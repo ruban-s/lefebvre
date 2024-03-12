@@ -13,14 +13,15 @@ export const metadata: Metadata = {
 const ProductedLayout = ({ children }: ProductedLayoutProps) => {
   return (
     <main className="w-full h-full flex flex-row justify-center items-center">
-      <div className="hidden  rounded-tr-[20px]  rounded-br-[20px] relative sm:hidden md:flex md:w-[50%] h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-theme-foreground to-theme  justify-center items-center">
+      <div className="   relative flex flex-col md:w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-theme-foreground to-theme  justify-center items-center">
         <div className="relative w-[300px] sm:w-[350px]  md:w-[400px] h-[150px] rounded-lg shadow-sm shadow-theme-700 ">
           <Logo />
         </div>
+        <div className="w-[400px] h-auto">{children}</div>
       </div>
-      <div className="w-[100%] sm:[100%] md:w-[50%] h-full flex flex-col justify-center items-center">
+      {/* <div className="w-[100%] sm:[100%] md:w-[50%] h-full flex flex-col justify-center items-center">
         {children}
-      </div>
+      </div> */}
     </main>
   );
 };

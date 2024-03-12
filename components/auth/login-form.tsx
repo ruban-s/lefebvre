@@ -25,8 +25,11 @@ import {
 import CardWrapper from "./card-wrapper";
 import { Button } from "@/components/ui/button";
 import { getUserById } from "@/data/user";
+import { Login } from "@/action/login";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import Logo from "./logo";
+import { signIn } from "@/auth";
+import { BASE_URL } from "@/config/const";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -45,26 +48,24 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
 
-    const user: data = await getUserById(values);
-    if (user.status) {
-      toast.success(`${user.message}`, {
-        position: "top-right",
-        dismissible: true,
-      });
-    } else {
-      toast.error(`${user.message}`, {
-        description:
-          "Oops! It seems like the credentials you entered are incorrect. Please double-check your username and password and try again",
-        position: "top-right",
-        dismissible: true,
-      });
-    }
+    await Login(values).then((callback) => {
+      if (callback?.error == undefined) {
+        toast.success(`Login successfully`, {
+          position: "top-right",
+          dismissible: true,
+        });
+      } else {
+        toast.error(`${callback?.error}`, {
+          description:
+            "Oops! It seems like the credentials you entered are incorrect. Please double-check your username and password and try again",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+    });
   };
   return (
     <div className="w-full h-full md:bg-white bg-theme flex  flex-col md:flex-row justify-center items-center">
-      <div className="md:hidden relative w-[400px] h-[120px] mb-[10px] rounded-lg shadow-sm shadow-theme-700 ">
-        <Logo />
-      </div>
       <CardWrapper headerLabel="Welcome Back...">
         <Form {...form}>
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

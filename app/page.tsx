@@ -1,15 +1,25 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { getUserById } from "@/data/user";
-import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const router = useRouter();
+import { Button } from "@/components/ui/button";
+import { signOut, useSession } from "next-auth/react";
+import { auth } from "@/auth";
+import { getUserById } from "@/data/user";
+
+const page = () => {
+  // const session = await auth();
+  const session = useSession();
 
   return (
-    <main className=" w-full h-full flex justify-center items-center">
-      <p className="">i am working</p>
-    </main>
+    <div>
+      <p>{JSON.stringify(session)}</p>
+      <Button
+        onClick={() => {
+          signOut();
+        }}>
+        sign out
+      </Button>
+    </div>
   );
-}
+};
+
+export default page;
