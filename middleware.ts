@@ -13,8 +13,10 @@ const { auth } = NextAuth(authConfig);
 export default auth((req: any) => {
   const isLoggedIn = !!req.auth;
   const { nextUrl, auth } = req;
+
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
   if (isApiAuthRoute) {
     return null;
   }
