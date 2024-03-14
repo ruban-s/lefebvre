@@ -30,7 +30,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="w-full   h-[7%] bg-white  flex justify-end items-center pr-4">
+    <div className="w-full   h-[5%] bg-white  flex justify-end items-center pr-4">
       {!isFullScreen ? (
         <Button
           className="bg-white hover:bg-neutral-100 mr-2"

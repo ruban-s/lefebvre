@@ -14,22 +14,10 @@ import {
   FormMessage,
   FormField,
 } from "@/components/ui/form";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import CardWrapper from "./card-wrapper";
-import { Button } from "@/components/ui/button";
-import { getUserById } from "@/data/user";
+
 import { Login } from "@/action/login";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
-import Logo from "./logo";
-import { signIn } from "@/auth";
-import { BASE_URL } from "@/config/const";
+import { Button } from "../ui/button";
+import CardWrapper from "./card-wrapper";
 
 const LoginForm = () => {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -39,11 +27,6 @@ const LoginForm = () => {
       password: "",
     },
   });
-  interface data {
-    status: boolean;
-    message: string;
-    data: string;
-  }
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
@@ -65,7 +48,7 @@ const LoginForm = () => {
     });
   };
   return (
-    <div className="w-full h-full md:bg-white bg-theme flex  flex-col md:flex-row justify-center items-center">
+    <div className="w-full h-full  flex  flex-col md:flex-row justify-center items-center ">
       <CardWrapper headerLabel="Welcome Back...">
         <Form {...form}>
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>

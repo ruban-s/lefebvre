@@ -5,9 +5,10 @@ const Logo = () => {
   return (
     <Image
       src="/lefebvre-logo.png"
-      fill
+      width={400}
+      height={410}
       alt="LEFEBVRE"
-      className="object-contain  rounded-lg "
+      className="object-cover  "
     />
   );
 };
