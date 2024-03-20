@@ -18,10 +18,8 @@ export default async function RootLayout({
 
       <div className="flex-1 h-full">
         <Topbar />
-        <div className="w-full h-[95%] p-2 bg-white">
-          <div className="w-full h-[100%] bg-neutral-100 shadow-sm">
-            {children}
-          </div>
+        <div className="w-full h-[95%] p-2 bg-neutral-100">
+          <div className="w-full h-[100%]  shadow-sm">{children}</div>
         </div>
       </div>
     </main>

@@ -1,5 +1,4 @@
 import { FaCog } from "react-icons/fa";
-
 const Loader = () => {
   return (
     <main>

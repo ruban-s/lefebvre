@@ -58,9 +58,9 @@ const LoginForm = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Username</FormLabel>
+                    {/* <FormLabel>Username</FormLabel> */}
                     <FormControl>
-                      <Input type="text" {...field} />
+                      <Input type="text" {...field} placeholder="username" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -73,9 +73,13 @@ const LoginForm = () => {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    {/* <FormLabel>Password</FormLabel> */}
                     <FormControl>
-                      <Input type="password" {...field} />
+                      <Input
+                        type="password"
+                        {...field}
+                        placeholder="password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

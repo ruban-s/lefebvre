@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
 import "./globals.css";
+import Provider from "@/query-client/provider";
 
 const mulish = Open_Sans({ subsets: ["latin"] });
 
@@ -23,7 +24,9 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en" className="overflow-hidden">
         <body className={mulish.className}>
-          <div className="w-full h-full"> {children}</div>
+          <Provider>
+            <div className="w-full h-full"> {children}</div>
+          </Provider>
           <Toaster richColors closeButton />
         </body>
       </html>

@@ -6,11 +6,7 @@ interface LayoutContainerProps {
 }
 
 const LayoutContainer = ({ children }: LayoutContainerProps) => {
-  return (
-    <div className="w-full h-full bg-neutral-100 flex flex-col justify-center items-center">
-      {children}
-    </div>
-  );
+  return <div className="w-full h-full overflow-auto">{children}</div>;
 };
 
 export default LayoutContainer;

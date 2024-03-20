@@ -6,21 +6,24 @@ import React, { useState, useMemo } from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import { IconType } from "react-icons";
-import { FaAngleDoubleLeft } from "react-icons/fa";
 import { FaHome } from "react-icons/fa";
 import { GiThermometerScale } from "react-icons/gi";
-import { FaUsersCog } from "react-icons/fa";
-import { FaUsers } from "react-icons/fa";
 import { IoCalendar } from "react-icons/io5";
 import { GiCoffeeCup } from "react-icons/gi";
-import { FaCogs } from "react-icons/fa";
-import { FaUserCog } from "react-icons/fa";
+import {
+  FaUsers,
+  FaCogs,
+  FaUserCog,
+  FaAngleDoubleLeft,
+  FaUsersCog,
+} from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import { MdSpaceDashboard } from "react-icons/md";
 
 import { TabData } from "@/types/index";
 import SideBarTabs from "./sidebar-tabs";
 import UserCard from "./user-card";
+import { adminTabs } from "@/config/const";
 
 // interface TabData {
 //   id: number;
@@ -32,24 +35,12 @@ import UserCard from "./user-card";
 const SideBar = () => {
   const [toggleCollapse, setToggleCollapse] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(false);
-  const adminTabs: TabData[] = [
-    { id: 1, label: "Home", icon: FaHome, link: "/" },
-    { id: 1, label: "Dashboard", icon: MdSpaceDashboard, link: "/dashboard" },
-    { id: 2, label: "Measures", icon: GiThermometerScale, link: "/measures" },
-    { id: 3, label: "Employees", icon: FaUsersCog, link: "/employees" },
-    { id: 4, label: "Attendance", icon: IoCalendar, link: "/attendance" },
-    { id: 5, label: "Break", icon: GiCoffeeCup, link: "/break" },
-    { id: 6, label: "Indirect-code", icon: FaCogs, link: "/indirect-code" },
-    { id: 7, label: "Resources", icon: FaUserCog, link: "/resources" },
-    { id: 8, label: "Users", icon: FaUsers, link: "/user" },
-    { id: 9, label: "Report", icon: TbReportAnalytics, link: "/report" },
-  ];
 
   const wrapperClasses = classNames(
-    "h-screen px-4 pt-2 pb-4 bg-light flex justify-start flex-col ",
+    "h-screen px-4 pt-2 pb-4 bg-light hidden justify-start flex-col lg:flex ",
     {
       ["w-80"]: !toggleCollapse,
-      ["w-20"]: toggleCollapse,
+      "w-[85px]": toggleCollapse,
     }
   );
 

@@ -1,13 +1,20 @@
 "use client";
 
-const Resources = () => {
-  // const session = await auth();
+import LayoutContainer from "@/components/common/layout-container";
+import ResourceFormContainer from "@/components/admin/resource/resourceFormContainer";
+import ResourceListContainer from "@/components/admin/resource/resourceListContainer";
 
+const User = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <p>Resources screen will develop soon..</p>
-    </div>
+    <LayoutContainer>
+      <div className="w-full h-auto ">
+        <ResourceFormContainer />
+      </div>
+      <div className="flex-1 w-[99%] mb-1 justify-center items-center flex bg-white rounded-lg shadow-md ">
+        <ResourceListContainer />
+      </div>
+    </LayoutContainer>
   );
 };
 
-export default Resources;
+export default User;

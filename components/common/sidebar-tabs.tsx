@@ -25,18 +25,20 @@ const SideBarTabs = (datas: SideBarTabProps) => {
       className="w-full h-auto mt-2"
       onMouseDown={onMouseOver()}
       onMouseLeave={onMouseOver()}>
-      {tabs.map(({ icon: Icon, ...value }) => {
+      {tabs.map(({ icon: Icon, ...value }, index: number) => {
         return (
           <Link
+            prefetch={false}
+            key={index}
             style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
             href={value.link}
-            className={`w-full  flex justify-start items-center  cursor-pointer  mb-1 p-4 rounded-md ${
+            className={`w-full flex justify-start items-center  cursor-pointer  mb-1 p-4 rounded-md ${
               path === value.link &&
               "bg-theme border-spacing-1 border-2 border-theme"
             } ${path !== value.link && "hover:bg-neutral-200 border-b-[1px]"}`}>
             <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger className="flex  justify-start items-center  ">
+              <Tooltip delayDuration={100}>
+                <TooltipTrigger className="flex  justify-start items-center mr-4  ">
                   <Icon
                     size={20}
                     className={`${
@@ -44,7 +46,7 @@ const SideBarTabs = (datas: SideBarTabProps) => {
                     }`}
                   />
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent align="end">
                   <p className="text-theme font-bold">{value.label}</p>
                 </TooltipContent>
               </Tooltip>
