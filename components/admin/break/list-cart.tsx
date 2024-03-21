@@ -48,7 +48,7 @@ const ListCardContainer = (props: ListCardContainerProps) => {
         position: "top-right",
         dismissible: true,
       });
-      queryClient.invalidateQueries({ queryKey: ["breaks"] });
+      queryClient.invalidateQueries({ queryKey: ["break"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

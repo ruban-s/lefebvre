@@ -95,17 +95,13 @@ const IndirectCodeFormContainer = () => {
   };
 
   return (
-    <div className="w-full h-auto bg-white  shadow-md">
+    <div className="w-full h-auto bg-white  shadow-sm">
       <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
           {indirectCode ? "Update Indirect Code" : "Add Indirect Code"}
         </p>
       </div>
-      <div className="w-[100%] max-h-[400px] ml-auto mr-auto    p-4 flex flex-col items-center justify-center overflow-auto ">
-        {/* <CommanCardContainer
-        headerLabel={user ? "Update User" : "Add User"}
-        footer={false}> */}
-
+      <div className="w-[100%] ml-auto mr-auto    p-4 ">
         <div className="w-full  flex flex-row mr-auto">
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
@@ -244,7 +240,6 @@ const IndirectCodeFormContainer = () => {
             </form>
           </Form>
         </div>
-        {/* </CommanCardContainer> */}
       </div>
     </div>
   );
