@@ -21,7 +21,7 @@ const IndirectCodeListContainer = () => {
   const indirects = data;
 
   return (
-    <div className="w-full h-auto bg-white  shadow-sm ">
+    <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (
         <Loading />
       ) : (
@@ -36,7 +36,7 @@ const IndirectCodeListContainer = () => {
             <DataTable
               columns={columns}
               data={indirects!}
-              searchName="name"
+              searchName="indirectCode"
               fileName="Indirect-codes"
             />
           </div>

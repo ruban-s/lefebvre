@@ -28,7 +28,6 @@ const SideBarTabs = (datas: SideBarTabProps) => {
       {tabs.map(({ icon: Icon, ...value }, index: number) => {
         return (
           <Link
-            prefetch={false}
             key={index}
             style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}
             href={value.link}

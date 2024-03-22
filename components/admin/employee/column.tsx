@@ -8,14 +8,15 @@ import { MoreHorizontal } from "lucide-react";
 import { useEmployeeStore } from "@/state";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
+import { TbEdit } from "react-icons/tb";
+import { IoIosWarning } from "react-icons/io";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteUser } from "@/data/user";
+import { toast } from "sonner";
+import { MdDelete } from "react-icons/md";
+import { deleteEmployee } from "@/data/employee";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<EmployeeData>[] = [
   {
@@ -72,29 +73,74 @@ export const columns: ColumnDef<EmployeeData>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => (
+      <Badge
+        className={`cursor-pointer rounded-md ${
+          row.original.status === "Active" ? "bg-green-500" : "bg-red-500"
+        }`}>
+        {row.original.status}
+      </Badge>
+    ),
   },
   {
     id: "actions",
     cell: ({ row }) => {
+      const queryClient = useQueryClient();
+
       const employee = row.original;
       const setEmployee = useEmployeeStore((state: any) => state.setEmployee);
       const handleUpdateUser = () => {
         setEmployee({ ...employee }); // Updating user object
       };
+      const deleteItem = useMutation({
+        mutationFn: async (value: any) => {
+          const deleteCode: any = await deleteEmployee(value);
+          return deleteCode;
+        },
+        onSuccess: (value) => {
+          if (value?.status) {
+            toast.success(`${value.message}`, {
+              description: `${value.message}`,
+              position: "top-right",
+              dismissible: true,
+            });
+          } else {
+            toast.error(`Something went wrong`, {
+              description: "Data not updated contact the admin",
+              position: "top-right",
+              dismissible: true,
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["employee"] });
+        },
+        onError: (value) => {
+          toast.error(`Something went wrong`, {
+            position: "top-right",
+            dismissible: true,
+          });
+        },
+      });
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only"></span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={handleUpdateUser}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <TableActionButtonComponents
+            primaryLable="Edit"
+            primaryAction={() => {
+              handleUpdateUser();
+            }}
+            primaryIcon={TbEdit}
+            alertlable="Delete"
+            alertlableIcon={MdDelete}
+            alertheading=" Are you absolutely sure?"
+            alertIcon={IoIosWarning}
+            alertactionLable="Delete"
+            alertcloseAllFunction={() => {}}
+            alertdescription="  This action cannot be undone. This will permanently delete
+                    your data and remove from our server."
+            alertactionFunction={() => {
+              deleteItem.mutate(`${employee.id}`);
+            }}
+          />
+        </>
       );
     },
   },

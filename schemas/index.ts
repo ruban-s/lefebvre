@@ -35,6 +35,7 @@ export const ResourceSchema = z.object({
 
 export const EmployeeSchema = z.object({
   designation_id: z.string().min(1, { message: "designation_id is required" }),
+  image_path: z.string().optional(),
   email: z.string().min(1, { message: "email is required" }),
   employee_id: z.string().min(1, { message: "employee_id is required" }),
   first_name: z.string().min(1, { message: "first_name is required" }),

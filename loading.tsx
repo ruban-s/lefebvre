@@ -2,7 +2,7 @@ import Loader from "./components/common/loader";
 
 const Loading = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-[100%] h-[100%] flex justify-center items-center">
       <Loader />
     </div>
   );

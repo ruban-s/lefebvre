@@ -46,8 +46,24 @@ export const updateEmployee = async (value: any) => {
       value
     );
     const data = axiosResponse.data;
-    console.log(data);
 
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
+export const deleteEmployee = async (value: any) => {
+  try {
+    const axiosResponse = await axios.delete(
+      `http://208.109.9.243:8082/employee/delete?id=${value}`,
+      value
+    );
+    const data = axiosResponse.data;
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

@@ -142,6 +142,27 @@ const IndirectCodeFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
+                  name="description"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            height={20}
+                            {...field}
+                            multiple
+                            placeholder="Description"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
                   name="status"
                   render={({ field }) => {
                     return (
@@ -160,27 +181,6 @@ const IndirectCodeFormContainer = () => {
                             <SelectItem value="Inactive">Inactive</SelectItem>
                           </SelectContent>
                         </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>description</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            height={20}
-                            {...field}
-                            multiple
-                            placeholder="Description"
-                          />
-                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     );

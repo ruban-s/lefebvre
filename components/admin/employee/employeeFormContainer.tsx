@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { FaUsersCog } from "react-icons/fa";
 
 import { IoMdCloseCircle } from "react-icons/io";
-import { IoMdInformationCircleOutline } from "react-icons/io";
+import { CiImageOn } from "react-icons/ci";
 import { FcInfo } from "react-icons/fc";
 
 import classNames from "classnames";
@@ -30,18 +30,25 @@ import {
 import { toast } from "sonner";
 import CommanCardContainer from "../../common/common-cart";
 import { Button } from "../../ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEmployee, updateEmployee } from "@/data/employee";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { useEmployeeStore } from "@/state";
 import { ComboboxPopover } from "../../common/combo-box";
+import Image from "next/image";
+import { EmployeeData } from "@/types";
+import CustomImageInput from "@/components/common/customImageInput";
 
 const EmployeeFormContainer = () => {
-  const employee = useEmployeeStore((state: any) => state.employee); // Accessing the employee object
+  const employee: EmployeeData = useEmployeeStore(
+    (state: any) => state.employee
+  ); // Accessing the employee object
   const removeEmployee = useEmployeeStore((state: any) => state.removeEmployee);
   const queryClient = useQueryClient();
+  const [image, setImage] = useState<any>();
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const creatUser = useMutation({
     mutationFn: async (value: any) => {
@@ -86,10 +93,28 @@ const EmployeeFormContainer = () => {
       mobile: "",
       status: "",
       gender: "",
+      image_path: "",
     },
   });
+  function fileToBase64(file: any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader?.result;
+        resolve(base64String);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
   useEffect(() => {
     if (employee) {
+      console.log(employee);
       form.setValue("designation_id", employee?.designation_id!);
       form.setValue("email", employee?.email!);
       form.setValue("mobile", employee?.mobile!);
@@ -98,6 +123,7 @@ const EmployeeFormContainer = () => {
       form.setValue("gender", employee?.gender!);
       form.setValue("status", employee?.status!);
       form.setValue("employee_id", employee?.employee_id!);
+      form.setValue("image_path", employee?.image_path);
       // setEdit(true);
     }
   }, [employee]);
@@ -105,22 +131,60 @@ const EmployeeFormContainer = () => {
   const onSubmit = async (values: z.infer<typeof EmployeeSchema>) => {
     creatUser.mutate(values);
   };
+  useEffect(() => {
+    console.log(image);
+    form.setValue("image_path", image);
+  }, [image]);
 
   return (
-    <div className="w-auto h-auto bg-white rounded-lg m-2 mt-4 shadow-md">
-      <div className=" w-full h-auto ">
+    <div className="w-full h-auto bg-white  shadow-sm">
+      <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
-          {employee ? "Update employee" : "Add employee"}
+          {employee ? "Update Employee" : "Add Employee"}
         </p>
       </div>
-      <div className="w-[100%] max-h-[400px] ml-auto mr-auto    p-4 flex flex-col items-center justify-center overflow-auto ">
-        {/* <CommanCardContainer
-        headerLabel={employee ? "Update employee" : "Add employee"}
-        footer={false}> */}
-
-        <div className="w-full flex flex-row">
+      <div className="w-[100%] ml-auto mr-auto  flex justify-center items-center   p-4 ">
+        <div className="w-[100%]  flex flex-row mr-auto ">
+          <CustomImageInput
+            value={form.watch("image_path")!}
+            onChange={(value: string) => {
+              form.setValue("image_path", value);
+            }}
+          />
+          {/* <div className=" w-[150px] h-[150px] bg-[url('/cog-bg2.png')] bg-im flex justify-center items-center mr-2 rounded-md relative">
+            <Input
+              ref={imageRef}
+              type="file"
+              className="absolute"
+              onChange={async (value: any) => {
+                const file = value.target?.files[0];
+                const base64String = await fileToBase64(file);
+                setImage(base64String);
+              }}
+            />
+            <Image
+              alt="emp-img"
+              src={
+                form.watch("image_path")
+                  ? form.watch("image_path")
+                  : image
+                  ? image
+                  : "https://github.com/shadcn.png"
+              }
+              fill
+              className="object-cover rounded-sm group bg-neutral-200"
+            />
+            <Button
+              className="absolute right-0 bottom-0 m-1  flex"
+              variant={"secondary"}
+              onClick={() => {
+                imageRef.current?.click();
+              }}>
+              <CiImageOn />
+            </Button>
+          </div> */}
           <Form {...form}>
-            <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
+            <form className=" flex-1 " onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4 2xl:lg:grid-cols-4 gap-2">
                 <FormField
                   control={form.control}

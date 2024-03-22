@@ -16,7 +16,6 @@ const HomeScreen = () => {
             <Link
               key={index}
               href={info.link}
-              prefetch={false}
               className={`w-full h-[220px] flex flex-row md:flex-col justify-evenly items-center p-2 ${
                 path === info.link && "ring-1"
               } bg-white shadow-md  cursor-pointer rounded-lg hover:ring-1 hover:ring-theme`}>

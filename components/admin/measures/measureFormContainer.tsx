@@ -97,18 +97,14 @@ const MeasureFormContainer = () => {
   };
 
   return (
-    <div className="w-auto h-auto bg-white  m-2 mt-4 shadow-md rounded-sm">
-      <div className=" w-full h-auto ">
+    <div className="w-full h-auto bg-white  shadow-sm">
+      <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
           {measure ? "Update Measure" : "Add Measure"}
         </p>
       </div>
-      <div className="w-[100%] max-h-[400px] ml-auto mr-auto    p-4 flex flex-col items-center justify-center overflow-auto ">
-        {/* <CommanCardContainer
-        headerLabel={measure ? "Update User" : "Add User"}
-        footer={false}> */}
-
-        <div className="w-full flex flex-row">
+      <div className="w-[100%] ml-auto mr-auto    p-4 ">
+        <div className="w-full  flex flex-row mr-auto">
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-2">
@@ -120,7 +116,7 @@ const MeasureFormContainer = () => {
                       <FormItem>
                         <FormLabel>Unit Measure</FormLabel>
                         <FormControl>
-                          <Input type="text" {...field} placeholder="measure" />
+                          <Input type="text" {...field} placeholder="Measure" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -184,7 +180,7 @@ const MeasureFormContainer = () => {
                       Update the details of the
                       <span className="ml-2 font-bold text-black">
                         {" "}
-                        {JSON.stringify(measure.name)}
+                        {JSON.stringify(measure.unit)}
                       </span>
                     </AlertDescription>
                   </Alert>

@@ -30,6 +30,7 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
+    console.log(values);
 
     await Login(values).then((callback) => {
       if (callback?.error == undefined) {
@@ -49,6 +50,9 @@ const LoginForm = () => {
   };
   return (
     <div className="w-full h-full  flex  flex-col md:flex-row justify-center items-center ">
+      {/* <div className="relative w-[300px] sm:w-[350px]  md:w-[400px] h-[150px] pt-8  shadow-sm shadow-theme-700  ">
+        <Logo />
+      </div> */}
       <CardWrapper headerLabel="Welcome Back...">
         <Form {...form}>
           <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -60,7 +64,7 @@ const LoginForm = () => {
                   <FormItem>
                     {/* <FormLabel>Username</FormLabel> */}
                     <FormControl>
-                      <Input type="text" {...field} placeholder="username" />
+                      <Input type="text" {...field} placeholder="Username" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -78,7 +82,7 @@ const LoginForm = () => {
                       <Input
                         type="password"
                         {...field}
-                        placeholder="password"
+                        placeholder="Password"
                       />
                     </FormControl>
                     <FormMessage />
@@ -100,7 +104,7 @@ const LoginForm = () => {
         </Form>
         <Button
           variant={"link"}
-          className="w-full"
+          className="w-full text-white"
           onClick={() => {
             toast.info(`Forgot Password?`, {
               description:

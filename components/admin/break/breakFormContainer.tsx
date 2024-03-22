@@ -6,8 +6,9 @@ import { BreakSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { GiCoffeeCup } from "react-icons/gi";
 import { IoMdCloseCircle } from "react-icons/io";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import { FcInfo } from "react-icons/fc";
+import Datetime from "react-datetime";
+import { FaRegClock } from "react-icons/fa";
 
 import classNames from "classnames";
 
@@ -26,6 +27,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
 import CommanCardContainer from "../../common/common-cart";
 import { Button } from "../../ui/button";
@@ -35,6 +41,8 @@ import { createBreak, updateBreak } from "@/data/break";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { BreaksData } from "@/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import CustomTimePicker from "@/components/common/customTimePicker";
 
 const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
   const queryClient = useQueryClient();
@@ -91,6 +99,10 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
       setEdit(true);
     }
   }, [data]);
+  useEffect(() => {
+    form.setValue("start_time", "");
+    form.setValue("end_time", "");
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof BreakSchema>) => {
     creatBreak.mutate(values);
@@ -99,11 +111,14 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
   };
 
   return (
-    <div className="w-full h-full p-2 flex items-center justify-center">
-      <CommanCardContainer
-        headerLabel={isEditable ? "Update Break" : "Add Break"}
-        footer={false}>
-        <div className="w-full flex flex-row">
+    <div className="w-full h-auto bg-white  shadow-sm">
+      <div className=" ">
+        <p className="text-lg font-semibold pl-4 pt-4">
+          {isEditable ? "Update Break" : "Add Break"}
+        </p>
+      </div>
+      <div className="w-[100%] ml-auto mr-auto    p-4 ">
+        <div className="w-full  flex flex-row mr-auto">
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
@@ -131,13 +146,19 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                   name="start_time"
                   render={({ field }) => {
                     return (
-                      <FormItem>
+                      <FormItem className="m-0 p-0">
                         <FormLabel>Start time</FormLabel>
-                        <FormControl>
-                          <Input
+                        <FormControl className="m-0 p-0">
+                          {/* <Input
                             type="time"
                             {...field}
                             placeholder="Start Time"
+                          /> */}
+                          <CustomTimePicker
+                            value={form.watch("start_time")}
+                            onChange={(value: string) => {
+                              form.setValue("start_time", value);
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -145,6 +166,7 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                     );
                   }}
                 />
+
                 <FormField
                   control={form.control}
                   name="end_time"
@@ -153,10 +175,16 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                       <FormItem>
                         <FormLabel>End time</FormLabel>
                         <FormControl>
-                          <Input
+                          {/* <Input
                             type="time"
                             {...field}
                             placeholder="End Time"
+                          /> */}
+                          <CustomTimePicker
+                            value={form.watch("end_time")}
+                            onChange={(value: string) => {
+                              form.setValue("end_time", value);
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -164,6 +192,7 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                     );
                   }}
                 />
+
                 <FormField
                   control={form.control}
                   name="status"
@@ -243,7 +272,7 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
             </form>
           </Form>
         </div>
-      </CommanCardContainer>
+      </div>
     </div>
   );
 };

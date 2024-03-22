@@ -1,21 +1,17 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AttendanceTypeData } from "@/types";
-import { MoreHorizontal } from "lucide-react";
 import { useAttendanceTypeStore, useMeasureStore } from "@/state";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
+import { TbEdit } from "react-icons/tb";
+import { IoIosWarning } from "react-icons/io";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { MdDelete } from "react-icons/md";
+import { deleteAttendanceType } from "@/data/attendanceType";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<AttendanceTypeData>[] = [
   {
@@ -47,10 +43,19 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
   {
     accessorKey: "status",
     header: "Status",
+    cell: ({ row }) => (
+      <Badge
+        className={`cursor-pointer rounded-md ${
+          row.original.status === "Active" ? "bg-green-500" : "bg-red-500"
+        }`}>
+        {row.original.status}
+      </Badge>
+    ),
   },
   {
     id: "actions",
     cell: ({ row }) => {
+      const queryClient = useQueryClient();
       const attendanceType = row.original;
 
       const setAttendanceType = useAttendanceTypeStore(
@@ -59,20 +64,55 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
       const handleUpdateUser = () => {
         setAttendanceType({ ...attendanceType }); // Updating user object
       };
+      const deleteItem = useMutation({
+        mutationFn: async (value: any) => {
+          const deleteCode: any = await deleteAttendanceType(value);
+          return deleteCode;
+        },
+        onSuccess: (value) => {
+          if (value?.status) {
+            toast.success(`${value.message}`, {
+              description: `${value.message}`,
+              position: "top-right",
+              dismissible: true,
+            });
+          } else {
+            toast.error(`Something went wrong`, {
+              description: "Data not updated contact the admin",
+              position: "top-right",
+              dismissible: true,
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["attendance"] });
+        },
+        onError: (value) => {
+          toast.error(`Something went wrong`, {
+            position: "top-right",
+            dismissible: true,
+          });
+        },
+      });
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only"></span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={handleUpdateUser}>Edit</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {}}>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <TableActionButtonComponents
+            primaryLable="Edit"
+            primaryAction={() => {
+              handleUpdateUser();
+            }}
+            primaryIcon={TbEdit}
+            alertlable="Delete"
+            alertlableIcon={MdDelete}
+            alertheading=" Are you absolutely sure?"
+            alertIcon={IoIosWarning}
+            alertactionLable="Delete"
+            alertcloseAllFunction={() => {}}
+            alertdescription="  This action cannot be undone. This will permanently delete
+                    your data and remove from our server."
+            alertactionFunction={() => {
+              deleteItem.mutate(`${attendanceType.id}`);
+            }}
+          />
+        </>
       );
     },
   },

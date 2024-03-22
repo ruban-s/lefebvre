@@ -41,6 +41,7 @@ export const createIndirectCode = async (
     return errorResponse;
   }
 };
+
 export const updateIndirectCode = async (value: any) => {
   try {
     const axiosResponse = await axios.put(
@@ -50,6 +51,23 @@ export const updateIndirectCode = async (value: any) => {
     const data = axiosResponse.data;
     console.log(data);
 
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
+export const deleteIndirectCode = async (value: any) => {
+  try {
+    const axiosResponse = await axios.delete(
+      `http://208.109.9.243:8082/indirectcode/delete?id=${value}`,
+      value
+    );
+    const data = axiosResponse.data;
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

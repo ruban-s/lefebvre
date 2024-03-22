@@ -1,3 +1,4 @@
+"use server";
 import * as z from "zod";
 import { BASE_URL } from "@/config/const";
 import { BreaksData, ResponseData } from "@/types";
@@ -49,6 +50,23 @@ export const updateBreak = async (value: BreaksData) => {
     return data;
   } catch (error) {
     console.log(error);
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
+export const deleteBreak = async (value: any) => {
+  try {
+    const axiosResponse = await axios.delete(
+      `http://208.109.9.243:8082/break/delete?id=${value}`,
+      value
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),

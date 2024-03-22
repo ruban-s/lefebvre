@@ -18,26 +18,27 @@ const EmployeeListContainer = () => {
       return JSON.parse(data.data) as EmployeeData[];
     },
   });
-  const breaks = data;
+  const employees = data;
 
   return (
-    <div className="w-full h-[300px] sm:h-[400px] md:h-[680px] lg:h-[650px] p-2 ">
+    <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="rounded-md">
+        <>
           <div className=" w-full h-auto ">
-            <p className="text-lg font-semibold pl-4 pt-4">{"Users"}</p>
+            <p className="text-lg font-semibold pl-4 pt-4">{"Employees"}</p>
           </div>
-          <div className="h-auto w-[400px] sm:w-[430px] md:w-[600px] lg:w-[900px] xl:w-full p-2 overflow-auto">
+
+          <div className="w-full ">
             <DataTable
               columns={columns}
-              data={breaks!}
-              searchName="first_name"
-              fileName="Employees"
+              data={employees!}
+              searchName="employee_id"
+              fileName="Employee"
             />
           </div>
-        </div>
+        </>
       )}
     </div>
   );

@@ -1,5 +1,3 @@
-"use client";
-
 import LayoutContainer from "@/components/common/layout-container";
 import EmployeeFormContainer from "@/components/admin/employee/employeeFormContainer";
 import EmployeeListContainer from "@/components/admin/employee/employeeListContainer";
@@ -9,10 +7,10 @@ import { useState } from "react";
 const Employee = () => {
   return (
     <LayoutContainer>
-      <div className="w-full h-auto ">
+      <div className="w-full min-h-[200px] p-2 ">
         <EmployeeFormContainer />
       </div>
-      <div className="flex-1 w-[99%] mb-1 justify-center items-center flex bg-white rounded-lg shadow-md ">
+      <div className="w-full min-h-[400px] p-2 ">
         <EmployeeListContainer />
       </div>
     </LayoutContainer>

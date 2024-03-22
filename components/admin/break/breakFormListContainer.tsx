@@ -1,11 +1,12 @@
 "use client";
 
 import Loading from "@/loading";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import ListCardContainer from "./list-cart";
 import { getAllBreaks } from "@/data/break";
 import { BreaksData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
+import ListContainer from "./listContainer";
 
 interface BreakFormListContainerProps {
   editBreak: Function;
@@ -19,6 +20,7 @@ const BreakFormListContainer = (props: BreakFormListContainerProps) => {
       return JSON.parse(data.data) as BreaksData[];
     },
   });
+
   const breaks = data;
 
   if (isError) {
@@ -30,19 +32,29 @@ const BreakFormListContainer = (props: BreakFormListContainerProps) => {
   }
 
   return (
-    <div className="w-auto h-[400px] sm:h-[500px] md:h-[700px] lg:h-[650px]  overflow-auto p-1 bg-slate-50 rounded-md  ">
+    <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (
         <Loading />
       ) : (
-        <div className=" w-full grid-col  grid grid-cols-1 sm:grid-cols-1 p-2 md:grid-cols-2 lg:grid-cols-2 gap-6 m-1">
-          {breaks?.map((info: BreaksData, index: number) => {
-            return (
-              <div className="h-auto" key={index}>
-                <ListCardContainer breaks={info} editBreak={props.editBreak} />
-              </div>
-            );
-          })}
-        </div>
+        <>
+          <div className=" w-full h-auto ">
+            <p className="text-lg font-semibold pl-4 pt-4">{"Breaks"}</p>
+          </div>
+
+          <ListContainer breaks={breaks!} editBreak={props.editBreak} />
+          {/* <div className=" w-full grid-col  grid grid-cols-1 sm:grid-cols-1 p-2 md:grid-cols-2 lg:grid-cols-2 gap-6 m-1">
+            {breaks?.map((info: BreaksData, index: number) => {
+              return (
+                <div className="h-auto" key={index}>
+                  <ListCardContainer
+                    breaks={info}
+                    editBreak={props.editBreak}
+                  />
+                </div>
+              );
+            })}
+          </div> */}
+        </>
       )}
     </div>
   );

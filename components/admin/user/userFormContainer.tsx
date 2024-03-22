@@ -34,10 +34,13 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUser, updateUser } from "@/data/user";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import CustomImageInput from "@/components/common/customImageInput";
 
 import { useStore } from "@/state";
+import { useRouter } from "next/navigation";
 
 const UserFormContainer = () => {
+  const router = useRouter();
   const user = useStore((state: any) => state.user); // Accessing the user object
   const removeUser = useStore((state: any) => state.removeUser);
   const queryClient = useQueryClient();
@@ -78,7 +81,6 @@ const UserFormContainer = () => {
     resolver: zodResolver(UserSchema),
     defaultValues: {
       name: "",
-
       email: "",
       image: "",
       mobile: "",
@@ -96,7 +98,7 @@ const UserFormContainer = () => {
       form.setValue("name", user?.name!);
       form.setValue("email", user?.email!);
       form.setValue("mobile", user?.mobile!);
-      form.setValue("image", "");
+      form.setValue("image", user?.image!);
       form.setValue("password", user?.password!);
       form.setValue("role_name", user?.role_name!);
       form.setValue("status", user?.status!);
@@ -111,18 +113,20 @@ const UserFormContainer = () => {
   };
 
   return (
-    <div className="w-auto h-auto bg-white  m-2 mt-4 shadow-md rounded-sm">
-      <div className=" w-full h-auto ">
+    <div className="w-full h-auto bg-white  shadow-sm">
+      <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
           {user ? "Update User" : "Add User"}
         </p>
       </div>
-      <div className="w-[100%] max-h-[400px] ml-auto mr-auto    p-4 flex flex-col items-center justify-center overflow-auto ">
-        {/* <CommanCardContainer
-        headerLabel={user ? "Update User" : "Add User"}
-        footer={false}> */}
-
-        <div className="w-full flex flex-row">
+      <div className="w-[100%] ml-auto mr-auto    p-4 ">
+        <div className="w-[100%]  flex flex-row mr-auto ">
+          <CustomImageInput
+            value={form.watch("image")!}
+            onChange={(value: string) => {
+              form.setValue("image", value);
+            }}
+          />
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4 2xl:grid-cols-5 gap-2">
@@ -346,7 +350,6 @@ const UserFormContainer = () => {
             </form>
           </Form>
         </div>
-        {/* </CommanCardContainer> */}
       </div>
     </div>
   );

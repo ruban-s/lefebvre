@@ -39,6 +39,7 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { useAttendanceTypeStore } from "@/state";
+import { IoCalendar } from "react-icons/io5";
 
 const AttendanceFormContainer = () => {
   const attendanceType = useAttendanceTypeStore(
@@ -102,18 +103,14 @@ const AttendanceFormContainer = () => {
   };
 
   return (
-    <div className="w-auto h-auto bg-white  m-2 mt-4 shadow-md rounded-sm">
-      <div className=" w-full h-auto ">
+    <div className="w-full h-auto bg-white  shadow-sm">
+      <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
-          {attendanceType ? "Update attendanceType" : "Add Attendance"}
+          {attendanceType ? "Update Attendance-Type" : "Add Attendance-Type"}
         </p>
       </div>
-      <div className="w-[100%] max-h-[400px] ml-auto mr-auto    p-4 flex flex-col items-center justify-center overflow-auto ">
-        {/* <CommanCardContainer
-        headerLabel={attendanceType ? "Update User" : "Add User"}
-        footer={false}> */}
-
-        <div className="w-full flex flex-row">
+      <div className="w-[100%] ml-auto mr-auto    p-4 ">
+        <div className="w-full  flex flex-row mr-auto">
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-2">
@@ -167,9 +164,9 @@ const AttendanceFormContainer = () => {
               <div className="w-full py-4  flex justify-start items-center">
                 <Button type="submit" className="bg-theme">
                   {attendanceType
-                    ? "Update attendanceType"
-                    : "Add attendanceType"}
-                  <GiThermometerScale className="ml-2 text-white" size={16} />
+                    ? "Update attendance type"
+                    : "Add attendance type"}
+                  <IoCalendar className="ml-2 text-white" size={16} />
                 </Button>
                 {!attendanceType && (
                   <Button

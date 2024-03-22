@@ -60,3 +60,20 @@ export const updateResources = async (value: any) => {
     return errorResponse;
   }
 };
+export const deleteResource = async (value: any) => {
+  try {
+    const axiosResponse = await axios.delete(
+      `http://208.109.9.243:8082/resourceAdmin/delete?id=${value}`,
+      value
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};

@@ -14,10 +14,10 @@ const User = () => {
 
   return (
     <LayoutContainer>
-      <div className="w-full h-auto ">
+      <div className="w-full min-h-[200px] p-2 ">
         <UserFormContainer />
       </div>
-      <div className="flex-1 w-[99%] mb-1 justify-center items-center flex bg-white rounded-lg shadow-md ">
+      <div className="w-full min-h-[400px] p-2 ">
         <UserListContainer editUser={editUser} />
       </div>
     </LayoutContainer>

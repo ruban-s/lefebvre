@@ -8,7 +8,7 @@ const Logo = () => {
       width={400}
       height={410}
       alt="LEFEBVRE"
-      className="object-cover  "
+      className="object-contain rounded-lg  "
     />
   );
 };

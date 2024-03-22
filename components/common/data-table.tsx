@@ -23,9 +23,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
 } from "@/components/ui/dropdown-menu";
@@ -47,16 +44,6 @@ import autoTable from "jspdf-autotable";
 
 import * as XLSX from "xlsx";
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import React, { useEffect } from "react";
 import {
@@ -67,6 +54,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "sonner";
+import ExportButtonComponent from "./exportButtonComponent";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -125,56 +113,15 @@ export function DataTable<TData, TValue>({
     link.click();
   };
   const exportXLSX = (data: any) => {
-    data.shift();
-    const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    let buffer = XLSX.write(workbook, { bookType: "xlsx", type: "buffer" });
-    XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
+    const header: any = Object.values(data[0]);
+    const body: any = [];
+    data.map((info: any, index: number) => body.push(Object.values(info)));
+    const ws = XLSX.utils.aoa_to_sheet([header, ...body.slice(1)]);
+    XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");
     XLSX.writeFile(workbook, exportFileName + ".xlsx");
   };
-  const exportData = (value: string) => {
-    if (data.length < 1) {
-      return toast.warning(`Data not Found`, {
-        description: "You can not export this file",
-        position: "top-right",
-        dismissible: true,
-      });
-    }
-    const newData = data.map(
-      ({ createdDate, updatedDate, token, image, ...rest }: any) => rest
-    );
-    var exportData: any = [];
-    var exportDataField = Object.keys(newData[0] as {});
-    var obj: any = {};
-    exportDataField.map((info: any, index: any) => {
-      obj[`${info}`] = info;
-    });
-    exportData.push(obj);
-    exportData = [...exportData, ...newData];
-    if (value === "CSV") {
-      exportCSV(exportData);
-    }
-    if (value === "XLSX") {
-      exportXLSX(exportData);
-    }
-    if (value === "PDF") {
-      exportPDF(exportData);
-    }
-    setExportFileName(
-      `${fileName}-${new Date().toISOString().replace(/:/g, "-")}`
-    );
-  };
-
-  useEffect(() => {
-    table.setPageSize(Number(5));
-  }, []);
-
   const exportPDF = (value: any) => {
-    console.log(value);
     var headerList = Object.keys(value[0]);
     var header: any = [[]];
     var body: any = [];
@@ -196,17 +143,55 @@ export function DataTable<TData, TValue>({
     });
     doc.save(exportFileName + ".pdf");
   };
+  const exportData = (value: string) => {
+    if (data.length < 1) {
+      return toast.warning(`Data not Found`, {
+        description: "You can not export this file",
+        position: "top-right",
+        dismissible: true,
+      });
+    }
+    const newData = data.map(
+      ({ createdDate, updatedDate, updatedBy, token, image, ...rest }: any) =>
+        rest
+    );
+    var exportData: any = [];
+    var exportDataField = Object.keys(newData[0] as {});
+    var obj: any = {};
+    exportDataField.map((info: string, index: any) => {
+      obj[`${info}`] = info.toUpperCase();
+    });
+    exportData.push(obj);
+    exportData = [...exportData, ...newData];
+    if (value === "CSV") {
+      exportCSV(exportData);
+    }
+    if (value === "XLSX") {
+      exportXLSX(exportData);
+    }
+    if (value === "PDF") {
+      exportPDF(exportData);
+    }
+    setExportFileName(
+      `${fileName}-${new Date().toISOString().replace(/:/g, "-")}`
+    );
+  };
+
+  useEffect(() => {
+    table.setPageSize(Number(5));
+  }, []);
+
   return (
     <div className="m-2 w-[100%] h-auto pr-4">
       <div className=" w-full  flex items-center py-4">
         <Input
-          placeholder="Search by Name"
+          placeholder={`Search by ${searchName.replace("_", "")}`}
           value={
             (table.getColumn(searchName)?.getFilterValue() as string) ?? ""
           }
-          onChange={(event) =>
-            table.getColumn(searchName)?.setFilterValue(event.target.value)
-          }
+          onChange={(event) => {
+            table.getColumn(searchName)?.setFilterValue(event.target.value);
+          }}
           className="max-w-sm"
         />
 
@@ -231,7 +216,37 @@ export function DataTable<TData, TValue>({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-[200px]">
-            <Dialog>
+            <ExportButtonComponent
+              nameChangeFunction={(value: any) => {
+                setExportFileName(value);
+              }}
+              exportFileName={exportFileName}
+              lable="CSV"
+              exportFunction={() => {
+                exportData("CSV");
+              }}
+            />
+            <ExportButtonComponent
+              nameChangeFunction={(value: any) => {
+                setExportFileName(value);
+              }}
+              exportFileName={exportFileName}
+              lable="PDF"
+              exportFunction={() => {
+                exportData("PDF");
+              }}
+            />
+            <ExportButtonComponent
+              nameChangeFunction={(value: any) => {
+                setExportFileName(value);
+              }}
+              exportFileName={exportFileName}
+              lable="XLSX"
+              exportFunction={() => {
+                exportData("XLSX");
+              }}
+            />
+            {/* <Dialog>
               <DialogTrigger asChild>
                 <Button className="ml-auto  w-full" variant={"ghost"}>
                   <FaFileCsv className="mr-1" /> Export CSV
@@ -272,8 +287,8 @@ export function DataTable<TData, TValue>({
                   </DialogClose>
                 </DialogFooter>
               </DialogContent>
-            </Dialog>
-            <Dialog>
+            </Dialog> */}
+            {/* <Dialog>
               <DialogTrigger asChild>
                 <Button className="ml-auto  w-full" variant={"ghost"}>
                   <FaFilePdf className="mr-1" /> Export PDF
@@ -356,7 +371,7 @@ export function DataTable<TData, TValue>({
                   </DialogClose>
                 </DialogFooter>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -390,7 +405,7 @@ export function DataTable<TData, TValue>({
         </DropdownMenu>
       </div>
       <div className="rounded-md border">
-        <Table id="tables">
+        <Table className="rounded-none">
           <TableHeader className="bg-blue-50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -445,20 +460,6 @@ export function DataTable<TData, TValue>({
           {table.getFilteredSelectedRowModel().rows.length} of
           {table.getFilteredRowModel().rows.entries()} row(s) selected.
         </div>
-        {/* <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}>
-          Previous
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}>
-          Next
-        </Button> */}
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>

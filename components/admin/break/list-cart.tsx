@@ -10,24 +10,13 @@ import { CgArrowsBreakeH } from "react-icons/cg";
 
 import { BreaksData } from "@/types";
 import { Switch } from "@/components/ui/switch";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "../../ui/button";
-import { useRouter } from "next/navigation";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { deleteBreak, updateBreak } from "@/data/break";
+import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
+import { IoIosWarning } from "react-icons/io";
+import { deleteResource } from "@/data/resources";
 import { toast } from "sonner";
-import { updateBreak } from "@/data/break";
+import { Badge } from "@/components/ui/badge";
 
 interface ListCardContainerProps {
   breaks: BreaksData;
@@ -48,6 +37,34 @@ const ListCardContainer = (props: ListCardContainerProps) => {
         position: "top-right",
         dismissible: true,
       });
+      queryClient.invalidateQueries({ queryKey: ["break"] });
+    },
+    onError: (value) => {
+      toast.error(`Something went wrong`, {
+        position: "top-right",
+        dismissible: true,
+      });
+    },
+  });
+  const deleteItem = useMutation({
+    mutationFn: async (value: any) => {
+      const deleteCode: any = await deleteBreak(value);
+      return deleteCode;
+    },
+    onSuccess: (value) => {
+      if (value?.status) {
+        toast.success(`${value.message}`, {
+          description: `${value.message}`,
+          position: "top-right",
+          dismissible: true,
+        });
+      } else {
+        toast.error(`Something went wrong`, {
+          description: "Data not updated contact the admin",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ["break"] });
     },
     onError: (value) => {
@@ -80,28 +97,24 @@ const ListCardContainer = (props: ListCardContainerProps) => {
           </div>
         </div>
 
-        <Popover>
-          <Button variant={"secondary"} asChild>
-            <PopoverTrigger>
-              <MdOutlineMoreVert />
-            </PopoverTrigger>
-          </Button>
-          <PopoverContent className="w-[200px] rounded-xl">
-            <Button
-              variant={"ghost"}
-              className="w-full justify-between"
-              onClick={() => {
-                props.editBreak(breaks);
-              }}>
-              <div className="text-sm font-medium">Edit</div>
-              <TbEdit className="text-yellow-400 ml-2" />
-            </Button>
-            <Button variant={"ghost"} className="w-full justify-between">
-              <div className="text-sm font-medium">Delete</div>
-              <MdDelete className="text-red-700 ml-2" />
-            </Button>
-          </PopoverContent>
-        </Popover>
+        <TableActionButtonComponents
+          primaryLable="Edit"
+          primaryAction={() => {
+            props.editBreak(breaks);
+          }}
+          primaryIcon={TbEdit}
+          alertlable="Delete"
+          alertlableIcon={MdDelete}
+          alertheading=" Are you absolutely sure?"
+          alertIcon={IoIosWarning}
+          alertactionLable="Delete"
+          alertcloseAllFunction={() => {}}
+          alertdescription="  This action cannot be undone. This will permanently delete
+                    your data and remove from our server."
+          alertactionFunction={() => {
+            deleteItem.mutate(`${breaks.id}`);
+          }}
+        />
       </CardHeader>
       <CardContent>
         <div className="w-ful p-0 m-0 flex flex-row justify-between items-center">
@@ -131,7 +144,7 @@ const ListCardContainer = (props: ListCardContainerProps) => {
             </div>
           </div>
           <div className="flex-1 flex  justify-end items-center">
-            <div className="flex justify-between items-center  flex-row ">
+            <div className="flex  justify-between items-center  flex-col ">
               <Switch
                 className={`${
                   breaks.status === "Active" && "bg-green"
@@ -140,6 +153,12 @@ const ListCardContainer = (props: ListCardContainerProps) => {
                 checked={breaks.status === "Active" ? true : false}
                 onCheckedChange={changeStatus}
               />
+              <Badge
+                className={`cursor-pointer rounded-md mt-2 ${
+                  breaks.status === "Active" ? "bg-green-500" : "bg-red-500"
+                }`}>
+                {breaks.status}
+              </Badge>
             </div>
           </div>
         </div>

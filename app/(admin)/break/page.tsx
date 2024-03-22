@@ -14,13 +14,11 @@ const Break = () => {
 
   return (
     <LayoutContainer>
-      <div className="w-full h-auto ">
+      <div className="w-full min-h-[200px] p-2 ">
         <BreakFormContainer data={data} />
       </div>
-      <div className="flex-1 w-[99%] mb-1 justify-center items-center flex">
-        <CommanCardContainer headerLabel="Breaks" footer={false}>
-          <BreakFormListContainer editBreak={editBreak} />
-        </CommanCardContainer>
+      <div className="w-full min-h-[400px] p-2 ">
+        <BreakFormListContainer editBreak={editBreak} />
       </div>
     </LayoutContainer>
   );
