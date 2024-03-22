@@ -51,7 +51,7 @@ const MeasureFormContainer = () => {
       return breake;
     },
     onSuccess: (value) => {
-      console.log(value);
+      // console.log(value);
       if (value.status) {
         toast.success(`${value.message}`, {
           description: `${value.message}`,
@@ -69,7 +69,7 @@ const MeasureFormContainer = () => {
       queryClient.invalidateQueries({ queryKey: ["measure"] });
     },
     onError: (value) => {
-      console.log(value);
+      // console.log(value);
       toast.error(`Something went wrong`, {
         position: "top-right",
         dismissible: true,
@@ -84,7 +84,7 @@ const MeasureFormContainer = () => {
     },
   });
   useEffect(() => {
-    console.log(measure);
+    // console.log(measure);
     if (measure) {
       form.setValue("unit", measure?.unit!);
       form.setValue("status", measure?.status!);
@@ -92,7 +92,7 @@ const MeasureFormContainer = () => {
   }, [measure]);
 
   const onSubmit = async (values: z.infer<typeof MeasureSchema>) => {
-    console.log(values);
+    // console.log(values);
     creatUser.mutate(values);
   };
 

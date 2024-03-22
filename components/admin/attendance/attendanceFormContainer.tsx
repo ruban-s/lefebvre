@@ -76,7 +76,7 @@ const AttendanceFormContainer = () => {
       queryClient.invalidateQueries({ queryKey: ["attendance"] });
     },
     onError: (value) => {
-      console.log(value);
+      // console.log(value);
       toast.error(`Something went wrong`, {
         position: "top-right",
         dismissible: true,
@@ -98,7 +98,7 @@ const AttendanceFormContainer = () => {
   }, [attendanceType]);
 
   const onSubmit = async (values: z.infer<typeof AttendanceTypeSchema>) => {
-    console.log(values);
+    // console.log(values);
     creatAttendanceType.mutate(values);
   };
 

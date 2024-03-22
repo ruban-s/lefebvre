@@ -49,7 +49,7 @@ export const updateIndirectCode = async (value: any) => {
       value
     );
     const data = axiosResponse.data;
-    console.log(data);
+    // console.log(data);
 
     return data;
   } catch (error) {

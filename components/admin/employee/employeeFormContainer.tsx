@@ -114,7 +114,7 @@ const EmployeeFormContainer = () => {
   }
   useEffect(() => {
     if (employee) {
-      console.log(employee);
+      // console.log(employee);
       form.setValue("designation_id", employee?.designation_id!);
       form.setValue("email", employee?.email!);
       form.setValue("mobile", employee?.mobile!);
@@ -132,7 +132,7 @@ const EmployeeFormContainer = () => {
     creatUser.mutate(values);
   };
   useEffect(() => {
-    console.log(image);
+    // console.log(image);
     form.setValue("image_path", image);
   }, [image]);
 

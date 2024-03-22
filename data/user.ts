@@ -52,7 +52,7 @@ export const updateUser = async (value: UserData) => {
     const data = axiosResponse.data;
     return data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),

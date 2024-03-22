@@ -11,7 +11,7 @@ export const getAllBreaks = async () => {
       "http://208.109.9.243:8082/break/getAllBreaks"
     );
     const data = axiosResponse.data;
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
@@ -48,7 +48,7 @@ export const updateBreak = async (value: BreaksData) => {
     const data = axiosResponse.data;
     return data;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),

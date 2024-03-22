@@ -30,7 +30,7 @@ export const createAttendanceType = async (
       value
     );
     const data = axiosResponse.data;
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

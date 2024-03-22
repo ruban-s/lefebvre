@@ -30,7 +30,7 @@ const LoginForm = () => {
 
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
-    console.log(values);
+    // console.log(values);
 
     await Login(values).then((callback) => {
       if (callback?.error == undefined) {

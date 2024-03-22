@@ -28,7 +28,7 @@ export const createMeasure = async (value: z.infer<typeof MeasureSchema>) => {
       value
     );
     const data = axiosResponse.data;
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

@@ -93,7 +93,7 @@ const ResourceFormContainer = () => {
   }, [resource]);
 
   const onSubmit = async (values: z.infer<typeof ResourceSchema>) => {
-    console.log(values);
+    // console.log(values);
     creatUser.mutate(values);
   };
 
