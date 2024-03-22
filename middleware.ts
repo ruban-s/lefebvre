@@ -7,31 +7,29 @@ import {
   apiAuthPrefix,
   publicRoutes,
 } from "@/routes";
+import { NextResponse } from "next/server";
+import { GetServerSidePropsContext } from "next";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req: any) => {
-  const isLoggedIn = !!req.auth;
-  const { nextUrl, auth } = req;
-
+export default auth((req) => {
+  const isLoggedIn = !!req?.auth;
+  const { nextUrl, auth } = req!;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
   if (isApiAuthRoute) {
-    return null;
+    return;
   }
   if (isAuthRoute) {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    return null;
+    return;
   }
-
   if (!isLoggedIn) {
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
-
-  return null;
+  return;
 });
 
 export const config = {
