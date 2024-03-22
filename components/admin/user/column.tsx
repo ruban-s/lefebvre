@@ -76,44 +76,45 @@ export const columns: ColumnDef<UserData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
+      // const queryClient = useQueryClient();
 
-      const user = row.original;
-      const setUser = useStore((state: any) => state.setUser);
-      const handleUpdateUser = () => {
-        setUser({ ...user }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteUser(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["users"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
+      // const user = row.original;
+      // const setUser = useStore((state: any) => state.setUser);
+      // const handleUpdateUser = () => {
+      //   setUser({ ...user }); // Updating user object
+      // };
+      // const deleteItem = useMutation({
+      //   mutationFn: async (value: any) => {
+      //     const deleteCode: any = await deleteUser(value);
+      //     return deleteCode;
+      //   },
+      //   onSuccess: (value) => {
+      //     if (value?.status) {
+      //       toast.success(`${value.message}`, {
+      //         description: `${value.message}`,
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     } else {
+      //       toast.error(`Something went wrong`, {
+      //         description: "Data not updated contact the admin",
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     }
+      //     queryClient.invalidateQueries({ queryKey: ["users"] });
+      //   },
+      //   onError: (value) => {
+      //     toast.error(`Something went wrong`, {
+      //       position: "top-right",
+      //       dismissible: true,
+      //     });
+      //   },
+      // });
       return (
         <>
-          <TableActionButtonComponents
+          <p>working</p>
+          {/* <TableActionButtonComponents
             primaryLable="Edit"
             primaryAction={() => {
               handleUpdateUser();
@@ -130,7 +131,7 @@ export const columns: ColumnDef<UserData>[] = [
             alertactionFunction={() => {
               deleteItem.mutate(`${user.id}`);
             }}
-          />
+          /> */}
         </>
       );
     },

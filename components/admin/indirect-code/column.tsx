@@ -76,46 +76,47 @@ export const columns: ColumnDef<IndirectCodeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const indirectCode = row.original;
-      const queryClient = useQueryClient();
+      // const indirectCode = row.original;
+      // const queryClient = useQueryClient();
 
-      const setIndirect = useIndirectCodeStore(
-        (state: any) => state.setIndirect
-      );
-      const handleUpdateUser = () => {
-        setIndirect({ ...indirectCode }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteIndirectCode(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["indirects"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
+      // const setIndirect = useIndirectCodeStore(
+      //   (state: any) => state.setIndirect
+      // );
+      // const handleUpdateUser = () => {
+      //   setIndirect({ ...indirectCode }); // Updating user object
+      // };
+      // const deleteItem = useMutation({
+      //   mutationFn: async (value: any) => {
+      //     const deleteCode: any = await deleteIndirectCode(value);
+      //     return deleteCode;
+      //   },
+      //   onSuccess: (value) => {
+      //     if (value?.status) {
+      //       toast.success(`${value.message}`, {
+      //         description: `${value.message}`,
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     } else {
+      //       toast.error(`Something went wrong`, {
+      //         description: "Data not updated contact the admin",
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     }
+      //     queryClient.invalidateQueries({ queryKey: ["indirects"] });
+      //   },
+      //   onError: (value) => {
+      //     toast.error(`Something went wrong`, {
+      //       position: "top-right",
+      //       dismissible: true,
+      //     });
+      //   },
+      // });
       return (
         <>
-          <TableActionButtonComponents
+          working
+          {/* <TableActionButtonComponents
             primaryLable="Edit"
             primaryAction={() => {
               handleUpdateUser();
@@ -132,7 +133,7 @@ export const columns: ColumnDef<IndirectCodeData>[] = [
             alertactionFunction={() => {
               deleteItem.mutate(`${indirectCode.id}`);
             }}
-          />
+          /> */}
         </>
       );
     },

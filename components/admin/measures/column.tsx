@@ -61,43 +61,44 @@ export const columns: ColumnDef<MeasureData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
-      const measure = row.original;
-      const setMeasure = useMeasureStore((state: any) => state.setMeasure);
-      const handleUpdateUser = () => {
-        setMeasure({ ...measure }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteMeasure(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["measure"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
+      // const queryClient = useQueryClient();
+      // const measure = row.original;
+      // const setMeasure = useMeasureStore((state: any) => state.setMeasure);
+      // const handleUpdateUser = () => {
+      //   setMeasure({ ...measure }); // Updating user object
+      // };
+      // const deleteItem = useMutation({
+      //   mutationFn: async (value: any) => {
+      //     const deleteCode: any = await deleteMeasure(value);
+      //     return deleteCode;
+      //   },
+      //   onSuccess: (value) => {
+      //     if (value?.status) {
+      //       toast.success(`${value.message}`, {
+      //         description: `${value.message}`,
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     } else {
+      //       toast.error(`Something went wrong`, {
+      //         description: "Data not updated contact the admin",
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     }
+      //     queryClient.invalidateQueries({ queryKey: ["measure"] });
+      //   },
+      //   onError: (value) => {
+      //     toast.error(`Something went wrong`, {
+      //       position: "top-right",
+      //       dismissible: true,
+      //     });
+      //   },
+      // });
       return (
         <>
-          <TableActionButtonComponents
+          <p>working</p>
+          {/* <TableActionButtonComponents
             primaryLable="Edit"
             primaryAction={() => {
               handleUpdateUser();
@@ -114,7 +115,7 @@ export const columns: ColumnDef<MeasureData>[] = [
             alertactionFunction={() => {
               deleteItem.mutate(`${measure.id}`);
             }}
-          />
+          /> */}
         </>
       );
     },

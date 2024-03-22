@@ -85,44 +85,45 @@ export const columns: ColumnDef<EmployeeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
+      // const queryClient = useQueryClient();
 
-      const employee = row.original;
-      const setEmployee = useEmployeeStore((state: any) => state.setEmployee);
-      const handleUpdateUser = () => {
-        setEmployee({ ...employee }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteEmployee(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["employee"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
+      // const employee = row.original;
+      // const setEmployee = useEmployeeStore((state: any) => state.setEmployee);
+      // const handleUpdateUser = () => {
+      //   setEmployee({ ...employee }); // Updating user object
+      // };
+      // const deleteItem = useMutation({
+      //   mutationFn: async (value: any) => {
+      //     const deleteCode: any = await deleteEmployee(value);
+      //     return deleteCode;
+      //   },
+      //   onSuccess: (value) => {
+      //     if (value?.status) {
+      //       toast.success(`${value.message}`, {
+      //         description: `${value.message}`,
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     } else {
+      //       toast.error(`Something went wrong`, {
+      //         description: "Data not updated contact the admin",
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     }
+      //     queryClient.invalidateQueries({ queryKey: ["employee"] });
+      //   },
+      //   onError: (value) => {
+      //     toast.error(`Something went wrong`, {
+      //       position: "top-right",
+      //       dismissible: true,
+      //     });
+      //   },
+      // });
       return (
         <>
-          <TableActionButtonComponents
+          <p>working</p>
+          {/* <TableActionButtonComponents
             primaryLable="Edit"
             primaryAction={() => {
               handleUpdateUser();
@@ -139,7 +140,7 @@ export const columns: ColumnDef<EmployeeData>[] = [
             alertactionFunction={() => {
               deleteItem.mutate(`${employee.id}`);
             }}
-          />
+          /> */}
         </>
       );
     },

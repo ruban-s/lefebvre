@@ -76,43 +76,44 @@ export const columns: ColumnDef<ResourceData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
-      const resource = row.original;
-      const setResource = useResourceStore((state: any) => state.setResource);
-      const handleUpdateUser = () => {
-        setResource({ ...resource }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteResource(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          queryClient.invalidateQueries({ queryKey: ["resource"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
+      // const queryClient = useQueryClient();
+      // const resource = row.original;
+      // const setResource = useResourceStore((state: any) => state.setResource);
+      // const handleUpdateUser = () => {
+      //   setResource({ ...resource }); // Updating user object
+      // };
+      // const deleteItem = useMutation({
+      //   mutationFn: async (value: any) => {
+      //     const deleteCode: any = await deleteResource(value);
+      //     return deleteCode;
+      //   },
+      //   onSuccess: (value) => {
+      //     if (value?.status) {
+      //       toast.success(`${value.message}`, {
+      //         description: `${value.message}`,
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     } else {
+      //       toast.error(`Something went wrong`, {
+      //         description: "Data not updated contact the admin",
+      //         position: "top-right",
+      //         dismissible: true,
+      //       });
+      //     }
+      //     queryClient.invalidateQueries({ queryKey: ["resource"] });
+      //   },
+      //   onError: (value) => {
+      //     toast.error(`Something went wrong`, {
+      //       position: "top-right",
+      //       dismissible: true,
+      //     });
+      //   },
+      // });
       return (
         <>
-          <TableActionButtonComponents
+          <p>workiong</p>
+          {/* <TableActionButtonComponents
             primaryLable="Edit"
             primaryAction={() => {
               handleUpdateUser();
@@ -129,7 +130,7 @@ export const columns: ColumnDef<ResourceData>[] = [
             alertactionFunction={() => {
               deleteItem.mutate(`${resource.id}`);
             }}
-          />
+          /> */}
         </>
       );
     },
