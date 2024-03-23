@@ -1,10 +1,10 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "../ui/hover-card";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "../ui/button";
 import { VscSignOut } from "react-icons/vsc";
@@ -22,39 +22,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import SideBar from "./sidebar";
-import { IconType } from "react-icons";
-import { FaHome } from "react-icons/fa";
-import { GiThermometerScale } from "react-icons/gi";
-import { IoCalendar } from "react-icons/io5";
-import { GiCoffeeCup } from "react-icons/gi";
-import {
-  FaUsers,
-  FaCogs,
-  FaUserCog,
-  FaAngleDoubleLeft,
-  FaUsersCog,
-} from "react-icons/fa";
-import { TbReportAnalytics } from "react-icons/tb";
-import { MdSpaceDashboard } from "react-icons/md";
-import { TabData } from "@/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { adminTabs } from "@/config/const";
-
 const Topbar = () => {
   const session = useSession();
   const path = usePathname();
-
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isOpen, setOpen] = useState(false);
-
   const toggleFullScreen = () => {
     if (!isFullScreen) {
       if (document.documentElement.requestFullscreen) {
@@ -72,7 +47,7 @@ const Topbar = () => {
     <div className="w-full   h-[10%] md:h-[5%] bg-white  flex  justify-between items-center pr-4">
       <Dialog open={isOpen}>
         <DialogTrigger
-          className="flex md:hidden p-4 bg-neutral-100 rounded-sm shadow-md m-1"
+          className="flex lg:hidden p-4 bg-neutral-100 rounded-sm shadow-md m-1 ml-4"
           onClick={() => setOpen(!isOpen)}>
           <TiThMenu />
         </DialogTrigger>
@@ -119,8 +94,8 @@ const Topbar = () => {
             <MdFullscreenExit size={25} className="text-theme font-bold " />
           </Button>
         )}
-        <HoverCard>
-          <HoverCardTrigger className="hover:cursor-pointer" draggable={true}>
+        <Popover>
+          <PopoverTrigger className="hover:cursor-pointer" draggable={true}>
             <Avatar className="w-[40px] h-[40px]  border-spacing-1 border-2 border-theme">
               <AvatarImage
                 src={
@@ -135,8 +110,8 @@ const Topbar = () => {
                 </p>
               </AvatarFallback>
             </Avatar>
-          </HoverCardTrigger>
-          <HoverCardContent className="w-[250px] h-[250px] flex flex-col justify-start items-center">
+          </PopoverTrigger>
+          <PopoverContent className="w-[250px] h-[250px] flex flex-col justify-start items-center">
             <Avatar className="w-[70px] h-[70px]  border-spacing-1 border-2 border-theme">
               <AvatarImage
                 src={
@@ -169,8 +144,8 @@ const Topbar = () => {
                 </span>
               </Button>
             </div>
-          </HoverCardContent>
-        </HoverCard>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );

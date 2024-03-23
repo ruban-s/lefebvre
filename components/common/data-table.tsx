@@ -175,8 +175,8 @@ export function DataTable<TData, TValue>({
   }, []);
 
   return (
-    <div className="m-2 w-[100%] h-auto pr-4">
-      <div className=" w-full  flex items-center py-4">
+    <div className=" ml-auto mr-auto w-[375px]  sm:w-[500px] md:w-[720px] lg:w-[100%]  h-auto pr-4 mb-6">
+      <div className=" w-[100%]  flex items-center py-4">
         <Input
           placeholder={`Search by ${searchName.replace("_", "").toLowerCase()}`}
           value={
@@ -185,7 +185,7 @@ export function DataTable<TData, TValue>({
           onChange={(event) => {
             table.getColumn(searchName)?.setFilterValue(event.target.value);
           }}
-          className="max-w-sm"
+          className="max-w-sm ml-2"
         />
 
         <Button
@@ -271,7 +271,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="rounded-md border">
+      <div className=" w-[100%] rounded-md ml-2 border">
         <Table className="rounded-none">
           <TableHeader className="bg-blue-50">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -323,13 +323,13 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between ml-4 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        <div className="flex-1 text-[8px] md:text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length.toString()} of{" "}
           {table.getFilteredRowModel().rows.length.toString()} row(s) selected.
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+            <p className="text-[8px] md:text-sm font-medium">Rows per page</p>
             <Select
               value={`${table.getState().pagination.pageSize}`}
               onValueChange={(value) => {

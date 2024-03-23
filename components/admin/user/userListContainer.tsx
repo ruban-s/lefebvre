@@ -24,7 +24,7 @@ const UserListContainer = (props: UserListContainerProps) => {
   const breaks = data;
 
   return (
-    <div className="w-full h-auto bg-white  shadow-sm">
+    <div className="w-[100%] h-auto bg-white  shadow-sm">
       {isLoading ? (
         <Loading />
       ) : (
@@ -32,7 +32,7 @@ const UserListContainer = (props: UserListContainerProps) => {
           <div className=" w-full h-auto ">
             <p className="text-lg font-semibold pl-4 pt-4">{"Users"}</p>
           </div>
-          <div className="w-full ">
+          <div className="w-full  ">
             <DataTable
               columns={columns}
               data={breaks!}
