@@ -55,7 +55,7 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
+      // const queryClient = useQueryClient();
       const attendanceType = row.original;
 
       const setAttendanceType = useAttendanceTypeStore(
@@ -83,7 +83,7 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
               dismissible: true,
             });
           }
-          queryClient.invalidateQueries({ queryKey: ["attendance"] });
+          // queryClient.invalidateQueries({ queryKey: ["attendance"] });
         },
         onError: (value) => {
           toast.error(`Something went wrong`, {
