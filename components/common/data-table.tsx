@@ -351,7 +351,7 @@ export function DataTable<TData, TValue>({
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
@@ -384,7 +384,7 @@ export function DataTable<TData, TValue>({
               <span className="sr-only">Go to last page</span>
               <MdKeyboardDoubleArrowRight className="h-4 w-4" />
             </Button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
