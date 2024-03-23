@@ -1,8 +1,5 @@
 "use client";
-
 import Loading from "@/loading";
-import React, { useEffect, useState } from "react";
-import { getAllBreaks } from "@/data/break";
 import { AttendanceTypeData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
@@ -18,7 +15,6 @@ const AttendanceListContainer = () => {
     },
   });
   const attendanceType = data;
-
   if (isError) {
     return <p>i am error</p>;
   }
