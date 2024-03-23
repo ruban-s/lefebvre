@@ -31,12 +31,13 @@ const EmployeeListContainer = () => {
           </div>
 
           <div className="w-full ">
-            <DataTable
+            <p className="w-[500 px ]">{JSON.stringify(employees)}</p>
+            {/* <DataTable
               columns={columns}
               data={employees!}
               searchName="employee_id"
               fileName="Employee"
-            />
+            /> */}
           </div>
         </>
       )}

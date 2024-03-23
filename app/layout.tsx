@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Merriweather } from "next/font/google";
+import { Mulish } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "@/components/ui/sonner";
 import { auth } from "@/auth";
 import "./globals.css";
 import Provider from "@/query-client/provider";
 
-const mulish = Merriweather({ subsets: ["latin"], weight: "400" });
+const mulish = Mulish({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "Admin",

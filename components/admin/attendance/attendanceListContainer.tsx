@@ -19,6 +19,9 @@ const AttendanceListContainer = () => {
   });
   const attendanceType = data;
 
+  if (isError) {
+    return <p>i am error</p>;
+  }
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (

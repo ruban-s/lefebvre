@@ -61,62 +61,59 @@ export const columns: ColumnDef<MeasureData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      // const queryClient = useQueryClient();
-      // const measure = row.original;
-      // const setMeasure = useMeasureStore((state: any) => state.setMeasure);
-      // const handleUpdateUser = () => {
-      //   setMeasure({ ...measure }); // Updating user object
-      // };
-      // const deleteItem = useMutation({
-      //   mutationFn: async (value: any) => {
-      //     const deleteCode: any = await deleteMeasure(value);
-      //     return deleteCode;
-      //   },
-      //   onSuccess: (value) => {
-      //     if (value?.status) {
-      //       toast.success(`${value.message}`, {
-      //         description: `${value.message}`,
-      //         position: "top-right",
-      //         dismissible: true,
-      //       });
-      //     } else {
-      //       toast.error(`Something went wrong`, {
-      //         description: "Data not updated contact the admin",
-      //         position: "top-right",
-      //         dismissible: true,
-      //       });
-      //     }
-      //     queryClient.invalidateQueries({ queryKey: ["measure"] });
-      //   },
-      //   onError: (value) => {
-      //     toast.error(`Something went wrong`, {
-      //       position: "top-right",
-      //       dismissible: true,
-      //     });
-      //   },
-      // });
+      const queryClient = useQueryClient();
+      const measure = row.original;
+      const setMeasure = useMeasureStore((state: any) => state.setMeasure);
+      const handleUpdateUser = () => {
+        setMeasure({ ...measure }); // Updating user object
+      };
+      const deleteItem = useMutation({
+        mutationFn: async (value: any) => {
+          const deleteCode: any = await deleteMeasure(value);
+          return deleteCode;
+        },
+        onSuccess: (value) => {
+          if (value?.status) {
+            toast.success(`${value.message}`, {
+              description: `${value.message}`,
+              position: "top-right",
+              dismissible: true,
+            });
+          } else {
+            toast.error(`Something went wrong`, {
+              description: "Data not updated contact the admin",
+              position: "top-right",
+              dismissible: true,
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["measure"] });
+        },
+        onError: (value) => {
+          toast.error(`Something went wrong`, {
+            position: "top-right",
+            dismissible: true,
+          });
+        },
+      });
       return (
-        <>
-          <p>working</p>
-          {/* <TableActionButtonComponents
-            primaryLable="Edit"
-            primaryAction={() => {
-              handleUpdateUser();
-            }}
-            primaryIcon={TbEdit}
-            alertlable="Delete"
-            alertlableIcon={MdDelete}
-            alertheading=" Are you absolutely sure?"
-            alertIcon={IoIosWarning}
-            alertactionLable="Delete"
-            alertcloseAllFunction={() => {}}
-            alertdescription="  This action cannot be undone. This will permanently delete
+        <TableActionButtonComponents
+          primaryLable="Edit"
+          primaryAction={() => {
+            handleUpdateUser();
+          }}
+          primaryIcon={TbEdit}
+          alertlable="Delete"
+          alertlableIcon={MdDelete}
+          alertheading=" Are you absolutely sure?"
+          alertIcon={IoIosWarning}
+          alertactionLable="Delete"
+          alertcloseAllFunction={() => {}}
+          alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
-            alertactionFunction={() => {
-              deleteItem.mutate(`${measure.id}`);
-            }}
-          /> */}
-        </>
+          alertactionFunction={() => {
+            deleteItem.mutate(`${measure.id}`);
+          }}
+        />
       );
     },
   },

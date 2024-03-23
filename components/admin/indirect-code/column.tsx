@@ -76,65 +76,62 @@ export const columns: ColumnDef<IndirectCodeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      // const indirectCode = row.original;
-      // const queryClient = useQueryClient();
+      const indirectCode = row.original;
+      const queryClient = useQueryClient();
 
-      // const setIndirect = useIndirectCodeStore(
-      //   (state: any) => state.setIndirect
-      // );
-      // const handleUpdateUser = () => {
-      //   setIndirect({ ...indirectCode }); // Updating user object
-      // };
-      // const deleteItem = useMutation({
-      //   mutationFn: async (value: any) => {
-      //     const deleteCode: any = await deleteIndirectCode(value);
-      //     return deleteCode;
-      //   },
-      //   onSuccess: (value) => {
-      //     if (value?.status) {
-      //       toast.success(`${value.message}`, {
-      //         description: `${value.message}`,
-      //         position: "top-right",
-      //         dismissible: true,
-      //       });
-      //     } else {
-      //       toast.error(`Something went wrong`, {
-      //         description: "Data not updated contact the admin",
-      //         position: "top-right",
-      //         dismissible: true,
-      //       });
-      //     }
-      //     queryClient.invalidateQueries({ queryKey: ["indirects"] });
-      //   },
-      //   onError: (value) => {
-      //     toast.error(`Something went wrong`, {
-      //       position: "top-right",
-      //       dismissible: true,
-      //     });
-      //   },
-      // });
+      const setIndirect = useIndirectCodeStore(
+        (state: any) => state.setIndirect
+      );
+      const handleUpdateUser = () => {
+        setIndirect({ ...indirectCode }); // Updating user object
+      };
+      const deleteItem = useMutation({
+        mutationFn: async (value: any) => {
+          const deleteCode: any = await deleteIndirectCode(value);
+          return deleteCode;
+        },
+        onSuccess: (value) => {
+          if (value?.status) {
+            toast.success(`${value.message}`, {
+              description: `${value.message}`,
+              position: "top-right",
+              dismissible: true,
+            });
+          } else {
+            toast.error(`Something went wrong`, {
+              description: "Data not updated contact the admin",
+              position: "top-right",
+              dismissible: true,
+            });
+          }
+          queryClient.invalidateQueries({ queryKey: ["indirects"] });
+        },
+        onError: (value) => {
+          toast.error(`Something went wrong`, {
+            position: "top-right",
+            dismissible: true,
+          });
+        },
+      });
       return (
-        <>
-          working
-          {/* <TableActionButtonComponents
-            primaryLable="Edit"
-            primaryAction={() => {
-              handleUpdateUser();
-            }}
-            primaryIcon={TbEdit}
-            alertlable="Delete"
-            alertlableIcon={MdDelete}
-            alertheading=" Are you absolutely sure?"
-            alertIcon={IoIosWarning}
-            alertactionLable="Delete"
-            alertcloseAllFunction={() => {}}
-            alertdescription="  This action cannot be undone. This will permanently delete
+        <TableActionButtonComponents
+          primaryLable="Edit"
+          primaryAction={() => {
+            handleUpdateUser();
+          }}
+          primaryIcon={TbEdit}
+          alertlable="Delete"
+          alertlableIcon={MdDelete}
+          alertheading=" Are you absolutely sure?"
+          alertIcon={IoIosWarning}
+          alertactionLable="Delete"
+          alertcloseAllFunction={() => {}}
+          alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
-            alertactionFunction={() => {
-              deleteItem.mutate(`${indirectCode.id}`);
-            }}
-          /> */}
-        </>
+          alertactionFunction={() => {
+            deleteItem.mutate(`${indirectCode.id}`);
+          }}
+        />
       );
     },
   },
