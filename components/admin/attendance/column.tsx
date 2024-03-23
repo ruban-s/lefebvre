@@ -13,6 +13,65 @@ import { MdDelete } from "react-icons/md";
 import { deleteAttendanceType } from "@/data/attendanceType";
 import { Badge } from "@/components/ui/badge";
 
+export const CellFunction = ({ row }: any) => {
+  const attendanceType = row.original;
+
+  const setAttendanceType = useAttendanceTypeStore(
+    (state: any) => state.setAttendanceType
+  );
+  const handleUpdateUser = () => {
+    setAttendanceType({ ...attendanceType }); // Updating user object
+  };
+  const deleteItem = useMutation({
+    mutationFn: async (value: any) => {
+      const deleteCode: any = await deleteAttendanceType(value);
+      return deleteCode;
+    },
+    onSuccess: (value) => {
+      if (value?.status) {
+        toast.success(`${value.message}`, {
+          description: `${value.message}`,
+          position: "top-right",
+          dismissible: true,
+        });
+      } else {
+        toast.error(`Something went wrong`, {
+          description: "Data not updated contact the admin",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+      // queryClient.invalidateQueries({ queryKey: ["attendance"] });
+    },
+    onError: (value) => {
+      toast.error(`Something went wrong`, {
+        position: "top-right",
+        dismissible: true,
+      });
+    },
+  });
+  return (
+    <TableActionButtonComponents
+      primaryLable="Edit"
+      primaryAction={() => {
+        handleUpdateUser();
+      }}
+      primaryIcon={TbEdit}
+      alertlable="Delete"
+      alertlableIcon={MdDelete}
+      alertheading=" Are you absolutely sure?"
+      alertIcon={IoIosWarning}
+      alertactionLable="Delete"
+      alertcloseAllFunction={() => {}}
+      alertdescription="  This action cannot be undone. This will permanently delete
+                    your data and remove from our server."
+      alertactionFunction={() => {
+        deleteItem.mutate(`${attendanceType.id}`);
+      }}
+    />
+  );
+};
+
 export const columns: ColumnDef<AttendanceTypeData>[] = [
   {
     id: "select",
@@ -55,63 +114,7 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      // const queryClient = useQueryClient();
-      const attendanceType = row.original;
-
-      const setAttendanceType = useAttendanceTypeStore(
-        (state: any) => state.setAttendanceType
-      );
-      const handleUpdateUser = () => {
-        setAttendanceType({ ...attendanceType }); // Updating user object
-      };
-      const deleteItem = useMutation({
-        mutationFn: async (value: any) => {
-          const deleteCode: any = await deleteAttendanceType(value);
-          return deleteCode;
-        },
-        onSuccess: (value) => {
-          if (value?.status) {
-            toast.success(`${value.message}`, {
-              description: `${value.message}`,
-              position: "top-right",
-              dismissible: true,
-            });
-          } else {
-            toast.error(`Something went wrong`, {
-              description: "Data not updated contact the admin",
-              position: "top-right",
-              dismissible: true,
-            });
-          }
-          // queryClient.invalidateQueries({ queryKey: ["attendance"] });
-        },
-        onError: (value) => {
-          toast.error(`Something went wrong`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        },
-      });
-      return (
-        <TableActionButtonComponents
-          primaryLable="Edit"
-          primaryAction={() => {
-            handleUpdateUser();
-          }}
-          primaryIcon={TbEdit}
-          alertlable="Delete"
-          alertlableIcon={MdDelete}
-          alertheading=" Are you absolutely sure?"
-          alertIcon={IoIosWarning}
-          alertactionLable="Delete"
-          alertcloseAllFunction={() => {}}
-          alertdescription="  This action cannot be undone. This will permanently delete
-                    your data and remove from our server."
-          alertactionFunction={() => {
-            deleteItem.mutate(`${attendanceType.id}`);
-          }}
-        />
-      );
+      return <CellFunction row={row} />;
     },
   },
 ];
