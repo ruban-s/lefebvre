@@ -176,7 +176,7 @@ export function DataTable<TData, TValue>({
     <div className="m-2 w-[100%] h-auto pr-4">
       <div className=" w-full  flex items-center py-4">
         <Input
-          placeholder={`Search by ${searchName.replace("_", "")}`}
+          placeholder={`Search by ${searchName.replace("_", "").toLowerCase()}`}
           value={
             (table.getColumn(searchName)?.getFilterValue() as string) ?? ""
           }
@@ -186,7 +186,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
 
-        <Button
+        {/* <Button
           className="ml-2 mr-auto "
           variant={"secondary"}
           onClick={() => {
@@ -196,7 +196,7 @@ export function DataTable<TData, TValue>({
             table.resetPagination();
           }}>
           <MdRefresh />
-        </Button>
+        </Button> */}
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -240,7 +240,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu> */}
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
@@ -267,7 +267,7 @@ export function DataTable<TData, TValue>({
                 );
               })}
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
       <div className="rounded-md border">
         <Table className="rounded-none">
