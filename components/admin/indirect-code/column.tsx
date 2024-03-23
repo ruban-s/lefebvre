@@ -76,6 +76,8 @@ export const columns: ColumnDef<IndirectCodeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      "use client";
+
       const indirectCode = row.original;
       const queryClient = useQueryClient();
 

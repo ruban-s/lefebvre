@@ -85,7 +85,7 @@ export const columns: ColumnDef<EmployeeData>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const queryClient = useQueryClient();
+      // const queryClient = useQueryClient();
 
       const employee = row.original;
       const setEmployee = useEmployeeStore((state: any) => state.setEmployee);
@@ -111,7 +111,7 @@ export const columns: ColumnDef<EmployeeData>[] = [
               dismissible: true,
             });
           }
-          queryClient.invalidateQueries({ queryKey: ["employee"] });
+          // queryClient.invalidateQueries({ queryKey: ["employee"] });
         },
         onError: (value) => {
           toast.error(`Something went wrong`, {
