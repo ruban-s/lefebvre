@@ -321,11 +321,11 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between ml-4 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
+        {/* <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of
           {table.getFilteredRowModel().rows.entries()} row(s) selected.
-        </div>
-        <div className="flex items-center space-x-6 lg:space-x-8">
+        </div> */}
+        {/* <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
             <Select
@@ -351,7 +351,7 @@ export function DataTable<TData, TValue>({
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
-          {/* <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
@@ -384,8 +384,8 @@ export function DataTable<TData, TValue>({
               <span className="sr-only">Go to last page</span>
               <MdKeyboardDoubleArrowRight className="h-4 w-4" />
             </Button>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
       </div>
     </div>
   );
