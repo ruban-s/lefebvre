@@ -14,6 +14,8 @@ import { deleteAttendanceType } from "@/data/attendanceType";
 import { Badge } from "@/components/ui/badge";
 
 export const CellFunction = ({ row }: any) => {
+  const queryClient = useQueryClient();
+
   const attendanceType = row.original;
 
   const setAttendanceType = useAttendanceTypeStore(
@@ -41,7 +43,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      // queryClient.invalidateQueries({ queryKey: ["attendance"] });
+      queryClient.invalidateQueries({ queryKey: ["attendance"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
