@@ -95,7 +95,7 @@ const AttendanceFormContainer = () => {
       form.setValue("name", attendanceType?.name!);
       form.setValue("status", attendanceType?.status!);
     }
-  }, [attendanceType]);
+  }, [attendanceType, form]);
 
   const onSubmit = async (values: z.infer<typeof AttendanceTypeSchema>) => {
     // console.log(values);
