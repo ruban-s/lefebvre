@@ -38,41 +38,49 @@ const CustomImageInput = ({ value, onChange }: CustomImageInputProps) => {
   }, [value]);
 
   return (
-    <div
-      className=" w-[150px] h-[150px] bg-[url('/cog-bg2.png')] bg-im flex justify-center items-center mr-2 rounded-lg  border-dotted border-1 border-ne p-2 mt-4 relative cursor-pointer"
-      onClick={() => imageRef.current?.click()}>
-      <Input
-        ref={imageRef}
-        type="file"
-        className="absolute"
-        accept="image/*"
-        onChange={async (value: any) => {
-          const file = value.target?.files[0];
-          const base64String = await fileToBase64(file);
-          setImage(base64String);
-          onChange(base64String);
-        }}
-      />
-      <Image
-        alt="emp-img"
-        src={value ? value : image ? image : "https://github.com/shadcn.png"}
-        fill
-        className="object-cover rounded-lg group bg-neutral-200"
-      />
-      {image && (
-        <Button
-          variant={"destructive"}
-          className="absolute right-0 bottom-0 m-1  flex"
+    <div className="w-auto h-auto mr-3">
+      <p className="mb-2">Image</p>
+      <div className=" w-[100px] h-[100px]  bg-black flex justify-center items-center ring-2 ring-black rounded-lg  relative cursor-pointer">
+        <Input
+          ref={imageRef}
+          type="file"
+          className="absolute"
+          accept="image/*"
+          onChange={async (value: any) => {
+            const file = value.target?.files[0];
+            const base64String = await fileToBase64(file);
+            setImage(base64String);
+            onChange(base64String);
+          }}
+        />
+        <Image
+          alt="emp-img"
+          src={value ? value : image ? image : "/user.png"}
+          fill
+          className="object-cover rounded-lg group bg-neutral-200"
+        />
+        {image && image !== "/user.png" && (
+          <div
+            className="absolute right-7 bottom-0 m-1  flex bg-red-500 rounded-sm p-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              setImage("");
+              onChange(() => {
+                onChange("/user.png");
+              });
+            }}>
+            <MdDelete className="text-white" />
+          </div>
+        )}
+        <div
+          className="absolute right-0 bottom-0 m-1  flex bg-neutral-300 rounded-sm p-1"
           onClick={(e) => {
             e.stopPropagation();
-            setImage("");
-            onChange(() => {
-              onChange("");
-            });
+            imageRef.current?.click();
           }}>
-          <MdDelete />
-        </Button>
-      )}
+          <CiImageOn className="text-theme" />
+        </div>
+      </div>
     </div>
   );
 };

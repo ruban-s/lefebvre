@@ -114,7 +114,6 @@ const EmployeeFormContainer = () => {
   }
   useEffect(() => {
     if (employee) {
-      // console.log(employee);
       form.setValue("designation_id", employee?.designation_id!);
       form.setValue("email", employee?.email!);
       form.setValue("mobile", employee?.mobile!);
@@ -132,8 +131,10 @@ const EmployeeFormContainer = () => {
     creatUser.mutate(values);
   };
   useEffect(() => {
-    // console.log(image);
-    form.setValue("image_path", image);
+    if (image) {
+      return form.setValue("image_path", image);
+    }
+    form.setValue("image_path", "");
   }, [image]);
 
   return (
@@ -144,48 +145,17 @@ const EmployeeFormContainer = () => {
         </p>
       </div>
       <div className="w-[100%] ml-auto mr-auto  flex justify-center items-center   p-4 ">
-        <div className="w-[100%]  flex flex-col lg:flex-row mr-auto ">
+        <div className="w-[100%]  flex flex-col justify-center items-center lg:justify-start lg:items-start  lg:flex-row mr-auto ">
           <CustomImageInput
             value={form.watch("image_path")!}
             onChange={(value: string) => {
               form.setValue("image_path", value);
             }}
           />
-          {/* <div className=" w-[150px] h-[150px] bg-[url('/cog-bg2.png')] bg-im flex justify-center items-center mr-2 rounded-md relative">
-            <Input
-              ref={imageRef}
-              type="file"
-              className="absolute"
-              onChange={async (value: any) => {
-                const file = value.target?.files[0];
-                const base64String = await fileToBase64(file);
-                setImage(base64String);
-              }}
-            />
-            <Image
-              alt="emp-img"
-              src={
-                form.watch("image_path")
-                  ? form.watch("image_path")
-                  : image
-                  ? image
-                  : "https://github.com/shadcn.png"
-              }
-              fill
-              className="object-cover rounded-sm group bg-neutral-200"
-            />
-            <Button
-              className="absolute right-0 bottom-0 m-1  flex"
-              variant={"secondary"}
-              onClick={() => {
-                imageRef.current?.click();
-              }}>
-              <CiImageOn />
-            </Button>
-          </div> */}
+
           <Form {...form}>
-            <form className=" flex-1 " onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid  grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3   2xl:grid-cols-4 gap-2">
+            <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="grid  grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
                 <FormField
                   control={form.control}
                   name="first_name"
@@ -323,8 +293,8 @@ const EmployeeFormContainer = () => {
                             <SelectValue placeholder="Select Gender" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="male">Male</SelectItem>
-                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="Male">Male</SelectItem>
+                            <SelectItem value="Female">Female</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -118,6 +118,11 @@ export const columns: ColumnDef<UserData>[] = [
   {
     accessorKey: "role_name",
     header: "Role",
+    cell: ({ row }) => (
+      <Badge className={`cursor-pointer rounded-md bg-neutral-500 text-white`}>
+        {row.original.role_name.toUpperCase()}
+      </Badge>
+    ),
   },
   {
     accessorKey: "status",

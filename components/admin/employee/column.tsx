@@ -113,6 +113,11 @@ export const columns: ColumnDef<EmployeeData>[] = [
   {
     accessorKey: "designation_id",
     header: "Designation",
+    cell: ({ row }) => (
+      <Badge className={`cursor-pointer rounded-md bg-neutral-500 text-white`}>
+        {row.original.designation_id.toUpperCase()}
+      </Badge>
+    ),
   },
   {
     accessorKey: "email",
