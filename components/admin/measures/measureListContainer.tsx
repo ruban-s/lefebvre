@@ -21,7 +21,9 @@ const MeasureListContainer = () => {
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (
-        <Loading />
+        <div className="w-full min-h-[500px] justify-center items-center flex">
+          <Loading />
+        </div>
       ) : (
         <>
           <div className=" w-full h-auto ">
