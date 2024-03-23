@@ -66,8 +66,10 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const paginationArray: number[] = [5, 10, 20, 30, 40, 50];
+
+  React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
   const [exportFileName, setExportFileName] = useState<string>(
     `${fileName}-${new Date().toISOString().replace(/:/g, "-")}`
@@ -321,11 +323,11 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-between ml-4 py-4">
-        {/* <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of
-          {table.getFilteredRowModel().rows.entries()} row(s) selected.
-        </div> */}
-        {/* <div className="flex items-center space-x-6 lg:space-x-8">
+        <div className="flex-1 text-sm text-muted-foreground">
+          {table.getFilteredSelectedRowModel().rows.length.toString()} of{" "}
+          {table.getFilteredRowModel().rows.length.toString()} row(s) selected.
+        </div>
+        <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
             <p className="text-sm font-medium">Rows per page</p>
             <Select
@@ -339,17 +341,17 @@ export function DataTable<TData, TValue>({
                 />
               </SelectTrigger>
               <SelectContent side="top">
-                {[5, 10, 20, 30, 40, 50].map((pageSize) => (
-                  <SelectItem key={pageSize} value={`${pageSize}`}>
-                    {pageSize}
+                {paginationArray.map((pageSize: number, index: number) => (
+                  <SelectItem key={index} value={`${pageSize}`}>
+                    {pageSize.toString()}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="flex w-[100px] items-center justify-center text-sm font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            Page {(table.getState().pagination.pageIndex + 1).toString()} of{" "}
+            {table.getPageCount().toString()}
           </div>
           <div className="flex items-center space-x-2">
             <Button
@@ -385,7 +387,7 @@ export function DataTable<TData, TValue>({
               <MdKeyboardDoubleArrowRight className="h-4 w-4" />
             </Button>
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

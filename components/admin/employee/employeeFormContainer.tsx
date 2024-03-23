@@ -144,7 +144,7 @@ const EmployeeFormContainer = () => {
         </p>
       </div>
       <div className="w-[100%] ml-auto mr-auto  flex justify-center items-center   p-4 ">
-        <div className="w-[100%]  flex flex-row mr-auto ">
+        <div className="w-[100%]  flex flex-col lg:flex-row mr-auto ">
           <CustomImageInput
             value={form.watch("image_path")!}
             onChange={(value: string) => {
@@ -185,7 +185,7 @@ const EmployeeFormContainer = () => {
           </div> */}
           <Form {...form}>
             <form className=" flex-1 " onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:lg:grid-cols-4 2xl:lg:grid-cols-4 gap-2">
+              <div className="grid  grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3   2xl:grid-cols-4 gap-2">
                 <FormField
                   control={form.control}
                   name="first_name"
