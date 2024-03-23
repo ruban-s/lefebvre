@@ -192,6 +192,7 @@ export function DataTable<TData, TValue>({
           className="ml-2 mr-auto "
           variant={"secondary"}
           onClick={() => {
+            table.setPageSize(Number(5));
             table.resetColumnVisibility();
             table.resetRowSelection();
             table.resetColumnFilters();
