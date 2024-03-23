@@ -197,7 +197,7 @@ export function DataTable<TData, TValue>({
           }}>
           <MdRefresh />
         </Button> */}
-        {/* <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
@@ -238,7 +238,7 @@ export function DataTable<TData, TValue>({
               }}
             />
           </DropdownMenuContent>
-        </DropdownMenu> */}
+        </DropdownMenu>
 
         {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
