@@ -213,20 +213,6 @@ const ResourceFormContainer = () => {
                 )}
 
                 {resource && (
-                  <Alert
-                    variant={"default"}
-                    className="w-auto h-[50px] ml-8 border-l-[5px]  border-blue-400">
-                    <FcInfo className="text-theme" />
-                    <AlertDescription className="font-semibold text-blue-400">
-                      Update the details of the
-                      <span className="ml-2 font-bold text-black">
-                        {" "}
-                        {JSON.stringify(resource.resource_id)}
-                      </span>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {resource && (
                   <Button
                     variant={"secondary"}
                     type="button"
@@ -245,6 +231,20 @@ const ResourceFormContainer = () => {
             </form>
           </Form>
         </div>
+        {resource && (
+          <Alert
+            variant={"default"}
+            className="w-auto h-[50px] ml-0 border-l-[5px]  border-blue-400">
+            <FcInfo className="text-theme" />
+            <AlertDescription className="font-semibold text-blue-400 ">
+              Update the details of the
+              <span className="ml-2 font-bold text-black">
+                {" "}
+                {JSON.stringify(resource.resource_id)}
+              </span>
+            </AlertDescription>
+          </Alert>
+        )}
         {/* </CommanCardContainer> */}
       </div>
     </div>

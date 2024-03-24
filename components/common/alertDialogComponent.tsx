@@ -22,7 +22,8 @@ interface AlertDialogComponentProps {
   alertdescription: string;
   alertcloseAllFunction?: Function;
   alertactionLable: string;
-  alertactionFunction: Function;
+  alertactionFunction?: Function;
+  children?: React.ReactNode;
 }
 
 const AlertDialogComponent = ({
@@ -34,6 +35,7 @@ const AlertDialogComponent = ({
   alertheading,
   alertIcon: AlertIcon,
   alertcloseAllFunction,
+  children,
 }: AlertDialogComponentProps) => {
   return (
     <AlertDialog>
@@ -42,7 +44,13 @@ const AlertDialogComponent = ({
           variant={"ghost"}
           className="w-full  flex justify-between items-center px-2">
           {alertlable}
-          {AlertLableIcon && <AlertLableIcon className="text-red-700 ml-2" />}
+          {AlertLableIcon && (
+            <AlertLableIcon
+              className={`${
+                alertlable === "View" ? "text-blue-500" : "text-red-500"
+              } ml-2`}
+            />
+          )}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -51,7 +59,12 @@ const AlertDialogComponent = ({
             {AlertIcon && <AlertIcon className="mr-4" />}
             {alertheading}
           </AlertDialogTitle>
-          <AlertDialogDescription>{alertdescription}</AlertDialogDescription>
+          {alertdescription.trim() !== "" && (
+            <AlertDialogDescription>{alertdescription}</AlertDialogDescription>
+          )}
+          {children && (
+            <AlertDialogDescription>{children}</AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel
@@ -61,13 +74,15 @@ const AlertDialogComponent = ({
             }}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction
-            className="bg-destructive"
-            onClick={() => {
-              alertactionFunction();
-            }}>
-            Continue
-          </AlertDialogAction>
+          {alertactionFunction && (
+            <AlertDialogAction
+              className="bg-destructive"
+              onClick={() => {
+                alertactionFunction();
+              }}>
+              Continue
+            </AlertDialogAction>
+          )}
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

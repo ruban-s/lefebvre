@@ -10,8 +10,12 @@ import { Button } from "../ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { IconType } from "react-icons";
 import AlertDialogComponent from "./alertDialogComponent";
+import { GrFormViewHide } from "react-icons/gr";
+import CustomImageInput from "./customImageInput";
+import { Badge } from "../ui/badge";
 
 interface TableActionButtonComponentsProps {
+  values?: any;
   primaryLable: string;
   primaryAction: Function;
   primaryIcon: IconType;
@@ -36,6 +40,7 @@ const TableActionButtonComponents = ({
   alertlable,
   alertIcon: AlertIcon,
   alertcloseAllFunction,
+  values,
   alertlableIcon: AlertLebleIcon,
 }: TableActionButtonComponentsProps) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -49,6 +54,90 @@ const TableActionButtonComponents = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-[150px]">
+          <AlertDialogComponent
+            alertlable={"View"}
+            alertlableIcon={GrFormViewHide}
+            alertheading={""}
+            alertactionLable={""}
+            alertcloseAllFunction={() => {
+              alertcloseAllFunction && alertcloseAllFunction();
+              ref.current?.click();
+            }}
+            alertdescription={""}>
+            <div className="w-full text-lg ml-1 font-bold text-theme">
+              <p>Details:</p>
+            </div>
+
+            {Object.keys(values).map((info, index) => {
+              if (["status", "designation_id"].includes(info)) {
+                return (
+                  <div
+                    key={index}
+                    className="w-full h-auto m-2 my-3 flex items-center justify-start">
+                    <div className="w-1/4 text-neutral-600">
+                      {info.charAt(0).toUpperCase() +
+                        info.replace("_", "-").slice(1)}
+                    </div>
+                    <div className="flex-1 text-bold text-sm  text-black font-bold">
+                      {" "}
+                      :{" "}
+                      <Badge
+                        className={`cursor-pointer rounded-md    bg-neutral-500 ${
+                          values[info] === "Active" && "bg-green-500"
+                        }
+                        ${values[info] === "Inactive" && "bg-red-500"}
+                     `}>
+                        {values[info]}
+                      </Badge>
+                    </div>
+                  </div>
+                );
+              }
+              if (["image_path", "image"].includes(info)) {
+                return (
+                  <div
+                    key={index}
+                    className="w-full h-auto m-2 my-3 flex items-center justify-start">
+                    <div className="w-1/4 text-neutral-600">
+                      {info.charAt(0).toUpperCase() +
+                        info.replace("_", "-").slice(1)}
+                    </div>
+                    {values[info] ? (
+                      <CustomImageInput
+                        value={values[`${info}`]}
+                        disable={true}
+                        onChange={(value: string) => {}}
+                      />
+                    ) : (
+                      "--"
+                    )}
+                  </div>
+                );
+              }
+              return (
+                ![
+                  "forman",
+                  "token",
+                  "res_status",
+                  "sq_number",
+                  "role_name",
+                ].includes(info) && (
+                  <div
+                    key={index}
+                    className="w-full h-auto m-2 my-3 flex items-center justify-start">
+                    <div className="w-1/4 text-neutral-600">
+                      {info.charAt(0).toUpperCase() +
+                        info.replace("_", "-").slice(1)}
+                    </div>
+                    <div className="w-[300px] h-auto  text-pretty flex  text-bold text-sm   text-black font-bold">
+                      {" "}
+                      : {values[`${info}`] || "--"}
+                    </div>
+                  </div>
+                )
+              );
+            })}
+          </AlertDialogComponent>
           <Button
             variant={"ghost"}
             className="w-full  flex justify-between items-center px-2"

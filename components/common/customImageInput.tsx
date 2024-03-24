@@ -9,10 +9,15 @@ import { MdDelete } from "react-icons/md";
 
 interface CustomImageInputProps {
   value: string;
+  disable?: boolean;
   onChange: Function;
 }
 
-const CustomImageInput = ({ value, onChange }: CustomImageInputProps) => {
+const CustomImageInput = ({
+  value,
+  onChange,
+  disable = false,
+}: CustomImageInputProps) => {
   const [image, setImage] = useState<any>(value);
 
   const imageRef = useRef<HTMLInputElement>(null);
@@ -39,7 +44,7 @@ const CustomImageInput = ({ value, onChange }: CustomImageInputProps) => {
 
   return (
     <div className="w-auto h-auto mr-3">
-      <p className="mb-2">Image</p>
+      {!disable && <p className="mb-2">Image</p>}
       <div className=" w-[100px] h-[100px]  bg-black flex justify-center items-center ring-2 ring-black rounded-lg  relative cursor-pointer">
         <Input
           ref={imageRef}
@@ -59,7 +64,7 @@ const CustomImageInput = ({ value, onChange }: CustomImageInputProps) => {
           fill
           className="object-cover rounded-lg group bg-neutral-200"
         />
-        {image && image !== "/user.png" && (
+        {!disable && image && image !== "/user.png" && (
           <div
             className="absolute right-7 bottom-0 m-1  flex bg-red-500 rounded-sm p-1"
             onClick={(e) => {
@@ -72,14 +77,16 @@ const CustomImageInput = ({ value, onChange }: CustomImageInputProps) => {
             <MdDelete className="text-white" />
           </div>
         )}
-        <div
-          className="absolute right-0 bottom-0 m-1  flex bg-neutral-300 rounded-sm p-1"
-          onClick={(e) => {
-            e.stopPropagation();
-            imageRef.current?.click();
-          }}>
-          <CiImageOn className="text-theme" />
-        </div>
+        {!disable && (
+          <div
+            className="absolute right-0 bottom-0 m-1  flex bg-neutral-300 rounded-sm p-1"
+            onClick={(e) => {
+              e.stopPropagation();
+              imageRef.current?.click();
+            }}>
+            <CiImageOn className="text-theme" />
+          </div>
+        )}
       </div>
     </div>
   );

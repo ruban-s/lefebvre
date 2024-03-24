@@ -67,6 +67,7 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
+      values={user}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={() => {

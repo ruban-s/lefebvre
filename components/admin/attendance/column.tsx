@@ -54,6 +54,7 @@ export const CellFunction = ({ row }: any) => {
   });
   return (
     <TableActionButtonComponents
+      values={attendanceType}
       primaryLable="Edit"
       primaryAction={() => {
         handleUpdateUser();

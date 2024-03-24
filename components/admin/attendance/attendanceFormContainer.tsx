@@ -184,20 +184,6 @@ const AttendanceFormContainer = () => {
                 )}
 
                 {attendanceType && (
-                  <Alert
-                    variant={"default"}
-                    className="w-auto h-[50px] ml-8 border-l-[5px]  border-blue-400">
-                    <FcInfo className="text-theme" />
-                    <AlertDescription className="font-semibold text-blue-400">
-                      Update the details of the
-                      <span className="ml-2 font-bold text-black">
-                        {" "}
-                        {JSON.stringify(attendanceType.name)}
-                      </span>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {attendanceType && (
                   <Button
                     variant={"secondary"}
                     type="button"
@@ -215,6 +201,20 @@ const AttendanceFormContainer = () => {
             </form>
           </Form>
         </div>
+        {attendanceType && (
+          <Alert
+            variant={"default"}
+            className=" h-[50px] border-l-[5px]  border-blue-400">
+            <FcInfo className="text-yellow-400" />
+            <AlertDescription className="font-semibold text-blue-400">
+              Update the details of the
+              <span className="ml-2 font-bold text-black">
+                {" "}
+                {JSON.stringify(attendanceType.name)}
+              </span>
+            </AlertDescription>
+          </Alert>
+        )}
         {/* </CommanCardContainer> */}
       </div>
     </div>

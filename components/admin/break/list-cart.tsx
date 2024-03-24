@@ -108,6 +108,7 @@ const ListCardContainer = (props: ListCardContainerProps) => {
           alertheading=" Are you absolutely sure?"
           alertIcon={IoIosWarning}
           alertactionLable="Delete"
+          values={breaks}
           alertcloseAllFunction={() => {}}
           alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."

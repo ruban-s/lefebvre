@@ -350,19 +350,6 @@ const EmployeeFormContainer = () => {
                 )}
 
                 {employee && (
-                  <Alert
-                    variant={"default"}
-                    className="w-auto h-[50px] ml-8 border-l-[5px]  border-blue-400">
-                    <FcInfo className="text-theme" />
-                    <AlertDescription className="font-semibold text-blue-400">
-                      Update the details of the
-                      <span className="ml-2 font-bold text-black">
-                        {employee.employee_id}
-                      </span>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                {employee && (
                   <Button
                     variant={"secondary"}
                     type="button"
@@ -381,8 +368,22 @@ const EmployeeFormContainer = () => {
             </form>
           </Form>
         </div>
+
         {/* </CommanCardContainer> */}
       </div>
+      {employee && (
+        <Alert
+          variant={"default"}
+          className="w-auto h-[50px]  border-l-[5px]  border-blue-400">
+          <FcInfo className="text-theme" />
+          <AlertDescription className="font-semibold text-blue-400">
+            Update the details of the
+            <span className="ml-2 font-bold text-black">
+              {employee.employee_id}
+            </span>
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 };

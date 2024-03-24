@@ -67,6 +67,7 @@ export const CellFunction = ({ row }: any) => {
       alertcloseAllFunction={() => {}}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
+      values={measure}
       alertactionFunction={() => {
         deleteItem.mutate(`${measure.id}`);
       }}

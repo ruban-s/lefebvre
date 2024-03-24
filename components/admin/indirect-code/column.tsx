@@ -24,6 +24,7 @@ import { MdDelete } from "react-icons/md";
 import AlertDialogComponent from "@/components/common/alertDialogComponent";
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { Badge } from "@/components/ui/badge";
+import { RxCaretSort } from "react-icons/rx";
 export const CellFunction = ({ row }: any) => {
   const indirectCode = row.original;
   const queryClient = useQueryClient();
@@ -75,6 +76,7 @@ export const CellFunction = ({ row }: any) => {
       alertcloseAllFunction={() => {}}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
+      values={indirectCode}
       alertactionFunction={() => {
         deleteItem.mutate(`${indirectCode.id}`);
       }}
@@ -115,6 +117,26 @@ export const columns: ColumnDef<IndirectCodeData>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.description.substring(0, 30)}{" "}
+        {row.original.description.length > 30 && "..."}
+        {row.original.description.length > 30 && (
+          <Popover>
+            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+              <RxCaretSort className="text-theme" size={20} />
+            </PopoverTrigger>
+
+            <PopoverContent className="w-[400px] ">
+              <p className="mb-2 text-bold">Description:</p>
+              <p className="text-sm text-neutral-500">
+                {row.original.description}
+              </p>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+    ),
   },
 
   {
