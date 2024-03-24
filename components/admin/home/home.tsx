@@ -20,7 +20,7 @@ const HomeScreen = () => {
                 path === info.link && "ring-1"
               } bg-white shadow-md  cursor-pointer rounded-lg hover:ring-1 hover:ring-theme`}>
               <div className="p-2 sm:p-3 md:p-4 lg:p-6 bg-blue-50 rounded-full">
-                <Icon className="text-theme  text-[20px] sm:text-[25px] md:text-[40px]" />
+                <Icon className="text-theme  text-[15px] sm:text-[20px] md:text-[40px]" />
               </div>
               <p className="text-theme font-bold">{info.label}</p>
             </Link>
