@@ -16,13 +16,13 @@ const HomeScreen = () => {
             <Link
               key={index}
               href={info.link}
-              className={`w-full h-[90px] sm:h-[120px]  md:h-[220px] ld:h-[220px] flex flex--col justify-center  space-x-2   md:justify-evenly items-center p-2 ${
+              className={`w-full h-[70px] sm:h-[100px]  md:h-[220px] ld:h-[220px] flex flex-col justify-center  space-x-2   md:justify-evenly items-center p-2 ${
                 path === info.link && "ring-1"
               } bg-white shadow-md  cursor-pointer rounded-lg hover:ring-1 hover:ring-theme`}>
               <div className="p-2 sm:p-3 md:p-4 lg:p-6 bg-blue-50 rounded-full">
                 <Icon className="text-theme  text-[20px] sm:text-[25px] md:text-[40px]" />
               </div>
-              <p className="text-theme text-sm font-bold">{info.label}</p>
+              <p className="text-theme font-bold">{info.label}</p>
             </Link>
           );
         })}
