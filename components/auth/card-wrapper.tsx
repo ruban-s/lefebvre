@@ -8,7 +8,7 @@ interface CardWrapperProps {
 }
 const CardWrapper = ({ children, headerLabel }: CardWrapperProps) => {
   return (
-    <Card className="w-[400px] shadow-md shadow-white/20  bg-neutral-100/10 backdrop-blur-sm  rounded-lg border-none">
+    <Card className="w-[400px] shadow-md shadow-black/30  bg-black/20 backdrop-blur-sm  rounded-lg border-none">
       <CardHeader>
         <Logo />
         <Header label={headerLabel || ""} />

@@ -1,17 +1,30 @@
 "use client";
 
-import { adminTabs } from "@/config/const";
+import { adminTabs, plannerTabs } from "@/config/const";
 import { TabData } from "@/types";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const HomeScreen = () => {
   const path = usePathname();
+  const [tabs, setTabs] = useState<TabData[]>();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session.data?.user.role === "Admin") {
+      return setTabs(adminTabs);
+    }
+    if (session.data?.user.role === "Planner") {
+      return setTabs(plannerTabs);
+    }
+  }, []);
 
   return (
     <main className="w-full h-full bg-white overflow-auto p-10">
       <main className="w-full h-auto grid justify-center items-center  grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3  gap-6">
-        {adminTabs.map(({ icon: Icon, ...info }: TabData, index: number) => {
+        {tabs?.map(({ icon: Icon, ...info }: TabData, index: number) => {
           return (
             <Link
               key={index}

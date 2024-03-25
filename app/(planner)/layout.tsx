@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
 const metadata: Metadata = {
-  title: "Admin",
+  title: "Planner",
   description: "",
 };
 

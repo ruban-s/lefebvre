@@ -62,21 +62,17 @@ export const updateUser = async (value: UserData) => {
   }
 };
 
-export const getUserById = async (userId: string) => {
+//
+export const getUserById = async (value: any) => {
   try {
-    const response = await fetch(
-      BASE_URL + `/user/getOneUser?user_id=${userId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
+    const axiosResponse = await axios.get(
+      BASE_URL + `/user/getOneUser?user_id=${value}`,
+      value
     );
-    const responseData: data = await response.json();
-    return responseData;
+    const data = axiosResponse.data;
+    return data;
   } catch (error) {
-    const errorResponse: data = {
+    const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),
       data: "",
@@ -84,6 +80,7 @@ export const getUserById = async (userId: string) => {
     return errorResponse;
   }
 };
+
 export const deleteUser = async (value: any) => {
   try {
     const axiosResponse = await axios.delete(

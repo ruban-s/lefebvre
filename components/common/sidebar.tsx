@@ -23,11 +23,14 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { TabData } from "@/types/index";
 import SideBarTabs from "./sidebar-tabs";
 import UserCard from "./user-card";
-import { adminTabs } from "@/config/const";
+import { adminTabs, plannerTabs } from "@/config/const";
 import { Ghost } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const SideBar = () => {
+  const session = useSession();
+
   const [toggleCollapse, setToggleCollapse] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(false);
 
@@ -61,44 +64,6 @@ const SideBar = () => {
       onMouseEnter={onMouseOver}
       onMouseLeave={onMouseOver}
       style={{ transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s" }}>
-      {/* <div className="flex flex-col h-[80px] border-b-2 border-theme">
-        <div className="w-full h-[60px] flex items-center justify-between relative">
-          {!toggleCollapse ? (
-            <div className="w-[220px] h-[40px] mt-[-30px] ml-3">
-              <Image
-                width={300}
-                height={300}
-                src="/lefebvre-logo.png"
-                alt="LEFEBVRE"
-                className="object-contain  "
-              />
-            </div>
-          ) : (
-            <div className="w-[200px] h-[40px]">
-              <Image
-                src="/lefebvre-icon.png"
-                alt="LEFEBVRE"
-                fill
-                className="object-contain  "
-              />
-            </div>
-          )}
-          {isCollapsible && (
-            <Button
-              className={collapseIconClasses}
-              onClick={handleSidebarToggle}>
-              <FaAngleDoubleLeft className="text-theme" />
-            </Button>
-          )}
-        </div>
-      </div> */}
-      {/* <div
-        className={`w-full h-[200px] bg-red hidden ${
-          toggleCollapse ? "md:hidden" : "md:flex"
-        } pt-2 `}>
-        <UserCard />
-      </div> */}
-
       <div
         className={`w-full flex justify-end items-center  ml-auto mb-2 ${
           toggleCollapse ? "rotate-180 " : "rotate-0"
@@ -132,7 +97,7 @@ const SideBar = () => {
 
       <SideBarTabs
         isToggles={toggleCollapse}
-        tabs={adminTabs}
+        tabs={session.data?.user.role === "Admin" ? adminTabs : plannerTabs}
         onMouseOver={() => setIsCollapsible(isCollapsible)}
       />
     </div>
