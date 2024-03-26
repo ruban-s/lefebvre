@@ -33,6 +33,10 @@ export default function RootLayout({
     }
   }, []);
 
+  // if (!session) {
+  //   return <AccessDenied />;
+  // }
+
   if (session.data?.user.role !== "Planner" && path !== "/") {
     return <AccessDenied />;
   }

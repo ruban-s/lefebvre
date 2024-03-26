@@ -31,7 +31,9 @@ export default function RootLayout({
       return setTabs(plannerTabs);
     }
   }, []);
-
+  // if (session.status === "unauthenticated") {
+  //   return <AccessDenied />;
+  // }
   if (session.data?.user.role !== "Admin" && path !== "/") {
     return <AccessDenied />;
   }

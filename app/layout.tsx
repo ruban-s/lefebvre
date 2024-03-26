@@ -25,7 +25,7 @@ export default async function RootLayout({
       <html lang="en" className="overflow-hidden">
         <body className={mulish.className}>
           <Provider>
-            <div className="w-full h-full"> {children}</div>
+            <div className="w-full h-full">{children}</div>
           </Provider>
           <Toaster richColors closeButton />
         </body>

@@ -17,10 +17,6 @@ export default auth((req) => {
   const { nextUrl, auth } = req!;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  console.log(isLoggedIn);
-  console.log(auth);
-  console.log(nextUrl);
-
   //for a testing
   // if (nextUrl.pathname === "/") {
   //   return Response.redirect(new URL("/dashboard", nextUrl));
