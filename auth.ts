@@ -8,6 +8,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  trustHost: true,
   callbacks: {
     async session({ token, session }) {
       if (session.user && token?.sub) {
@@ -26,10 +27,6 @@ export const {
       return token;
     },
   },
-  pages: {
-    signIn: "http://temp.lef-fabsol.com/auth/login",
-  },
-
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days

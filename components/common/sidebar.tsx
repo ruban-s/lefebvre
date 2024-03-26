@@ -97,7 +97,7 @@ const SideBar = () => {
 
       <SideBarTabs
         isToggles={toggleCollapse}
-        tabs={session.data?.user.role === "Admin" ? adminTabs : plannerTabs}
+        tabs={session.data?.user!.role === "Admin" ? adminTabs : plannerTabs}
         onMouseOver={() => setIsCollapsible(isCollapsible)}
       />
     </div>

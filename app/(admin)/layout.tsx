@@ -4,7 +4,7 @@ import SideBar from "@/components/common/sidebar";
 import Topbar from "@/components/common/topbar";
 import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const metadata: Metadata = {
   title: "Admin",
@@ -18,10 +18,11 @@ export default function RootLayout({
 }>) {
   const session = useSession();
   const path = usePathname();
+  const router = useRouter();
 
-  if (session.data?.user.role !== "Planner" && path !== "/") {
-    return <AccessDenied />;
-  }
+  // if (session.data?.user.role !== "Admin" && path !== "/") {
+  //   return <AccessDenied />;
+  // }
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar />

@@ -16,7 +16,7 @@ export const Login = async (data: z.infer<typeof LoginSchema>) => {
     await signIn("credentials", {
       username: data.username,
       password: data.password,
-      redirectTo: "/",
+      redirectTo: "http://temp.lef-fabsol.com",
     });
   } catch (error) {
     if (error instanceof AuthError) {

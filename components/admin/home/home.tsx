@@ -13,6 +13,7 @@ const HomeScreen = () => {
   const session = useSession();
 
   useEffect(() => {
+    setTabs(adminTabs);
     if (session.data?.user.role === "Admin") {
       return setTabs(adminTabs);
     }
