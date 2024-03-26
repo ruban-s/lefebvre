@@ -24,7 +24,6 @@ export default async function RootLayout({
     <SessionProvider session={session} basePath="/api/auth">
       <html lang="en" className="overflow-hidden">
         <body className={mulish.className}>
-          \{" "}
           <Provider>
             <div className="w-full h-full"> {children}</div>
           </Provider>
