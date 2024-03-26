@@ -8,7 +8,6 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  trustHost: true,
   callbacks: {
     async session({ token, session }) {
       if (session.user && token?.sub) {

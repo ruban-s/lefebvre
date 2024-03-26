@@ -20,9 +20,9 @@ export default function RootLayout({
   const path = usePathname();
   const router = useRouter();
 
-  // if (session.data?.user.role !== "Admin" && path !== "/") {
-  //   return <AccessDenied />;
-  // }
+  if (session.data?.user.role !== "Admin" && path !== "/") {
+    return <AccessDenied />;
+  }
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar />
