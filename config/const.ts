@@ -18,3 +18,32 @@ export const adminTabs: TabData[] = [
   { id: 8, label: "Users", icon: FaUsers, link: "/user" },
   { id: 9, label: "Report", icon: TbReportAnalytics, link: "/report" },
 ];
+export const plannerTabs: TabData[] = [
+  { id: 1, label: "Home", icon: FaHome, link: "/" },
+  { id: 1, label: "Project", icon: MdSpaceDashboard, link: "/planner/project" },
+  {
+    id: 2,
+    label: "Work Order",
+    icon: GiThermometerScale,
+    link: "/planner/work-order",
+  },
+  {
+    id: 3,
+    label: "Resource Work Order",
+    icon: FaUsersCog,
+    link: "/planner/resource-work-order",
+  },
+  { id: 4, label: "Closed Project", icon: IoCalendar, link: "/closed-project" },
+  {
+    id: 5,
+    label: "Unreleased Project",
+    icon: GiCoffeeCup,
+    link: "/unreleased-project",
+  },
+  {
+    id: 6,
+    label: "Released Project",
+    icon: FaCogs,
+    link: "/released-project",
+  },
+];
