@@ -25,7 +25,7 @@ const SideBarTabs = (datas: SideBarTabProps) => {
       className="w-full h-auto mt-2"
       onMouseDown={onMouseOver()}
       onMouseLeave={onMouseOver()}>
-      {tabs.map(({ icon: Icon, ...value }, index: number) => {
+      {tabs?.map(({ icon: Icon, ...value }, index: number) => {
         return (
           <Link
             key={index}

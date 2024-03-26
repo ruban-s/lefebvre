@@ -28,9 +28,7 @@ import { Ghost } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-const SideBar = () => {
-  const session = useSession();
-
+const SideBar = ({ tabs }: { tabs: TabData[] }) => {
   const [toggleCollapse, setToggleCollapse] = useState(false);
   const [isCollapsible, setIsCollapsible] = useState(false);
 
@@ -97,7 +95,7 @@ const SideBar = () => {
 
       <SideBarTabs
         isToggles={toggleCollapse}
-        tabs={session.data?.user!.role === "Admin" ? adminTabs : plannerTabs}
+        tabs={tabs}
         onMouseOver={() => setIsCollapsible(isCollapsible)}
       />
     </div>

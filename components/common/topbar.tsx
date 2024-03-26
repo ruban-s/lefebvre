@@ -23,13 +23,12 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { adminTabs, plannerTabs } from "@/config/const";
+import { usePathname, useRouter } from "next/navigation";
 import { TabData } from "@/types";
-const Topbar = () => {
+const Topbar = ({ tabs }: { tabs: TabData[] }) => {
   const session = useSession();
+  const router = useRouter();
   const path = usePathname();
-  const [tabs, setTabs] = useState<TabData[]>();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const toggleFullScreen = () => {
@@ -44,15 +43,6 @@ const Topbar = () => {
     }
     setIsFullScreen((prevState) => !prevState);
   };
-
-  useEffect(() => {
-    if (session.data?.user.role === "Admin") {
-      return setTabs(adminTabs);
-    }
-    if (session.data?.user.role === "Planner") {
-      return setTabs(plannerTabs);
-    }
-  }, []);
 
   return (
     <div className="w-full   h-[10%] md:h-[5%] bg-white  flex  justify-between items-center pr-4">
