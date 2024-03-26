@@ -24,10 +24,6 @@ export default function RootLayout({
   const session = useSession();
   const path = usePathname();
 
-  if (session.data?.user.role !== "Planner" && path !== "/") {
-    return <AccessDenied />;
-  }
-
   useEffect(() => {
     if (session.data?.user.role === "Admin") {
       return setTabs(adminTabs);
@@ -36,6 +32,11 @@ export default function RootLayout({
       return setTabs(plannerTabs);
     }
   }, []);
+
+  if (session.data?.user.role !== "Planner" && path !== "/") {
+    return <AccessDenied />;
+  }
+
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar tabs={tabs!} />
