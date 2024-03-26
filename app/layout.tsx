@@ -21,7 +21,10 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session} basePath="/api/auth">
+    <SessionProvider
+      session={session}
+      basePath="/api/auth"
+      baseUrl={process.env.URL}>
       <html lang="en" className="overflow-hidden">
         <body className={mulish.className}>
           <Provider>
