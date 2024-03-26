@@ -13,7 +13,7 @@ import { MdFullscreenExit } from "react-icons/md";
 import Image from "next/image";
 import { TiThMenu } from "react-icons/ti";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,10 +24,12 @@ import {
 } from "../ui/dialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { adminTabs } from "@/config/const";
+import { adminTabs, plannerTabs } from "@/config/const";
+import { TabData } from "@/types";
 const Topbar = () => {
   const session = useSession();
   const path = usePathname();
+  const [tabs, setTabs] = useState<TabData[]>();
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const toggleFullScreen = () => {
@@ -43,6 +45,15 @@ const Topbar = () => {
     setIsFullScreen((prevState) => !prevState);
   };
 
+  useEffect(() => {
+    if (session.data?.user.role === "Admin") {
+      return setTabs(adminTabs);
+    }
+    if (session.data?.user.role === "Planner") {
+      return setTabs(plannerTabs);
+    }
+  }, []);
+
   return (
     <div className="w-full   h-[10%] md:h-[5%] bg-white  flex  justify-between items-center pr-4">
       <Dialog open={isOpen}>
@@ -52,7 +63,7 @@ const Topbar = () => {
           <TiThMenu />
         </DialogTrigger>
         <DialogContent className="w-[400px] rounded-sm">
-          {adminTabs.map(({ icon: Icon, ...value }, index: number) => {
+          {tabs?.map(({ icon: Icon, ...value }, index: number) => {
             return (
               <Link
                 key={index}
@@ -130,7 +141,7 @@ const Topbar = () => {
               {session.data?.user?.name}
             </p>
             <p className="bg-blue-100  text-theme shadow-md p-1 text-sm rounded-md capitalize">
-              Admin
+              {session.data?.user?.role}
             </p>
             <div className="p-2  border-t mt-10">
               <Button

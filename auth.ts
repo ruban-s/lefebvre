@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
+import { getUserById } from "./data/user";
 
 export const {
   handlers: { GET, POST },
@@ -7,17 +8,25 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  trustHost: true,
   callbacks: {
     async session({ token, session }) {
-      session.user.role = token.role;
+      if (session.user && token?.sub) {
+        session.user.id = token.sub;
+      }
+      if (session.user && token?.role) {
+        session.user.role = token.role;
+      }
       return session;
     },
     async jwt({ token, user }) {
-      // token.role = "admin";
+      if (!token.sub) return token;
+      const existingUser = await getUserById(token.sub);
+      if (!existingUser) return token;
+      token.role = JSON.parse(existingUser.data).role_name;
       return token;
     },
   },
-
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days

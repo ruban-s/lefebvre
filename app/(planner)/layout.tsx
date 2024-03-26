@@ -4,10 +4,10 @@ import SideBar from "@/components/common/sidebar";
 import Topbar from "@/components/common/topbar";
 import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const metadata: Metadata = {
-  title: "Admin",
+  title: "Planner",
   description: "",
 };
 
@@ -18,9 +18,8 @@ export default function RootLayout({
 }>) {
   const session = useSession();
   const path = usePathname();
-  const router = useRouter();
 
-  // if (session.data?.user.role !== "Admin" && path !== "/") {
+  // if (session.data?.user.role !== "Planner" && path !== "/") {
   //   return <AccessDenied />;
   // }
   return (
