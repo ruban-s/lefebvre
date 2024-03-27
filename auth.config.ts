@@ -4,7 +4,6 @@ import { LoginSchema } from "@/schemas";
 import { Login } from "./action/login";
 
 export default {
-  trustHost: true,
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
