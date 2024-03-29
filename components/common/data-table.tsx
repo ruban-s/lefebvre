@@ -118,7 +118,6 @@ export function DataTable<TData, TValue>({
     var headerList = Object.keys(value[0]);
     var header: any = [[]];
     var body: any = [];
-
     headerList.map((info: string, index) => {
       header[0].push(info.replace("_", "").toUpperCase());
     });
@@ -127,7 +126,6 @@ export function DataTable<TData, TValue>({
         return body.push(Object.values(info));
       }
     });
-
     const doc = new jsPDF({ orientation: "landscape" });
     autoTable(doc, {
       head: header,
@@ -145,8 +143,18 @@ export function DataTable<TData, TValue>({
       });
     }
     const newData = data.map(
-      ({ createdDate, updatedDate, updatedBy, token, image, ...rest }: any) =>
-        rest
+      ({
+        createdDate,
+        updatedDate,
+        updatedBy,
+        token,
+        image,
+        image_path,
+        res_status,
+        sq_number,
+        res_note,
+        ...rest
+      }: any) => rest
     );
     var exportData: any = [];
     var exportDataField = Object.keys(newData[0] as {});
@@ -178,14 +186,16 @@ export function DataTable<TData, TValue>({
     <div className=" ml-auto mr-auto w-[375px]  sm:w-[500px] md:w-[720px] lg:w-[100%]  h-auto pr-4 mb-6">
       <div className=" w-[100%]  flex items-center py-4">
         <Input
-          placeholder={`Search by ${searchName.replace("_", "").toLowerCase()}`}
+          placeholder={`Search by ${searchName
+            .replaceAll("_", " ")
+            .toLowerCase()}`}
           value={
             (table.getColumn(searchName)?.getFilterValue() as string) ?? ""
           }
           onChange={(event) => {
             table.getColumn(searchName)?.setFilterValue(event.target.value);
           }}
-          className="max-w-sm ml-2"
+          className="max-w-sm ml-2 placeholder:capitalize"
         />
 
         <Button
@@ -265,7 +275,21 @@ export function DataTable<TData, TValue>({
                     onCheckedChange={(value) =>
                       column.toggleVisibility(!!value)
                     }>
-                    {column.id}
+                    {column.id === "role_name"
+                      ? "role".toString().replace("_", " ")
+                      : column.id === "res_description"
+                      ? "Description"
+                      : column.id === "unit"
+                      ? " Unit Measure "
+                      : column.id === "res_note"
+                      ? "Note"
+                      : column.id === "indirectCode"
+                      ? "Indirect Code ID"
+                      : column.id === "name"
+                      ? fileName === "Attendance-Type"
+                        ? "Attendance Type"
+                        : "GL-Code"
+                      : column.id.toString().replace("_", " ")}
                   </DropdownMenuCheckboxItem>
                 );
               })}

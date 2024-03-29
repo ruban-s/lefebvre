@@ -105,7 +105,7 @@ export const columns: ColumnDef<MeasureData>[] = [
 
   {
     accessorKey: "status",
-    header: "Measure Status",
+    header: "Status",
     cell: ({ row }) => (
       <Badge
         className={`cursor-pointer rounded-md ${

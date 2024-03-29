@@ -66,7 +66,7 @@ export function ComboboxPopover({ select }: { select: Function }) {
       <PopoverContent>
         <Command>
           <CommandInput placeholder="Search Designation..." className="h-9" />
-          <CommandEmpty>No framework found.</CommandEmpty>
+          <CommandEmpty>No Designation found.</CommandEmpty>
           <CommandList onSelect={() => alert("hi")}>
             {jobPositions.map((info, index) => {
               return (

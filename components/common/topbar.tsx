@@ -84,8 +84,7 @@ const Topbar = ({ tabs }: { tabs: TabData[] }) => {
         {!isFullScreen ? (
           <Button
             className="bg-white hover:bg-neutral-100 mr-2"
-            onClick={toggleFullScreen}
-            asChild>
+            onClick={toggleFullScreen}>
             <MdFullscreen size={25} className="text-theme font-bold " />
           </Button>
         ) : (

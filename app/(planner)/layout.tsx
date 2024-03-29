@@ -36,6 +36,9 @@ export default function RootLayout({
   // if (!session) {
   //   return <AccessDenied />;
   // }
+  if (session.status === "loading") {
+    return <p>Loading</p>;
+  }
 
   if (session.data?.user.role !== "Planner" && path !== "/") {
     return <AccessDenied />;

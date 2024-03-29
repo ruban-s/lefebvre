@@ -86,3 +86,37 @@ export interface AttendanceTypeData {
   name: string;
   updatedDate: string;
 }
+
+export interface ProjectData {
+  actualHour: string;
+  createdDate: string;
+  customer_name: string;
+  description: string;
+  end_date: string;
+  estimateHour: string;
+  id: string;
+  images: string[];
+  planner_remark: string;
+  production_remark: string;
+  project_id: string;
+  start_date: string;
+  status: string;
+  updatedDate: string;
+}
+export interface WorkOrderData {
+  actualHour: string;
+  createdDate: string;
+  description: string;
+  end_date: string;
+  estimateHour: string;
+  id: string;
+  images: string[];
+  planner_remark: string;
+  production_remark: string;
+  project_id: string;
+  role_id: string;
+  start_date: string;
+  status: string;
+  updatedDate: string;
+  work_order_id: string;
+}

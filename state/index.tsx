@@ -5,6 +5,8 @@ import {
   EmployeeData,
   MeasureData,
   AttendanceTypeData,
+  ProjectData,
+  WorkOrderData,
 } from "@/types";
 import { create } from "zustand";
 
@@ -14,7 +16,6 @@ export const useStore = create((set) => ({
   setUser: (user: any) => set({ user }),
   removeUser: (user: any) => set({ user: null }), // Action to update user object
 }));
-
 var indirectCode: IndirectCodeData | null = null;
 export const useIndirectCodeStore = create((set) => ({
   indirectCode: indirectCode, // Object value with initial properties
@@ -46,4 +47,16 @@ export const useAttendanceTypeStore = create((set) => ({
   attendanceType: attendanceType, // Object value with initial properties
   setAttendanceType: (attendanceType: any) => set({ attendanceType }),
   removeAttendanceType: (attendanceType: any) => set({ attendanceType: null }), // Action to update user object
+}));
+var project: ProjectData | null = null;
+export const useProjectStore = create((set) => ({
+  project: project, // Object value with initial properties
+  setProject: (project: any) => set({ project }),
+  removeProject: (project: any) => set({ project: null }), // Action to update user object
+}));
+var workOrder: WorkOrderData | null = null;
+export const useWorkOrderStore = create((set) => ({
+  workOrder: workOrder, // Object value with initial properties
+  setWorkOrder: (workOrder: any) => set({ workOrder }),
+  removeWorkOrder: (workOrder: any) => set({ workOrder: null }), // Action to update user object
 }));
