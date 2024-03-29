@@ -1,24 +1,19 @@
 "use client";
 
 import LayoutContainer from "@/components/common/layout-container";
-import ProjectFormContainer from "@/components/planner/project/projectFormContainer";
-import ProjectListContainer from "@/components/planner/project/projectListContainer";
+import WorkOrderFormContainer from "@/components/planner/work-order/workOrderFormContainer";
+import WorkOrderListContainer from "@/components/planner/work-order/workOrderListContainer";
 import { UserData } from "@/types";
 import { useState } from "react";
 
 const Planner = () => {
-  const [data, setData] = useState<UserData>();
-  const editUser = (value: UserData) => {
-    setData({ ...value });
-  };
-
   return (
     <LayoutContainer>
       <div className="w-full min-h-[200px] p-2 ">
-        <ProjectFormContainer />
+        <WorkOrderFormContainer />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        <ProjectListContainer editUser={editUser} />
+        <WorkOrderListContainer />
       </div>
     </LayoutContainer>
   );
