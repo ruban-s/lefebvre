@@ -20,7 +20,7 @@ export default auth((req) => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const cookieStore = cookies();
   const theme = cookieStore.get("token");
-
+  console.log(theme);
   if (isApiAuthRoute) {
     return;
   }
