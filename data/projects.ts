@@ -2,8 +2,8 @@
 import * as z from "zod";
 import { ProjectSchema } from "@/schemas/index";
 import { BASE_URL } from "@/config/const";
-import axios from "axios";
 import { ResponseData, ProjectData } from "@/types";
+import { Axios } from "@/action/axios";
 
 interface data {
   status: boolean;
@@ -12,9 +12,7 @@ interface data {
 }
 export const getAllProject = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/project/getAllProject"
-    );
+    const axiosResponse = await Axios.get("/project/getAllProject");
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -28,10 +26,7 @@ export const getAllProject = async () => {
 };
 export const createProject = async (value: z.infer<typeof ProjectSchema>) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/project/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/project/create", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -45,10 +40,7 @@ export const createProject = async (value: z.infer<typeof ProjectSchema>) => {
 };
 export const updateProject = async (value: ProjectData) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/project/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/project/update", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -64,8 +56,8 @@ export const updateProject = async (value: ProjectData) => {
 
 export const deleteProject = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/project/delete?id=${value}`,
+    const axiosResponse = await Axios.delete(
+      `/project/delete?id=${value}`,
       value
     );
     const data = axiosResponse.data;

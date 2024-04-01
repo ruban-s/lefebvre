@@ -1,5 +1,8 @@
+"use server";
+
+import { cookies } from "next/headers";
+
 export const convertToUAEFormat = (dateString: string) => {
-  // Parse the date string
   const date = new Date(dateString);
   var localTime = date.getTime();
   var localOffset = date.getTimezoneOffset() * 60000;

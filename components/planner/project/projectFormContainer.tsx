@@ -57,6 +57,7 @@ const ProjectFormContainer = () => {
       return breake;
     },
     onSuccess: (value) => {
+      console.log(value);
       if (value.status) {
         toast.success(`${value.message}`, {
           description: `${value.message}`,
@@ -66,7 +67,7 @@ const ProjectFormContainer = () => {
         form.reset();
       } else {
         toast.error(`Something went wrong`, {
-          description: "Data not updated contact the admin",
+          description: `${value.data}`,
           position: "top-right",
           dismissible: true,
         });
@@ -259,6 +260,7 @@ const ProjectFormContainer = () => {
                       <FormItem>
                         <FormLabel>Status</FormLabel>
                         <Select
+                          disabled
                           value={form.watch("status")}
                           onValueChange={(value) => {
                             form.clearErrors("status");

@@ -2,14 +2,12 @@
 import * as z from "zod";
 import { BASE_URL } from "@/config/const";
 import { BreaksData, ResponseData } from "@/types";
-import axios from "axios";
 import { IndirectCodeSchema } from "@/schemas";
+import { Axios } from "@/action/axios";
 
 export const getAllIndirectCodes = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/indirectcode/getAllIndirectCodes"
-    );
+    const axiosResponse = await Axios.get("/indirectcode/getAllIndirectCodes");
     const data = axiosResponse.data;
 
     return data;
@@ -26,10 +24,7 @@ export const createIndirectCode = async (
   value: z.infer<typeof IndirectCodeSchema>
 ) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/indirectcode/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/indirectcode/create", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -44,10 +39,7 @@ export const createIndirectCode = async (
 
 export const updateIndirectCode = async (value: any) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/indirectcode/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/indirectcode/update", value);
     const data = axiosResponse.data;
     // console.log(data);
 
@@ -63,8 +55,8 @@ export const updateIndirectCode = async (value: any) => {
 };
 export const deleteIndirectCode = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/indirectcode/delete?id=${value}`,
+    const axiosResponse = await Axios.delete(
+      `/indirectcode/delete?id=${value}`,
       value
     );
     const data = axiosResponse.data;

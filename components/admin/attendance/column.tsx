@@ -100,6 +100,10 @@ export const columns: ColumnDef<AttendanceTypeData>[] = [
   },
   {
     accessorKey: "name",
+    header: "Name",
+  },
+  {
+    accessorKey: "type",
     header: "Attendance Type",
   },
   {

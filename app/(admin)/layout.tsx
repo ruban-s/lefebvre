@@ -40,7 +40,6 @@ export default function RootLayout({
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar tabs={tabs!} />
-
       <div className="flex-1 h-full">
         <Topbar tabs={tabs!} />
         <div className="w-full h-[95%] p-2 bg-blue-50">

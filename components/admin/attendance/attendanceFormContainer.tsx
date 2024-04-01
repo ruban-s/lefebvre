@@ -87,6 +87,7 @@ const AttendanceFormContainer = () => {
     resolver: zodResolver(AttendanceTypeSchema),
     defaultValues: {
       name: "",
+      type: "",
       status: "",
     },
   });
@@ -94,6 +95,7 @@ const AttendanceFormContainer = () => {
     if (attendanceType) {
       form.setValue("name", attendanceType?.name!);
       form.setValue("status", attendanceType?.status!);
+      form.setValue("type", attendanceType?.type!);
     }
   }, [attendanceType, form]);
 
@@ -117,6 +119,22 @@ const AttendanceFormContainer = () => {
                 <FormField
                   control={form.control}
                   name="name"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input type="text" {...field} placeholder="Name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="type"
                   render={({ field }) => {
                     return (
                       <FormItem>

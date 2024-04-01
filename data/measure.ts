@@ -2,14 +2,12 @@
 import * as z from "zod";
 import { BASE_URL } from "@/config/const";
 import { ResponseData } from "@/types";
-import axios from "axios";
 import { MeasureSchema } from "@/schemas";
+import { Axios } from "@/action/axios";
 
 export const getAllMeasure = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/unit_measure/getAllUnitMeasures"
-    );
+    const axiosResponse = await Axios.get("/unit_measure/getAllUnitMeasures");
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -23,12 +21,8 @@ export const getAllMeasure = async () => {
 };
 export const createMeasure = async (value: z.infer<typeof MeasureSchema>) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/unit_measure/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/unit_measure/create", value);
     const data = axiosResponse.data;
-    // console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
@@ -41,10 +35,7 @@ export const createMeasure = async (value: z.infer<typeof MeasureSchema>) => {
 };
 export const updateMeasure = async (value: any) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/unit_measure/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/unit_measure/update", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -58,8 +49,8 @@ export const updateMeasure = async (value: any) => {
 };
 export const deleteMeasure = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/unit_measure/delete?id=${value}`,
+    const axiosResponse = await Axios.delete(
+      `/unit_measure/delete?id=${value}`,
       value
     );
     const data = axiosResponse.data;

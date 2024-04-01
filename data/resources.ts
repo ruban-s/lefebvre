@@ -2,12 +2,12 @@
 import * as z from "zod";
 import { BASE_URL } from "@/config/const";
 import { BreaksData, ResponseData } from "@/types";
-import axios from "axios";
 import { ResourceSchema } from "@/schemas";
+import { Axios } from "@/action/axios";
 
 export const getAllResources = async () => {
   try {
-    const axiosResponse = await axios.get(
+    const axiosResponse = await Axios.get(
       "http://208.109.9.243:8082/resourceAdmin/getAllResource"
     );
     const data = axiosResponse.data;
@@ -26,7 +26,7 @@ export const createResources = async (
   value: z.infer<typeof ResourceSchema>
 ) => {
   try {
-    const axiosResponse = await axios.post(
+    const axiosResponse = await Axios.post(
       "http://208.109.9.243:8082/resourceAdmin/create",
       value
     );
@@ -43,7 +43,7 @@ export const createResources = async (
 };
 export const updateResources = async (value: any) => {
   try {
-    const axiosResponse = await axios.put(
+    const axiosResponse = await Axios.put(
       "http://208.109.9.243:8082/resourceAdmin/update",
       value
     );
@@ -62,7 +62,7 @@ export const updateResources = async (value: any) => {
 };
 export const deleteResource = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
+    const axiosResponse = await Axios.delete(
       `http://208.109.9.243:8082/resourceAdmin/delete?id=${value}`,
       value
     );

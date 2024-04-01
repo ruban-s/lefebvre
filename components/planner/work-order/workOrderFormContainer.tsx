@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WorkOrderSchema } from "@/schemas";
+import { WorkOrderSchema } from "@/schemas/index";
 import { Input } from "@/components/ui/input";
 import { FaUser } from "react-icons/fa";
 
@@ -120,7 +120,10 @@ const WorkOrderFormContainer = () => {
       form.setValue("start_date", workOrder?.start_date!);
       form.setValue("end_date", workOrder?.end_date!);
       form.setValue("status", workOrder?.status!);
-      form.setValue("work_order_id", workOrder?.work_order_id!);
+      form.setValue(
+        "work_order_id",
+        workOrder?.project_id! + "-" + workOrder?.work_order_id!
+      );
       form.setValue("description", workOrder?.description!);
       setDateRange({
         from: new Date(workOrder?.start_date!),
@@ -150,28 +153,31 @@ const WorkOrderFormContainer = () => {
     const projectWiseWorkOrders: WorkOrderData[] | undefined = data?.filter(
       (info) => info.project_id === value?.project_id
     );
-    setDisbleDates([]);
-    const workOrderDates: Date[] = [];
-
-    projectWiseWorkOrders?.map(({ start_date, end_date, ...info }, index) => {
-      const days = differenceInDays(start_date, end_date);
-      const projectDays = 0 | -days;
-      for (let i = 0; i <= projectDays; i++) {
-        const newdate = addDays(new Date(start_date), i);
-        workOrderDates.push(new Date(format(newdate, "LLL dd, y")));
-      }
-    });
+    // setDisbleDates([]);
+    // const workOrderDates: Date[] = [];
+    // projectWiseWorkOrders?.map(({ start_date, end_date, ...info }, index) => {
+    //   const days = differenceInDays(start_date, end_date);
+    //   const projectDays = 0 | -days;
+    //   for (let i = 0; i <= projectDays; i++) {
+    //     const newdate = addDays(new Date(start_date), i);
+    //     workOrderDates.push(new Date(format(newdate, "LLL dd, y")));
+    //   }
+    // });
     // if (workOrder) {
     //   const days = differenceInDays(workOrder?.start_date, workOrder?.end_date);
     //   const workDays = 0 | -days;
     //   for (let i = 0; i <= workDays; i++) {
     //     const newdate = addDays(new Date(workOrder?.start_date), i);
 
-    //     console.log(newdate);
+    //     workOrderDates.map((info: Date, index) => {
+    //       if (info <= newdate) {
+    //         workOrderDates.splice(index, 1); // Use splice() to remove the element at the found index
+    //       }
+    //     });
     //   }
-    // } if need in future will im plement
+    // }
 
-    setDisbleDates([...workOrderDates]);
+    // setDisbleDates([...workOrderDates]);
   };
 
   const setRange = (data: DateRange | undefined) => {
@@ -315,6 +321,7 @@ const WorkOrderFormContainer = () => {
                       <FormItem>
                         <FormLabel>Status</FormLabel>
                         <Select
+                          disabled
                           value={form.watch("status")}
                           onValueChange={(value) => {
                             form.clearErrors("status");

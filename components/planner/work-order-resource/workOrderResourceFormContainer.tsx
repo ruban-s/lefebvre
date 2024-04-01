@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { WorkOrderSchema } from "@/schemas";
+import { ResourceWorkOrderListSchema } from "@/schemas/index";
 import { Input } from "@/components/ui/input";
 import { FaUser } from "react-icons/fa";
 
@@ -43,8 +43,15 @@ import { useRouter } from "next/navigation";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays, addDays } from "date-fns";
-import ProjectListCombo from "@/components/common/projectListCombo";
+import ProjectListCombo from "../../common/projectListCombo";
 import { ProjectData, WorkOrderData } from "@/types";
+import WorkOrderListCombo from "@/components/common/workOrderListCombo";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -54,14 +61,10 @@ const WorkOrderResourceFormContainer = () => {
   const queryClient = useQueryClient();
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedProject, setProject] = useState<ProjectData | undefined>();
-  const [disabledDates, setDisbleDates] = useState<Date[]>([]);
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["work-orders"],
-    queryFn: async () => {
-      const data = await getAllWorkOrder();
-      return JSON.parse(data.data) as WorkOrderData[];
-    },
-  });
+  const [selectedWorkOrder, setWorkOrder] = useState<
+    WorkOrderData | undefined
+  >();
+  const [workOderList, setWorkOrderList] = useState<WorkOrderData[]>([]);
 
   const creatWorkOrder = useMutation({
     mutationFn: async (value: any) => {
@@ -81,7 +84,6 @@ const WorkOrderResourceFormContainer = () => {
         });
         form.reset();
         setProject(undefined);
-        setRange(undefined);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -99,104 +101,46 @@ const WorkOrderResourceFormContainer = () => {
       });
     },
   });
-  const form = useForm<z.infer<typeof WorkOrderSchema>>({
-    resolver: zodResolver(WorkOrderSchema),
+  const form = useForm<z.infer<typeof ResourceWorkOrderListSchema>>({
+    resolver: zodResolver(ResourceWorkOrderListSchema),
     defaultValues: {
       project_id: "",
       work_order_id: "",
-      planner_remark: "",
-      start_date: "",
-      status: "Unreleased",
-      description: "",
-      images: [],
     },
   });
   useEffect(() => {
     if (workOrder) {
-      setProject(workOrder?.project_id);
-
-      form.setValue("project_id", workOrder?.project_id!);
-      form.setValue("planner_remark", workOrder?.planner_remark!);
-      form.setValue("start_date", workOrder?.start_date!);
-      form.setValue("end_date", workOrder?.end_date!);
-      form.setValue("status", workOrder?.status!);
-      form.setValue("work_order_id", workOrder?.work_order_id!);
-      form.setValue("description", workOrder?.description!);
-      setDateRange({
-        from: new Date(workOrder?.start_date!),
-        to: new Date(workOrder?.end_date!),
-      });
+      //
       // setEdit(true);
     }
   }, [workOrder]);
 
-  const onSubmit = async (values: z.infer<typeof WorkOrderSchema>) => {
-    creatWorkOrder.mutate(values);
+  const onSubmit = async (
+    values: z.infer<typeof ResourceWorkOrderListSchema>
+  ) => {
+    console.log(values);
+    // creatWorkOrder.mutate(values);
   };
 
   const chooseProject = (value: ProjectData) => {
     if (!value) {
-      form.setValue("work_order_id", "");
       form.setValue("project_id", "");
       setProject(value);
-      setDisbleDates([]);
-      setDisbleDates([]);
-
+      setWorkOrder(undefined);
       return;
     }
-    form.setValue("work_order_id", value.project_id + "-");
+
     form.setValue("project_id", value.project_id);
     setProject(value);
-    const projectWiseWorkOrders: WorkOrderData[] | undefined = data?.filter(
-      (info) => info.project_id === value?.project_id
-    );
-    setDisbleDates([]);
-    const workOrderDates: Date[] = [];
-
-    projectWiseWorkOrders?.map(({ start_date, end_date, ...info }, index) => {
-      const days = differenceInDays(start_date, end_date);
-      const projectDays = 0 | -days;
-      for (let i = 0; i <= projectDays; i++) {
-        const newdate = addDays(new Date(start_date), i);
-        workOrderDates.push(new Date(format(newdate, "LLL dd, y")));
-      }
-    });
-    // if (workOrder) {
-    //   const days = differenceInDays(workOrder?.start_date, workOrder?.end_date);
-    //   const workDays = 0 | -days;
-    //   for (let i = 0; i <= workDays; i++) {
-    //     const newdate = addDays(new Date(workOrder?.start_date), i);
-
-    //     console.log(newdate);
-    //   }
-    // } if need in future will im plement
-
-    setDisbleDates([...workOrderDates]);
+    setWorkOrder(undefined);
   };
-
-  const setRange = (data: DateRange | undefined) => {
-    form.clearErrors("start_date");
-    setDateRange(data);
-    if (!data) {
-      form.setValue("start_date", "");
-      form.setValue("end_date", "");
+  const chooseWorkOrder = (value: WorkOrderData) => {
+    if (!value) {
+      setWorkOrder(undefined);
       return;
     }
-    const { from, to } = data;
-    if (!from) {
-      form.setValue("start_date", "");
-      form.setValue("end_date", "");
-      return;
-    }
-    if (!to) {
-      form?.setValue("start_date", format(from, "LLL dd, y"));
-      form?.setValue("end_date", format(from, "LLL dd, y"));
-      return;
-    }
-    form.setValue("start_date", format(from, "LLL dd, y"));
-    form.setValue("end_date", format(to, "LLL dd, y"));
-
-    return;
+    form.setValue("work_order_id", value.work_order_id);
+    setWorkOrder(value);
   };
 
   return (
@@ -235,12 +179,13 @@ const WorkOrderResourceFormContainer = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Work Order id</FormLabel>
+                        <FormLabel>Work Order ID</FormLabel>
                         <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            placeholder="Work Order Id"
+                          <WorkOrderListCombo
+                            work_order_id={selectedWorkOrder?.work_order_id}
+                            value={selectedWorkOrder}
+                            onChange={chooseWorkOrder}
+                            project_id={selectedProject?.project_id}
                           />
                         </FormControl>
                         <FormMessage />
@@ -250,101 +195,34 @@ const WorkOrderResourceFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="description"
+                  name="resources"
                   render={({ field }) => {
                     return (
-                      <FormItem>
-                        <FormLabel>Description</FormLabel>
+                      <FormItem className="w-full flex flex-col mt-3">
+                        <FormLabel>Resource Id</FormLabel>
                         <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            placeholder="Description"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="planner_remark"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Planner Remark</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            placeholder="Planner Remark"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="start_date"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Start Date - End Date</FormLabel>
-                        <FormControl>
-                          <DatePickerWithRange
-                            onselect={setRange}
-                            selectedData={dateRange!}
-                            fromDate={selectedProject?.start_date}
-                            toDate={selectedProject?.end_date}
-                            disabled={disabledDates}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Status</FormLabel>
-                        <Select
-                          value={form.watch("status")}
-                          onValueChange={(value) => {
-                            form.clearErrors("status");
-                            form.setValue("status", value);
-                          }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Unreleased">
-                              Unreleased
-                            </SelectItem>
-                            <SelectItem value="Released">Released</SelectItem>
-                            <SelectItem value="Closed">Closed</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="images"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Files</FormLabel>
-                        <FormControl>
-                          <Input />
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="outline" className="w-2/4 px-4">
+                                Choose Resources
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="w-56">
+                              {["one", "two"].map((info, index) => {
+                                return (
+                                  <div className="w-full p-1 flex justify-between items-center">
+                                    <p>{info}</p>
+                                    <Checkbox
+                                      // checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        console.log(checked);
+                                      }}
+                                    />
+                                  </div>
+                                );
+                              })}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -367,8 +245,6 @@ const WorkOrderResourceFormContainer = () => {
                     form.clearErrors();
                     removeWorkOrder();
                     setProject(undefined);
-                    setRange(undefined);
-                    setDisbleDates([]);
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

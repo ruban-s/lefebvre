@@ -20,14 +20,14 @@ export default {
               body: JSON.stringify(credentials),
             }
           );
-
           if (!authResponse.ok) {
             return null;
           }
           const response = await authResponse.json();
           if (response.status) {
             const user = JSON.parse(response.data);
-            return user;
+            user["token"] = response.authToken;
+            return Promise.resolve(user);
           }
           return null;
         }

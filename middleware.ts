@@ -9,6 +9,7 @@ import {
 } from "@/routes";
 import { NextResponse } from "next/server";
 import { GetServerSidePropsContext } from "next";
+import { cookies } from "next/headers";
 
 const { auth } = NextAuth(authConfig);
 
@@ -17,10 +18,9 @@ export default auth((req) => {
   const { nextUrl, auth } = req!;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-  //for a testing
-  // if (nextUrl.pathname === "/") {
-  //   return Response.redirect(new URL("/dashboard", nextUrl));
-  // }
+  const cookieStore = cookies();
+  const theme = cookieStore.get("token");
+
   if (isApiAuthRoute) {
     return;
   }

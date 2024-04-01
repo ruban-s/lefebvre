@@ -2,8 +2,8 @@
 import * as z from "zod";
 import { WorkOrderSchema } from "@/schemas/index";
 import { BASE_URL } from "@/config/const";
-import axios from "axios";
 import { ResponseData, WorkOrderData } from "@/types";
+import { Axios } from "@/action/axios";
 
 interface data {
   status: boolean;
@@ -12,9 +12,7 @@ interface data {
 }
 export const getAllWorkOrder = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/workorder/getAllWorkOrder"
-    );
+    const axiosResponse = await Axios.get("/workorder/getAllWorkOrder");
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -30,10 +28,7 @@ export const createWorkOrder = async (
   value: z.infer<typeof WorkOrderSchema>
 ) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/workorder/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/workorder/create", value);
     const data = axiosResponse.data;
     console.log(data);
     return data;
@@ -48,10 +43,7 @@ export const createWorkOrder = async (
 };
 export const updateWorkOrder = async (value: WorkOrderData) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/workorder/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/workorder/update", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -67,8 +59,8 @@ export const updateWorkOrder = async (value: WorkOrderData) => {
 
 export const deleteWorkOrder = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/workorder/delete?id=${value}`,
+    const axiosResponse = await Axios.delete(
+      `/workorder/delete?id=${value}`,
       value
     );
     const data = axiosResponse.data;

@@ -2,8 +2,8 @@
 import * as z from "zod";
 import { UserSchema } from "@/schemas/index";
 import { BASE_URL } from "@/config/const";
-import axios from "axios";
 import { ResponseData, UserData } from "@/types";
+import { Axios } from "@/action/axios";
 
 interface data {
   status: boolean;
@@ -12,9 +12,7 @@ interface data {
 }
 export const getAllUser = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/user/getAllUsers"
-    );
+    const axiosResponse = await Axios.get("/user/getAllUsers");
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -28,10 +26,7 @@ export const getAllUser = async () => {
 };
 export const createUser = async (value: z.infer<typeof UserSchema>) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/user/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/user/create", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -45,10 +40,7 @@ export const createUser = async (value: z.infer<typeof UserSchema>) => {
 };
 export const updateUser = async (value: UserData) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/user/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/user/update", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -65,7 +57,7 @@ export const updateUser = async (value: UserData) => {
 //
 export const getUserById = async (value: any) => {
   try {
-    const axiosResponse = await axios.get(
+    const axiosResponse = await Axios.get(
       BASE_URL + `/user/getOneUser?user_id=${value}`,
       value
     );
@@ -83,10 +75,7 @@ export const getUserById = async (value: any) => {
 
 export const deleteUser = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/user/delete?id=${value}`,
-      value
-    );
+    const axiosResponse = await Axios.delete(`/user/delete?id=${value}`, value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {

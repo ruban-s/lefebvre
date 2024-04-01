@@ -83,6 +83,7 @@ export interface AttendanceTypeData {
   createdDate: string;
   id: string;
   status: string;
+  type: string;
   name: string;
   updatedDate: string;
 }

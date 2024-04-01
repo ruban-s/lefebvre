@@ -1,7 +1,6 @@
 "use client";
 
-import { getAllProject } from "@/data/projects";
-// import { any } from "@/types";
+import { getAllWorkOrder } from "@/data/work-order";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,40 +20,61 @@ import { RxCaretSort } from "react-icons/rx";
 import { IoCloseSharp } from "react-icons/io5";
 import { use, useEffect, useState } from "react";
 import { string } from "zod";
+import { WorkOrderData } from "@/types";
 import { Checkbox } from "../ui/checkbox";
-import { ProjectData } from "@/types";
 
 interface ProjectListComboProps {
   value: any | undefined;
   onChange: Function;
+  project_id: string | undefined;
+  work_order_id: string | undefined;
 }
-const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
+const WorkOrderListCombo = ({
+  value,
+  onChange,
+  project_id,
+  work_order_id,
+}: ProjectListComboProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [values, setValues] = useState<any | undefined>(value);
+  const [selectedProjectId, setProject] = useState<string | undefined>(
+    project_id
+  );
 
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["projects"],
+  const {
+    data: workOrders,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["work-orders"],
     queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as any[];
+      const data = await getAllWorkOrder();
+      return JSON.parse(data.data) as WorkOrderData[];
     },
   });
-  const projects = data;
 
   useEffect(() => {
-    if (!value) {
-      return setValues(undefined);
-    }
-    if (typeof value === "string") {
-      var selectedProject = projects?.filter(
-        (info) => info.project_id === value
-      );
-      setValues(selectedProject![0]);
-      onChange(selectedProject![0]);
-      return;
-    }
-    setValues(value);
+    // if (!value) {
+    //   return setValues(undefined);
+    // }
+    // if (typeof value === "string") {
+    //   var selectedWorkOrder = workOrders?.filter(
+    //     (info) => info.work_order_id === value
+    //   );
+    //   // setValues(selectedWorkOrder![0]);
+    //   // onChange(selectedWorkOrder![0]);
+    //   return;
+    // }
+    // setValues(value);
   }, [value]);
+
+  useEffect(() => {
+    var projectWorkOreders = workOrders?.filter(
+      (info) => info.project_id === project_id
+    ) as WorkOrderData[];
+
+    setValues(projectWorkOreders);
+  }, [project_id]);
 
   return (
     <Popover open={open}>
@@ -71,7 +91,7 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
           onClick={() => {
             setOpen(!open);
           }}>
-          {!values ? "Choose Project" : values?.project_id}
+          {!work_order_id ? "Choose Work Order" : work_order_id}
 
           {!open ? (
             <RxCaretSort className="mb-1" />
@@ -82,18 +102,17 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
       </PopoverTrigger>
       <PopoverContent>
         <Command>
-          <CommandInput placeholder="Search Project..." className="h-9" />
-          <CommandEmpty>No Work Orders Found.</CommandEmpty>
-          <CommandList onSelect={() => alert("hi")}>
-            {projects?.map((info: ProjectData, index) => {
+          <CommandInput placeholder={selectedProjectId} className="h-9" />
+          <CommandEmpty>No Project Found.</CommandEmpty>
+          <CommandList>
+            {values?.map((info: WorkOrderData, index: any) => {
               return (
                 <CommandItem
                   key={index}
                   onSelect={() => {
-                    if (info.project_id === values?.project_id) {
+                    if (info.work_order_id === work_order_id) {
                       onChange(undefined);
                       setOpen(!open);
-
                       return;
                     }
                     onChange(info);
@@ -101,9 +120,9 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
                   }}
                   className="flex justify-between items-center">
                   <div className="w-3/4 text-sm font-extrabold text-theme">
-                    {info.project_id}
+                    {info.work_order_id}
                   </div>
-                  <Checkbox checked={info.project_id === values?.project_id} />
+                  <Checkbox checked={info.work_order_id === work_order_id} />
                 </CommandItem>
               );
             })}
@@ -114,4 +133,4 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
   );
 };
 
-export default ProjectListCombo;
+export default WorkOrderListCombo;

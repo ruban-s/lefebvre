@@ -36,12 +36,12 @@ const WorkOrderResourceListContainer = () => {
             <p className="text-lg font-bold text-white ">{"WorkOrders"}</p>
           </div>
           <div className="w-full  ">
-            <DataTable
+            {/* <DataTable
               columns={columns}
               data={breaks!}
               searchName="work_order_id"
               fileName="WorkOrder"
-            />
+            /> */}
           </div>
         </>
       )}

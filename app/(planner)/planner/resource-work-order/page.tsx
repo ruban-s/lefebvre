@@ -13,7 +13,7 @@ const Planner = () => {
         <WorkOrderResourceFormContainer />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        <WorkOrderResourceListContainer />
+        {/* <WorkOrderResourceListContainer /> */}
       </div>
     </LayoutContainer>
   );

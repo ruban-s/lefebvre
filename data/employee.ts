@@ -2,14 +2,12 @@
 import * as z from "zod";
 import { BASE_URL } from "@/config/const";
 import { ResponseData } from "@/types";
-import axios from "axios";
 import { EmployeeSchema } from "@/schemas";
+import { Axios } from "@/action/axios";
 
 export const getAllEmployee = async () => {
   try {
-    const axiosResponse = await axios.get(
-      "http://208.109.9.243:8082/employee/getAllEmployees"
-    );
+    const axiosResponse = await Axios.get("/employee/getAllEmployees");
     const data = axiosResponse.data;
 
     return data;
@@ -24,10 +22,7 @@ export const getAllEmployee = async () => {
 };
 export const createEmployee = async (value: z.infer<typeof EmployeeSchema>) => {
   try {
-    const axiosResponse = await axios.post(
-      "http://208.109.9.243:8082/employee/create",
-      value
-    );
+    const axiosResponse = await Axios.post("/employee/create", value);
     const data = axiosResponse.data;
     return data;
   } catch (error) {
@@ -41,10 +36,7 @@ export const createEmployee = async (value: z.infer<typeof EmployeeSchema>) => {
 };
 export const updateEmployee = async (value: any) => {
   try {
-    const axiosResponse = await axios.put(
-      "http://208.109.9.243:8082/employee/update",
-      value
-    );
+    const axiosResponse = await Axios.put("/employee/update", value);
     const data = axiosResponse.data;
 
     return data;
@@ -59,8 +51,8 @@ export const updateEmployee = async (value: any) => {
 };
 export const deleteEmployee = async (value: any) => {
   try {
-    const axiosResponse = await axios.delete(
-      `http://208.109.9.243:8082/employee/delete?id=${value}`,
+    const axiosResponse = await Axios.delete(
+      `/employee/delete?id=${value}`,
       value
     );
     const data = axiosResponse.data;
