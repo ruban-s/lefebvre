@@ -103,7 +103,7 @@ const WorkOrderListCombo = ({
       <PopoverContent>
         <Command>
           <CommandInput placeholder={selectedProjectId} className="h-9" />
-          <CommandEmpty>No Project Found.</CommandEmpty>
+          <CommandEmpty>No Work Order Found.</CommandEmpty>
           <CommandList>
             {values?.map((info: WorkOrderData, index: any) => {
               return (

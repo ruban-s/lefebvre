@@ -210,7 +210,9 @@ const WorkOrderResourceFormContainer = () => {
                             <DropdownMenuContent className="w-56">
                               {["one", "two"].map((info, index) => {
                                 return (
-                                  <div className="w-full p-1 flex justify-between items-center">
+                                  <div
+                                    key={index}
+                                    className="w-full p-1 flex justify-between items-center">
                                     <p>{info}</p>
                                     <Checkbox
                                       // checked={field.value?.includes(item.id)}
