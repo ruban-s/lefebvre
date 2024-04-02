@@ -121,3 +121,29 @@ export interface WorkOrderData {
   updatedDate: string;
   work_order_id: string;
 }
+
+export interface ResourceWorkOdderData {
+  actual_hour: string;
+  ballance_hour: string;
+  ballanced_quantity: string;
+  bench_mark_measure: string;
+  bench_mark_unit: string;
+  createdDate: string;
+  employee_id: string;
+  endDate: string;
+  estimated_hour: string;
+  forman: string;
+  id: string;
+  prepared_quantity: string;
+  project_id: string;
+  quantity_unit: string;
+  remark: string;
+  required_quantity: string;
+  resourceId: string;
+  roleName: string;
+  sqNumber: string;
+  startDate: string;
+  status: string;
+  updatedDate: string;
+  work_order_id: string;
+}

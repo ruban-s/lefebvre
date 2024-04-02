@@ -7,6 +7,7 @@ import {
   AttendanceTypeData,
   ProjectData,
   WorkOrderData,
+  ResourceWorkOdderData,
 } from "@/types";
 import { create } from "zustand";
 
@@ -59,4 +60,12 @@ export const useWorkOrderStore = create((set) => ({
   workOrder: workOrder, // Object value with initial properties
   setWorkOrder: (workOrder: any) => set({ workOrder }),
   removeWorkOrder: (workOrder: any) => set({ workOrder: null }), // Action to update user object
+}));
+
+var resourceWorkOrder: ResourceWorkOdderData | null = null;
+export const useResourceWorkOrderStore = create((set) => ({
+  resourceWorkOrder: resourceWorkOrder, // Object value with initial properties
+  setResourceWorkOrder: (resourceWorkOrder: any) => set({ resourceWorkOrder }),
+  removeResourceWorkOrder: (resourceWorkOrder: any) =>
+    set({ resourceWorkOrder: null }), // Action to update user object
 }));

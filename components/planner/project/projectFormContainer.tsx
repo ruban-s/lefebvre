@@ -57,7 +57,6 @@ const ProjectFormContainer = () => {
       return breake;
     },
     onSuccess: (value) => {
-      console.log(value);
       if (value.status) {
         toast.success(`${value.message}`, {
           description: `${value.message}`,

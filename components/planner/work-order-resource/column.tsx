@@ -2,14 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProjectData, WorkOrderData } from "@/types";
-import { useWorkOrderStore } from "@/state";
+import { ResourceWorkOdderData } from "@/types";
+import { useResourceWorkOrderStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteWorkOrder } from "@/data/work-order";
+import { deleteResourceWorkOrder } from "@/data/resource-work-order";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
@@ -20,13 +20,15 @@ import { RxCaretSort } from "react-icons/rx";
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const workOrders = row.original;
-  const setWorkOrder = useWorkOrderStore((state: any) => state.setWorkOrder);
+  const setResourceWorkOrder = useResourceWorkOrderStore(
+    (state: any) => state.setResourceWorkOrder
+  );
   const handleUpdateUser = () => {
-    setWorkOrder({ ...workOrders });
+    setResourceWorkOrder({ ...workOrders });
   };
   const deleteItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await deleteWorkOrder(value);
+      const deleteCode: any = await deleteResourceWorkOrder(value);
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -43,7 +45,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["work-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["resource-work-orders"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -75,7 +77,7 @@ export const CellFunction = ({ row }: any) => {
   );
 };
 
-export const columns: ColumnDef<WorkOrderData>[] = [
+export const columns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -99,70 +101,58 @@ export const columns: ColumnDef<WorkOrderData>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "work_order_id",
-    header: "Work Order Id",
-  },
-  {
     accessorKey: "project_id",
     header: "Project ID",
   },
+  {
+    accessorKey: "work_order_id",
+    header: "Work Order Id",
+  },
 
   {
-    accessorKey: "start_date",
-    header: "Start Date",
+    accessorKey: "resourceId",
+    header: "Resource ID",
   },
   {
-    accessorKey: "end_date",
-    header: "End Date",
+    accessorKey: "sqNumber",
+    header: "Sequence Number",
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "actual_hour",
+    header: "Hour",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Quantity",
+  },
+  {
+    accessorKey: "bench_mark_measure",
+    header: "Bench Mark",
+  },
+
+  {
+    accessorKey: "remark",
+    header: "Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
+        {row.original.remark.substring(0, 30)}{" "}
+        {row.original.remark.length > 30 && "..."}
+        {row.original.remark.length > 30 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
             </PopoverTrigger>
 
             <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
+              <p className="mb-2 text-bold">Remark:</p>
+              <p className="text-sm text-neutral-500">{row.original.remark}</p>
             </PopoverContent>
           </Popover>
         )}
       </div>
     ),
   },
-  {
-    accessorKey: "planner_remark",
-    header: "Remarks",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
-  },
   {
     accessorKey: "status",
     header: "Status",

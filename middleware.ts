@@ -5,10 +5,10 @@ import {
   authRoutes,
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
+  adminRoutes,
+  plannerRoutes,
   publicRoutes,
 } from "@/routes";
-import { NextResponse } from "next/server";
-import { GetServerSidePropsContext } from "next";
 import { cookies } from "next/headers";
 
 const { auth } = NextAuth(authConfig);
@@ -18,9 +18,13 @@ export default auth((req) => {
   const { nextUrl, auth } = req!;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isAdminRoute = adminRoutes.includes(nextUrl.pathname);
+  const isPlannerRoute = plannerRoutes.includes(nextUrl.pathname);
+  const isPublicRoutes = publicRoutes.includes(nextUrl.pathname);
   const cookieStore = cookies();
-  const theme = cookieStore.get("token");
-  console.log(theme);
+  const token = cookieStore.get("token");
+  const role = cookieStore.get("role");
+
   if (isApiAuthRoute) {
     return;
   }
@@ -30,8 +34,23 @@ export default auth((req) => {
     }
     return;
   }
-  if (!isLoggedIn) {
+  if (!isLoggedIn || !token) {
     return Response.redirect(new URL("/auth/login", nextUrl));
+  }
+  if (isPublicRoutes) {
+    return;
+  }
+  if (role?.value === "Admin") {
+    if (!isAdminRoute) {
+      return Response.redirect(new URL("/access-denied", nextUrl));
+    }
+    return;
+  }
+  if (role?.value === "Planner") {
+    if (!isPlannerRoute) {
+      return Response.redirect(new URL("/access-denied", nextUrl));
+    }
+    return;
   }
   return;
 });

@@ -21,8 +21,6 @@ export default function RootLayout({
 }>) {
   const [tabs, setTabs] = useState<TabData[]>();
   const session = useSession();
-  const path = usePathname();
-  const router = useRouter();
   useEffect(() => {
     if (session.data?.user.role === "Admin") {
       return setTabs(adminTabs);
@@ -31,12 +29,6 @@ export default function RootLayout({
       return setTabs(plannerTabs);
     }
   }, []);
-  // if (session.status === "unauthenticated") {
-  //   return <AccessDenied />;
-  // }
-  if (session.data?.user.role !== "Admin" && path !== "/") {
-    return <AccessDenied />;
-  }
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar tabs={tabs!} />

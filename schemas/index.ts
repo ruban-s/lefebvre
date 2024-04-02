@@ -86,32 +86,32 @@ export const WorkOrderSchema = z.object({
   status: z.string().min(1, { message: "status is required" }),
 });
 export const ResourceWorkOrderSchema = z.object({
-  actual_hour: z.string().min(1, { message: "Actual Hour is required" }),
-  ballance_hour: z.string().optional(),
-  ballanced_quantity: z.string().optional(),
-  bench_mark_measure: z.string().optional(),
-  bench_mark_unit: z.string().optional(),
-  createdDate: z.string().optional(),
-  employee_id: z.string().optional(),
-  endDate: z.string().optional(),
-  estimated_hour: z.string().optional(),
-  forman: z.string().optional(),
-  id: z.string().optional(),
-  prepared_quantity: z.string().optional(),
+  actual_hour: z.string().min(1, { message: "Actual Hour is required!" }),
+  // ballance_hour: z.string().optional(),
+  // ballanced_quantity: z.string().optional(),
+  bench_mark_measure: z
+    .string()
+    .min(1, { message: "Bench Mark Measure is required!" }),
+  // bench_mark_unit: z.string().optional(),
+  // employee_id: z.string().optional(),
+  // endDate: z.string().optional(),
+  // estimated_hour: z.string().optional(),
+  // forman: z.string().optional(),
+  prepared_quantity: z
+    .string()
+    .min(1, { message: "Quantity Unit is required!" }),
   project_id: z.string().optional(),
-  quantity_unit: z.string().optional(),
-  remark: z.string().optional(),
-  required_quantity: z.string().optional(),
+  // quantity_unit: z.string().min(1, { message: "Quantity Unit is required!" }),
+  remark: z.string().min(1, { message: "Remark is required!" }),
+  // required_quantity: z.string().optional(),
   resourceId: z.string().optional(),
-  sqNumber: z.string().optional(),
-  startDate: z.string().optional(),
+  sqNumber: z.string().min(1, { message: "Sequence Number is required!" }),
+  // startDate: z.string().optional(),
   status: z.string().optional(),
   work_order_id: z.string().optional(),
 });
 export const ResourceWorkOrderListSchema = z.object({
-  project_id: z.string().min(1, { message: "Project Id is required" }),
-  work_order_id: z
-    .string()
-    .min(1, { message: "Work Order Id Hour is required" }),
-  resources: z.array(ResourceWorkOrderSchema),
+  project_id: z.string().optional(),
+  work_order_id: z.string().optional(),
+  resources: z.array(ResourceWorkOrderSchema).optional(),
 });

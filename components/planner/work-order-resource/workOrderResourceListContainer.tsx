@@ -1,22 +1,18 @@
 "use client";
 
 import Loading from "@/loading";
-import React, { useEffect, useState } from "react";
-import { getAllBreaks } from "@/data/break";
-import { WorkOrderData, UserData } from "@/types";
+import { ResourceWorkOdderData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
-import { getAllWorkOrder } from "@/data/work-order";
-import ProjectListCombo from "@/components/common/projectListCombo";
+import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 
 const WorkOrderResourceListContainer = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["work-orders"],
+    queryKey: ["resource-work-orders"],
     queryFn: async () => {
-      const data = await getAllWorkOrder();
-      return JSON.parse(data.data) as WorkOrderData[];
+      const data = await getAllResourceWorkOrder();
+      return JSON.parse(data.data) as ResourceWorkOdderData[];
     },
   });
   const breaks = data;
@@ -36,12 +32,12 @@ const WorkOrderResourceListContainer = () => {
             <p className="text-lg font-bold text-white ">{"WorkOrders"}</p>
           </div>
           <div className="w-full  ">
-            {/* <DataTable
+            <DataTable
               columns={columns}
               data={breaks!}
-              searchName="work_order_id"
-              fileName="WorkOrder"
-            /> */}
+              searchName="resourceId"
+              fileName="ResourceWorkOrder"
+            />
           </div>
         </>
       )}

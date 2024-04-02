@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
     var header: any = [[]];
     var body: any = [];
     headerList.map((info: string, index) => {
-      header[0].push(info.replace("_", "").toUpperCase());
+      header[0].push(info.replace("_", " ").toUpperCase());
     });
     value.map((info: any, index: any) => {
       if (index > 0) {
@@ -129,6 +129,7 @@ export function DataTable<TData, TValue>({
     const doc = new jsPDF({ orientation: "landscape" });
     autoTable(doc, {
       head: header,
+
       body: body,
       theme: "grid",
     });

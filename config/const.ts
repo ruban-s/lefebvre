@@ -33,17 +33,22 @@ export const plannerTabs: TabData[] = [
     icon: FaUsersCog,
     link: "/planner/resource-work-order",
   },
-  { id: 4, label: "Closed Project", icon: IoCalendar, link: "/closed-project" },
+  {
+    id: 4,
+    label: "Closed Project",
+    icon: IoCalendar,
+    link: "/planner/closed-project",
+  },
   {
     id: 5,
     label: "Unreleased Project",
     icon: GiCoffeeCup,
-    link: "/unreleased-project",
+    link: "/planner/unreleased-project",
   },
   {
     id: 6,
     label: "Released Project",
     icon: FaCogs,
-    link: "/released-project",
+    link: "/planner/released-project",
   },
 ];

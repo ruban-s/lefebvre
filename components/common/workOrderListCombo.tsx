@@ -54,18 +54,20 @@ const WorkOrderListCombo = ({
   });
 
   useEffect(() => {
-    // if (!value) {
-    //   return setValues(undefined);
-    // }
-    // if (typeof value === "string") {
-    //   var selectedWorkOrder = workOrders?.filter(
-    //     (info) => info.work_order_id === value
-    //   );
-    //   // setValues(selectedWorkOrder![0]);
-    //   // onChange(selectedWorkOrder![0]);
-    //   return;
-    // }
-    // setValues(value);
+    if (!value) {
+      return setValues(undefined);
+    }
+    if (typeof value === "string") {
+      var selectedWorkOrder = workOrders?.filter(
+        (info) => info.work_order_id === value
+      );
+      console.log(selectedWorkOrder);
+      // setValues(selectedWorkOrder![0]);
+      onChange(selectedWorkOrder![0]);
+      // setValues(value);
+
+      return;
+    }
   }, [value]);
 
   useEffect(() => {

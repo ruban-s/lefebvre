@@ -4,7 +4,7 @@
  * @type {string[]}
  */
 
-export const publicRoutes = [];
+export const publicRoutes = ["/", "/access-denied"];
 
 /**
  * An array of routes that are used for authendication
@@ -26,3 +26,29 @@ export const apiAuthPrefix = "/api/auth";
  */
 
 export const DEFAULT_LOGIN_REDIRECT = "/";
+
+/**
+ * An array of routes that are used for authendication
+ * There routes will redirect logged in user to /setting page
+ * @type {string[]}
+ */
+
+export const adminRoutes = [
+  "/attendance",
+  "/break",
+  "/dashboard",
+  "/employees",
+  "/indirect-code",
+  "/measures",
+  "/report",
+  "/resources",
+  "/user",
+];
+export const plannerRoutes = [
+  "/planner/project",
+  "/planner/work-order",
+  "/planner/resource-work-order",
+  "/planner/closed-project",
+  "/planner/unreleased-project",
+  "/planner/released-project",
+];

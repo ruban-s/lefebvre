@@ -9,6 +9,12 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  events: {
+    async signOut() {
+      cookies().delete("token");
+      cookies().delete("role");
+    },
+  },
   callbacks: {
     async session({ token, session, user }) {
       if (session.user && token?.sub) {
@@ -30,6 +36,7 @@ export const {
       cookies().set("token", newUser?.token, {
         maxAge: 5 * 24 * 60 * 60 * 1000, // 5 days
       });
+      cookies().set("role", newUser?.role_name);
       token.token = newUser?.token;
       return token;
     },
