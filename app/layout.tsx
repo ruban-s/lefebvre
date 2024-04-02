@@ -8,10 +8,10 @@ import Provider from "@/query-client/provider";
 
 const mulish = Mulish({ subsets: ["latin"], weight: "400" });
 
-// export const metadata: Metadata = {
-//   title: "",
-//   description: "",
-// };
+export const metadata: Metadata = {
+  title: "LEFEBVRE",
+  description: "",
+};
 
 export default async function RootLayout({
   children,

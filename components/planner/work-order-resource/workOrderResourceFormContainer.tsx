@@ -143,7 +143,6 @@ const WorkOrderResourceFormContainer = () => {
   });
   useEffect(() => {
     if (workOrder) {
-      console.log(workOrder);
       setProject(workOrder.project_id);
       setWorkOrder(workOrder.work_order_id);
       append({
@@ -159,7 +158,7 @@ const WorkOrderResourceFormContainer = () => {
       });
       // setEdit(true);
     }
-  }, [workOrder]);
+  }, workOrder);
 
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
@@ -269,7 +268,9 @@ const WorkOrderResourceFormContainer = () => {
                                   {fields.length < 4 &&
                                     fields.map((info, index) => {
                                       return (
-                                        <Badge className="ml-2 rounded-sm bg-neutral-500">
+                                        <Badge
+                                          key={index}
+                                          className="ml-2 rounded-sm bg-neutral-500">
                                           {info.resourceId}
                                         </Badge>
                                       );
@@ -341,7 +342,9 @@ const WorkOrderResourceFormContainer = () => {
                   <ScrollArea className="w-full h-[500px]  lg:h-[700px] bg-slate-100 rounded-md p-1">
                     {fields.map((info: any, index: any) => {
                       return (
-                        <div className="w-full  h-auto p-2 bg-white mb-2 border-l-2 border-l-black shadow-lg  rounded-md">
+                        <div
+                          key={index}
+                          className="w-full  h-auto p-2 bg-white mb-2 border-l-2 border-l-black shadow-lg  rounded-md">
                           <Badge variant="default" className="rounded-sm">
                             {info.resourceId}
                           </Badge>

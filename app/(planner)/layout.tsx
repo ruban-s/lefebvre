@@ -31,7 +31,7 @@ export default function RootLayout({
     if (session.data?.user.role === "Planner") {
       return setTabs(plannerTabs);
     }
-  }, []);
+  }, [session.data?.user.role]);
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar tabs={tabs!} />
