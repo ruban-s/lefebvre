@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ProjectData, UserData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
-import { columns } from "./column";
+import { projectColumns } from "./column";
 import { getAllProject } from "@/data/projects";
 
 const ProjectListContainer = () => {
@@ -34,7 +34,7 @@ const ProjectListContainer = () => {
           </div>
           <div className="w-full  ">
             <DataTable
-              columns={columns}
+              columns={projectColumns}
               data={breaks!}
               searchName="project_id"
               fileName="Project"

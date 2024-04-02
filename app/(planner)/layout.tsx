@@ -32,6 +32,9 @@ export default function RootLayout({
       return setTabs(plannerTabs);
     }
   }, [session.data?.user.role]);
+  if (session.data?.user.role !== "Planner" && path !== "/") {
+    return <AccessDenied />;
+  }
   return (
     <main className="w-full h-full flex flex-row items-center justify-center">
       <SideBar tabs={tabs!} />

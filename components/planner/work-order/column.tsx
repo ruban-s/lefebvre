@@ -43,7 +43,14 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["work-orders"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "work-orders",
+          "unreleased-work-orders",
+          "released-work-orders",
+          "closed-work-orders",
+        ],
+      });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -75,7 +82,7 @@ export const CellFunction = ({ row }: any) => {
   );
 };
 
-export const columns: ColumnDef<WorkOrderData>[] = [
+export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     id: "select",
     header: ({ table }) => (

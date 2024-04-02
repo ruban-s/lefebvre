@@ -43,14 +43,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: [
-          "projects",
-          "unreleased-projects",
-          "released-projects",
-          "closed-projects",
-        ],
-      });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -180,11 +173,5 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         {row.original.status}
       </Badge>
     ),
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <CellFunction row={row} />;
-    },
   },
 ];

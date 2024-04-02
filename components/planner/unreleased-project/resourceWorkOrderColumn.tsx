@@ -2,14 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProjectData } from "@/types";
-import { useProjectStore } from "@/state";
+import { ResourceWorkOdderData } from "@/types";
+import { useResourceWorkOrderStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteProject } from "@/data/projects";
+import { deleteResourceWorkOrder } from "@/data/resource-work-order";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
@@ -19,14 +19,16 @@ import { RxCaretSort } from "react-icons/rx";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const project = row.original;
-  const setProject = useProjectStore((state: any) => state.setProject);
+  const workOrders = row.original;
+  const setResourceWorkOrder = useResourceWorkOrderStore(
+    (state: any) => state.setResourceWorkOrder
+  );
   const handleUpdateUser = () => {
-    setProject({ ...project });
+    setResourceWorkOrder({ ...workOrders });
   };
   const deleteItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await deleteProject(value);
+      const deleteCode: any = await deleteResourceWorkOrder(value);
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -43,14 +45,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: [
-          "projects",
-          "unreleased-projects",
-          "released-projects",
-          "closed-projects",
-        ],
-      });
+      queryClient.invalidateQueries({ queryKey: ["resource-work-orders"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -72,17 +67,17 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
-      values={project}
+      values={workOrders}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={() => {
-        deleteItem.mutate(`${project.id}`);
+        deleteItem.mutate(`${workOrders.id}`);
       }}
     />
   );
 };
 
-export const projectColumns: ColumnDef<ProjectData>[] = [
+export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -110,65 +105,54 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Project ID",
   },
   {
-    accessorKey: "customer_name",
-    header: "Customer Name",
+    accessorKey: "work_order_id",
+    header: "Work Order Id",
+  },
+
+  {
+    accessorKey: "resourceId",
+    header: "Resource ID",
   },
   {
-    accessorKey: "start_date",
-    header: "Start Date",
+    accessorKey: "sqNumber",
+    header: "Sequence Number",
   },
   {
-    accessorKey: "end_date",
-    header: "End Date",
+    accessorKey: "actual_hour",
+    header: "Hour",
   },
   {
-    accessorKey: "description",
-    header: "Description",
+    accessorKey: "prepared_quantity",
+    header: "Quantity",
+  },
+  {
+    accessorKey: "bench_mark_measure",
+    header: "Bench Mark",
+  },
+
+  {
+    accessorKey: "remark",
+    header: "Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
+        {row.original.remark.substring(0, 30)}{" "}
+        {row.original.remark.length > 30 && "..."}
+        {row.original.remark.length > 30 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
             </PopoverTrigger>
 
             <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
+              <p className="mb-2 text-bold">Remark:</p>
+              <p className="text-sm text-neutral-500">{row.original.remark}</p>
             </PopoverContent>
           </Popover>
         )}
       </div>
     ),
   },
-  {
-    accessorKey: "planner_remark",
-    header: "Remarks",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
-  },
   {
     accessorKey: "status",
     header: "Status",
@@ -180,11 +164,5 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         {row.original.status}
       </Badge>
     ),
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <CellFunction row={row} />;
-    },
   },
 ];

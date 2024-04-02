@@ -129,7 +129,6 @@ export function DataTable<TData, TValue>({
     const doc = new jsPDF({ orientation: "landscape" });
     autoTable(doc, {
       head: header,
-
       body: body,
       theme: "grid",
     });
@@ -320,7 +319,20 @@ export function DataTable<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody defaultValue={5}>
-            {table.getRowModel().rows?.length ? (
+            {/* <TableRow>
+              <TableCell>
+                {table.getRowModel().rows?.length.toString()}
+              </TableCell>
+            </TableRow> */}
+            {data?.length < 1 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   className="even:bg-neutral-100  odd:bg-white"

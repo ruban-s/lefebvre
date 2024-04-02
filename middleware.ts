@@ -25,8 +25,8 @@ export default auth((req) => {
   const token = cookieStore.get("token");
   const role = cookieStore.get("role");
 
-  console.log(token);
-  console.log(role);
+  // console.log(token);
+  // console.log(role);
 
   if (isApiAuthRoute) {
     return;
@@ -43,18 +43,20 @@ export default auth((req) => {
   if (isPublicRoutes) {
     return;
   }
-  if (role?.value === "Admin") {
-    if (!isAdminRoute) {
-      return Response.redirect(new URL("/access-denied", nextUrl));
-    }
-    return;
-  }
-  if (role?.value === "Planner") {
-    if (!isPlannerRoute) {
-      return Response.redirect(new URL("/access-denied", nextUrl));
-    }
-    return;
-  }
+
+  //Secondary option
+  // if (role?.value === "Admin") {
+  //   if (!isAdminRoute) {
+  //     return Response.redirect(new URL("/access-denied", nextUrl));
+  //   }
+  //   return;
+  // }
+  // if (role?.value === "Planner") {
+  //   if (!isPlannerRoute) {
+  //     return Response.redirect(new URL("/access-denied", nextUrl));
+  //   }
+  //   return;
+  // }
   return;
 });
 

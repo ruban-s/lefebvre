@@ -11,8 +11,6 @@ import { FaUser } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 import { FcInfo } from "react-icons/fc";
 
-import classNames from "classnames";
-
 import {
   Form,
   FormItem,
@@ -71,7 +69,14 @@ const ProjectFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "projects",
+          "unreleased-projects",
+          "released-projects",
+          "closed-projects",
+        ],
+      });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

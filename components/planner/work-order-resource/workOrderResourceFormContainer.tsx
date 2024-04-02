@@ -117,7 +117,14 @@ const WorkOrderResourceFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["resource-work-orders"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "resource-work-orders",
+          "unreleased-resource-work-orders",
+          "released-resource-work-orders",
+          "closed-resource-work-orders",
+        ],
+      });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

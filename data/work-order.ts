@@ -24,6 +24,22 @@ export const getAllWorkOrder = async () => {
     return errorResponse;
   }
 };
+export const getAllWorkOrderByStatus = async (value: string) => {
+  try {
+    const axiosResponse = await Axios.get(
+      `/workorder/getWorkOrderByStatus?work_order_status=${value}`
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
 export const createWorkOrder = async (
   value: z.infer<typeof WorkOrderSchema>
 ) => {

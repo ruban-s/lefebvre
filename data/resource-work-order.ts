@@ -24,6 +24,22 @@ export const getAllResourceWorkOrder = async () => {
     return errorResponse;
   }
 };
+export const getAllResourceWorkOrderByStatus = async (value: string) => {
+  try {
+    const axiosResponse = await Axios.get(
+      `/resource/getResourceByStatus?Resource_status=${value}`
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
 export const createResourceWorkOrder = async (
   value: z.infer<typeof ResourceWorkOrderSchema>[]
 ) => {

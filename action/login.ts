@@ -1,11 +1,8 @@
 "use server";
 import * as z from "zod";
-import { BASE_URL } from "@/config/const";
 import { LoginSchema } from "@/schemas/index";
 import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
-import { cookies } from "next/headers";
-import { Axios } from "./axios";
 
 interface responseData {
   status: boolean;

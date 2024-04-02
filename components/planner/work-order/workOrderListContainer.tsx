@@ -7,7 +7,7 @@ import { WorkOrderData, UserData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
-import { columns } from "./column";
+import { workOrderColumns } from "./column";
 import { getAllWorkOrder } from "@/data/work-order";
 import ProjectListCombo from "../../common/projectListCombo";
 
@@ -37,7 +37,7 @@ const WorkOrderListContainer = () => {
           </div>
           <div className="w-full  ">
             <DataTable
-              columns={columns}
+              columns={workOrderColumns}
               data={breaks!}
               searchName="work_order_id"
               fileName="WorkOrder"

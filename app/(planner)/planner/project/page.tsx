@@ -9,7 +9,7 @@ const Planner = () => {
         <ProjectFormContainer />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        {/* <ProjectListContainer /> */}
+        <ProjectListContainer />
       </div>
     </LayoutContainer>
   );

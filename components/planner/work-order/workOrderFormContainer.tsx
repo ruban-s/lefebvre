@@ -89,7 +89,14 @@ const WorkOrderFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["work-orders"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "work-orders",
+          "unreleased-work-orders",
+          "released-work-orders",
+          "closed-work-orders",
+        ],
+      });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

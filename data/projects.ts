@@ -24,6 +24,23 @@ export const getAllProject = async () => {
     return errorResponse;
   }
 };
+export const getAllProjectByStatus = async (value: string) => {
+  try {
+    const axiosResponse = await Axios.get(
+      `/project/getProjectByStatus?project_status=${value}`
+    );
+    const data = axiosResponse.data;
+    console.log(data);
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
 export const createProject = async (value: z.infer<typeof ProjectSchema>) => {
   try {
     const axiosResponse = await Axios.post("/project/create", value);

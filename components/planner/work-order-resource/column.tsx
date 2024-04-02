@@ -45,7 +45,14 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["resource-work-orders"] });
+      queryClient.invalidateQueries({
+        queryKey: [
+          "resource-work-orders",
+          "unreleased-resource-work-orders",
+          "released-resource-work-orders",
+          "closed-resource-work-orders",
+        ],
+      });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -77,7 +84,7 @@ export const CellFunction = ({ row }: any) => {
   );
 };
 
-export const columns: ColumnDef<ResourceWorkOdderData>[] = [
+export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     id: "select",
     header: ({ table }) => (

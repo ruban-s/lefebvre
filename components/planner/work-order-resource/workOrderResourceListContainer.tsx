@@ -4,7 +4,7 @@ import Loading from "@/loading";
 import { ResourceWorkOdderData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
-import { columns } from "./column";
+import { workOrderListcolumns } from "./column";
 import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 
 const WorkOrderResourceListContainer = () => {
@@ -33,7 +33,7 @@ const WorkOrderResourceListContainer = () => {
           </div>
           <div className="w-full  ">
             <DataTable
-              columns={columns}
+              columns={workOrderListcolumns}
               data={breaks!}
               searchName="resourceId"
               fileName="ResourceWorkOrder"

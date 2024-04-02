@@ -4,6 +4,7 @@ import { BASE_URL } from "@/config/const";
 import { ResponseData } from "@/types";
 import { AttendanceTypeSchema } from "@/schemas";
 import { Axios } from "@/action/axios";
+import { headers } from "next/headers";
 
 export const getAllAttendanceType = async () => {
   try {
