@@ -1,10 +1,6 @@
-"use client";
-
 import LayoutContainer from "@/components/common/layout-container";
 import WorkOrderFormContainer from "@/components/planner/work-order/workOrderFormContainer";
 import WorkOrderListContainer from "@/components/planner/work-order/workOrderListContainer";
-import { UserData } from "@/types";
-import { useState } from "react";
 
 const Planner = () => {
   return (
@@ -13,7 +9,7 @@ const Planner = () => {
         <WorkOrderFormContainer />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        <WorkOrderListContainer />
+        {/* <WorkOrderListContainer /> */}
       </div>
     </LayoutContainer>
   );

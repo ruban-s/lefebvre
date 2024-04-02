@@ -1,5 +1,3 @@
-"use client";
-
 import LayoutContainer from "@/components/common/layout-container";
 import WorkOrderResourceFormContainer from "@/components/planner/work-order-resource/workOrderResourceFormContainer";
 import WorkOrderResourceListContainer from "@/components/planner/work-order-resource/workOrderResourceListContainer";
@@ -11,7 +9,7 @@ const Planner = () => {
         <WorkOrderResourceFormContainer />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        <WorkOrderResourceListContainer />
+        {/* <WorkOrderResourceListContainer /> */}
       </div>
     </LayoutContainer>
   );

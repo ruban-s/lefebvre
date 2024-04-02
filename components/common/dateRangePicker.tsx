@@ -34,7 +34,6 @@ export function DatePickerWithRange({
 }: DatePickerWithRangeProps) {
   const [date, setDate] = React.useState<DateRange | undefined>();
   React.useEffect(() => {
-    console.log(selectedData);
     setDate(selectedData);
   }, [selectedData]);
 

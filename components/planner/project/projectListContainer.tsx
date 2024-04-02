@@ -9,11 +9,8 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllProject } from "@/data/projects";
-interface UserListContainerProps {
-  editUser: Function;
-}
 
-const ProjectListContainer = (props: UserListContainerProps) => {
+const ProjectListContainer = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
