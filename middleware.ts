@@ -25,6 +25,9 @@ export default auth((req) => {
   const token = cookieStore.get("token");
   const role = cookieStore.get("role");
 
+  console.log(token);
+  console.log(role);
+
   if (isApiAuthRoute) {
     return;
   }
