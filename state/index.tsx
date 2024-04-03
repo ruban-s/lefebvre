@@ -8,6 +8,7 @@ import {
   ProjectData,
   WorkOrderData,
   ResourceWorkOdderData,
+  ShiftData,
 } from "@/types";
 import { create } from "zustand";
 
@@ -68,4 +69,10 @@ export const useResourceWorkOrderStore = create((set) => ({
   setResourceWorkOrder: (resourceWorkOrder: any) => set({ resourceWorkOrder }),
   removeResourceWorkOrder: (resourceWorkOrder: any) =>
     set({ resourceWorkOrder: null }), // Action to update user object
+}));
+var shift: ShiftData | null = null;
+export const useShiftStore = create((set) => ({
+  shift: shift, // Object value with initial properties
+  setShift: (shift: any) => set({ shift }),
+  removeShift: (shift: any) => set({ shift: null }), // Action to update user object
 }));

@@ -3,22 +3,19 @@
 import Loading from "@/loading";
 import React, { useEffect, useState } from "react";
 import { getAllBreaks } from "@/data/break";
-import { UserData } from "@/types";
+import { ShiftData, UserData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
-import { getAllUser } from "@/data/user";
-interface UserListContainerProps {
-  editUser: Function;
-}
+import { getAllShift } from "@/data/shift";
 
-const UserListContainer = (props: UserListContainerProps) => {
+const ShiftListContainer = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["users"],
+    queryKey: ["shift"],
     queryFn: async () => {
-      const data = await getAllUser();
-      return JSON.parse(data.data) as UserData[];
+      const data = await getAllShift();
+      return JSON.parse(data.data) as ShiftData[];
     },
   });
   const breaks = data;
@@ -47,4 +44,4 @@ const UserListContainer = (props: UserListContainerProps) => {
     </div>
   );
 };
-export default UserListContainer;
+export default ShiftListContainer;

@@ -54,25 +54,6 @@ export const updateShift = async (value: ShiftData) => {
   }
 };
 
-//
-export const getShiftById = async (value: any) => {
-  try {
-    const axiosResponse = await Axios.get(
-      BASE_URL + `/shift/getOneShift?Shift_id=${value}`,
-      value
-    );
-    const data = axiosResponse.data;
-    return data;
-  } catch (error) {
-    const errorResponse: ResponseData = {
-      status: false,
-      message: JSON.stringify(error),
-      data: "",
-    };
-    return errorResponse;
-  }
-};
-
 export const deleteShift = async (value: any) => {
   try {
     const axiosResponse = await Axios.delete(

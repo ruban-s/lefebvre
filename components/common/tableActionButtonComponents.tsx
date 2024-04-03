@@ -138,7 +138,7 @@ const TableActionButtonComponents = ({
                         info.replace("_", "-").slice(1)}
                     </div>
                     <div className="w-[300px] h-auto  text-pretty flex  text-bold text-sm   text-black font-bold">
-                      {/* :{"  "}
+                      :{"  "}
                       {info.charAt(0).toUpperCase() +
                         info.replace("_", "-").slice(1) ===
                       "UpdatedDate"
@@ -147,8 +147,7 @@ const TableActionButtonComponents = ({
                             info.replace("_", "-").slice(1) ===
                           "CreatedDate"
                         ? convertToUAEFormat(values[`${info}`])
-                        : values[`${info}`] || "--"} */}
-                      :{values[`${info}`]}
+                        : values[`${info}`] || "--"}
                     </div>
                   </div>
                 </>

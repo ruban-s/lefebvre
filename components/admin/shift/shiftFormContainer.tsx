@@ -2,7 +2,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema } from "@/schemas";
+import { ShiftSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { FaUser } from "react-icons/fa";
 
@@ -32,24 +32,25 @@ import CommanCardContainer from "../../common/common-cart";
 import { Button } from "../../ui/button";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createUser, updateUser } from "@/data/user";
+import { createShift, updateShift } from "@/data/shift";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import CustomImageInput from "@/components/common/customImageInput";
 
-import { useStore } from "@/state";
+import { useShiftStore } from "@/state";
 import { useRouter } from "next/navigation";
+import CustomTimePicker from "@/components/common/customTimePicker";
 
 const ShiftFormContainer = () => {
   const router = useRouter();
-  const user = useStore((state: any) => state.user); // Accessing the user object
-  const removeUser = useStore((state: any) => state.removeUser);
+  const shift = useShiftStore((state: any) => state.shift); // Accessing the shift object
+  const removeUser = useShiftStore((state: any) => state.removeShift);
   const queryClient = useQueryClient();
 
   const creatUser = useMutation({
     mutationFn: async (value: any) => {
-      const breake = user
-        ? await updateUser({ id: user?.id, ...value })
-        : await createUser(value);
+      const breake = shift
+        ? await updateShift({ id: shift?.id, ...value })
+        : await createShift(value);
       removeUser();
       return breake;
     },
@@ -68,7 +69,7 @@ const ShiftFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["shift"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -77,33 +78,27 @@ const ShiftFormContainer = () => {
       });
     },
   });
-  const form = useForm<z.infer<typeof UserSchema>>({
-    resolver: zodResolver(UserSchema),
+  const form = useForm<z.infer<typeof ShiftSchema>>({
+    resolver: zodResolver(ShiftSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      image: "",
-      mobile: "",
-      password: "",
-      role_name: "",
+      shift_end_time: "",
+      shift_name: "",
+      shift_start_time: "",
+      shift_type: "",
       status: "",
-      username: "",
     },
   });
   useEffect(() => {
-    if (user) {
-      form.setValue("name", user?.name!);
-      form.setValue("email", user?.email!);
-      form.setValue("mobile", user?.mobile!);
-      form.setValue("image", user?.image!);
-      form.setValue("password", user?.password!);
-      form.setValue("role_name", user?.role_name!);
-      form.setValue("status", user?.status!);
-      form.setValue("username", user?.username!);
+    if (shift) {
+      form.setValue("shift_end_time", shift?.shift_end_time!);
+      form.setValue("shift_name", shift?.shift_name!);
+      form.setValue("shift_start_time", shift?.shift_start_time!);
+      form.setValue("shift_type", shift?.shift_type!);
+      form.setValue("status", shift?.status!);
     }
-  }, [user]);
+  }, [shift]);
 
-  const onSubmit = async (values: z.infer<typeof UserSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ShiftSchema>) => {
     creatUser.mutate(values);
   };
 
@@ -111,47 +106,26 @@ const ShiftFormContainer = () => {
     <div className="w-full h-auto bg-white  shadow-sm">
       <div className=" ">
         <p className="text-lg font-semibold pl-4 pt-4">
-          {user ? "Update User" : "Add User"}
+          {shift ? "Update Shift" : "Add Shift"}
         </p>
       </div>
       <div className="w-[100%] ml-auto mr-auto  flex justify-center items-center   p-4 ">
         <div className="w-[100%]  flex flex-col justify-center items-center lg:justify-start lg:items-start  lg:flex-row mr-auto ">
-          <CustomImageInput
-            value={form.watch("image")!}
-            onChange={(value: string) => {
-              form.setValue("image", value);
-            }}
-          />
           <Form {...form}>
             <form className=" w-full " onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid  grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2">
+              <div className="grid  grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-5 gap-2">
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="shift_name"
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input type="text" {...field} placeholder="Name" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>Shift Name</FormLabel>
                         <FormControl>
                           <Input
                             type="text"
                             {...field}
-                            placeholder="Username"
+                            placeholder="Shift Name"
                           />
                         </FormControl>
                         <FormMessage />
@@ -161,69 +135,16 @@ const ShiftFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="shift_type"
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input type="email" {...field} placeholder="Email" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                <FormField
-                  control={form.control}
-                  name="mobile"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Mobile.no</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            {...field}
-                            placeholder="Mobile.no"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-                {/* <FormField
-                  control={form.control}
-                  name="image"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Image</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="file"
-                            {...field}
-                            placeholder="Choose iamge"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                /> */}
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Shift Type</FormLabel>
                         <FormControl>
                           <Input
                             type="text"
                             {...field}
-                            placeholder="Password"
+                            placeholder="Shift Type"
                           />
                         </FormControl>
                         <FormMessage />
@@ -233,33 +154,49 @@ const ShiftFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="role_name"
+                  name="shift_start_time"
                   render={({ field }) => {
                     return (
-                      <FormItem>
-                        <FormLabel>Role</FormLabel>
-                        <Select
-                          value={form.watch("role_name")}
-                          onValueChange={(value) => {
-                            form.setValue("role_name", value);
-                          }}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem
-                              value="Superadmin
-                            ">
-                              SUPER-ADMIN
-                            </SelectItem>
-                            <SelectItem value="Admin">ADMIN</SelectItem>
-                            <SelectItem value="Planner">PLANNER</SelectItem>
-                            <SelectItem value="Production">
-                              PRODUCTION
-                            </SelectItem>
-                            <SelectItem value="Foreman">FOREMAN</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <FormItem className="m-0 p-0">
+                        <FormLabel>Shift Start Time</FormLabel>
+                        <FormControl className="m-0 p-0">
+                          {/* <Input
+                            type="time"
+                            {...field}
+                            placeholder="Start Time"
+                          /> */}
+                          <CustomTimePicker
+                            value={form.watch("shift_start_time")}
+                            onChange={(value: string) => {
+                              form.setValue("shift_start_time", value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="shift_end_time"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="m-0 p-0">
+                        <FormLabel>Shift End Time</FormLabel>
+                        <FormControl className="m-0 p-0">
+                          {/* <Input
+                            type="time"
+                            {...field}
+                            placeholder="Start Time"
+                          /> */}
+                          <CustomTimePicker
+                            value={form.watch("shift_end_time")}
+                            onChange={(value: string) => {
+                              form.setValue("shift_end_time", value);
+                            }}
+                          />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     );
@@ -294,10 +231,10 @@ const ShiftFormContainer = () => {
 
               <div className="w-full py-4  flex justify-start items-center">
                 <Button type="submit" className="bg-theme">
-                  {user ? "Update User" : "Add User"}
+                  {shift ? "Update Shift" : "Add Shift"}
                   <FaUser className="ml-2 text-white" size={16} />
                 </Button>
-                {!user && (
+                {!shift && (
                   <Button
                     variant={"secondary"}
                     type="button"
@@ -312,7 +249,7 @@ const ShiftFormContainer = () => {
                   </Button>
                 )}
 
-                {user && (
+                {shift && (
                   <Button
                     variant={"secondary"}
                     type="button"
@@ -332,7 +269,7 @@ const ShiftFormContainer = () => {
           </Form>
         </div>
       </div>
-      {user && (
+      {shift && (
         <Alert
           variant={"default"}
           className="w-auto h-[50px] ml-0 border-l-[5px]  border-blue-400">
@@ -341,7 +278,7 @@ const ShiftFormContainer = () => {
             Update the details of the
             <span className="ml-2 font-bold text-black">
               {" "}
-              {JSON.stringify(user.name)}
+              {JSON.stringify(shift.name)}
             </span>
           </AlertDescription>
         </Alert>

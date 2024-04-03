@@ -3,9 +3,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { UserData } from "@/types";
+import { ShiftData, UserData } from "@/types";
 import { MoreHorizontal } from "lucide-react";
-import { useStore } from "@/state";
+import { useShiftStore } from "@/state";
 
 import { Button } from "@/components/ui/button";
 
@@ -13,7 +13,7 @@ import TableActionButtonComponents from "@/components/common/tableActionButtonCo
 import { TbEdit } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteUser } from "@/data/user";
+import { deleteShift } from "@/data/shift";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
@@ -22,13 +22,13 @@ export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
 
   const user = row.original;
-  const setUser = useStore((state: any) => state.setUser);
+  const setUser = useShiftStore((state: any) => state.setShift);
   const handleUpdateUser = () => {
     setUser({ ...user }); // Updating user object
   };
   const deleteItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await deleteUser(value);
+      const deleteCode: any = await deleteShift(value);
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -45,7 +45,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["shift"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -77,7 +77,7 @@ export const CellFunction = ({ row }: any) => {
   );
 };
 
-export const columns: ColumnDef<UserData>[] = [
+export const columns: ColumnDef<ShiftData>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -101,30 +101,22 @@ export const columns: ColumnDef<UserData>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "shift_name",
+    header: "Shift Name",
   },
   {
-    accessorKey: "username",
-    header: "Username",
+    accessorKey: "shift_type",
+    header: "Shift Type",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "shift_start_time",
+    header: "Shift Start Time",
   },
   {
-    accessorKey: "mobile",
-    header: "Mobile",
+    accessorKey: "shift_end_time",
+    header: "Shift Start Time",
   },
-  {
-    accessorKey: "role_name",
-    header: "Role",
-    cell: ({ row }) => (
-      <Badge className={`cursor-pointer rounded-md bg-neutral-500 text-white`}>
-        {row.original.role_name && row.original.role_name}
-      </Badge>
-    ),
-  },
+
   {
     accessorKey: "status",
     header: "Status",
