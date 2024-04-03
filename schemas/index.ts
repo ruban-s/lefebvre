@@ -112,3 +112,16 @@ export const ResourceWorkOrderListSchema = z.object({
   work_order_id: z.string().optional(),
   resources: z.array(ResourceWorkOrderSchema).optional(),
 });
+
+export const ShiftSchema = z.object({
+  createdDate: z.string().optional(),
+  employee_id: z.string().optional(),
+  forman_id: z.string().optional(),
+  id: z.string().optional(),
+  shift_end_time: z.string().min(1, { message: "Shift Time Required!" }),
+  shift_name: z.string().min(1, { message: "Shift Time Required!" }),
+  shift_start_time: z.string().min(1, { message: "Shift Time required!" }),
+  shift_type: z.string().min(1, { message: "Shift Type required!" }),
+  status: z.string().optional(),
+  updatedDate: z.string().optional(),
+});

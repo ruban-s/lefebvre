@@ -425,7 +425,9 @@ const WorkOrderResourceFormContainer = () => {
                         <tbody>
                           {fields.map((info, index) => {
                             return (
-                              <tr className="border-b border-gray-200 dark:border-gray-700">
+                              <tr
+                                key={index}
+                                className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="px-6 w-[150px] py-4 text-sm border border-slate-300">
                                   {info.resourceId}
                                 </td>

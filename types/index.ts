@@ -147,3 +147,15 @@ export interface ResourceWorkOdderData {
   updatedDate: string;
   work_order_id: string;
 }
+export interface ShiftData {
+  createdDate: string;
+  employee_id: string;
+  forman_id: string;
+  id: string;
+  shift_end_time: string;
+  shift_name: string;
+  shift_start_time: string;
+  shift_type: string;
+  status: string;
+  updatedDate: string;
+}
