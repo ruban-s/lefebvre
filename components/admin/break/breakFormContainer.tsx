@@ -106,7 +106,6 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
 
   const onSubmit = async (values: z.infer<typeof BreakSchema>) => {
     creatBreak.mutate(values);
-
     form.reset();
   };
 

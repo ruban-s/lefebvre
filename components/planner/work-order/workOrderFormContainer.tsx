@@ -90,12 +90,7 @@ const WorkOrderFormContainer = () => {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: [
-          "work-orders",
-          "unreleased-work-orders",
-          "released-work-orders",
-          "closed-work-orders",
-        ],
+        queryKey: ["work-orders"],
       });
     },
     onError: (value) => {

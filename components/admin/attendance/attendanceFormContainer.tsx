@@ -100,7 +100,6 @@ const AttendanceFormContainer = () => {
   }, [attendanceType, form]);
 
   const onSubmit = async (values: z.infer<typeof AttendanceTypeSchema>) => {
-    // console.log(values);
     creatAttendanceType.mutate(values);
   };
 

@@ -103,7 +103,12 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
                   <div className="w-3/4 text-sm font-extrabold text-theme">
                     {info.project_id}
                   </div>
-                  <Checkbox checked={info.project_id === values?.project_id} />
+                  <div
+                    className={`w-[15px] h-[15px] rounded-full border-2 border-bg-theme border-spacing-2 ${
+                      info.project_id === values?.project_id
+                        ? "bg-theme"
+                        : "bg-white"
+                    }`}></div>
                 </CommandItem>
               );
             })}

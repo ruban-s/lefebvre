@@ -124,7 +124,12 @@ const WorkOrderListCombo = ({
                   <div className="w-3/4 text-sm font-extrabold text-theme">
                     {info.work_order_id}
                   </div>
-                  <Checkbox checked={info.work_order_id === work_order_id} />
+                  <div
+                    className={`w-[15px] h-[15px] rounded-full border-2 border-bg-theme border-spacing-2 ${
+                      info.work_order_id === work_order_id
+                        ? "bg-theme"
+                        : "bg-white"
+                    }`}></div>
                 </CommandItem>
               );
             })}

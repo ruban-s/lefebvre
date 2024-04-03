@@ -78,28 +78,28 @@ export const CellFunction = ({ row }: any) => {
 };
 
 export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "project_id",
     header: "Project ID",
@@ -115,19 +115,29 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "sqNumber",
-    header: "Sequence Number",
+    header: "Seq No",
   },
-  {
-    accessorKey: "actual_hour",
-    header: "Hour",
-  },
-  {
-    accessorKey: "prepared_quantity",
-    header: "Quantity",
-  },
+
   {
     accessorKey: "bench_mark_measure",
-    header: "Bench Mark",
+    header: "Bench Mark Measure",
+  },
+  {
+    accessorKey: "bench_mark_unit",
+    header: "Bench Mark Unit",
+  },
+  {
+    accessorKey: "estimated_hour",
+    header: "Estimated Hours",
+  },
+
+  {
+    accessorKey: "required_quantity",
+    header: "Required Quantity",
+  },
+  {
+    accessorKey: "quantity_unit",
+    header: "Quantity Unit",
   },
 
   {

@@ -12,7 +12,7 @@ interface data {
 }
 export const getAllWorkOrder = async () => {
   try {
-    const axiosResponse = await Axios.get("/workorder/getAllWorkOrder");
+    const axiosResponse = await Axios.get(`/workorder/getAllWorkOrder`);
     const data = axiosResponse.data;
     return data;
   } catch (error) {

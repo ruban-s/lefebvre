@@ -24,7 +24,7 @@ const ReleasedProject = () => {
   >([]);
 
   const { data: workOrders, error: workOrderError } = useQuery({
-    queryKey: ["released-work-orders"],
+    queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
@@ -35,7 +35,7 @@ const ReleasedProject = () => {
     },
   });
   const { data: projects, error: projectError } = useQuery({
-    queryKey: ["released-projects"],
+    queryKey: ["projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
@@ -46,7 +46,7 @@ const ReleasedProject = () => {
     },
   });
   const { data: resourceWorkOrder, isError: resourceError } = useQuery({
-    queryKey: ["released-resource-work-orders"],
+    queryKey: ["resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];

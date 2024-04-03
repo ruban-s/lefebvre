@@ -70,12 +70,7 @@ const ProjectFormContainer = () => {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: [
-          "projects",
-          "unreleased-projects",
-          "released-projects",
-          "closed-projects",
-        ],
+        queryKey: ["projects"],
       });
     },
     onError: (value) => {

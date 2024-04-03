@@ -7,9 +7,7 @@ const token = cookieStore.get("token");
 
 export const Axios = axios.create({
   baseURL: BASE_URL,
-  timeout: 1000,
   headers: {
-    "Content-Type": "application/json",
     Authorization: `${token?.value}`,
   },
 });

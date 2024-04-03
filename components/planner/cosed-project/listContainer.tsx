@@ -25,7 +25,7 @@ const ClosedProject = () => {
   >([]);
 
   const { data: workOrders, error: workOrderError } = useQuery({
-    queryKey: ["closed-work-orders"],
+    queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
@@ -36,7 +36,7 @@ const ClosedProject = () => {
     },
   });
   const { data: projects, error: projectError } = useQuery({
-    queryKey: ["closed-projects"],
+    queryKey: ["projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
@@ -45,7 +45,7 @@ const ClosedProject = () => {
     },
   });
   const { data: resourceWorkOrder, isError: resourceError } = useQuery({
-    queryKey: ["closed-resource-work-orders"],
+    queryKey: ["resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];
