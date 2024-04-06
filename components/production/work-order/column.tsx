@@ -215,10 +215,10 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
       </Badge>
     ),
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <CellFunction row={row} />;
-    },
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     return <CellFunction row={row} />;
+  //   },
+  // },
 ];

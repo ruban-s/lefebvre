@@ -6,6 +6,7 @@ import {
   FaUsersCog,
   FaUsers,
   FaBusinessTime,
+  FaIdCardAlt,
 } from "react-icons/fa";
 import { GiCoffeeCup, GiThermometerScale } from "react-icons/gi";
 import { IoCalendar } from "react-icons/io5";
@@ -61,5 +62,50 @@ export const plannerTabs: TabData[] = [
     label: "Released Project",
     icon: TbLockCheck,
     link: "/planner/released-project",
+  },
+];
+export const productionTabs: TabData[] = [
+  { id: 1, label: "Home", icon: FaHome, link: "/" },
+  {
+    id: 1,
+    label: "Project",
+    icon: MdSpaceDashboard,
+    link: "/production/project",
+  },
+  {
+    id: 2,
+    label: "Work Order",
+    icon: CgWorkAlt,
+    link: "/production/work-order",
+  },
+  {
+    id: 3,
+    label: "Resource Work Order",
+    icon: FaClipboardList,
+    link: "/production/resource-work-order",
+  },
+  {
+    id: 4,
+    label: "Closed Project",
+    icon: TbLockCancel,
+    link: "/production/closed-project",
+  },
+  {
+    id: 5,
+    label: "Unreleased Project",
+    icon: TbLockExclamation,
+    link: "/production/unreleased-project",
+  },
+  {
+    id: 6,
+    label: "Released Project",
+    icon: TbLockCheck,
+    link: "/production/released-project",
+  },
+  {
+    id: 7,
+    label: "Labour Card Maintenance",
+    icon: FaIdCardAlt,
+    link: "/production/labour-card",
   },
 ];

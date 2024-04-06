@@ -14,6 +14,23 @@ export const getAllProject = async () => {
   try {
     const axiosResponse = await Axios.get("/project/getAllProject");
     const data = axiosResponse.data;
+    console.log(data);
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
+export const getAllProject2 = async (name: string, file: File) => {
+  console.log(name);
+  try {
+    const axiosResponse = await Axios.get("/project/getAllProject");
+    const data = axiosResponse.data;
+    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

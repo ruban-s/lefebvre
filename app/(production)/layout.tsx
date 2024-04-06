@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const metadata: Metadata = {
-  title: "Planner",
+  title: "Production",
   description: "",
 };
 
@@ -35,7 +35,7 @@ export default function RootLayout({
       return setTabs(productionTabs);
     }
   }, [session.data?.user.role]);
-  if (session.data?.user.role !== "Planner" && path !== "/") {
+  if (session.data?.user.role !== "Production" && path !== "/") {
     return <AccessDenied />;
   }
   return (

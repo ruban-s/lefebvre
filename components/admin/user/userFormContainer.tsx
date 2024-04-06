@@ -92,9 +92,6 @@ const UserFormContainer = () => {
   });
   useEffect(() => {
     if (user) {
-      // Object.keys(user).map((info:"image"|, index) => {
-      //   form.setValue(`${info}`, user[`${info}`]);
-      // });
       form.setValue("name", user?.name!);
       form.setValue("email", user?.email!);
       form.setValue("mobile", user?.mobile!);

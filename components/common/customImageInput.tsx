@@ -6,38 +6,46 @@ import { CiImageOn } from "react-icons/ci";
 import { Button } from "../ui/button";
 import { IoIosWarning } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { uploadImage } from "@/data/common";
+import { useMutation } from "@tanstack/react-query";
+import { getAllProject, getAllProject2 } from "@/data/projects";
 
 interface CustomImageInputProps {
+  array?: boolean;
   value: string;
   disable?: boolean;
   onChange: Function;
 }
 
 const CustomImageInput = ({
+  array = false,
   value,
   onChange,
   disable = false,
 }: CustomImageInputProps) => {
-  const [image, setImage] = useState<any>(value);
+  const [image, setImage] = useState<any>("/user.png");
 
   const imageRef = useRef<HTMLInputElement>(null);
-
-  function fileToBase64(file: any) {
+  const toBase64 = (file: File) => {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+      const fileReader = new FileReader();
 
-      reader.onload = () => {
-        const base64String = reader?.result;
-        resolve(base64String);
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
       };
 
-      reader.onerror = (error) => {
+      fileReader.onerror = (error) => {
         reject(error);
       };
-
-      file && reader.readAsDataURL(file);
     });
-  }
+  };
+  const newData = async (value: FormData, name: string) => {
+    var data = await uploadImage(value, name);
+    onChange(data.data);
+  };
+
   useEffect(() => {
     setImage(value);
   }, [value]);
@@ -50,17 +58,16 @@ const CustomImageInput = ({
           ref={imageRef}
           type="file"
           className="absolute"
-          accept="image/*"
-          onChange={async (value: any) => {
-            const file = value.target?.files[0];
-            const base64String = await fileToBase64(file);
-            setImage(base64String);
-            onChange(base64String);
+          onChange={(e: any) => {
+            const formData = new FormData();
+            e.target?.files[0] &&
+              formData.append("file", e.target?.files[0] as File);
+            e.target?.files[0] && newData(formData, e.target?.files[0].name);
           }}
         />
         <Image
           alt="emp-img"
-          src={value ? value : image ? image : "/user.png"}
+          src={image || "/user.png"}
           fill
           className="object-cover rounded-lg group bg-neutral-200"
         />
@@ -71,7 +78,7 @@ const CustomImageInput = ({
               e.stopPropagation();
               setImage("");
               onChange(() => {
-                onChange("/user.png");
+                onChange("");
               });
             }}>
             <MdDelete className="text-white" />

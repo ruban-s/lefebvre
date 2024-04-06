@@ -16,6 +16,10 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
+import Link from "next/link";
+import { FaFileCsv } from "react-icons/fa6";
+import { FaFilePdf } from "react-icons/fa6";
+import { BsFiletypeXlsx } from "react-icons/bs";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -163,6 +167,39 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: "images",
+    header: "Attachments",
+    cell: ({ row }) => {
+      var files = row.original.images;
+
+      if (files.length < 1) return <p>--</p>;
+      return (
+        <Popover>
+          <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+            Attachment
+          </PopoverTrigger>
+
+          <PopoverContent className="w-[200px] ">
+            {row.original.images.map((info, index) => {
+              var file = info.split("/")[info.split("/").length - 1];
+              console.log(row.original.images);
+              return (
+                <Link
+                  href={info}
+                  className="flex justify-center items-center m-1">
+                  {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
+                  {file.split(".")[1] === "pdf" && <FaFilePdf />}
+                  {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
+                  {info.split("/")[4]}
+                </Link>
+              );
+            })}
+          </PopoverContent>
+        </Popover>
+      );
+    },
   },
   {
     accessorKey: "status",

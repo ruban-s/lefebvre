@@ -2,32 +2,31 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProjectData, WorkOrderData } from "@/types";
-import { useWorkOrderStore } from "@/state";
+import { ProjectData } from "@/types";
+import { useProjectStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteWorkOrder } from "@/data/work-order";
+import { deleteProject } from "@/data/projects";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
-import Link from "next/link";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const workOrders = row.original;
-  const setWorkOrder = useWorkOrderStore((state: any) => state.setWorkOrder);
+  const project = row.original;
+  const setProject = useProjectStore((state: any) => state.setProject);
   const handleUpdateUser = () => {
-    setWorkOrder({ ...workOrders });
+    setProject({ ...project });
   };
   const deleteItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await deleteWorkOrder(value);
+      const deleteCode: any = await deleteProject(value);
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -44,9 +43,7 @@ export const CellFunction = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: ["work-orders"],
-      });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {
@@ -68,17 +65,17 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
-      values={workOrders}
+      values={project}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={() => {
-        deleteItem.mutate(`${workOrders.id}`);
+        deleteItem.mutate(`${project.id}`);
       }}
     />
   );
 };
 
-export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
+export const projectColumns: ColumnDef<ProjectData>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -102,14 +99,13 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "work_order_id",
-    header: "Work Order Id",
-  },
-  {
     accessorKey: "project_id",
     header: "Project ID",
   },
-
+  {
+    accessorKey: "customer_name",
+    header: "Customer Name",
+  },
   {
     accessorKey: "start_date",
     header: "Start Date",
@@ -122,28 +118,24 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
-      <>
-        {row.original.description && (
-          <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
-              <Popover>
-                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                  <RxCaretSort className="text-theme" size={20} />
-                </PopoverTrigger>
+      <div className="flex justify-start items-center">
+        {row.original.description.substring(0, 30)}{" "}
+        {row.original.description.length > 30 && "..."}
+        {row.original.description.length > 30 && (
+          <Popover>
+            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+              <RxCaretSort className="text-theme" size={20} />
+            </PopoverTrigger>
 
-                <PopoverContent className="w-[400px] ">
-                  <p className="mb-2 text-bold">Description:</p>
-                  <p className="text-sm text-neutral-500">
-                    {row.original.description}
-                  </p>
-                </PopoverContent>
-              </Popover>
-            )}
-          </div>
+            <PopoverContent className="w-[400px] ">
+              <p className="mb-2 text-bold">Description:</p>
+              <p className="text-sm text-neutral-500">
+                {row.original.description}
+              </p>
+            </PopoverContent>
+          </Popover>
         )}
-      </>
+      </div>
     ),
   },
   {
@@ -171,39 +163,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     ),
   },
   {
-    accessorKey: "images",
-    header: "Attachments",
-    cell: ({ row }) => {
-      var files = row.original.images;
-
-      if (files.length < 1) return <p>--</p>;
-      return (
-        <Popover>
-          <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-            Attachment
-          </PopoverTrigger>
-
-          <PopoverContent className="w-[200px] ">
-            {row.original.images.map((info, index) => {
-              var file = info.split("/")[info.split("/").length - 1];
-              console.log(row.original.images);
-              return (
-                <Link
-                  href={info}
-                  className="flex justify-center items-center m-1">
-                  {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
-                  {file.split(".")[1] === "pdf" && <FaFilePdf />}
-                  {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-                  {info.split("/")[4]}
-                </Link>
-              );
-            })}
-          </PopoverContent>
-        </Popover>
-      );
-    },
-  },
-  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -214,11 +173,5 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
         {row.original.status}
       </Badge>
     ),
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <CellFunction row={row} />;
-    },
   },
 ];
