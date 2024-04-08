@@ -159,3 +159,28 @@ export interface ShiftData {
   status: string;
   updatedDate: string;
 }
+export interface LabourData {
+  attendance_type: string;
+  break_type: string;
+  createdDate: string;
+  designation_id: string;
+  employee_id: string;
+  forman_id: string;
+  gl_code: string;
+  id: string;
+  image_path: string;
+  labor_id: string;
+  labor_type_id: string;
+  name: string;
+  project_id: string;
+  punch_in_time: string;
+  punch_out_time: string;
+  quantity: string;
+  remark: string;
+  resource_id: string;
+  shift_end_time: string;
+  shift_start_time: string;
+  status: string;
+  updatedDate: string;
+  work_order_id: string;
+}

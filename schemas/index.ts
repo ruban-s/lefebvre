@@ -95,7 +95,6 @@ export const ResourceWorkOrderSchema = z.object({
   required_quantity: z.string().min(1, { message: "required!" }),
   sqNumber: z.string().min(1, { message: "required!" }),
   status: z.string().min(1, { message: "required!" }),
-
   ballance_hour: z.string().optional().default("--"),
   ballanced_quantity: z.string().optional().default("--"),
   employee_id: z.string().optional().default("--"),

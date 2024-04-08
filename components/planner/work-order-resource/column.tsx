@@ -171,7 +171,11 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     cell: ({ row }) => (
       <Badge
         className={`cursor-pointer rounded-md ${
-          row.original.status === "Active" ? "bg-green-500" : "bg-red-500"
+          row.original.status === "Released"
+            ? "bg-green-500"
+            : row.original.status === "Unreleased"
+            ? "bg-red-500"
+            : "bg-black"
         }`}>
         {row.original.status}
       </Badge>

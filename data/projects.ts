@@ -73,6 +73,7 @@ export const createProject = async (value: z.infer<typeof ProjectSchema>) => {
   }
 };
 export const updateProject = async (value: ProjectData) => {
+  console.log(value);
   try {
     const axiosResponse = await Axios.put("/project/update", value);
     const data = axiosResponse.data;
@@ -87,6 +88,21 @@ export const updateProject = async (value: ProjectData) => {
     return errorResponse;
   }
 };
+// export const updateProjectStatus = async (value: ProjectData) => {
+//   console.log(value);
+//   try {
+//     const axiosResponse = await Axios.put("/project/StatusUpdate", value);
+//     const data = axiosResponse.data;
+//     return data;
+//   } catch (error) {
+//     const errorResponse: ResponseData = {
+//       status: false,
+//       message: JSON.stringify(error),
+//       data: "",
+//     };
+//     return errorResponse;
+//   }
+// };
 
 export const deleteProject = async (value: any) => {
   try {
