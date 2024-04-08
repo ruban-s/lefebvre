@@ -189,6 +189,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
               console.log(row.original.images);
               return (
                 <Link
+                  key={index}
                   href={info}
                   className="flex justify-center items-center m-1">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}

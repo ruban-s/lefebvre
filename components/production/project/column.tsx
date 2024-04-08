@@ -334,6 +334,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
               return (
                 <Link
                   href={info}
+                  key={index}
                   className="flex justify-center items-center m-1">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
