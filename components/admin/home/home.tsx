@@ -1,6 +1,10 @@
 "use client";
-
-import { adminTabs, plannerTabs, productionTabs } from "@/config/const";
+import {
+  adminTabs,
+  plannerTabs,
+  productionTabs,
+  SuperAdminTabs,
+} from "@/config/const";
 import { TabData } from "@/types";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -21,6 +25,9 @@ const HomeScreen = () => {
     }
     if (session.data?.user.role === "Production") {
       return setTabs(productionTabs);
+    }
+    if (session.data?.user.role === "SuperAdmin") {
+      return setTabs(SuperAdminTabs);
     }
   }, []);
 

@@ -282,6 +282,9 @@ const ProjectFormContainer = () => {
                             </SelectItem>
                             <SelectItem value="Released">Released</SelectItem>
                             <SelectItem value="Closed">Closed</SelectItem>
+                            <SelectItem value="Canceled" disabled>
+                              Canceled
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -389,7 +392,7 @@ const ProjectFormContainer = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem
-                              value="Superadmin
+                              value="SuperAdmin
                             ">
                               SUPER-ADMIN
                             </SelectItem>

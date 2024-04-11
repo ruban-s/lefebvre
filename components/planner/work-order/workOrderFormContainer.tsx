@@ -345,6 +345,9 @@ const WorkOrderFormContainer = () => {
                             </SelectItem>
                             <SelectItem value="Released">Released</SelectItem>
                             <SelectItem value="Closed">Closed</SelectItem>
+                            <SelectItem value="Canceled" disabled>
+                              Canceled
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

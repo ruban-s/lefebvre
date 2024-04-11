@@ -14,7 +14,6 @@ export const getAllProject = async () => {
   try {
     const axiosResponse = await Axios.get("/project/getAllProject");
     const data = axiosResponse.data;
-    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

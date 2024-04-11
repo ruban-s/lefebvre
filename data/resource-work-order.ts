@@ -2,7 +2,7 @@
 import * as z from "zod";
 import { ResourceWorkOrderSchema } from "@/schemas/index";
 import { BASE_URL } from "@/config/const";
-import { ResponseData, WorkOrderData } from "@/types";
+import { ResourceWorkOdderData, ResponseData, WorkOrderData } from "@/types";
 import { Axios } from "@/action/axios";
 
 interface data {
@@ -59,7 +59,7 @@ export const createResourceWorkOrder = async (
     return errorResponse;
   }
 };
-export const updateResourceWorkOrder = async (value: WorkOrderData) => {
+export const updateResourceWorkOrder = async (value: any) => {
   try {
     const axiosResponse = await Axios.put("/resource/update", value);
     const data = axiosResponse.data;

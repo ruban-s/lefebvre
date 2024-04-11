@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProjectData, WorkOrderData } from "@/types";
+import { ProjectData, ResourceWorkOdderData, WorkOrderData } from "@/types";
 import { useWorkOrderStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
@@ -42,6 +42,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getAllProject } from "@/data/projects";
+import ViewTabField from "@/components/common/viewTabField";
+import StatusBadge from "@/components/common/status-badge";
+import {
+  getAllResourceWorkOrder,
+  updateResourceWorkOrder,
+} from "@/data/resource-work-order";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -231,18 +237,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <Badge
-        className={`cursor-pointer rounded-md ${
-          row.original.status === "Released"
-            ? "bg-green-500"
-            : row.original.status === "Unreleased"
-            ? "bg-red-500"
-            : "bg-black"
-        }`}>
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => <StatusBadge row={row} />,
   },
   {
     id: "actions",
@@ -272,12 +267,54 @@ export const UpdateStatus = ({ row }: any) => {
   };
 
   const queryClient = useQueryClient();
+  const { data: resourceWorkOrder } = useQuery({
+    queryKey: ["resource-work-orders"],
+    queryFn: async () => {
+      const data = await getAllResourceWorkOrder();
+      return JSON.parse(data.data) as ResourceWorkOdderData[];
+    },
+  });
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const deleteCode: any = await updateWorkOrder({
         id: data.id,
         ...value,
       });
+      if (value.status !== "Released") {
+        var resourceWorkOrderList = resourceWorkOrder?.filter(
+          (info) => info.project_id === value.project_id
+        );
+        resourceWorkOrderList?.map(async (resourceWorkData, index) => {
+          const payLoad = {
+            estimated_hour: resourceWorkData.estimated_hour,
+            bench_mark_measure: resourceWorkData.bench_mark_measure,
+            bench_mark_unit: resourceWorkData.bench_mark_unit,
+            remark: resourceWorkData.remark,
+            required_quantity: resourceWorkData.required_quantity,
+            sqNumber: resourceWorkData.sqNumber,
+            status: value.status,
+            ballance_hour: resourceWorkData.ballance_hour,
+            ballanced_quantity: resourceWorkData.ballanced_quantity,
+            employee_id: resourceWorkData.employee_id,
+            endDate: resourceWorkData.endDate,
+            actual_hour: resourceWorkData.actual_hour,
+            forman: resourceWorkData.forman,
+            project_id: resourceWorkData.project_id,
+            resourceId: resourceWorkData.resourceId,
+            prepared_quantity: resourceWorkData.prepared_quantity,
+            startDate: resourceWorkData.startDate,
+            work_order_id: resourceWorkData.work_order_id,
+            quantity_unit: resourceWorkData.quantity_unit,
+          };
+
+          const { status, ...data } = resourceWorkData;
+          status === "Released" &&
+            (await updateResourceWorkOrder({
+              id: resourceWorkData.id,
+              ...payLoad,
+            }));
+        });
+      }
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -294,9 +331,12 @@ export const UpdateStatus = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: ["work-orders"],
+      ["work-orders", "resource-work-orders"].map((info, index) => {
+        queryClient.invalidateQueries({
+          queryKey: [info],
+        });
       });
+
       setDateRange(undefined);
     },
     onError: (value) => {
@@ -341,11 +381,42 @@ export const UpdateStatus = ({ row }: any) => {
           onInteractOutside={(e) => {
             e.preventDefault();
           }}>
-          <DialogHeader>
-            <DialogTitle>Change Status</DialogTitle>
+          <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
+            <DialogTitle className="text-white">Change Status</DialogTitle>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className=" grid grid-row-4 items-center gap-4">
+          <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
+            <ViewTabField
+              heading="Project Id"
+              value={data.project_id}
+              isInput
+            />
+            <ViewTabField
+              heading="Work Orded Id"
+              value={data.work_order_id}
+              isInput
+            />
+            <ViewTabField
+              heading="Description"
+              value={data.description}
+              isInput={false}
+            />
+            <ViewTabField
+              heading="Planer Remarks"
+              value={data.planner_remark}
+              isInput={false}
+            />
+            <div className=" col-span-2">
+              <div>Start Date - End Date</div>
+              <DatePickerWithRange
+                onselect={(value: DateRange) => {
+                  payLoad.start_date = format(value?.from!, "LLL dd, y");
+                  payLoad.end_date = format(value?.to!, "LLL dd, y");
+                }}
+                selectedData={dateRange!}
+                disabled={[]}
+              />
+            </div>
+            <div className=" col-span-2">
               <div>Status</div>
 
               <Select
@@ -357,26 +428,24 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
-                  <SelectItem value="Closed">Closed</SelectItem>
                   <SelectItem value="Unreleased" className="text-red-500">
                     Unreleased
                   </SelectItem>
                   <SelectItem value="Released" className="text-green-500">
                     Released
                   </SelectItem>
+                  <SelectItem value="Closed" disabled>
+                    Closed
+                  </SelectItem>
+
+                  <SelectItem
+                    value="Canceled"
+                    className="text-orange-500"
+                    disabled>
+                    Canceled
+                  </SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="grid grid-row-4   items-center gap-4">
-              <div>Start Date - End Date</div>
-              <DatePickerWithRange
-                onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "LLL dd, y");
-                  payLoad.end_date = format(value?.to!, "LLL dd, y");
-                }}
-                selectedData={dateRange!}
-                disabled={[]}
-              />
             </div>
           </div>
           <DialogFooter>

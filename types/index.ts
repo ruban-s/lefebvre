@@ -18,6 +18,8 @@ export interface BreaksData {
   name: string;
   start_time: string;
   status: string;
+  shift_id: string;
+  shift_name: string;
   updatedDate: string;
 }
 export interface UserData {

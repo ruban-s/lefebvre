@@ -2,7 +2,12 @@
 import AccessDenied from "@/components/common/access-denied";
 import SideBar from "@/components/common/sidebar";
 import Topbar from "@/components/common/topbar";
-import { adminTabs, plannerTabs, productionTabs } from "@/config/const";
+import {
+  adminTabs,
+  plannerTabs,
+  productionTabs,
+  SuperAdminTabs,
+} from "@/config/const";
 import { TabData } from "@/types";
 import type { Metadata } from "next";
 import { useSession } from "next-auth/react";
@@ -33,6 +38,9 @@ export default function RootLayout({
     }
     if (session.data?.user.role === "Production") {
       return setTabs(productionTabs);
+    }
+    if (session.data?.user.role === "SuperAdmin") {
+      return setTabs(SuperAdminTabs);
     }
   }, [session.data?.user.role]);
   if (session.data?.user.role !== "Production" && path !== "/") {

@@ -36,19 +36,26 @@ import { toast } from "sonner";
 import CommanCardContainer from "../../common/common-cart";
 import { Button } from "../../ui/button";
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { createBreak, updateBreak } from "@/data/break";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-import { BreaksData } from "@/types";
+import { BreaksData, ShiftData } from "@/types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import CustomTimePicker from "@/components/common/customTimePicker";
+import { getAllShift } from "@/data/shift";
 
 const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
   const queryClient = useQueryClient();
   const [isEditable, setEdit] = useState<boolean>(false);
   const inputContainerDiv = classNames("flex-1");
-
+  const { data: shift } = useQuery({
+    queryKey: ["shift"],
+    queryFn: async () => {
+      const data = await getAllShift();
+      return JSON.parse(data.data) as ShiftData[];
+    },
+  });
   const creatBreak = useMutation({
     mutationFn: async (value: any) => {
       const breake = isEditable
@@ -88,6 +95,8 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
       status: "",
       start_time: "",
       end_time: "",
+      shift_id: "",
+      shift_name: "",
     },
   });
   useEffect(() => {
@@ -95,6 +104,9 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
     form.setValue("status", data?.status!);
     form.setValue("start_time", data?.start_time!);
     form.setValue("end_time", data?.end_time!);
+    form.setValue("shift_id", data?.shift_id!);
+    form.setValue("shift_name", data?.shift_name!);
+
     if (data) {
       setEdit(true);
     }
@@ -191,7 +203,44 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                     );
                   }}
                 />
-
+                <FormField
+                  control={form.control}
+                  name="shift_name"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Shift Name</FormLabel>
+                        <Select
+                          value={form.watch("shift_name")}
+                          onValueChange={(value) => {
+                            var selectedShift = shift?.filter(
+                              (info) => info.shift_name === value
+                            );
+                            if (!selectedShift) return;
+                            form.setValue("shift_name", value);
+                            form.setValue(
+                              "shift_id",
+                              `${selectedShift![0].id}`
+                            );
+                          }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Shift" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {shift?.map((info, index) => {
+                              return (
+                                <SelectItem key={index} value={info.shift_name}>
+                                  {info.shift_name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
                 <FormField
                   control={form.control}
                   name="status"

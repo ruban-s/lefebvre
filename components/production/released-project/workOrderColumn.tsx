@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
+import StatusBadge from "@/components/common/status-badge";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -170,17 +171,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <Badge
-        className={`cursor-pointer rounded-md ${
-          row.original.status === "Released"
-            ? "bg-green-500"
-            : row.original.status === "Unreleased"
-            ? "bg-red-500"
-            : "bg-black"
-        }`}>
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => <StatusBadge row={row} />,
   },
 ];

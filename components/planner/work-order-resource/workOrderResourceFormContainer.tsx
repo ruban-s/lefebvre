@@ -68,6 +68,7 @@ import { getAllResources } from "@/data/resources";
 import { getAllMeasure } from "@/data/measure";
 import { Table } from "lucide-react";
 import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
+import SqSelect from "@/components/common/sq-secelct";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -440,11 +441,46 @@ const WorkOrderResourceFormContainer = () => {
                                       return (
                                         <FormItem>
                                           <FormControl>
-                                            <Input
-                                              className="p-0 pl-2 h-[38px] "
-                                              type="number"
-                                              {...field}
-                                              placeholder=""
+                                            <SqSelect
+                                              fields={fields}
+                                              resourceId={info.resourceId}
+                                              value={form.watch(
+                                                `resources.${index}.sqNumber`
+                                              )}
+                                              index={index}
+                                              onChange={(value: any) => {
+                                                // console.log(
+                                                //   form.watch("resources")!
+                                                // );
+                                                var data = form
+                                                  .watch("resources")!
+                                                  .filter(
+                                                    (filterInfo) =>
+                                                      filterInfo.resourceId ===
+                                                      info.resourceId
+                                                  );
+                                                var filterdData = data.filter(
+                                                  (filterSq) =>
+                                                    filterSq.sqNumber == value
+                                                );
+                                                if (filterdData.length > 0) {
+                                                  return toast.error(
+                                                    `Something went wrong`,
+                                                    {
+                                                      description: `Resource ID : \" ${info.resourceId} \" has the same Seq No, try to change the Seq No value`,
+                                                      position: "top-right",
+                                                      dismissible: true,
+                                                    }
+                                                  );
+                                                }
+                                                form.clearErrors(
+                                                  `resources.${index}.sqNumber`
+                                                );
+                                                form.setValue(
+                                                  `resources.${index}.sqNumber`,
+                                                  value
+                                                );
+                                              }}
                                             />
                                           </FormControl>
                                           <FormMessage />
@@ -637,6 +673,11 @@ const WorkOrderResourceFormContainer = () => {
                                               </SelectItem>
                                               <SelectItem value="Closed">
                                                 Closed
+                                              </SelectItem>
+                                              <SelectItem
+                                                value="Canceled"
+                                                disabled>
+                                                Canceled
                                               </SelectItem>
                                             </SelectContent>
                                           </Select>

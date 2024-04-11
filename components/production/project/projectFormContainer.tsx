@@ -389,7 +389,7 @@ const ProjectFormContainer = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem
-                              value="Superadmin
+                              value="SuperAdmin
                             ">
                               SUPER-ADMIN
                             </SelectItem>

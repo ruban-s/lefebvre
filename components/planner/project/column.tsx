@@ -20,6 +20,7 @@ import Link from "next/link";
 import { FaFileCsv } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXlsx } from "react-icons/bs";
+import StatusBadge from "@/components/common/status-badge";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -205,18 +206,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <Badge
-        className={`cursor-pointer rounded-md ${
-          row.original.status === "Released"
-            ? "bg-green-500"
-            : row.original.status === "Unreleased"
-            ? "bg-red-500"
-            : "bg-black"
-        }`}>
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => <StatusBadge row={row} />,
   },
   {
     id: "actions",

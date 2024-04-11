@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const paginationArray: number[] = [5, 10, 20, 30, 40, 50];
+  const paginationArray: number[] = [10, 20, 30, 40, 50];
 
   React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
@@ -179,7 +179,7 @@ export function DataTable<TData, TValue>({
   };
 
   useEffect(() => {
-    table.setPageSize(Number(5));
+    // table.setPageSize(Number(5));
   }, []);
 
   return (
@@ -202,7 +202,7 @@ export function DataTable<TData, TValue>({
           className="ml-2 mr-auto "
           variant={"secondary"}
           onClick={() => {
-            table.setPageSize(Number(5));
+            // table.setPageSize(Number(5));
             table.resetColumnVisibility();
             table.resetRowSelection();
             table.resetColumnFilters();

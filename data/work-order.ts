@@ -57,7 +57,7 @@ export const createWorkOrder = async (
     return errorResponse;
   }
 };
-export const updateWorkOrder = async (value: WorkOrderData) => {
+export const updateWorkOrder = async (value: any) => {
   try {
     const axiosResponse = await Axios.put("/workorder/update", value);
     const data = axiosResponse.data;

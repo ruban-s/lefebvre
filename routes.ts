@@ -12,7 +12,12 @@ export const publicRoutes = ["/", "/access-denied"];
  * @type {string[]}
  */
 
-export const authRoutes = ["/auth/login"];
+export const authRoutes = [
+  "/auth/login",
+  "/planner",
+  "/production",
+  "/super-admin",
+];
 
 /**
  * There routes do not need authendication and dont stop by middleware ever.

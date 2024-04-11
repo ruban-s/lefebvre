@@ -15,6 +15,8 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { CgWorkAlt } from "react-icons/cg";
 import { FaClipboardList } from "react-icons/fa";
 import { TbLockExclamation, TbLockCheck, TbLockCancel } from "react-icons/tb";
+import { TiCancelOutline } from "react-icons/ti";
+import { IoCloseCircle } from "react-icons/io5";
 
 export const BASE_URL = "http://208.109.9.243:8082";
 export const adminTabs: TabData[] = [
@@ -28,7 +30,7 @@ export const adminTabs: TabData[] = [
   { id: 8, label: "Indirect-code", icon: FaCogs, link: "/indirect-code" },
   { id: 9, label: "Resources", icon: FaUserCog, link: "/resources" },
   { id: 10, label: "Users", icon: FaUsers, link: "/user" },
-  { id: 911, label: "Report", icon: TbReportAnalytics, link: "/report" },
+  { id: 11, label: "Report", icon: TbReportAnalytics, link: "/report" },
 ];
 export const plannerTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
@@ -107,5 +109,44 @@ export const productionTabs: TabData[] = [
     label: "Labour Card Maintenance",
     icon: FaIdCardAlt,
     link: "/production/labour-card",
+  },
+];
+export const SuperAdminTabs: TabData[] = [
+  { id: 1, label: "Home", icon: FaHome, link: "/" },
+  {
+    id: 2,
+    label: "Project",
+    icon: MdSpaceDashboard,
+    link: "/super-admin/project",
+  },
+  {
+    id: 3,
+    label: "Work Order",
+    icon: CgWorkAlt,
+    link: "/super-admin/work-order",
+  },
+  {
+    id: 4,
+    label: "Resource Work Order",
+    icon: FaClipboardList,
+    link: "/super-admin/resource-work-order",
+  },
+  {
+    id: 5,
+    label: "Canceled Details",
+    icon: TiCancelOutline,
+    link: "/super-admin/canceled-details",
+  },
+  {
+    id: 6,
+    label: "Closed Details",
+    icon: IoCloseCircle,
+    link: "/super-admin/closed-details",
+  },
+  {
+    id: 7,
+    label: "Labour Card",
+    icon: FaClipboardList,
+    link: "/super-admin/labour-card",
   },
 ];

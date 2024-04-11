@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/select";
 import { getAllWorkOrder } from "@/data/work-order";
 import { getAllProject } from "@/data/projects";
+import StatusBadge from "@/components/common/status-badge";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -176,18 +177,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => (
-      <Badge
-        className={`cursor-pointer rounded-md ${
-          row.original.status === "Released"
-            ? "bg-green-500"
-            : row.original.status === "Unreleased"
-            ? "bg-red-500"
-            : "bg-black"
-        }`}>
-        {row.original.status}
-      </Badge>
-    ),
+    cell: ({ row }) => <StatusBadge row={row} />,
   },
   {
     id: "actions",
@@ -225,7 +215,6 @@ export const UpdateStatus = ({ row }: any) => {
   const queryClient = useQueryClient();
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
-      console.log(value);
       const deleteCode: any = await updateResourceWorkOrder({
         id: data.id,
         ...value,
@@ -320,8 +309,8 @@ export const UpdateStatus = ({ row }: any) => {
           onInteractOutside={(e) => {
             e.preventDefault();
           }}>
-          <DialogHeader>
-            <DialogTitle>Change Status</DialogTitle>
+          <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
+            <DialogTitle className="text-white">Change Status</DialogTitle>
           </DialogHeader>
           <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
             <div className="items-center gap-4">
@@ -378,12 +367,20 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
-                  <SelectItem value="Closed">Closed</SelectItem>
                   <SelectItem value="Unreleased" className="text-red-500">
                     Unreleased
                   </SelectItem>
                   <SelectItem value="Released" className="text-green-500">
                     Released
+                  </SelectItem>
+                  <SelectItem value="Closed" disabled>
+                    Closed
+                  </SelectItem>
+                  <SelectItem
+                    value="Canceled"
+                    className="text-orange-500"
+                    disabled>
+                    Canceled
                   </SelectItem>
                 </SelectContent>
               </Select>

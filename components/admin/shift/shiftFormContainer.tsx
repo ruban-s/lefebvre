@@ -139,14 +139,20 @@ const ShiftFormContainer = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Shift Type</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            placeholder="Shift Type"
-                          />
-                        </FormControl>
+                        <FormLabel>Status</FormLabel>
+                        <Select
+                          value={form.watch("shift_type")}
+                          onValueChange={(value) => {
+                            form.setValue("shift_type", value);
+                          }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Shift Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Day">Day</SelectItem>
+                            <SelectItem value="Night">Night</SelectItem>
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     );

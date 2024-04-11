@@ -249,9 +249,7 @@ const UserFormContainer = () => {
                             <SelectValue placeholder="Select Role" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem
-                              value="Superadmin
-                            ">
+                            <SelectItem value="SuperAdmin">
                               SUPER-ADMIN
                             </SelectItem>
                             <SelectItem value="Admin">ADMIN</SelectItem>

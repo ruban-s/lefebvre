@@ -9,6 +9,8 @@ export const BreakSchema = z.object({
   name: z.string().min(1, { message: "Break name is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   start_time: z.string().min(1, { message: "Start time is required" }),
+  shift_id: z.string().optional(),
+  shift_name: z.string().min(1, { message: "Shift Name is required" }),
   end_time: z.string().min(1, { message: "End time is required" }),
 });
 export const UserSchema = z.object({
