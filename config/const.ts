@@ -23,7 +23,22 @@ export const adminTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
   { id: 2, label: "Dashboard", icon: MdSpaceDashboard, link: "/dashboard" },
   { id: 3, label: "Measures", icon: GiThermometerScale, link: "/measures" },
-  { id: 4, label: "Shift", icon: FaBusinessTime, link: "/shift" },
+  {
+    id: 4,
+    label: "Shift",
+    icon: FaBusinessTime,
+    link: "/shift",
+    child: true,
+    childLink: [
+      { id: 2, label: "Shift", icon: FaBusinessTime, link: "/shift" },
+      {
+        id: 2,
+        label: "Shift Employee",
+        icon: MdSpaceDashboard,
+        link: "/shift-employee",
+      },
+    ],
+  },
   { id: 5, label: "Employees", icon: FaUsersCog, link: "/employees" },
   { id: 6, label: "Attendance", icon: IoCalendar, link: "/attendance" },
   { id: 7, label: "Break", icon: GiCoffeeCup, link: "/break" },

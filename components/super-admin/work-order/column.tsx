@@ -280,38 +280,40 @@ export const UpdateStatus = ({ row }: any) => {
         ...value,
       });
 
-      var resourceWorkOrderList = resourceWorkOrder?.filter(
-        (info) => info.project_id === value.project_id
-      );
-      resourceWorkOrderList?.map(async (resourceWorkData, index) => {
-        const payLoad = {
-          estimated_hour: resourceWorkData.estimated_hour,
-          bench_mark_measure: resourceWorkData.bench_mark_measure,
-          bench_mark_unit: resourceWorkData.bench_mark_unit,
-          remark: resourceWorkData.remark,
-          required_quantity: resourceWorkData.required_quantity,
-          sqNumber: resourceWorkData.sqNumber,
-          status: value.status,
-          ballance_hour: resourceWorkData.ballance_hour,
-          ballanced_quantity: resourceWorkData.ballanced_quantity,
-          employee_id: resourceWorkData.employee_id,
-          endDate: resourceWorkData.endDate,
-          actual_hour: resourceWorkData.actual_hour,
-          forman: resourceWorkData.forman,
-          project_id: resourceWorkData.project_id,
-          resourceId: resourceWorkData.resourceId,
-          prepared_quantity: resourceWorkData.prepared_quantity,
-          startDate: resourceWorkData.startDate,
-          work_order_id: resourceWorkData.work_order_id,
-          quantity_unit: resourceWorkData.quantity_unit,
-        };
-        const { status, ...data } = resourceWorkData;
-        status === "Released" &&
-          (await updateResourceWorkOrder({
-            id: resourceWorkData.id,
-            ...payLoad,
-          }));
-      });
+      if (value.status === "Closed" || value.status === "Canceled") {
+        var resourceWorkOrderList = resourceWorkOrder?.filter(
+          (info) => info.project_id === value.project_id
+        );
+        resourceWorkOrderList?.map(async (resourceWorkData, index) => {
+          const payLoad = {
+            estimated_hour: resourceWorkData.estimated_hour,
+            bench_mark_measure: resourceWorkData.bench_mark_measure,
+            bench_mark_unit: resourceWorkData.bench_mark_unit,
+            remark: resourceWorkData.remark,
+            required_quantity: resourceWorkData.required_quantity,
+            sqNumber: resourceWorkData.sqNumber,
+            status: value.status,
+            ballance_hour: resourceWorkData.ballance_hour,
+            ballanced_quantity: resourceWorkData.ballanced_quantity,
+            employee_id: resourceWorkData.employee_id,
+            endDate: resourceWorkData.endDate,
+            actual_hour: resourceWorkData.actual_hour,
+            forman: resourceWorkData.forman,
+            project_id: resourceWorkData.project_id,
+            resourceId: resourceWorkData.resourceId,
+            prepared_quantity: resourceWorkData.prepared_quantity,
+            startDate: resourceWorkData.startDate,
+            work_order_id: resourceWorkData.work_order_id,
+            quantity_unit: resourceWorkData.quantity_unit,
+          };
+          const { status, ...data } = resourceWorkData;
+          resourceWorkData.status !== value.status &&
+            (await updateResourceWorkOrder({
+              id: resourceWorkData.id,
+              ...payLoad,
+            }));
+        });
+      }
       return deleteCode;
     },
     onSuccess: (value) => {
@@ -408,8 +410,8 @@ export const UpdateStatus = ({ row }: any) => {
               <div>Start Date - End Date</div>
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "LLL dd, y");
-                  payLoad.end_date = format(value?.to!, "LLL dd, y");
+                  payLoad.start_date = format(value?.from!, "dd-LL-y");
+                  payLoad.end_date = format(value?.to!, "dd-LL-y");
                 }}
                 selectedData={dateRange!}
                 disabled={[]}
@@ -433,14 +435,9 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectItem value="Released" className="text-green-500">
                     Released
                   </SelectItem>
-                  <SelectItem value="Closed" disabled>
-                    Closed
-                  </SelectItem>
+                  <SelectItem value="Closed">Closed</SelectItem>
 
-                  <SelectItem
-                    value="Canceled"
-                    className="text-orange-500"
-                    disabled>
+                  <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
                   </SelectItem>
                 </SelectContent>

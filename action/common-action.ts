@@ -1,5 +1,6 @@
 "use server";
 
+import { format } from "date-fns";
 import { cookies } from "next/headers";
 
 export const convertToUAEFormat = (dateString: string) => {
@@ -9,6 +10,6 @@ export const convertToUAEFormat = (dateString: string) => {
   var utc = localTime + localOffset;
   var offset = 4; //UTC of Dubai is +04.00
   var dubai = utc + 3600000 * offset;
-  var nd = new Date(dubai);
+  var nd = format(new Date(dubai), "dd-LL-y");
   return nd.toLocaleString();
 };

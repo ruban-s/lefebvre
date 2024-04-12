@@ -4,6 +4,8 @@ export interface TabData {
   id: number;
   label: string;
   icon: IconType;
+  child?: boolean;
+  childLink?: TabData[];
   link: string;
 }
 export interface ResponseData {
@@ -71,6 +73,10 @@ export interface EmployeeData {
   mobile: string;
   role_name: string;
   status: string;
+  current_shift_id: string;
+  current_shift_name: string;
+  previous_shift_id: string;
+  previous_shift_name: string;
   updatedDate: string;
 }
 export interface MeasureData {

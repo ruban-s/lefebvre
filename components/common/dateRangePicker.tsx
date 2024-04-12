@@ -52,14 +52,13 @@ export function DatePickerWithRange({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "dd-LL-y")} - {format(date.to, "dd-LL-y")}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "dd-LL-y")
               )
             ) : (
-              <span>project date</span>
+              <span>Select Date</span>
             )}
           </Button>
         </PopoverTrigger>

@@ -168,7 +168,7 @@ const WorkOrderFormContainer = () => {
     //   const projectDays = 0 | -days;
     //   for (let i = 0; i <= projectDays; i++) {
     //     const newdate = addDays(new Date(start_date), i);
-    //     workOrderDates.push(new Date(format(newdate, "LLL dd, y")));
+    //     workOrderDates.push(new Date(format(newdate, "dd-LL-y")));
     //   }
     // });
     // if (workOrder) {
@@ -203,12 +203,12 @@ const WorkOrderFormContainer = () => {
       return;
     }
     if (!to) {
-      form?.setValue("start_date", format(from, "LLL dd, y"));
-      form?.setValue("end_date", format(from, "LLL dd, y"));
+      form?.setValue("start_date", format(from, "dd-LL-y"));
+      form?.setValue("end_date", format(from, "dd-LL-y"));
       return;
     }
-    form.setValue("start_date", format(from, "LLL dd, y"));
-    form.setValue("end_date", format(to, "LLL dd, y"));
+    form.setValue("start_date", format(from, "dd-LL-y"));
+    form.setValue("end_date", format(to, "dd-LL-y"));
 
     return;
   };

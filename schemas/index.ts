@@ -46,6 +46,10 @@ export const EmployeeSchema = z.object({
   last_name: z.string().min(1, { message: "Last name is required" }),
   mobile: z.string().optional(),
   status: z.string().min(1, { message: "Status is required" }),
+  current_shift_id: z.string().optional(),
+  current_shift_name: z.string().optional(),
+  previous_shift_id: z.string().optional(),
+  previous_shift_name: z.string().optional(),
 });
 export const MeasureSchema = z.object({
   unit: z.string().min(1, { message: "Unit is required" }),
@@ -90,10 +94,10 @@ export const WorkOrderSchema = z.object({
 });
 export const ResourceWorkOrderSchema = z.object({
   estimated_hour: z.string().min(1, { message: "required!" }),
-  bench_mark_measure: z.string().min(1, { message: "required!" }),
-  bench_mark_unit: z.string().min(1, { message: "required!" }),
+  bench_mark_measure: z.string().optional().default("--"),
+  bench_mark_unit: z.string().optional().default("--"),
   quantity_unit: z.string().min(1, { message: "required!" }),
-  remark: z.string().min(1, { message: " required!" }),
+  remark: z.string().optional().default("--"),
   required_quantity: z.string().min(1, { message: "required!" }),
   sqNumber: z.string().min(1, { message: "required!" }),
   status: z.string().min(1, { message: "required!" }),

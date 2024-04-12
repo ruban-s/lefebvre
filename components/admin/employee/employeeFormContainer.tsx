@@ -31,15 +31,16 @@ import { toast } from "sonner";
 import CommanCardContainer from "../../common/common-cart";
 import { Button } from "../../ui/button";
 import { useEffect, useState, useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { createEmployee, updateEmployee } from "@/data/employee";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { useEmployeeStore } from "@/state";
 import { ComboboxPopover } from "../../common/combo-box";
 import Image from "next/image";
-import { EmployeeData } from "@/types";
+import { EmployeeData, ShiftData } from "@/types";
 import CustomImageInput from "@/components/common/customImageInput";
+import { getAllShift } from "@/data/shift";
 
 const EmployeeFormContainer = () => {
   const employee: EmployeeData = useEmployeeStore(
@@ -49,7 +50,17 @@ const EmployeeFormContainer = () => {
   const queryClient = useQueryClient();
   const [image, setImage] = useState<any>();
   const imageRef = useRef<HTMLInputElement>(null);
-
+  const {
+    data: shift,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["shift"],
+    queryFn: async () => {
+      const data = await getAllShift();
+      return JSON.parse(data.data) as ShiftData[];
+    },
+  });
   const creatUser = useMutation({
     mutationFn: async (value: any) => {
       const breake = employee
@@ -94,6 +105,10 @@ const EmployeeFormContainer = () => {
       status: "",
       gender: "",
       image_path: "",
+      // current_shift_id: "",
+      // current_shift_name: "",
+      // previous_shift_id: "",
+      // previous_shift_name: "",
     },
   });
   function fileToBase64(file: any) {
@@ -123,6 +138,10 @@ const EmployeeFormContainer = () => {
       form.setValue("status", employee?.status!);
       form.setValue("employee_id", employee?.employee_id!);
       form.setValue("image_path", employee?.image_path);
+      form.setValue("current_shift_id", "");
+      form.setValue("current_shift_name", "");
+      form.setValue("previous_shift_id", employee?.previous_shift_id || "");
+      form.setValue("previous_shift_name", employee?.previous_shift_name || "");
       // setEdit(true);
     }
   }, [employee]);
@@ -304,6 +323,45 @@ const EmployeeFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
+                  name="previous_shift_name"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Shift Name</FormLabel>
+                        <Select
+                          value={form.watch("previous_shift_name")}
+                          onValueChange={(value) => {
+                            var selectedShift = shift?.filter(
+                              (info) => info.shift_name === value
+                            );
+                            if (selectedShift && selectedShift?.length < 1)
+                              return;
+                            form.setValue("previous_shift_name", value);
+                            form.setValue(
+                              "previous_shift_id",
+                              `${selectedShift![0].id}`
+                            );
+                          }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Shift" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {shift?.map((info, index) => {
+                              return (
+                                <SelectItem key={index} value={info.shift_name}>
+                                  {info.shift_name}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
                   name="status"
                   render={({ field }) => {
                     return (
@@ -342,6 +400,8 @@ const EmployeeFormContainer = () => {
                     onClick={() => {
                       form.reset();
                       form.clearErrors();
+                      form.setValue("current_shift_name", "");
+
                       // setEdit(false);
                     }}>
                     Clear
@@ -357,6 +417,7 @@ const EmployeeFormContainer = () => {
                     onClick={() => {
                       form.reset();
                       form.clearErrors();
+                      form.setValue("current_shift_name", "");
                       // setEdit(false);
                       removeEmployee();
                     }}>

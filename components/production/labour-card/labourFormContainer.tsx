@@ -142,12 +142,12 @@ const LabourFormContainer = () => {
       return;
     }
     if (!to) {
-      form?.setValue("start_date", format(from, "LLL dd, y"));
-      form?.setValue("end_date", format(from, "LLL dd, y"));
+      form?.setValue("start_date", format(from, "dd-LL-y"));
+      form?.setValue("end_date", format(from, "dd-LL-y"));
       return;
     }
-    form.setValue("start_date", format(from, "LLL dd, y"));
-    form.setValue("end_date", format(to, "LLL dd, y"));
+    form.setValue("start_date", format(from, "dd-LL-y"));
+    form.setValue("end_date", format(to, "dd-LL-y"));
 
     return;
   };

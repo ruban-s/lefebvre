@@ -151,6 +151,7 @@ export const UpdateStatus = ({ row }: any) => {
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const deleteCode: any = await updateProject(value);
+      console.log(value.status);
       if (value.status === "Closed" || value.status === "Canceled") {
         var workOrderList = workOrders?.filter(
           (info) => info.project_id === value.project_id
@@ -167,9 +168,8 @@ export const UpdateStatus = ({ row }: any) => {
             end_date: workOrderData.end_date,
             status: value.status,
           };
-          value.status === "Closed" ||
-            (value.status === "Canceled" &&
-              (await updateWorkOrder({ id: workOrderData.id, ...payLoad })));
+          workOrderData.status !== value.status &&
+            (await updateWorkOrder({ id: workOrderData.id, ...payLoad }));
         });
         var resourceWorkOrderList = resourceWorkOrder?.filter(
           (info) => info.project_id === value.project_id
@@ -196,14 +196,12 @@ export const UpdateStatus = ({ row }: any) => {
             work_order_id: resourceWorkData.work_order_id,
             quantity_unit: resourceWorkData.quantity_unit,
           };
-
           const { status, ...data } = resourceWorkData;
-          value.status === "Closed" ||
-            (value.status === "Canceled" &&
-              (await updateResourceWorkOrder({
-                id: resourceWorkData.id,
-                ...payLoad,
-              })));
+          resourceWorkData.status !== value.status &&
+            (await updateResourceWorkOrder({
+              id: resourceWorkData.id,
+              ...payLoad,
+            }));
         });
       }
       return deleteCode;
@@ -295,8 +293,8 @@ export const UpdateStatus = ({ row }: any) => {
               <div>Start Date - End Date</div>
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "LLL dd, y");
-                  payLoad.end_date = format(value?.to!, "LLL dd, y");
+                  payLoad.start_date = format(value?.from!, "dd-LL-y");
+                  payLoad.end_date = format(value?.to!, "dd-LL-y");
                 }}
                 selectedData={dateRange!}
                 disabled={[]}
