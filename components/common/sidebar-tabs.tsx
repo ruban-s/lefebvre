@@ -32,10 +32,9 @@ const SideBarTabs = (datas: SideBarTabProps) => {
       {tabs?.map(({ icon: Icon, ...value }, index: number) => {
         if (value.child) {
           return (
-            <Popover>
+            <Popover key={index}>
               <PopoverTrigger className="w-full hover-none">
                 <div
-                  key={index}
                   style={{
                     transition: "width 300ms cubic-bezier(0.2, 0, 0, 1) 0s",
                   }}
