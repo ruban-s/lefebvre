@@ -86,11 +86,13 @@ const ExportButtonComponent = ({
                   }}
                 />
                 <Label htmlFor={info}>
-                  {info.replaceAll("_", " ").charAt(0).toUpperCase() +
-                    info
-                      .replaceAll("_", " ")
-                      .slice(1)
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")}
+                  {info === "forman"
+                    ? "Foreman"
+                    : info.replaceAll("_", " ").charAt(0).toUpperCase() +
+                      info
+                        .replaceAll("_", " ")
+                        .slice(1)
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")}
                 </Label>
               </div>
             );
