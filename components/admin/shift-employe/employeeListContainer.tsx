@@ -60,7 +60,7 @@ const EmployeeListContainer = () => {
             <p className="text-lg w-auto font-semibold ">
               {"Shift-Employees"} :{" "}
             </p>
-            <Select
+            {/* <Select
               value={selectedShift?.shift_name}
               onValueChange={(value) => {
                 console.log(value);
@@ -79,7 +79,7 @@ const EmployeeListContainer = () => {
                 })}
                 <SelectItem value="--">No Shift </SelectItem>
               </SelectContent>
-            </Select>
+            </Select> */}
           </div>
 
           <div className="w-full flex ">
@@ -150,12 +150,18 @@ const EmployeeListContainer = () => {
                             {info.last_name}
                             <span>
                               <Badge
-                                className={` ml-2 ${
+                                className={`rounded-sm mr-2 ml-2 ${
                                   info.status === "Active"
                                     ? "bg-green-500"
                                     : "bg-slate-500"
                                 }`}>
                                 {info.status}
+                              </Badge>
+                              <Badge
+                                className={`rounded-sm bg-slate-500
+                                `}>
+                                {" "}
+                                {info.previous_shift_name}
                               </Badge>
                             </span>
                           </p>
@@ -193,16 +199,21 @@ const EmployeeListContainer = () => {
                             {info.last_name}
                             <span>
                               <Badge
-                                className={`${
+                                className={`rounded-sm mr-2 ml-2 ${
                                   info.status === "Active"
                                     ? "bg-green-500"
                                     : "bg-slate-500"
                                 }`}>
                                 {info.status}
                               </Badge>
+                              <Badge
+                                className={`rounded-sm bg-slate-500
+                                `}>
+                                {" "}
+                                {info.previous_shift_name}
+                              </Badge>
                             </span>
                           </p>
-                          <div></div>
                         </div>
                       );
                     }
@@ -229,16 +240,21 @@ const EmployeeListContainer = () => {
                             {info.last_name}
                             <span>
                               <Badge
-                                className={`${
+                                className={`rounded-sm mr-2 ml-2 ${
                                   info.status === "Active"
                                     ? "bg-green-500"
                                     : "bg-slate-500"
                                 }`}>
                                 {info.status}
                               </Badge>
+                              <Badge
+                                className={`rounded-sm bg-slate-500
+                                `}>
+                                {" "}
+                                {info.previous_shift_name}
+                              </Badge>
                             </span>
                           </p>
-                          <div></div>
                         </div>
                       );
                     }
@@ -250,22 +266,38 @@ const EmployeeListContainer = () => {
               <div className="w-full h-[70px] bg-slate-400 flex justify-center items-center rounded-tl-md rounded-tr-md">
                 <p className="text-lg text-white">No Shift</p>
               </div>
-              <div className=" w-full h-[730px] border-1 border border-slate-400 p-2">
+              <ScrollArea className=" w-full h-[730px] border-1 border border-slate-400 p-2">
                 {employees?.map((info, index) => {
                   if (!info.current_shift_id && !info.previous_shift_id) {
                     return (
                       <div
                         key={index}
                         className="w-full mb-2 shadow-sm p-2  cursor-pointer">
-                        <p>
+                        <p className="text-sm font-bold">
                           {info.first_name}
                           {info.last_name}
+                          <span>
+                            <Badge
+                              className={`rounded-sm mr-2 ml-2 ${
+                                info.status === "Active"
+                                  ? "bg-green-500"
+                                  : "bg-slate-500"
+                              }`}>
+                              {info.status}
+                            </Badge>
+                            <Badge
+                              className={`rounded-sm bg-slate-500
+                                `}>
+                              {" "}
+                              {info.previous_shift_name}
+                            </Badge>
+                          </span>
                         </p>
                       </div>
                     );
                   }
                 })}
-              </div>
+              </ScrollArea>
             </div>
           </div>
         </>
