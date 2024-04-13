@@ -50,11 +50,13 @@ import {
 } from "../ui/select";
 import { toast } from "sonner";
 import ExportButtonComponent from "./exportButtonComponent";
+import { object } from "zod";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   searchName: string;
   fileName: string;
+  exportDataFields?: string[];
   data: TData[];
 }
 
@@ -63,6 +65,7 @@ export function DataTable<TData, TValue>({
   searchName,
   fileName,
   data,
+  exportDataFields,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -119,7 +122,7 @@ export function DataTable<TData, TValue>({
     var header: any = [[]];
     var body: any = [];
     headerList.map((info: string, index) => {
-      header[0].push(info.replace("_", " ").toUpperCase());
+      header[0].push(info);
     });
     value.map((info: any, index: any) => {
       if (index > 0) {
@@ -134,7 +137,7 @@ export function DataTable<TData, TValue>({
     });
     doc.save(exportFileName + ".pdf");
   };
-  const exportData = (value: string) => {
+  const exportData = (value: string, dataField: string[]) => {
     if (data.length < 1) {
       return toast.warning(`Data not Found`, {
         description: "You can not export this file",
@@ -142,28 +145,25 @@ export function DataTable<TData, TValue>({
         dismissible: true,
       });
     }
-    const newData = data.map(
-      ({
-        createdDate,
-        updatedDate,
-        updatedBy,
-        token,
-        image,
-        image_path,
-        res_status,
-        sq_number,
-        res_note,
-        ...rest
-      }: any) => rest
-    );
+    var obj1: any = {};
     var exportData: any = [];
-    var exportDataField = Object.keys(newData[0] as {});
-    var obj: any = {};
-    exportDataField.map((info: string, index: any) => {
-      obj[`${info}`] = info.toUpperCase();
+    dataField.map((field: string, fieldIndex) => {
+      obj1[`${field}`] =
+        field.replaceAll("_", " ").charAt(0).toUpperCase() +
+        field
+          .replaceAll("_", " ")
+          .slice(1)
+          .replace(/([a-z])([A-Z])/g, "$1 $2");
     });
-    exportData.push(obj);
-    exportData = [...exportData, ...newData];
+    exportData.push(obj1);
+    data.map((info: any, index) => {
+      var obj2: any = {};
+      dataField.map((field: string, fieldIndex) => {
+        obj2[`${field}`] = info[`${field}`];
+      });
+      exportData.push(obj2);
+    });
+
     if (value === "CSV") {
       exportCSV(exportData);
     }
@@ -226,9 +226,13 @@ export function DataTable<TData, TValue>({
               }}
               exportFileName={exportFileName}
               lable="CSV"
-              exportFunction={() => {
-                exportData("CSV");
+              exportFunction={(value: string[]) => {
+                console.log(value);
+
+                exportData("CSV", value);
               }}
+              exportDataFields={exportDataFields}
+              data={data}
             />
             <ExportButtonComponent
               nameChangeFunction={(value: any) => {
@@ -236,9 +240,12 @@ export function DataTable<TData, TValue>({
               }}
               exportFileName={exportFileName}
               lable="PDF"
-              exportFunction={() => {
-                exportData("PDF");
+              exportFunction={(value: string[]) => {
+                console.log(value);
+                exportData("PDF", value);
               }}
+              exportDataFields={exportDataFields}
+              data={data}
             />
             <ExportButtonComponent
               nameChangeFunction={(value: any) => {
@@ -246,9 +253,12 @@ export function DataTable<TData, TValue>({
               }}
               exportFileName={exportFileName}
               lable="XLSX"
-              exportFunction={() => {
-                exportData("XLSX");
+              exportFunction={(value: string[]) => {
+                console.log(value);
+                exportData("XLSX", value);
               }}
+              exportDataFields={exportDataFields}
+              data={data}
             />
           </DropdownMenuContent>
         </DropdownMenu>

@@ -165,3 +165,153 @@ export const SuperAdminTabs: TabData[] = [
     link: "/super-admin/labour-card",
   },
 ];
+
+export const attendanceTypeController = [
+  "createdDate",
+  "id",
+  "name",
+  "status",
+  "type",
+  "updatedDate",
+];
+export const breakController = [
+  "createdDate",
+  "end_time",
+  "id",
+  "name",
+  "shift_id",
+  "shift_name",
+  "start_time",
+  "status",
+  "updatedDate",
+];
+export const employeeController = [
+  "createdDate",
+  "current_shift_id",
+  "current_shift_name",
+  "designation_id",
+  "email",
+  "employee_id",
+  "first_name",
+  "gender",
+  "id",
+  "last_name",
+  "mobile",
+  "role_name",
+  "status",
+  "updatedDate",
+];
+
+export const indirectController = [
+  "createdDate",
+  "description",
+  "id",
+  "indirectCode",
+  "name",
+  "status",
+  "updatedDate",
+];
+export const projectController = [
+  "actualHour",
+  "createdDate",
+  "customer_name",
+  "description",
+  "end_date",
+  "estimateHour",
+  "id",
+  "planner_remark",
+  "production_remark",
+  "project_id",
+  "start_date",
+  "status",
+  "updatedDate",
+];
+
+export const resourceController = [
+  "actual_hour",
+  "ballance_hour",
+  "ballanced_quantity",
+  "bench_mark_measure",
+  "bench_mark_unit",
+  "createdDate",
+  "employee_id",
+  "endDate",
+  "estimated_hour",
+  "forman",
+  "id",
+  "prepared_quantity",
+  "project_id",
+  "quantity_unit",
+  "remark",
+  "required_quantity",
+  "resourceId",
+  "sqNumber",
+  "startDate",
+  "status",
+  "updatedDate",
+  "work_order_id",
+];
+export const shiftController = [
+  "createdDate",
+  "employee_id",
+  "id",
+  "shift_end_time",
+  "shift_name",
+  "shift_start_time",
+  "shift_type",
+  "status",
+  "updatedDate",
+];
+
+export const measuresController = [
+  "createdDate",
+  "id",
+  "status",
+  "unit",
+  "updatedBy",
+  "updatedDate",
+];
+
+export const userController = [
+  "createdDate",
+  "email",
+  "id",
+  "mobile",
+  "name",
+  "password",
+  "role_name",
+  "status",
+  "token",
+  "updatedDate",
+  "username",
+];
+
+export const workOrderController = [
+  "actualHour",
+  "createdDate",
+  "description",
+  "end_date",
+  "estimateHour",
+  "id",
+  "planner_remark",
+  "production_remark",
+  "project_id",
+  "role_id",
+  "start_date",
+  "status",
+  "updatedDate",
+  "work_order_id",
+];
+
+export const resourceAdmincontroller = [
+  "attachment",
+  "createdDate",
+  "id:",
+  "res_description",
+  "res_note",
+  "res_status",
+  "resource_id",
+  "sq_number",
+  "status",
+  "updatedDate",
+];

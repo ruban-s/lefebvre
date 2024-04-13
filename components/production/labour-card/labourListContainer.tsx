@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
 import { projectColumns } from "./column";
 import { getAllLabourCard } from "@/data/labour-card";
+import { projectController } from "@/config/const";
 
 const LabourListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -38,6 +39,7 @@ const LabourListContainer = () => {
               data={labours!}
               searchName="project_id"
               fileName="Project"
+              exportDataFields={projectController}
             />
           </div>
         </>

@@ -9,6 +9,7 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllIndirectCodes } from "@/data/indirect-code";
+import { indirectController } from "@/config/const";
 
 const IndirectCodeListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -40,6 +41,7 @@ const IndirectCodeListContainer = () => {
               data={indirects!}
               searchName="indirectCode"
               fileName="Indirect-codes"
+              exportDataFields={indirectController}
             />
           </div>
         </>

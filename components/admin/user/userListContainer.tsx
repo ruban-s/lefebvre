@@ -9,6 +9,7 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllUser } from "@/data/user";
+import { userController } from "@/config/const";
 interface UserListContainerProps {
   editUser: Function;
 }
@@ -40,6 +41,7 @@ const UserListContainer = (props: UserListContainerProps) => {
               data={breaks!}
               searchName="name"
               fileName="Users"
+              exportDataFields={userController}
             />
           </div>
         </>

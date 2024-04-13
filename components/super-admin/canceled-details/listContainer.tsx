@@ -16,6 +16,11 @@ import {
   getAllResourceWorkOrder,
   getAllResourceWorkOrderByStatus,
 } from "@/data/resource-work-order";
+import {
+  projectController,
+  resourceController,
+  workOrderController,
+} from "@/config/const";
 const ReleasedProject = () => {
   const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
   const [projectList, setProjects] = useState<ProjectData[]>([]);
@@ -89,6 +94,7 @@ const ReleasedProject = () => {
                   data={projectList!}
                   searchName="project_id"
                   fileName="Project"
+                  exportDataFields={projectController}
                 />
               </div>
             </>
@@ -109,6 +115,7 @@ const ReleasedProject = () => {
                   data={workOrderList!}
                   searchName="work_order_id"
                   fileName="WorkOrder"
+                  exportDataFields={workOrderController}
                 />
               </div>
             </>
@@ -129,6 +136,7 @@ const ReleasedProject = () => {
                   data={resourceWorkOrderList!}
                   searchName="resourceId"
                   fileName="ResourceWorkOrder"
+                  exportDataFields={resourceController}
                 />
               </div>
             </>

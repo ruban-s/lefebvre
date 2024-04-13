@@ -14,16 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
 
 const EmployeeListContainer = () => {
   const [selectedShift, setShift] = useState<ShiftData>();
-  const [curruntShift, setCurrentShift] = useState<
-    EmployeeData[] | undefined
-  >();
-  const [previousShift, setPreviousShift] = useState<
-    EmployeeData[] | undefined
-  >();
-  useState<EmployeeData[]>();
+  const [curruntShift, setCurrentShift] = useState<EmployeeData[]>([]);
+  const [previousShift, setPreviousShift] = useState<EmployeeData[]>([]);
 
   const { data: shift } = useQuery({
     queryKey: ["shift"],
@@ -36,15 +33,14 @@ const EmployeeListContainer = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["employee"],
     queryFn: async () => {
-      const data = await getAllEmployee();
       var employee = JSON.parse(data.data) as EmployeeData[];
       employee.map((info, index) => {
-        // if (info.current_shift_id) {
-        //   setCurrentShift(info || undefined);
-        // }
-        // if (info.previous_shift_id) {
-        //   setPreviousShift(info || undefined);
-        // }
+        if (info.current_shift_id) {
+          setCurrentShift([...curruntShift, info]);
+        }
+        if (info.previous_shift_id) {
+          setPreviousShift([...previousShift, info]);
+        }
       });
 
       return JSON.parse(data.data) as EmployeeData[];
@@ -91,37 +87,171 @@ const EmployeeListContainer = () => {
               <div className="w-full h-[70px] bg-blue-400 flex justify-center items-center rounded-tl-md rounded-tr-md">
                 <p className="text-lg text-white">Day Shift</p>
               </div>
-              <div className=" w-full h-[730px] border-1 border border-blue-400 p-2">
+              <ScrollArea className=" w-full h-[730px] border-1 border border-black p-2">
+                <div className="my-3 p-2 w-[130px]  bg-neutral-100  border-0 border-l-2 border-l-neutral-500">
+                  <p className="text-md text-neutral-700">Last Shift</p>
+                </div>
                 {employees?.map((info, index) => {
-                  if (info.current_shift_id) {
-                    return (
-                      <div
-                        key={index}
-                        className="w-full mb-2 shadow-sm p-2  cursor-pointer">
-                        <p>
-                          {info.first_name}
-                          {info.last_name}
-                        </p>
-                      </div>
+                  if (info.previous_shift_id) {
+                    var newShift = shift?.filter(
+                      (shiftInfo) => shiftInfo.id == info.previous_shift_id
                     );
+                    if (
+                      newShift![0].shift_type === "Day" &&
+                      info.designation_id !== "FOREMEN"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg rounded-lg">
+                          <p className="text-sm font-bold">
+                            {info.first_name}
+                            {info.last_name}
+                            <span>
+                              <Badge
+                                className={`rounded-sm mr-2 ml-2 ${
+                                  info.status === "Active"
+                                    ? "bg-green-500"
+                                    : "bg-slate-500"
+                                }`}>
+                                {info.status}
+                              </Badge>
+                              <Badge
+                                className={`rounded-sm bg-slate-500
+                                `}>
+                                {" "}
+                                {info.previous_shift_name}
+                              </Badge>
+                            </span>
+                          </p>
+                        </div>
+                      );
+                    }
                   }
                 })}
-              </div>
+                <div className="my-3 p-2 w-[130px]  bg-green-100  border-0 border-l-2 border-l-green-500">
+                  <p className="text-md text-green-700">Current Shift</p>
+                </div>
+                {employees?.map((info, index) => {
+                  if (info.current_shift_id) {
+                    var newShift = shift?.filter(
+                      (shiftInfo) => shiftInfo.id == info.current_shift_id
+                    );
+                    if (
+                      newShift![0].shift_type === "Day" &&
+                      info.designation_id !== "FOREMEN"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
+                          <p className="text-sm font-bold">
+                            {info.first_name}
+                            {info.last_name}
+                            <span>
+                              <Badge
+                                className={` ml-2 ${
+                                  info.status === "Active"
+                                    ? "bg-green-500"
+                                    : "bg-slate-500"
+                                }`}>
+                                {info.status}
+                              </Badge>
+                            </span>
+                          </p>
+                          <div></div>
+                        </div>
+                      );
+                    }
+                  }
+                })}
+              </ScrollArea>
             </div>
             <div className="flex-1 h-[800px] m-2 ">
               <div className="w-full h-[70px] bg-black flex justify-center items-center rounded-tl-md rounded-tr-md">
                 <p className="text-lg text-white">Night Shift</p>
               </div>
-              <div className=" w-full h-[730px] border-1 border border-black p-2">
-                demo
-              </div>
+              <ScrollArea className=" w-full h-[730px] border-1 border border-black p-2">
+                <div className="my-3 p-2 w-[130px]  bg-neutral-100  border-0 border-l-2 border-l-neutral-500">
+                  <p className="text-md text-neutral-700">Last Shift</p>
+                </div>
+                {employees?.map((info, index) => {
+                  if (info.previous_shift_id) {
+                    var newShift = shift?.filter(
+                      (shiftInfo) => shiftInfo.id == info.previous_shift_id
+                    );
+                    if (
+                      newShift![0].shift_type === "Night" &&
+                      info.designation_id !== "FOREMEN"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg">
+                          <p className="text-sm font-bold">
+                            {info.first_name}
+                            {info.last_name}
+                            <span>
+                              <Badge
+                                className={`${
+                                  info.status === "Active"
+                                    ? "bg-green-500"
+                                    : "bg-slate-500"
+                                }`}>
+                                {info.status}
+                              </Badge>
+                            </span>
+                          </p>
+                          <div></div>
+                        </div>
+                      );
+                    }
+                  }
+                })}
+                <div className="my-3 p-2 w-[130px]  bg-green-100  border-0 border-l-2 border-l-green-500">
+                  <p className="text-md text-green-700">Current Shift</p>
+                </div>
+                {employees?.map((info, index) => {
+                  if (info.current_shift_id) {
+                    var newShift = shift?.filter(
+                      (shiftInfo) => shiftInfo.id == info.current_shift_id
+                    );
+                    if (
+                      newShift![0].shift_type === "Night" &&
+                      info.designation_id !== "FOREMEN"
+                    ) {
+                      return (
+                        <div
+                          key={index}
+                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
+                          <p className="text-sm font-bold">
+                            {info.first_name}
+                            {info.last_name}
+                            <span>
+                              <Badge
+                                className={`${
+                                  info.status === "Active"
+                                    ? "bg-green-500"
+                                    : "bg-slate-500"
+                                }`}>
+                                {info.status}
+                              </Badge>
+                            </span>
+                          </p>
+                          <div></div>
+                        </div>
+                      );
+                    }
+                  }
+                })}
+              </ScrollArea>
             </div>
             <div className="flex-1 h-[800px] m-2 ">
               <div className="w-full h-[70px] bg-slate-400 flex justify-center items-center rounded-tl-md rounded-tr-md">
                 <p className="text-lg text-white">No Shift</p>
               </div>
               <div className=" w-full h-[730px] border-1 border border-slate-400 p-2">
-                {employees?.map((info, index) => {
+                {employees?.map((info: any, index) => {
                   if (!info.current_shift_id && !info.previous_shift_id) {
                     return (
                       <div

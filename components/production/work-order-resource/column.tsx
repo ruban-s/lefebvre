@@ -373,15 +373,6 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectItem value="Released" className="text-green-500">
                     Released
                   </SelectItem>
-                  <SelectItem value="Closed" disabled>
-                    Closed
-                  </SelectItem>
-                  <SelectItem
-                    value="Canceled"
-                    className="text-orange-500"
-                    disabled>
-                    Canceled
-                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>

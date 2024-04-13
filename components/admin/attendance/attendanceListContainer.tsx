@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllAttendanceType } from "@/data/attendanceType";
+import { attendanceTypeController } from "@/config/const";
 
 const AttendanceListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -38,6 +39,7 @@ const AttendanceListContainer = () => {
               data={attendanceType!}
               searchName="name"
               fileName="Attendance-Type"
+              exportDataFields={attendanceTypeController}
             />
           </div>
         </>

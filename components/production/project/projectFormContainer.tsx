@@ -281,7 +281,6 @@ const ProjectFormContainer = () => {
                               Unreleased
                             </SelectItem>
                             <SelectItem value="Released">Released</SelectItem>
-                            <SelectItem value="Closed">Closed</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -23,6 +23,11 @@ import {
   getAllResourceWorkOrder,
   getAllResourceWorkOrderByStatus,
 } from "@/data/resource-work-order";
+import {
+  projectController,
+  resourceController,
+  workOrderController,
+} from "@/config/const";
 
 const UnreleasedProject = () => {
   const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
@@ -104,6 +109,7 @@ const UnreleasedProject = () => {
                   data={projectList!}
                   searchName="project_id"
                   fileName="Project"
+                  exportDataFields={projectController}
                 />
               </div>
             </>
@@ -124,6 +130,7 @@ const UnreleasedProject = () => {
                   data={workOrderList!}
                   searchName="work_order_id"
                   fileName="WorkOrder"
+                  exportDataFields={workOrderController}
                 />
               </div>
             </>
@@ -144,6 +151,7 @@ const UnreleasedProject = () => {
                   data={resourceWorkOrderList!}
                   searchName="resourceId"
                   fileName="ResourceWorkOrder"
+                  exportDataFields={resourceController}
                 />
               </div>
             </>

@@ -10,6 +10,7 @@ import { DataTable } from "../../common/data-table";
 import { workOrderColumns } from "./column";
 import { getAllWorkOrder } from "@/data/work-order";
 import ProjectListCombo from "../../common/projectListCombo";
+import { workOrderController } from "@/config/const";
 
 const WorkOrderListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -41,6 +42,7 @@ const WorkOrderListContainer = () => {
               data={breaks!}
               searchName="work_order_id"
               fileName="WorkOrder"
+              exportDataFields={workOrderController}
             />
           </div>
         </>

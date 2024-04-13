@@ -9,6 +9,7 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllShift } from "@/data/shift";
+import { shiftController } from "@/config/const";
 
 const ShiftListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -37,6 +38,7 @@ const ShiftListContainer = () => {
               data={breaks!}
               searchName="name"
               fileName="Users"
+              exportDataFields={shiftController}
             />
           </div>
         </>

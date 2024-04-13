@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { columns } from "./column";
 import { getAllMeasure } from "@/data/measure";
 import { DataTable } from "@/components/common/data-table";
+import { measuresController } from "@/config/const";
 
 const MeasureListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -36,6 +37,7 @@ const MeasureListContainer = () => {
               data={measures!}
               searchName="unit"
               fileName="Measure"
+              exportDataFields={measuresController}
             />
           </div>
         </>

@@ -9,6 +9,7 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllEmployee } from "@/data/employee";
+import { employeeController } from "@/config/const";
 
 const EmployeeListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -38,6 +39,7 @@ const EmployeeListContainer = () => {
               data={employees!}
               searchName="employee_id"
               fileName="Employee"
+              exportDataFields={employeeController}
             />
           </div>
         </>

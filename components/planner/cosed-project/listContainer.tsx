@@ -16,6 +16,11 @@ import {
   getAllResourceWorkOrderByStatus,
 } from "@/data/resource-work-order";
 import { useState, useEffect } from "react";
+import {
+  projectController,
+  resourceController,
+  workOrderController,
+} from "@/config/const";
 
 const ClosedProject = () => {
   const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
@@ -88,6 +93,7 @@ const ClosedProject = () => {
                   data={projectList!}
                   searchName="project_id"
                   fileName="Project"
+                  exportDataFields={projectController}
                 />
               </div>
             </>
@@ -108,6 +114,7 @@ const ClosedProject = () => {
                   data={workOrderList!}
                   searchName="work_order_id"
                   fileName="WorkOrder"
+                  exportDataFields={workOrderController}
                 />
               </div>
             </>
@@ -128,6 +135,7 @@ const ClosedProject = () => {
                   data={resourceWorkOrderList!}
                   searchName="resourceId"
                   fileName="ResourceWorkOrder"
+                  exportDataFields={resourceController}
                 />
               </div>
             </>

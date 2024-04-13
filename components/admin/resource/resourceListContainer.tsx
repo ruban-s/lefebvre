@@ -9,6 +9,7 @@ import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { columns } from "./column";
 import { getAllResources } from "@/data/resources";
+import { resourceAdmincontroller } from "@/config/const";
 
 const ResourceListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -38,6 +39,7 @@ const ResourceListContainer = () => {
               data={indirects!}
               searchName="resource_id"
               fileName="Resourece"
+              exportDataFields={resourceAdmincontroller}
             />
           </div>
         </>

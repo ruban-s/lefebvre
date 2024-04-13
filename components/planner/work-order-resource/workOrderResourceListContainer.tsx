@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
 import { workOrderListcolumns } from "./column";
 import { getAllResourceWorkOrder } from "@/data/resource-work-order";
+import { resourceController } from "@/config/const";
 
 const WorkOrderResourceListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -37,6 +38,7 @@ const WorkOrderResourceListContainer = () => {
               data={breaks!}
               searchName="resourceId"
               fileName="ResourceWorkOrder"
+              exportDataFields={resourceController}
             />
           </div>
         </>

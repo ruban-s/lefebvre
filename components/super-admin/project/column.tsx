@@ -311,14 +311,7 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
-                  <SelectItem value="Unreleased" className="text-red-500">
-                    Unreleased
-                  </SelectItem>
-                  <SelectItem value="Released" className="text-green-500">
-                    Released
-                  </SelectItem>
                   <SelectItem value="Closed">Closed</SelectItem>
-
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
                   </SelectItem>
