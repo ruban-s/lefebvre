@@ -33,6 +33,7 @@ const EmployeeListContainer = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["employee"],
     queryFn: async () => {
+      const data = await getAllEmployee();
       var employee = JSON.parse(data.data) as EmployeeData[];
       employee.map((info, index) => {
         if (info.current_shift_id) {
@@ -42,7 +43,6 @@ const EmployeeListContainer = () => {
           setPreviousShift([...previousShift, info]);
         }
       });
-
       return JSON.parse(data.data) as EmployeeData[];
     },
   });
@@ -251,7 +251,7 @@ const EmployeeListContainer = () => {
                 <p className="text-lg text-white">No Shift</p>
               </div>
               <div className=" w-full h-[730px] border-1 border border-slate-400 p-2">
-                {employees?.map((info: any, index) => {
+                {employees?.map((info, index) => {
                   if (!info.current_shift_id && !info.previous_shift_id) {
                     return (
                       <div
