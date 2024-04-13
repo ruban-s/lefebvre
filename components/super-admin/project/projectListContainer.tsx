@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
 import { projectColumns } from "./column";
 import { getAllProject } from "@/data/projects";
+import { projectController } from "@/config/const";
 
 const ProjectListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -38,6 +39,7 @@ const ProjectListContainer = () => {
               data={breaks!}
               searchName="project_id"
               fileName="Project"
+              exportDataFields={projectController}
             />
           </div>
         </>

@@ -168,7 +168,7 @@ export const SuperAdminTabs: TabData[] = [
 
 export const attendanceTypeController = [
   "createdDate",
-  "id",
+
   "name",
   "status",
   "type",
@@ -177,7 +177,7 @@ export const attendanceTypeController = [
 export const breakController = [
   "createdDate",
   "end_time",
-  "id",
+
   "name",
   "shift_id",
   "shift_name",
@@ -194,7 +194,7 @@ export const employeeController = [
   "employee_id",
   "first_name",
   "gender",
-  "id",
+
   "last_name",
   "mobile",
   "role_name",
@@ -205,7 +205,7 @@ export const employeeController = [
 export const indirectController = [
   "createdDate",
   "description",
-  "id",
+
   "indirectCode",
   "name",
   "status",
@@ -218,7 +218,7 @@ export const projectController = [
   "description",
   "end_date",
   "estimateHour",
-  "id",
+
   "planner_remark",
   "production_remark",
   "project_id",
@@ -238,7 +238,7 @@ export const resourceController = [
   "endDate",
   "estimated_hour",
   "forman",
-  "id",
+
   "prepared_quantity",
   "project_id",
   "quantity_unit",
@@ -254,7 +254,7 @@ export const resourceController = [
 export const shiftController = [
   "createdDate",
   "employee_id",
-  "id",
+
   "shift_end_time",
   "shift_name",
   "shift_start_time",
@@ -265,7 +265,7 @@ export const shiftController = [
 
 export const measuresController = [
   "createdDate",
-  "id",
+
   "status",
   "unit",
   "updatedBy",
@@ -275,7 +275,7 @@ export const measuresController = [
 export const userController = [
   "createdDate",
   "email",
-  "id",
+
   "mobile",
   "name",
   "password",
@@ -292,7 +292,7 @@ export const workOrderController = [
   "description",
   "end_date",
   "estimateHour",
-  "id",
+
   "planner_remark",
   "production_remark",
   "project_id",
@@ -306,7 +306,7 @@ export const workOrderController = [
 export const resourceAdmincontroller = [
   "attachment",
   "createdDate",
-  "id:",
+
   "res_description",
   "res_note",
   "res_status",
