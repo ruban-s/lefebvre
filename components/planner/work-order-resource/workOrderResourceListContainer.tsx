@@ -13,7 +13,12 @@ const WorkOrderResourceListContainer = () => {
     queryKey: ["resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
-      return JSON.parse(data.data) as ResourceWorkOdderData[];
+      const newData = JSON.parse(data.data) as ResourceWorkOdderData[];
+      var filterClosedData = newData.filter((info) => info.status !== "Closed");
+      var filterData = filterClosedData.filter(
+        (info) => info.status !== "Canceled"
+      );
+      return filterData;
     },
   });
   const breaks = data;

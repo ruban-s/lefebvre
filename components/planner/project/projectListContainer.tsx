@@ -14,7 +14,12 @@ const ProjectListContainer = () => {
     queryKey: ["projects"],
     queryFn: async () => {
       const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
+      const newData = JSON.parse(data.data) as ProjectData[];
+      var filterClosedData = newData.filter((info) => info.status !== "Closed");
+      var filterData = filterClosedData.filter(
+        (info) => info.status !== "Canceled"
+      );
+      return filterData;
     },
   });
   const breaks = data;

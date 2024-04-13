@@ -32,7 +32,7 @@ const ClosedProject = () => {
   const { data: workOrders, error: workOrderError } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
-      const data = await getAllWorkOrder();
+      const data: any = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
       setWorkOrders(
         newWorkOrderData.filter((info, index) => info.status === "Closed")

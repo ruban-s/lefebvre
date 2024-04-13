@@ -17,7 +17,12 @@ const WorkOrderListContainer = () => {
     queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
-      return JSON.parse(data.data) as WorkOrderData[];
+      const newData = JSON.parse(data.data) as WorkOrderData[];
+      var filterClosedData = newData.filter((info) => info.status !== "Closed");
+      var filterData = filterClosedData.filter(
+        (info) => info.status !== "Canceled"
+      );
+      return filterData;
     },
   });
   const breaks = data;
