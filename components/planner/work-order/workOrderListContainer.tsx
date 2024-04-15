@@ -1,35 +1,35 @@
 "use client";
 
 import Loading from "@/loading";
-import React, { useEffect, useState } from "react";
-import { getAllBreaks } from "@/data/break";
 import { WorkOrderData, UserData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import CommanCardContainer from "../../common/common-cart";
 import { DataTable } from "../../common/data-table";
 import { workOrderColumns } from "./column";
 import { getAllWorkOrder } from "@/data/work-order";
-import ProjectListCombo from "../../common/projectListCombo";
 import { workOrderController } from "@/config/const";
+import { useEffect, useState } from "react";
 
 const WorkOrderListContainer = () => {
-  const {
-    data: workOrder,
-    isLoading,
-    isError,
-  } = useQuery({
+  const [workOrderList, setWorkOrder] = useState<WorkOrderData[]>([]);
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newData = JSON.parse(data.data) as WorkOrderData[];
-      var filterClosedData = newData.filter((info) => info.status !== "Closed");
-      var filterData = filterClosedData.filter(
-        (info) => info.status !== "Canceled"
-      );
-      return filterData;
+      return newData;
     },
   });
-
+  const workOrder = data;
+  useEffect(() => {
+    var filterClosedData = data?.filter((info) => info.status !== "Closed");
+    var filterData = filterClosedData?.filter(
+      (info) => info.status !== "Canceled"
+    );
+    if (filterData) {
+      setWorkOrder(filterData);
+    }
+  }, [workOrder]);
   if (isError) {
     return <p>error</p>;
   }
@@ -47,7 +47,7 @@ const WorkOrderListContainer = () => {
           <div className="w-full  ">
             <DataTable
               columns={workOrderColumns}
-              data={workOrder!}
+              data={workOrderList!}
               searchName="work_order_id"
               fileName="WorkOrder"
               exportDataFields={workOrderController}

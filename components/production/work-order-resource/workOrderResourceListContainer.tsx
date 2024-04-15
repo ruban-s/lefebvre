@@ -7,21 +7,31 @@ import { DataTable } from "../../common/data-table";
 import { workOrderListcolumns } from "./column";
 import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 import { resourceController } from "@/config/const";
+import { useEffect, useState } from "react";
 
 const WorkOrderResourceListContainer = () => {
+  const [workOrderResourceList, setWorkOrderResources] = useState<
+    ResourceWorkOdderData[]
+  >([]);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newData = JSON.parse(data.data) as ResourceWorkOdderData[];
-      var filterClosedData = newData.filter((info) => info.status !== "Closed");
-      var filterData = filterClosedData.filter(
-        (info) => info.status !== "Canceled"
-      );
-      return filterData;
+      return newData;
     },
   });
-  const breaks = data;
+  const workOrderResource = data;
+  useEffect(() => {
+    var filterClosedData = data?.filter((info) => info.status !== "Closed");
+    var filterData = filterClosedData?.filter(
+      (info) => info.status !== "Canceled"
+    );
+    if (filterData) {
+      setWorkOrderResources(filterData);
+    }
+  }, [workOrderResource]);
 
   if (isError) {
     return <p>error</p>;
@@ -40,7 +50,7 @@ const WorkOrderResourceListContainer = () => {
           <div className="w-full  ">
             <DataTable
               columns={workOrderListcolumns}
-              data={breaks!}
+              data={workOrderResourceList!}
               searchName="resourceId"
               fileName="ResourceWorkOrder"
               exportDataFields={resourceController}

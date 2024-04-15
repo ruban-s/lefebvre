@@ -10,20 +10,26 @@ import { getAllProject } from "@/data/projects";
 import { projectController } from "@/config/const";
 
 const ProjectListContainer = () => {
+  const [productList, setProducts] = useState<ProjectData[]>([]);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newData = JSON.parse(data.data) as ProjectData[];
-      var filterClosedData = newData.filter((info) => info.status !== "Closed");
-      var filterData = filterClosedData.filter(
-        (info) => info.status !== "Canceled"
-      );
-      return filterData;
+      return newData;
     },
   });
-  const breaks = data;
-
+  const projects = data;
+  useEffect(() => {
+    var filterClosedData = data?.filter((info) => info.status !== "Closed");
+    var filterData = filterClosedData?.filter(
+      (info) => info.status !== "Canceled"
+    );
+    if (filterData) {
+      setProducts(filterData);
+    }
+  }, [projects]);
   if (isError) {
     return <p>error</p>;
   }
@@ -41,7 +47,7 @@ const ProjectListContainer = () => {
           <div className="w-full  ">
             <DataTable
               columns={projectColumns}
-              data={breaks!}
+              data={productList!}
               searchName="project_id"
               fileName="Project"
               exportDataFields={projectController}

@@ -13,19 +13,25 @@ import ProjectListCombo from "../../common/projectListCombo";
 import { workOrderController } from "@/config/const";
 
 const WorkOrderListContainer = () => {
+  const [workOrderList, setWorkOrder] = useState<WorkOrderData[]>([]);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newData = JSON.parse(data.data) as WorkOrderData[];
-      var filterClosedData = newData.filter((info) => info.status !== "Closed");
-      var filterData = filterClosedData.filter(
-        (info) => info.status !== "Canceled"
-      );
-      return filterData;
+      return newData;
     },
   });
-  const breaks = data;
+  const workOrder = data;
+  useEffect(() => {
+    var filterClosedData = data?.filter((info) => info.status !== "Closed");
+    var filterData = filterClosedData?.filter(
+      (info) => info.status !== "Canceled"
+    );
+    if (filterData) {
+      setWorkOrder(filterData);
+    }
+  }, [workOrder]);
 
   if (isError) {
     return <p>error</p>;
@@ -44,7 +50,7 @@ const WorkOrderListContainer = () => {
           <div className="w-full  ">
             <DataTable
               columns={workOrderColumns}
-              data={breaks!}
+              data={workOrderList!}
               searchName="work_order_id"
               fileName="WorkOrder"
               exportDataFields={workOrderController}
