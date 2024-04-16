@@ -114,7 +114,7 @@ export const columns: ColumnDef<ShiftData>[] = [
   },
   {
     accessorKey: "shift_end_time",
-    header: "Shift Start Time",
+    header: "Shift End Time",
   },
 
   {
