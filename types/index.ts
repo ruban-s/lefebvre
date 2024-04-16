@@ -145,6 +145,7 @@ export interface ResourceWorkOdderData {
   prepared_quantity: string;
   project_id: string;
   quantity_unit: string;
+  production_remark: string;
   remark: string;
   required_quantity: string;
   resourceId: string;
