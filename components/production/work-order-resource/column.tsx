@@ -2,12 +2,17 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ProjectData, ResourceWorkOdderData, WorkOrderData } from "@/types";
+import {
+  ProjectData,
+  ResourceWorkOdderData,
+  UserData,
+  WorkOrderData,
+} from "@/types";
 import { useResourceWorkOrderStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
-import { IoIosWarning } from "react-icons/io";
+import { IoIosWarning, IoMdClose } from "react-icons/io";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteResourceWorkOrder,
@@ -17,7 +22,7 @@ import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent } from "@/components/ui/popover";
-import { PopoverTrigger } from "@radix-ui/react-popover";
+import { PopoverClose, PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import {
   Dialog,
@@ -47,6 +52,15 @@ import {
 import { getAllWorkOrder } from "@/data/work-order";
 import { getAllProject } from "@/data/projects";
 import StatusBadge from "@/components/common/status-badge";
+import { Textarea } from "@/components/ui/textarea";
+import { getAllUser } from "@/data/user";
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -153,25 +167,53 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
 
   {
     accessorKey: "remark",
-    header: "Remark",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.remark.substring(0, 30)}{" "}
-        {row.original.remark.length > 30 && "..."}
-        {row.original.remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+    header: "Planner Remark",
+    cell: ({ row }) =>
+      row.original.remark && (
+        <div className="flex justify-start items-center">
+          {row.original.remark.substring(0, 30)}{" "}
+          {row.original.remark.length > 30 && "..."}
+          {row.original.remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Remark:</p>
-              <p className="text-sm text-neutral-500">{row.original.remark}</p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Planner Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
+  },
+  {
+    accessorKey: "production_remark",
+    header: "Production Remark",
+    cell: ({ row }) =>
+      row.original.production_remark && (
+        <div className="flex justify-start items-center">
+          {row.original.production_remark.substring(0, 30)}{" "}
+          {row.original.production_remark.length > 30 && "..."}
+          {row.original.production_remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
+
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Production Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.production_remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
   },
 
   {
@@ -188,6 +230,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
 ];
 export const UpdateStatus = ({ row }: any) => {
   const data: ResourceWorkOdderData = row.original as ResourceWorkOdderData;
+  const [foremans, setFormans] = useState<UserData[]>([]);
   const ref = useRef<HTMLButtonElement>(null);
 
   const payLoad = {
@@ -196,6 +239,7 @@ export const UpdateStatus = ({ row }: any) => {
     bench_mark_unit: data.bench_mark_unit,
     remark: data.remark,
     required_quantity: data.required_quantity,
+    production_remark: data.production_remark,
     sqNumber: data.sqNumber,
     status: data.status,
     ballance_hour: data.ballance_hour,
@@ -203,7 +247,7 @@ export const UpdateStatus = ({ row }: any) => {
     employee_id: data.employee_id,
     endDate: data.endDate,
     actual_hour: data.actual_hour,
-    forman: data.forman,
+    forman: foremans.length > 1 ? `${foremans[0].id ?? 0}` : "0",
     project_id: data.project_id,
     resourceId: data.resourceId,
     prepared_quantity: data.prepared_quantity,
@@ -222,8 +266,19 @@ export const UpdateStatus = ({ row }: any) => {
       return deleteCode;
     },
     onSuccess: (value) => {
-      if (value?.status || value?.message === `For input string: ""`) {
+      console.log(value);
+      if (
+        value?.status ||
+        value?.message === `For input string: ""` ||
+        value?.message === `For input string: "[]"`
+      ) {
         if (value?.message === `For input string: ""`) {
+          toast.success(`Data updated successfully!`, {
+            description: `Data updated successfully!`,
+            position: "top-right",
+            dismissible: true,
+          });
+        } else if (value?.message === `For input string: ""`) {
           toast.success(`Data updated successfully!`, {
             description: `Data updated successfully!`,
             position: "top-right",
@@ -255,11 +310,7 @@ export const UpdateStatus = ({ row }: any) => {
       });
     },
   });
-  const {
-    data: workOrders,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: workOrders } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
@@ -271,6 +322,13 @@ export const UpdateStatus = ({ row }: any) => {
     queryFn: async () => {
       const data = await getAllProject();
       return JSON.parse(data.data) as ProjectData[];
+    },
+  });
+  const { data: user } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const data = await getAllUser();
+      return JSON.parse(data.data) as UserData[];
     },
   });
   return (
@@ -356,6 +414,105 @@ export const UpdateStatus = ({ row }: any) => {
               <div className="mb-1">Remark</div>
               <Input disabled value={data.remark} />
             </div>
+            <div className="items-center gap-4">
+              <div className="mb-1">Foremans</div>
+              <Popover>
+                {foremans.length < 1 && (
+                  <PopoverTrigger asChild className="w-full col-span-2">
+                    <div className="w-full border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
+                      Select Foremans
+                    </div>
+                  </PopoverTrigger>
+                )}
+
+                {foremans.length > 0 && (
+                  <PopoverTrigger asChild className="w-full col-span-2">
+                    <div className="w-full grid  grid-cols-4 mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
+                      {foremans.map((info, index) => {
+                        return (
+                          <Badge
+                            key={index}
+                            className="rounded-sm bg-neutral-400 ml-1 flex justify-between px-1">
+                            {info.username}
+                            <IoMdClose
+                              className="ml-1 cursor-pointer "
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFormans((formans) =>
+                                  formans.filter(
+                                    (data) => data.username !== info.username
+                                  )
+                                );
+                              }}
+                            />
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  </PopoverTrigger>
+                )}
+
+                {/* <Button
+                  variant="secondary"
+                  role="combobox"
+                  className="w-auto justify-between"
+                  onClick={() => setOpen(!isOpen)}>
+                  {!isOpen ? <RxCaretSort /> : <IoCloseSharp />}
+                </Button> */}
+                <PopoverContent>
+                  <Command>
+                    <CommandInput
+                      placeholder="Search Foreman..."
+                      className="h-9"
+                    />
+                    <CommandEmpty>No Foreman found.</CommandEmpty>
+                    <CommandList onSelect={() => alert("hi")}>
+                      {user?.map((info, index) => {
+                        if (info.role_name === "Foreman")
+                          return (
+                            <CommandItem
+                              className="cursor-pointer"
+                              key={index}
+                              onSelect={(value) => {
+                                var isSelectedForman = foremans.filter(
+                                  (formans) =>
+                                    formans.username === info.username
+                                );
+
+                                if (isSelectedForman.length > 0) {
+                                  return;
+                                }
+                                var filterForeman: UserData[] = user.filter(
+                                  (data) => data.username === info.username
+                                );
+                                if (filterForeman.length > 0) {
+                                  setFormans((formans) => [
+                                    ...formans,
+                                    filterForeman[0],
+                                  ]);
+                                }
+                              }}>
+                              <PopoverClose>
+                                <p className="text-sm">{info.username}</p>
+                              </PopoverClose>
+                            </CommandItem>
+                          );
+                      })}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="col-span-2">
+              <p> Production Remarks:</p>
+              <Textarea
+                defaultValue={payLoad.production_remark}
+                onChange={(value) => {
+                  payLoad.production_remark = value.target.value;
+                }}
+              />
+            </div>
 
             <div className="items-center gap-4">
               <div className="mb-1">Status</div>
@@ -388,7 +545,9 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  console.log(payLoad);
+                  if (foremans.length > 0) {
+                    payLoad.forman = foremans[0].id.toString();
+                  }
                   updateItem.mutate(payLoad);
                 }}>
                 Save

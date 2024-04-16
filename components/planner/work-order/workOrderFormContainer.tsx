@@ -112,6 +112,7 @@ const WorkOrderFormContainer = () => {
       start_date: "",
       status: "Unreleased",
       description: "",
+      production_remark: "",
       images: [],
     },
   });
@@ -125,6 +126,8 @@ const WorkOrderFormContainer = () => {
       form.setValue("end_date", workOrder?.end_date!);
       form.setValue("status", workOrder?.status!);
       form.setValue("images", workOrder?.images!);
+      form.setValue("production_remark", workOrder?.production_remark!);
+
       form.setValue(
         "work_order_id",
         workOrder?.project_id! + "-" + workOrder?.work_order_id!

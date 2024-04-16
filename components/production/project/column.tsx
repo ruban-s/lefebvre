@@ -128,6 +128,7 @@ export const UpdateStatus = ({ row }: any) => {
     description: data.description,
     images: data.images,
     planner_remark: data.planner_remark,
+    production_remark: data.production_remark,
     start_date: data.start_date,
     end_date: data.end_date,
     status: data.status,
@@ -165,6 +166,7 @@ export const UpdateStatus = ({ row }: any) => {
             project_id: workOrderData.project_id,
             start_date: workOrderData.start_date,
             end_date: workOrderData.end_date,
+            production_remark: value.production_remark,
             status: value.status,
           };
           status === "Released" &&
@@ -287,6 +289,15 @@ export const UpdateStatus = ({ row }: any) => {
               value={data.planner_remark}
               isInput={false}
             />
+            <div className="col-span-2">
+              <p> Production Remarks:</p>
+              <Textarea
+                defaultValue={payLoad.production_remark}
+                onChange={(value) => {
+                  payLoad.production_remark = value.target.value;
+                }}
+              />
+            </div>
             <div className=" col-span-2">
               <div>Start Date - End Date</div>
               <DatePickerWithRange
@@ -408,26 +419,52 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "planner_remark",
     header: "Planner Remarks",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+    cell: ({ row }) =>
+      row.original.planner_remark && (
+        <div className="flex justify-start items-center">
+          {row.original.planner_remark.substring(0, 30)}{" "}
+          {row.original.planner_remark.length > 30 && "..."}
+          {row.original.planner_remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Planner Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.planner_remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
+  },
+  {
+    accessorKey: "production_remark",
+    header: "Production Remarks",
+    cell: ({ row }) =>
+      row.original.production_remark && (
+        <div className="flex justify-start items-center">
+          {row.original.production_remark.substring(0, 30)}{" "}
+          {row.original.production_remark.length > 30 && "..."}
+          {row.original.production_remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
+
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Production Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.production_remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
   },
   {
     accessorKey: "images",

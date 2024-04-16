@@ -94,6 +94,7 @@ const ProjectFormContainer = () => {
       status: "Unreleased",
       customer_name: "",
       description: "",
+      production_remark: "",
       images: [],
     },
   });
@@ -107,6 +108,7 @@ const ProjectFormContainer = () => {
       form.setValue("customer_name", project?.customer_name!);
       form.setValue("description", project?.description!);
       form.setValue("images", project?.images!);
+      form.setValue("production_remark", project?.production_remark!);
       setDateRange({
         from: new Date(project?.start_date!),
         to: new Date(project?.end_date!),

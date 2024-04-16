@@ -48,6 +48,7 @@ import {
   getAllResourceWorkOrder,
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
+import { Textarea } from "@/components/ui/textarea";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -179,27 +180,53 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   },
   {
     accessorKey: "planner_remark",
-    header: "Remarks",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+    header: "Planer Remarks",
+    cell: ({ row }) =>
+      row.original.planner_remark && (
+        <div className="flex justify-start items-center">
+          {row.original.planner_remark.substring(0, 30)}{" "}
+          {row.original.planner_remark.length > 30 && "..."}
+          {row.original.planner_remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Planner Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.planner_remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
+  },
+  {
+    accessorKey: "production_remark",
+    header: "Production Remarks",
+    cell: ({ row }) =>
+      row.original.production_remark && (
+        <div className="flex justify-start items-center">
+          {row.original.production_remark.substring(0, 30)}{" "}
+          {row.original.production_remark.length > 30 && "..."}
+          {row.original.production_remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
+
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Production Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.production_remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
   },
   {
     accessorKey: "images",
@@ -259,6 +286,7 @@ export const UpdateStatus = ({ row }: any) => {
     work_order_id: data.work_order_id,
     description: data.description,
     images: data.images,
+    production_remark: data.production_remark,
     planner_remark: data.planner_remark,
     project_id: data.project_id,
     start_date: data.start_date,
@@ -405,6 +433,15 @@ export const UpdateStatus = ({ row }: any) => {
               value={data.planner_remark}
               isInput={false}
             />
+            <div className="col-span-2">
+              <p> Production Remarks:</p>
+              <Textarea
+                defaultValue={payLoad.production_remark}
+                onChange={(value) => {
+                  payLoad.production_remark = value.target.value;
+                }}
+              />
+            </div>
             <div className=" col-span-2">
               <div>Start Date - End Date</div>
               <DatePickerWithRange
@@ -449,7 +486,6 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  console.log(payLoad);
                   updateItem.mutate(payLoad);
                 }}>
                 Save

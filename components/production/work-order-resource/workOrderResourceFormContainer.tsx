@@ -155,6 +155,7 @@ const WorkOrderResourceFormContainer = () => {
         actual_hour: `${workOrder.actual_hour}` || "-",
         bench_mark_measure: `${workOrder.bench_mark_measure}` || "-",
         prepared_quantity: `${workOrder.prepared_quantity}` || "-",
+        production_remark: `${workOrder.production_remark}` || "-",
         remark: `${workOrder.remark}` || "-",
         sqNumber: `${workOrder.sqNumber}` || "-",
         project_id: `${workOrder.project_id}` || "-",
