@@ -1,4 +1,3 @@
-"use client";
 
 import LayoutContainer from "@/components/common/layout-container";
 import MeasureFormContainer from "@/components/admin/measures/measureFormContainer";

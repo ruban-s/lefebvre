@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import LayoutContainer from "@/components/common/layout-container";
 import UserListContainer from "@/components/admin/user/userListContainer";

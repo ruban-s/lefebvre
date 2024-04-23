@@ -1,5 +1,3 @@
-"use client";
-
 import AttendanceFormContainer from "@/components/admin/attendance/attendanceFormContainer";
 import AttendanceListContainer from "@/components/admin/attendance/attendanceListContainer";
 import LayoutContainer from "@/components/common/layout-container";

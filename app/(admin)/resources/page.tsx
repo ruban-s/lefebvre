@@ -1,5 +1,3 @@
-"use client";
-
 import LayoutContainer from "@/components/common/layout-container";
 import ResourceFormContainer from "@/components/admin/resource/resourceFormContainer";
 import ResourceListContainer from "@/components/admin/resource/resourceListContainer";

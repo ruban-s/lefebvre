@@ -216,7 +216,7 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                             var selectedShift = shift?.filter(
                               (info) => info.shift_name === value
                             );
-                            if (!selectedShift || selectedShift!.length < 1)
+                            if (!selectedShift || selectedShift.length < 1)
                               return;
                             form.setValue("shift_name", value);
                             form.setValue(
