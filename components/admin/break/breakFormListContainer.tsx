@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import Loading from "@/loading";
 import React, { use, useEffect, useState } from "react";
@@ -23,21 +23,21 @@ const BreakFormListContainer = (props: BreakFormListContainerProps) => {
 
   const breaks = data;
 
-  if (isLoading) {
+  if (isError) {
     return (
-      <div className="w-full min-h-[500px] justify-center items-center flex">
-        <Loading />
+      <div>
+        <p>something went wrong</p>
       </div>
     );
   }
 
-  if (isError) {
-    return <div>Error fetching breaks. Please try again later.</div>;
-  }
-
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
-      {
+      {isLoading ? (
+        <div className="w-full min-h-[500px] justify-center items-center flex">
+          <Loading />
+        </div>
+      ) : (
         <>
           <div className=" w-full h-auto ">
             <p className="text-lg font-semibold pl-4 pt-4">{"Breaks"}</p>
@@ -57,7 +57,7 @@ const BreakFormListContainer = (props: BreakFormListContainerProps) => {
             })}
           </div> */}
         </>
-      }
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import Loading from "@/loading";
 import React, { useEffect, useState } from "react";
@@ -13,7 +13,6 @@ import { resourceAdmincontroller } from "@/config/const";
 
 const ResourceListContainer = () => {
   const { data, isLoading, isError } = useQuery({
-    staleTime: 1,
     queryKey: ["resource"],
     queryFn: async () => {
       const data = await getAllResources();
@@ -22,12 +21,6 @@ const ResourceListContainer = () => {
   });
   const indirects = data;
 
-  if (isError)
-    return (
-      <div className="w-full h-full flex justify-center items-center ">
-        demo
-      </div>
-    );
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (

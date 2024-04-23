@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 import Loading from "@/loading";
 import { AttendanceTypeData } from "@/types";
 import { useQuery } from "@tanstack/react-query";

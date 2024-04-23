@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import Loading from "@/loading";
 import React, { useEffect, useState } from "react";
@@ -20,7 +20,6 @@ const EmployeeListContainer = () => {
     },
   });
   const employees = data;
-  console.log(employees);
 
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
@@ -35,16 +34,13 @@ const EmployeeListContainer = () => {
           </div>
 
           <div className="w-full ">
-            {/* <p>demo</p> */}
-            {employees && (
-              <DataTable
-                columns={columns}
-                data={employees!}
-                searchName="employee_id"
-                fileName="Employee"
-                exportDataFields={employeeController}
-              />
-            )}
+            <DataTable
+              columns={columns}
+              data={employees!}
+              searchName="employee_id"
+              fileName="Employee"
+              exportDataFields={employeeController}
+            />
           </div>
         </>
       )}
