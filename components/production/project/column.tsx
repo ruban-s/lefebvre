@@ -39,7 +39,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
@@ -115,12 +115,25 @@ export const CellFunction = ({ row }: any) => {
 };
 export const UpdateStatus = ({ row }: any) => {
   const data = row.original;
+  console.log(data.start_date);
+  console.log(data.end_date);
+
   const ref = useRef<HTMLButtonElement>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(data.start_date),
-    to: new Date(data.end_date),
+    from: data.start_date,
+    to: data.end_date,
   });
+  console.log(dateRange);
 
+  useEffect(() => {
+    setDateRange({
+      from: data.start_date,
+      to: data.end_dat,
+    });
+    console.log(dateRange);
+
+    console.log("hi");
+  }, []);
   const payLoad = {
     id: data.id,
     project_id: data.project_id,
@@ -300,12 +313,19 @@ export const UpdateStatus = ({ row }: any) => {
             </div>
             <div className=" col-span-2">
               <div>Start Date - End Date</div>
+              {JSON.stringify({
+                from: payLoad.start_date,
+                to: payLoad.end_date,
+              })}
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
                   payLoad.start_date = format(value?.from!, "dd-LL-y");
                   payLoad.end_date = format(value?.to!, "dd-LL-y");
                 }}
-                selectedData={dateRange!}
+                selectedData={{
+                  from: payLoad.start_date,
+                  to: payLoad.end_date,
+                }}
                 disabled={[]}
               />
             </div>

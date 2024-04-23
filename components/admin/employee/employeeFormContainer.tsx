@@ -63,6 +63,7 @@ const EmployeeFormContainer = () => {
   });
   const creatUser = useMutation({
     mutationFn: async (value: any) => {
+      console.log({ id: employee?.id, ...value });
       const breake = employee
         ? await updateEmployee({ id: employee?.id, ...value })
         : await createEmployee(value);

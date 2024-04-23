@@ -116,7 +116,8 @@ export const columns: ColumnDef<EmployeeData>[] = [
     header: "Designation",
     cell: ({ row }) => (
       <Badge className={`cursor-pointer rounded-md bg-neutral-500 text-white`}>
-        {row.original.designation_id.toUpperCase()}
+        {row.original.designation_id &&
+          row.original.designation_id.toUpperCase()}
       </Badge>
     ),
   },

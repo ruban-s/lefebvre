@@ -216,11 +216,16 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
                             var selectedShift = shift?.filter(
                               (info) => info.shift_name === value
                             );
-                            if (!selectedShift) return;
+                            if (!selectedShift || selectedShift!.length < 1)
+                              return;
                             form.setValue("shift_name", value);
                             form.setValue(
                               "shift_id",
-                              `${selectedShift![0].id}`
+                              `${
+                                (selectedShift![0].id &&
+                                  selectedShift![0].id) ??
+                                0
+                              }`
                             );
                           }}>
                           <SelectTrigger>
