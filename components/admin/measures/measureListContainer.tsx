@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import Loading from "@/loading";
 import React, { useEffect, useState } from "react";
