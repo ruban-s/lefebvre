@@ -209,10 +209,10 @@ const WorkOrderResourceFormContainer = () => {
     form.setValue("work_order_id", value.work_order_id);
     setWorkOrder(value);
   };
-  const checkValue = (value: any) => {
-    var newData = fields.filter((info: any) => info.resourceId === value);
-    return newData.length > 0 ? true : false;
-  };
+  // const checkValue = (value: any) => {
+  //   var newData = fields.filter((info: any) => info.resourceId === value);
+  //   return newData.length > 0 ? true : false;
+  // };
 
   return (
     <div className="w-full h-auto bg-white  shadow-sm ring-1 ring-theme rounded-sm">
