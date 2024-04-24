@@ -210,7 +210,7 @@ const WorkOrderResourceFormContainer = () => {
     setWorkOrder(value);
   };
   const checkValue = (value: any) => {
-    var newData = fields.filter((info) => info.resourceId === value);
+    var newData = fields.filter((info: any) => info.resourceId === value);
     return newData.length > 0 ? true : false;
   };
 
@@ -335,12 +335,12 @@ const WorkOrderResourceFormContainer = () => {
                       <p className=" w-full text-sm ml-4 mb-1">
                         Selected Resource Ids
                       </p>
-                      {fields.map((info, index) => {
+                      {fields.map((info: any, index) => {
                         return (
                           <Badge
                             key={index}
                             className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
-                            {index + 1} | {info.resourceId}
+                            {index + 1} | {info["resourceId"]}
                             <div className=" bg-white rounded-full text-red-500 ml-2">
                               <IoMdCloseCircle
                                 onClick={(e) => {
@@ -424,17 +424,17 @@ const WorkOrderResourceFormContainer = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {fields.map((info, index) => {
+                          {fields.map((info: any, index) => {
                             return (
                               <tr
                                 key={index}
                                 className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="px-6 w-[150px] py-4 text-sm border border-slate-300">
-                                  {info.resourceId}
+                                  {info["resourceId"]}
                                 </td>
                                 <td className=" w-[150px] text-sm border border-slate-300">
                                   <FormField
-                                    key={info.sqNumber}
+                                    key={info["sqNumber"]}
                                     control={form.control}
                                     name={`resources.${index}.sqNumber`}
                                     render={({ field }) => {
