@@ -430,10 +430,10 @@ export const UpdateStatus = ({ row }: any) => {
                     <div className="w-full flex flex-row flex-wrap mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
                       {foremans.map((info, index) => {
                         return (
-                          <div className="bg-neutral-400 flex flex-row justify-center items-center  rounded-sm shadow-sm">
-                            <div
-                              key={index}
-                              className="rounded-sm w-auto px-2 text-white ml-1 flex justify-between ">
+                          <div
+                            key={index}
+                            className="bg-neutral-400 flex flex-row justify-center items-center  rounded-sm shadow-sm">
+                            <div className="rounded-sm w-auto px-2 text-white ml-1 flex justify-between ">
                               {info.username}
                             </div>
                             <IoMdClose
