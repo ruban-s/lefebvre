@@ -406,17 +406,16 @@ export const UpdateStatus = ({ row }: any) => {
               value={data.planner_remark}
               isInput={false}
             />
-            <div className=" col-span-2">
-              <div>Start Date - End Date</div>
-              <DatePickerWithRange
-                onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "dd-LL-y");
-                  payLoad.end_date = format(value?.to!, "dd-LL-y");
-                }}
-                selectedData={dateRange!}
-                disabled={[]}
-              />
-            </div>
+            <ViewTabField
+              heading="Start Date"
+              value={data.start_date}
+              isInput={true}
+            />
+            <ViewTabField
+              heading="End Date"
+              value={data.end_date}
+              isInput={true}
+            />
             <div className=" col-span-2">
               <div>Status</div>
 

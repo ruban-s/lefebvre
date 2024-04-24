@@ -1,3 +1,4 @@
+/* trunk-ignore-all(prettier) */
 import { Badge } from "@/components/ui/badge";
 
 const StatusBadge = ({ row }: { row: any }) => {

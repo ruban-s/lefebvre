@@ -107,7 +107,15 @@ export const ResourceWorkOrderSchema = z.object({
   employee_id: z.string().optional().default("--"),
   endDate: z.string().optional().default("--"),
   actual_hour: z.string().optional().default("--"),
-  forman: z.string().optional().default("--"),
+  forman: z.array(z.string().optional()).default([]),
+  formanAndAttachment: z
+    .array(
+      z.object({
+        attachment: z.array(z.string().optional()).optional(),
+        forman: z.string(),
+      })
+    )
+    .default([]),
   project_id: z.string().optional().default("--"),
   resourceId: z.string().optional().default("--"),
   prepared_quantity: z.string().optional().default("--"),

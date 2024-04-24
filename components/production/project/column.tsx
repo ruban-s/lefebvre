@@ -115,24 +115,19 @@ export const CellFunction = ({ row }: any) => {
 };
 export const UpdateStatus = ({ row }: any) => {
   const data = row.original;
-  console.log(data.start_date);
-  console.log(data.end_date);
-
   const ref = useRef<HTMLButtonElement>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: data.start_date,
     to: data.end_date,
   });
-  console.log(dateRange);
 
   useEffect(() => {
+    var startDate = data?.start_date!.toString().split("-");
+    var endDate = data?.end_date!.toString().split("-");
     setDateRange({
-      from: data.start_date,
-      to: data.end_dat,
+      from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+      to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
     });
-    console.log(dateRange);
-
-    console.log("hi");
   }, []);
   const payLoad = {
     id: data.id,
@@ -222,7 +217,6 @@ export const UpdateStatus = ({ row }: any) => {
       return deleteCode;
     },
     onSuccess: (value) => {
-      console.log(value);
       if (value?.status) {
         toast.success(`${value.message}`, {
           description: `${value.message}`,
@@ -313,19 +307,13 @@ export const UpdateStatus = ({ row }: any) => {
             </div>
             <div className=" col-span-2">
               <div>Start Date - End Date</div>
-              {JSON.stringify({
-                from: payLoad.start_date,
-                to: payLoad.end_date,
-              })}
+
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
                   payLoad.start_date = format(value?.from!, "dd-LL-y");
                   payLoad.end_date = format(value?.to!, "dd-LL-y");
                 }}
-                selectedData={{
-                  from: payLoad.start_date,
-                  to: payLoad.end_date,
-                }}
+                selectedData={dateRange}
                 disabled={[]}
               />
             </div>

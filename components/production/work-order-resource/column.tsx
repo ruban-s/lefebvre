@@ -247,7 +247,8 @@ export const UpdateStatus = ({ row }: any) => {
     employee_id: data.employee_id,
     endDate: data.endDate,
     actual_hour: data.actual_hour,
-    forman: foremans.length > 1 ? `${foremans[0].id ?? 0}` : "0",
+    forman: foremans.map(({ id, ...data }) => `${id}`),
+    formanAndAttachment: [],
     project_id: data.project_id,
     resourceId: data.resourceId,
     prepared_quantity: data.prepared_quantity,
@@ -266,7 +267,6 @@ export const UpdateStatus = ({ row }: any) => {
       return deleteCode;
     },
     onSuccess: (value) => {
-      console.log(value);
       if (
         value?.status ||
         value?.message === `For input string: ""` ||
@@ -427,15 +427,17 @@ export const UpdateStatus = ({ row }: any) => {
 
                 {foremans.length > 0 && (
                   <PopoverTrigger asChild className="w-full col-span-2">
-                    <div className="w-full grid  grid-cols-4 mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
+                    <div className="w-full flex flex-row flex-wrap mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
                       {foremans.map((info, index) => {
                         return (
-                          <Badge
-                            key={index}
-                            className="rounded-sm bg-neutral-400 ml-1 flex justify-between px-1">
-                            {info.username}
+                          <div className="bg-neutral-400 flex flex-row justify-center items-center  rounded-sm shadow-sm">
+                            <div
+                              key={index}
+                              className="rounded-sm w-auto px-2 text-white ml-1 flex justify-between ">
+                              {info.username}
+                            </div>
                             <IoMdClose
-                              className="ml-1 cursor-pointer "
+                              className="ml-1 cursor-pointer text-white "
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setFormans((formans) =>
@@ -445,7 +447,7 @@ export const UpdateStatus = ({ row }: any) => {
                                 );
                               }}
                             />
-                          </Badge>
+                          </div>
                         );
                       })}
                     </div>
@@ -536,7 +538,11 @@ export const UpdateStatus = ({ row }: any) => {
           </div>
           <DialogFooter>
             <DialogClose>
-              <Button variant={"secondary"} onClick={() => {}}>
+              <Button
+                variant={"secondary"}
+                onClick={() => {
+                  setFormans([]);
+                }}>
                 Close
               </Button>
             </DialogClose>
@@ -545,10 +551,12 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  if (foremans.length > 0) {
-                    payLoad.forman = foremans[0].id.toString();
-                  }
+                  // if (foremans.length > 0) {
+                  //   payLoad.forman = foremans[0].id.toString();
+                  // }
+                  console.log(payLoad);
                   updateItem.mutate(payLoad);
+                  setFormans([]);
                 }}>
                 Save
               </Button>

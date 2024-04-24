@@ -14,6 +14,7 @@ const AttendanceListContainer = () => {
       const data = await getAllAttendanceType();
       return JSON.parse(data.data) as AttendanceTypeData[];
     },
+    staleTime: 0,
   });
   const attendanceType = data;
   if (isError) {

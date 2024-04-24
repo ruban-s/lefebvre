@@ -40,12 +40,15 @@ import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import CustomImageInput from "@/components/common/customImageInput";
 import { uploadImage } from "@/data/common";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 
 const ProjectFormContainer = () => {
   const project = useProjectStore((state: any) => state.project); // Accessing the project object
   const removeProject = useProjectStore((state: any) => state.removeProject);
   const queryClient = useQueryClient();
   const ref = useRef<HTMLInputElement>(null);
+  const [file, selectedFile] = useState<string[]>([]);
+
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
 
   const creatProject = useMutation({
@@ -67,6 +70,7 @@ const ProjectFormContainer = () => {
         });
 
         form.reset();
+        selectedFile([]);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -100,6 +104,13 @@ const ProjectFormContainer = () => {
   });
   useEffect(() => {
     if (project) {
+      var startDate = project?.start_date!.toString().split("-");
+      var endDate = project?.end_date!.toString().split("-");
+      selectedFile(project?.images!);
+      setDateRange({
+        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      });
       form.setValue("project_id", project?.project_id!);
       form.setValue("planner_remark", project?.planner_remark!);
       form.setValue("start_date", project?.start_date!);
@@ -109,15 +120,10 @@ const ProjectFormContainer = () => {
       form.setValue("description", project?.description!);
       form.setValue("images", project?.images!);
       form.setValue("production_remark", project?.production_remark!);
-      setDateRange({
-        from: new Date(project?.start_date!),
-        to: new Date(project?.end_date!),
-      });
     }
   }, [project]);
 
   const onSubmit = async (values: z.infer<typeof ProjectSchema>) => {
-    console.log(values);
     const { project_id, ...data } = values;
     const payload = { project_id: `${project_id}`.toUpperCase(), ...data };
     console.log(payload);
@@ -126,7 +132,6 @@ const ProjectFormContainer = () => {
   const newData = async (value: FormData, name: string) => {
     var data = await uploadImage(value, name);
     form.setValue("images", [...form.watch("images")!, data.data]);
-    console.log(data);
   };
 
   const setRange = (data: DateRange | undefined) => {
@@ -302,7 +307,20 @@ const ProjectFormContainer = () => {
                       <FormItem>
                         <FormLabel>Files</FormLabel>
                         <FormControl>
-                          <Input
+                          <div className="w-full h-auto">
+                            <MultiFileSelect
+                              files={file}
+                              onChange={(e: any) => {
+                                console.log("rithi", e);
+                                selectedFile(e);
+                                form.setValue("images", [
+                                  ...form.watch("images")!,
+                                  ...e,
+                                ]);
+                              }}
+                            />
+                          </div>
+                          {/* <Input
                             ref={ref}
                             multiple={true}
                             type="file"
@@ -327,12 +345,9 @@ const ProjectFormContainer = () => {
                                   );
                               });
                             }}
-                          />
+                          /> */}
                         </FormControl>
                         <FormMessage />
-                        {project && (
-                          <p>selected files - {form.watch("images")!.length}</p>
-                        )}
                       </FormItem>
                     );
                   }}
@@ -444,6 +459,7 @@ const ProjectFormContainer = () => {
                       form.reset();
                       form.clearErrors();
                       removeProject();
+                      selectedFile([]);
                     }}>
                     {"Clear"}
                     <IoMdCloseCircle className="ml-2 text-black" size={20} />

@@ -168,13 +168,18 @@ export interface ShiftData {
   status: string;
   updatedDate: string;
 }
+export interface FormanAndAttachment {
+  attachment: string[];
+  forman: string;
+}
 export interface LabourData {
   attendance_type: string;
   break_type: string;
   createdDate: string;
   designation_id: string;
   employee_id: string;
-  forman_id: string;
+  forman: string[];
+  formanAndAttachment: FormanAndAttachment[];
   gl_code: string;
   id: string;
   image_path: string;
