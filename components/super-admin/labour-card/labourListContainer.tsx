@@ -35,7 +35,7 @@ const LabourListContainer = () => {
     return <p>error</p>;
   }
   return (
-    <div className="w-full h-full bg-red m-2 ">demo</div>
+    <div className="w-full h-[100%] bg-red-500 m-2 ">demo</div>
     // <Tabs defaultValue="labourCardDashboard" className="w-full">
     //   <TabsList className="bg-theme text-white">
     //     <TabsTrigger value="labourCardDashboard">

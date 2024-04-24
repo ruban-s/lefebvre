@@ -69,6 +69,7 @@ import { getAllMeasure } from "@/data/measure";
 import { Table } from "lucide-react";
 import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import SqSelect from "@/components/common/sq-secelct";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -84,6 +85,8 @@ const WorkOrderResourceFormContainer = () => {
   >();
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [workOderList, setWorkOrderList] = useState<WorkOrderData[]>([]);
+  const [file, selectedFile] = useState<string[]>([]);
+
   const {
     data: resource,
     isLoading,
@@ -714,6 +717,36 @@ const WorkOrderResourceFormContainer = () => {
                                   />
                                 </td>
                                 <td className="w-[200px] text-sm border border-slate-300">
+                                  <FormField
+                                    key={info.remark}
+                                    control={form.control}
+                                    name={`resources.${index}.formanAndAttachment`}
+                                    render={({ field }) => {
+                                      return (
+                                        <FormItem>
+                                          <FormControl>
+                                            <MultiFileSelect
+                                              files={file}
+                                              onChange={(e: any) => {
+                                                selectedFile(e);
+                                                form.setValue(
+                                                  `resources.${index}.formanAndAttachment`,
+                                                  [
+                                                    // ...form.watch(
+                                                    //   `resources.${index}.remark`
+                                                    // )!,
+                                                    // ...e,
+                                                  ]
+                                                );
+                                              }}
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      );
+                                    }}
+                                  />
+
                                   {/* <FormField
                                     key={info.remark}
                                     control={form.control}
