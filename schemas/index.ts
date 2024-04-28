@@ -25,13 +25,13 @@ export const UserSchema = z.object({
   token: z.string().default(" "),
 });
 export const IndirectCodeSchema = z.object({
-  name: z.string().min(1, { message: "Resource Id is required" }),
+  name: z.string().min(1, { message: "Name is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   indirectCode: z.string().min(1, { message: "Indirect-ID is required" }),
   description: z.string().min(1, { message: "Description is required" }),
 });
 export const ResourceSchema = z.object({
-  resource_id: z.string().min(1, { message: "Name is required" }),
+  resource_id: z.string().min(1, { message: "Resource-ID is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   res_description: z.string().min(1, { message: "Description is required" }),
   res_note: z.string().optional(),
