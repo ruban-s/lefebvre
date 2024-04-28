@@ -53,7 +53,7 @@ const AlertDialogComponent = ({
           )}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="w-[700px]">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-destructive flex justify-start items-center text-md font-semibold ">
             {AlertIcon && <AlertIcon className="mr-4" />}
