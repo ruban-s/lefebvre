@@ -168,7 +168,6 @@ export const SuperAdminTabs: TabData[] = [
 
 export const attendanceTypeController = [
   "createdDate",
-
   "name",
   "status",
   "type",
@@ -177,7 +176,6 @@ export const attendanceTypeController = [
 export const breakController = [
   "createdDate",
   "end_time",
-
   "name",
   "shift_id",
   "shift_name",
@@ -194,7 +192,6 @@ export const employeeController = [
   "employee_id",
   "first_name",
   "gender",
-
   "last_name",
   "mobile",
   "role_name",

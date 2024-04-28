@@ -25,7 +25,7 @@ export const UserSchema = z.object({
   token: z.string().default(" "),
 });
 export const IndirectCodeSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
+  name: z.string().min(1, { message: "Resource Id is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   indirectCode: z.string().min(1, { message: "Indirect-ID is required" }),
   description: z.string().min(1, { message: "Description is required" }),
@@ -34,7 +34,7 @@ export const ResourceSchema = z.object({
   resource_id: z.string().min(1, { message: "Name is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   res_description: z.string().min(1, { message: "Description is required" }),
-  res_note: z.string().min(1, { message: "Note is required" }),
+  res_note: z.string().optional(),
 });
 export const EmployeeSchema = z.object({
   designation_id: z.string().min(1, { message: "Designation_id is required" }),
@@ -42,7 +42,7 @@ export const EmployeeSchema = z.object({
   email: z.string().optional(),
   employee_id: z.string().min(1, { message: "Employee id is required" }),
   first_name: z.string().min(1, { message: "First name is required" }),
-  gender: z.string().min(1, { message: "Gender is required" }),
+  gender: z.string().optional(),
   last_name: z.string().min(1, { message: "Last name is required" }),
   mobile: z.string().optional(),
   status: z.string().min(1, { message: "Status is required" }),
@@ -58,7 +58,7 @@ export const MeasureSchema = z.object({
 export const AttendanceTypeSchema = z.object({
   name: z.string().min(1, { message: "Attendance type is required" }),
   type: z.string().min(1, { message: "Type type is required" }),
-  status: z.string().min(1, { message: "Atatus is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
 });
 // --PLANNER--
 export const ProjectSchema = z.object({

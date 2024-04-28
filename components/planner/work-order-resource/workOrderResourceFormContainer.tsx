@@ -186,6 +186,7 @@ const WorkOrderResourceFormContainer = () => {
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
   ) => {
+    // console.log(values.resources);
     creatWorkOrder.mutate(values.resources);
     dialogRef.current?.click();
   };
@@ -728,14 +729,16 @@ const WorkOrderResourceFormContainer = () => {
                                             <MultiFileSelect
                                               files={file}
                                               onChange={(e: any) => {
-                                                selectedFile(e);
+                                                var data: object[] = [];
+
+                                                // selectedFile(e);
                                                 form.setValue(
                                                   `resources.${index}.formanAndAttachment`,
                                                   [
-                                                    // ...form.watch(
-                                                    //   `resources.${index}.remark`
-                                                    // )!,
-                                                    // ...e,
+                                                    {
+                                                      attachment: e,
+                                                      forman: "0",
+                                                    },
                                                   ]
                                                 );
                                               }}
