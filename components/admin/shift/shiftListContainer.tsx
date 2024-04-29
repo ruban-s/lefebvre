@@ -30,7 +30,7 @@ const ShiftListContainer = () => {
       ) : (
         <>
           <div className=" w-full h-auto ">
-            <p className="text-lg font-semibold pl-4 pt-4">{"Users"}</p>
+            <p className="text-lg font-semibold pl-4 pt-4">{"Shifts"}</p>
           </div>
           <div className="w-full  ">
             <DataTable
