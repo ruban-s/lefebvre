@@ -167,151 +167,141 @@ export const SuperAdminTabs: TabData[] = [
 ];
 
 export const attendanceTypeController = [
-  "createdDate",
-
   "name",
   "status",
   "type",
   "updatedDate",
+  "createdDate",
 ];
 export const breakController = [
-  "createdDate",
-  "end_time",
-
   "name",
   "shift_id",
   "shift_name",
   "start_time",
+  "end_time",
   "status",
   "updatedDate",
+  "createdDate",
 ];
 export const employeeController = [
-  "createdDate",
-  "current_shift_id",
-  "current_shift_name",
-  "designation_id",
-  "email",
   "employee_id",
   "first_name",
-  "gender",
-
   "last_name",
+  "designation_id",
+  "current_shift_id",
+  "current_shift_name",
+  "email",
+  "gender",
   "mobile",
   "role_name",
   "status",
   "updatedDate",
+  "createdDate",
 ];
 
 export const indirectController = [
-  "createdDate",
+  "GL CODE",
+  "indirectID",
   "description",
-
-  "indirectCode",
-  "name",
   "status",
   "updatedDate",
+  "createdDate",
 ];
 export const projectController = [
-  "actualHour",
-  "createdDate",
+  "project_id",
   "customer_name",
   "description",
-  "end_date",
   "estimateHour",
-
+  "actualHour",
+  "start_date",
+  "end_date",
   "planner_remark",
   "production_remark",
-  "project_id",
-  "start_date",
   "status",
   "updatedDate",
+  "createdDate",
 ];
 
 export const resourceController = [
-  "actual_hour",
+  "project_id",
+  "work_order_id",
+  "sqNumber",
+  "resourceId",
+  "estimated_hour",
   "ballance_hour",
   "ballanced_quantity",
   "bench_mark_measure",
   "bench_mark_unit",
-  "createdDate",
-  "employee_id",
-  "endDate",
-  "estimated_hour",
-  "forman",
-
-  "prepared_quantity",
-  "project_id",
-  "quantity_unit",
-  "remark",
-  "required_quantity",
-  "resourceId",
-  "sqNumber",
   "startDate",
+  "endDate",
+  "actual_hour",
+  "required_quantity",
+  "prepared_quantity",
+  "quantity_unit",
+  "employee_id",
+  "employee_id",
+  "remark",
+  "forman",
   "status",
+  "createdDate",
   "updatedDate",
-  "work_order_id",
 ];
 export const shiftController = [
-  "createdDate",
   "employee_id",
-
-  "shift_end_time",
+  "designation_id",
   "shift_name",
-  "shift_start_time",
   "shift_type",
+  "shift_start_time",
+  "shift_end_time",
   "status",
+  "createdDate",
   "updatedDate",
 ];
 
 export const measuresController = [
-  "createdDate",
-
-  "status",
   "unit",
   "updatedBy",
+  "status",
+  "createdDate",
   "updatedDate",
 ];
 
 export const userController = [
-  "createdDate",
-  "email",
-
-  "mobile",
+  "username",
   "name",
   "password",
+  "email",
+  "mobile",
   "role_name",
   "status",
   "token",
+  "createdDate",
   "updatedDate",
-  "username",
 ];
 
 export const workOrderController = [
-  "actualHour",
-  "createdDate",
+  "project_id",
+  "work_order_id",
   "description",
-  "end_date",
   "estimateHour",
-
+  "actualHour",
+  "start_date",
+  "end_date",
   "planner_remark",
   "production_remark",
-  "project_id",
   "role_id",
-  "start_date",
   "status",
+  "createdDate",
   "updatedDate",
-  "work_order_id",
 ];
 
 export const resourceAdmincontroller = [
-  "attachment",
-  "createdDate",
-
+  "resource_id",
   "res_description",
   "res_note",
-  "res_status",
-  "resource_id",
-  "sq_number",
+  // "res_status",
   "status",
+  "attachment",
+  "createdDate",
   "updatedDate",
 ];

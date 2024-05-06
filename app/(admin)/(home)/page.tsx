@@ -1,5 +1,3 @@
-"use client";
-
 import HomeScreen from "@/components/admin/home/home";
 import AccessDenied from "@/components/common/access-denied";
 

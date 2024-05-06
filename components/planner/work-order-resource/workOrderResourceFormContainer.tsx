@@ -69,6 +69,7 @@ import { getAllMeasure } from "@/data/measure";
 import { Table } from "lucide-react";
 import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
 import SqSelect from "@/components/common/sq-secelct";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -84,6 +85,8 @@ const WorkOrderResourceFormContainer = () => {
   >();
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [workOderList, setWorkOrderList] = useState<WorkOrderData[]>([]);
+  const [file, selectedFile] = useState<string[]>([]);
+
   const {
     data: resource,
     isLoading,
@@ -137,6 +140,7 @@ const WorkOrderResourceFormContainer = () => {
   const degaultValusSet = {
     project_id: "",
     work_order_id: "",
+    resources: [],
   };
   const form = useForm<z.infer<typeof ResourceWorkOrderListSchema>>({
     resolver: zodResolver(ResourceWorkOrderListSchema),
@@ -168,7 +172,8 @@ const WorkOrderResourceFormContainer = () => {
         endDate: `${workOrder.endDate}` || "-",
         startDate: `${workOrder.startDate}` || "-",
         estimated_hour: `${workOrder.estimated_hour}` || "-",
-        forman: `${workOrder.forman}` || "--",
+        forman: workOrder.forman || [],
+        formanAndAttachment: workOrder.formanAndAttachment || [],
         quantity_unit: `${workOrder.quantity_unit}` || "-",
         required_quantity: `${workOrder.required_quantity}` || "-",
         ballance_hour: `${workOrder.ballance_hour}`,
@@ -181,6 +186,7 @@ const WorkOrderResourceFormContainer = () => {
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
   ) => {
+    // console.log(values.resources);
     creatWorkOrder.mutate(values.resources);
     dialogRef.current?.click();
   };
@@ -210,10 +216,10 @@ const WorkOrderResourceFormContainer = () => {
     form.setValue("work_order_id", value.work_order_id);
     setWorkOrder(value);
   };
-  const checkValue = (value: any) => {
-    var newData = fields.filter((info) => info.resourceId === value);
-    return newData.length > 0 ? true : false;
-  };
+  // const checkValue = (value: any) => {
+  //   var newData = fields.filter((info) => info.resourceId === value);
+  //   return newData.length > 0 ? true : false;
+  // };
 
   return (
     <div className="w-full h-auto bg-white  shadow-sm ring-1 ring-theme rounded-sm">
@@ -267,15 +273,15 @@ const WorkOrderResourceFormContainer = () => {
                     );
                   }}
                 />
-                <div className="flex justify-between items-start">
-                  <FormField
-                    control={form.control}
-                    name="resources"
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="w-auto flex flex-col mt-3">
-                          <FormLabel>Resource Id</FormLabel>
-                          <FormControl>
+                <FormField
+                  control={form.control}
+                  name="resources"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className=" col-span-2">
+                        <FormLabel>Resource Id</FormLabel>
+                        <FormControl>
+                          <div className="flex flex-row">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <div className="w-auto flex">
@@ -308,7 +314,8 @@ const WorkOrderResourceFormContainer = () => {
                                             employee_id: "",
                                             endDate: `${selectedWorkOrder?.end_date}`,
                                             estimated_hour: "",
-                                            forman: "",
+                                            forman: [],
+                                            formanAndAttachment: [],
                                             quantity_unit: "",
                                             required_quantity: "",
                                             startDate: `${selectedWorkOrder?.start_date}`,
@@ -325,37 +332,37 @@ const WorkOrderResourceFormContainer = () => {
                                 })}
                               </DropdownMenuContent>
                             </DropdownMenu>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-                  {fields.length > 0 && (
-                    <div className="w-[300px]  bg-slate-100 rounded-sm">
-                      <p className=" w-full text-sm ml-4 mb-1">
-                        Selected Resource Ids
-                      </p>
-                      {fields.map((info, index) => {
-                        return (
-                          <Badge
-                            key={index}
-                            className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
-                            {index + 1} | {info.resourceId}
-                            <div className=" bg-white rounded-full text-red-500 ml-2">
-                              <IoMdCloseCircle
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  remove(index);
-                                }}
-                              />
-                            </div>
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                            {fields.length > 0 && (
+                              <div className="flex-1 flex-wrap  rounded-sm border-dashed border-2 p-2 mx-2">
+                                <p className=" w-full text-sm ml-4 mb-1">
+                                  Selected Resource Ids
+                                </p>
+                                {fields.map((info: any, index) => {
+                                  return (
+                                    <Badge
+                                      key={index}
+                                      className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
+                                      {index + 1} | {info.resourceId}
+                                      <div className=" bg-white rounded-full text-red-500 ml-2">
+                                        <IoMdCloseCircle
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            remove(index);
+                                          }}
+                                        />
+                                      </div>
+                                    </Badge>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
               </div>
               <Dialog>
                 <DialogTrigger className="mt-2" ref={dialogRef}>
@@ -425,7 +432,7 @@ const WorkOrderResourceFormContainer = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {fields.map((info, index) => {
+                          {fields.map((info: any, index) => {
                             return (
                               <tr
                                 key={index}
@@ -711,6 +718,38 @@ const WorkOrderResourceFormContainer = () => {
                                   />
                                 </td>
                                 <td className="w-[200px] text-sm border border-slate-300">
+                                  <FormField
+                                    key={info.remark}
+                                    control={form.control}
+                                    name={`resources.${index}.formanAndAttachment`}
+                                    render={({ field }) => {
+                                      return (
+                                        <FormItem>
+                                          <FormControl>
+                                            <MultiFileSelect
+                                              files={file}
+                                              onChange={(e: any) => {
+                                                var data: object[] = [];
+
+                                                // selectedFile(e);
+                                                form.setValue(
+                                                  `resources.${index}.formanAndAttachment`,
+                                                  [
+                                                    {
+                                                      attachment: e,
+                                                      forman: "0",
+                                                    },
+                                                  ]
+                                                );
+                                              }}
+                                            />
+                                          </FormControl>
+                                          <FormMessage />
+                                        </FormItem>
+                                      );
+                                    }}
+                                  />
+
                                   {/* <FormField
                                     key={info.remark}
                                     control={form.control}

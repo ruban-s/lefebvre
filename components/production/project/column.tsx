@@ -39,7 +39,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
@@ -117,10 +117,18 @@ export const UpdateStatus = ({ row }: any) => {
   const data = row.original;
   const ref = useRef<HTMLButtonElement>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
-    from: new Date(data.start_date),
-    to: new Date(data.end_date),
+    from: data.start_date,
+    to: data.end_date,
   });
 
+  useEffect(() => {
+    var startDate = data?.start_date!.toString().split("-");
+    var endDate = data?.end_date!.toString().split("-");
+    setDateRange({
+      from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+      to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+    });
+  }, []);
   const payLoad = {
     id: data.id,
     project_id: data.project_id,
@@ -209,7 +217,6 @@ export const UpdateStatus = ({ row }: any) => {
       return deleteCode;
     },
     onSuccess: (value) => {
-      console.log(value);
       if (value?.status) {
         toast.success(`${value.message}`, {
           description: `${value.message}`,
@@ -300,12 +307,13 @@ export const UpdateStatus = ({ row }: any) => {
             </div>
             <div className=" col-span-2">
               <div>Start Date - End Date</div>
+
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
                   payLoad.start_date = format(value?.from!, "dd-LL-y");
                   payLoad.end_date = format(value?.to!, "dd-LL-y");
                 }}
-                selectedData={dateRange!}
+                selectedData={dateRange}
                 disabled={[]}
               />
             </div>

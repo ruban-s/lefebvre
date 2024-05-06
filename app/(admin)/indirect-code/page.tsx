@@ -1,5 +1,3 @@
-"use client";
-
 import IndirectCodeFormContainer from "@/components/admin/indirect-code/IndirectCodeFormContainer";
 import IndirectCodeListContainer from "@/components/admin/indirect-code/IndirectCodeListContainer";
 import LayoutContainer from "@/components/common/layout-container";

@@ -14,7 +14,6 @@ export const getAllLabourCard = async () => {
   try {
     const axiosResponse = await Axios.get("/labor/web/getAllLabor");
     const data = axiosResponse.data;
-    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

@@ -29,7 +29,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
@@ -281,7 +281,16 @@ export const UpdateStatus = ({ row }: any) => {
     from: new Date(data.start_date),
     to: new Date(data.end_date),
   });
-
+  var startDate = data?.start_date!.toString().split("-");
+  var endDate = data?.end_date!.toString().split("-");
+  useEffect(() => {
+    var startDate = data?.start_date!.toString().split("-");
+    var endDate = data?.end_date!.toString().split("-");
+    setDateRange({
+      from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+      to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+    });
+  }, []);
   const payLoad = {
     work_order_id: data.work_order_id,
     description: data.description,

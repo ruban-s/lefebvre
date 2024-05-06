@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import LayoutContainer from "@/components/common/layout-container";
 import UserListContainer from "@/components/admin/user/userListContainer";
@@ -8,11 +8,6 @@ import ShiftFormContainer from "@/components/admin/shift/shiftFormContainer";
 import ShiftListContainer from "@/components/admin/shift/shiftListContainer";
 
 const User = () => {
-  const [data, setData] = useState<UserData>();
-  const editUser = (value: UserData) => {
-    setData({ ...value });
-  };
-
   return (
     <LayoutContainer>
       <div className="w-full min-h-[200px] p-2 ">

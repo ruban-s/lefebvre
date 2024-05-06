@@ -4,8 +4,6 @@ import { ResponseData } from "@/types";
 import { headers } from "next/headers";
 
 export const uploadImage = async (formData: FormData, name: string) => {
-  console.log(name);
-  console.log(formData);
   try {
     const axiosResponse = await Axios.post(
       `/uploadFile?fileName=${name}`,

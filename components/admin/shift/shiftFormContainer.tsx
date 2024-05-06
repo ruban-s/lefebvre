@@ -139,7 +139,7 @@ const ShiftFormContainer = () => {
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>Status</FormLabel>
+                        <FormLabel>Shift Type</FormLabel>
                         <Select
                           value={form.watch("shift_type")}
                           onValueChange={(value) => {

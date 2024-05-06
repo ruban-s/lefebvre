@@ -35,7 +35,7 @@ const CustomTimePicker = ({ value, onChange }: CustomTimePickerProps) => {
         <PopoverContent className="w-[150px] h-auto flex flex-col justify-between items-center">
           <div className="w-full flex">
             <div className="w-[150px] mb-2 flex flex-col h-[50px] justify-center items-center bg-neutral-100 rounded-md shadow-md">
-              <p className="text-sm text-neutral-500">hr:ms</p>
+              <p className="text-sm text-neutral-500">HH:MM</p>
               <p className="text-md font-bold text-theme">{time}</p>
             </div>
           </div>

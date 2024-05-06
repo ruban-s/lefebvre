@@ -13,7 +13,8 @@ import AlertDialogComponent from "./alertDialogComponent";
 import { GrFormViewHide } from "react-icons/gr";
 import CustomImageInput from "./customImageInput";
 import { Badge } from "../ui/badge";
-import { convertToUAEFormat } from "@/action/common-action";
+import ViewTabField from "./viewTabField";
+// import { convertToUAEFormat } from "@/action/common-action";
 
 interface TableActionButtonComponentsProps {
   values?: any;
@@ -69,68 +70,82 @@ const TableActionButtonComponents = ({
               <p>Details:</p>
             </div>
 
-            {Object.keys(values).map((info, index) => {
-              // console.log(convertToUAEFormat(values[`${info}`]))
-              if (["status", "designation_id"].includes(info)) {
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-auto m-2 my-3 flex items-center justify-start">
-                    <div className="w-1/4 text-neutral-400">
-                      {info.charAt(0).toUpperCase() +
-                        info.replace("_", "-").slice(1)}
+            <div className="w-full grid grid-cols-2 gap-3">
+              {Object.keys(values).map((info, index) => {
+                // console.log(convertToUAEFormat(values[`${info}`]))
+                // if (["status", "designation_id"].includes(info)) {
+                //   return (
+                //     <div
+                //       key={index}
+                //       className="w-full h-auto m-2 my-3 flex items-center justify-start">
+                //       <div className="w-1/4 text-neutral-400">
+                //         {info.charAt(0).toUpperCase() +
+                //           info.replace("_", "-").slice(1)}
+                //       </div>
+                //       <div className="flex-1 text-bold text-sm  text-black font-bold">
+                //         {" "}
+                //         :{" "}
+                //         <Badge
+                //           className={`cursor-pointer rounded-md    bg-neutral-500 ${
+                //             values[info] === "Active" && "bg-green-500"
+                //           }
+                //           ${values[info] === "Inactive" && "bg-red-500"}
+                //        `}>
+                //           {values[info]}
+                //         </Badge>
+                //       </div>
+                //     </div>
+                //   );
+                // }
+                if (["image_path", "image"].includes(info)) {
+                  return (
+                    <div
+                      key={index}
+                      className="w-full row-span-2 h-auto m-2 my-3 flex items-center justify-start">
+                      <div className="w-1/4 text-neutral-400">
+                        {info.charAt(0).toUpperCase() +
+                          info.replace("_", "-").slice(1)}
+                      </div>
+                      {values[info] ? (
+                        <CustomImageInput
+                          value={values[`${info}`]}
+                          disable={true}
+                          onChange={(value: string) => {}}
+                        />
+                      ) : (
+                        "--"
+                      )}
                     </div>
-                    <div className="flex-1 text-bold text-sm  text-black font-bold">
-                      {" "}
-                      :{" "}
-                      <Badge
-                        className={`cursor-pointer rounded-md    bg-neutral-500 ${
-                          values[info] === "Active" && "bg-green-500"
+                  );
+                }
+                // if (
+                //   [
+                //     "forman",
+                //     "res_note",
+                //     "token",
+                //     "res_status",
+                //     "sq_number",
+                //     "role_name",
+                //   ].includes(info)
+                // ) {
+                //   return null;
+                // }
+                return (
+                  <>
+                    {values[`${info}`] && (
+                      <ViewTabField
+                        heading={
+                          info.replaceAll("_", " ").charAt(0).toUpperCase() +
+                          info
+                            .replaceAll("_", " ")
+                            .slice(1)
+                            .replace(/([a-z])([A-Z])/g, "$1 $2")
                         }
-                        ${values[info] === "Inactive" && "bg-red-500"}
-                     `}>
-                        {values[info]}
-                      </Badge>
-                    </div>
-                  </div>
-                );
-              }
-              if (["image_path", "image"].includes(info)) {
-                return (
-                  <div
-                    key={index}
-                    className="w-full h-auto m-2 my-3 flex items-center justify-start">
-                    <div className="w-1/4 text-neutral-400">
-                      {info.charAt(0).toUpperCase() +
-                        info.replace("_", "-").slice(1)}
-                    </div>
-                    {values[info] ? (
-                      <CustomImageInput
                         value={values[`${info}`]}
-                        disable={true}
-                        onChange={(value: string) => {}}
+                        isInput={true}
                       />
-                    ) : (
-                      "--"
                     )}
-                  </div>
-                );
-              }
-              if (
-                [
-                  "forman",
-                  "res_note",
-                  "token",
-                  "res_status",
-                  "sq_number",
-                  "role_name",
-                ].includes(info)
-              ) {
-                return null;
-              }
-              return (
-                <>
-                  <div
+                    {/* <div
                     key={index}
                     className="w-full h-auto m-2 my-3 flex items-center justify-start ">
                     <div className="w-1/4 text-neutral-400">
@@ -138,21 +153,13 @@ const TableActionButtonComponents = ({
                         info.replace("_", "-").slice(1)}
                     </div>
                     <div className="w-[300px] h-auto  text-pretty flex  text-bold text-sm   text-black font-bold">
-                      :{"  "}
-                      {info.charAt(0).toUpperCase() +
-                        info.replace("_", "-").slice(1) ===
-                      "UpdatedDate"
-                        ? convertToUAEFormat(values[`${info}`])
-                        : info.charAt(0).toUpperCase() +
-                            info.replace("_", "-").slice(1) ===
-                          "CreatedDate"
-                        ? convertToUAEFormat(values[`${info}`])
-                        : values[`${info}`] || "--"}
+                      :{values[`${info}`] || "--"}
                     </div>
-                  </div>
-                </>
-              );
-            })}
+                  </div> */}
+                  </>
+                );
+              })}
+            </div>
           </AlertDialogComponent>
           <Button
             variant={"ghost"}

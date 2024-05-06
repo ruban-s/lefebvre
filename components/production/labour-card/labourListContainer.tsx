@@ -33,7 +33,7 @@ const LabourListContainer = () => {
           <div className="bg-theme w-full pl-2 py-2 ">
             <p className="text-lg font-bold text-white ">{"Labour Cards"}</p>
           </div>
-          <div className="w-full  ">
+          <div className="w-full ">
             <DataTable
               columns={projectColumns}
               data={labours!}

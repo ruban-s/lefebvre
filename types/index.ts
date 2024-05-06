@@ -140,7 +140,8 @@ export interface ResourceWorkOdderData {
   employee_id: string;
   endDate: string;
   estimated_hour: string;
-  forman: string;
+  forman: string[];
+  formanAndAttachment: FormanAndAttachment[];
   id: string;
   prepared_quantity: string;
   project_id: string;
@@ -168,13 +169,17 @@ export interface ShiftData {
   status: string;
   updatedDate: string;
 }
+export interface FormanAndAttachment {
+  attachment: string[];
+  forman: string;
+}
 export interface LabourData {
   attendance_type: string;
   break_type: string;
   createdDate: string;
   designation_id: string;
   employee_id: string;
-  forman_id: string;
+  forman: string;
   gl_code: string;
   id: string;
   image_path: string;

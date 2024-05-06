@@ -34,13 +34,14 @@ export default auth((req) => {
     }
     return;
   }
+
   if (!isLoggedIn || !token) {
+    // return;
     return Response.redirect(new URL("/auth/login", nextUrl));
   }
   if (isPublicRoutes) {
     return;
   }
-
   //Secondary option
   // if (role?.value === "Admin") {
   //   if (!isAdminRoute) {

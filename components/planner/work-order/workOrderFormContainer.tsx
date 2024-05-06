@@ -46,6 +46,7 @@ import { format, differenceInDays, addDays } from "date-fns";
 import ProjectListCombo from "../../common/projectListCombo";
 import { ProjectData, WorkOrderData } from "@/types";
 import { uploadImage } from "@/data/common";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -56,6 +57,10 @@ const WorkOrderFormContainer = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedProject, setProject] = useState<ProjectData | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
+  const [file, selectedFile] = useState<string[]>([]);
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
@@ -71,6 +76,7 @@ const WorkOrderFormContainer = () => {
         ? await updateWorkOrder({ id: workOrder?.id, ...value })
         : await createWorkOrder(value);
       setDateRange(undefined);
+      selectedFile([]);
       removeWorkOrder();
       return breake;
     },
@@ -119,7 +125,7 @@ const WorkOrderFormContainer = () => {
   useEffect(() => {
     if (workOrder) {
       setProject(workOrder?.project_id);
-
+      selectedFile(workOrder?.images!);
       form.setValue("project_id", workOrder?.project_id!);
       form.setValue("planner_remark", workOrder?.planner_remark!);
       form.setValue("start_date", workOrder?.start_date!);
@@ -133,11 +139,13 @@ const WorkOrderFormContainer = () => {
         workOrder?.project_id! + "-" + workOrder?.work_order_id!
       );
       form.setValue("description", workOrder?.description!);
+      var startDate = workOrder?.start_date!.toString().split("-");
+      var endDate = workOrder?.end_date!.toString().split("-");
+
       setDateRange({
-        from: new Date(workOrder?.start_date!),
-        to: new Date(workOrder?.end_date!),
+        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
       });
-      // setEdit(true);
     }
   }, [workOrder]);
 
@@ -150,11 +158,11 @@ const WorkOrderFormContainer = () => {
     console.log(data);
   };
   const chooseProject = (value: ProjectData) => {
+    setProject(value);
     if (!value) {
       form.setValue("work_order_id", "");
       form.setValue("project_id", "");
       setProject(value);
-      setDisbleDates([]);
       setDisbleDates([]);
 
       return;
@@ -162,13 +170,21 @@ const WorkOrderFormContainer = () => {
     form.setValue("work_order_id", value.project_id + "-");
     form.setValue("project_id", value.project_id);
     setProject(value);
-    setDateRange({
-      from: new Date(value?.start_date!),
-      to: new Date(value?.end_date!),
-    });
-    const projectWiseWorkOrders: WorkOrderData[] | undefined = data?.filter(
-      (info) => info.project_id === value?.project_id
-    );
+    var startDate = value?.start_date!.toString().split("-");
+    var endDate = value?.end_date!.toString().split("-");
+    if (!workOrder) {
+      console.log("i am working");
+      setFromDate(`${startDate[1]}-${startDate[0]}-${startDate[2]}`);
+      setToDate(`${endDate[1]}-${endDate[0]}-${endDate[2]}`);
+      setDateRange({
+        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      });
+      const projectWiseWorkOrders: WorkOrderData[] | undefined = data?.filter(
+        (info) => info.project_id === value?.project_id
+      );
+    }
+
     // setDisbleDates([]);
     // const workOrderDates: Date[] = [];
     // projectWiseWorkOrders?.map(({ start_date, end_date, ...info }, index) => {
@@ -319,8 +335,8 @@ const WorkOrderFormContainer = () => {
                           <DatePickerWithRange
                             onselect={setRange}
                             selectedData={dateRange!}
-                            fromDate={selectedProject?.start_date}
-                            toDate={selectedProject?.end_date}
+                            fromDate={fromDate}
+                            toDate={toDate}
                             disabled={disabledDates}
                           />
                         </FormControl>
@@ -370,7 +386,20 @@ const WorkOrderFormContainer = () => {
                       <FormItem>
                         <FormLabel>Files</FormLabel>
                         <FormControl>
-                          <Input
+                          <div className="w-full h-auto">
+                            <MultiFileSelect
+                              files={file}
+                              onChange={(e: any) => {
+                                console.log("rithi", e);
+                                selectedFile(e);
+                                form.setValue("images", [
+                                  ...form.watch("images")!,
+                                  ...e,
+                                ]);
+                              }}
+                            />
+                          </div>
+                          {/* <Input
                             multiple={true}
                             type="file"
                             placeholder=""
@@ -394,12 +423,9 @@ const WorkOrderFormContainer = () => {
                                   );
                               });
                             }}
-                          />
+                          /> */}
                         </FormControl>
                         <FormMessage />
-                        {workOrder && (
-                          <p>selected files - {form.watch("images")!.length}</p>
-                        )}
                       </FormItem>
                     );
                   }}
@@ -422,6 +448,7 @@ const WorkOrderFormContainer = () => {
                     setProject(undefined);
                     setRange(undefined);
                     setDisbleDates([]);
+                    selectedFile([]);
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />
