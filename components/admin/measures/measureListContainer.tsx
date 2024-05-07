@@ -13,11 +13,17 @@ const MeasureListContainer = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["measure"],
     queryFn: async () => {
-      const data = await getAllMeasure();
-      return JSON.parse(data.data) as MeasureData[];
+      try {
+        const data = await getAllMeasure();
+        return JSON.parse(data.data) as MeasureData[];
+      } catch (error) {
+        // Handle error appropriately
+        console.error("Error fetching measures:", error);
+        return [];
+      }
     },
   });
-  const measures = data;
+  const measures = data || [];
 
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
@@ -34,7 +40,7 @@ const MeasureListContainer = () => {
           <div className="w-full ">
             <DataTable
               columns={columns}
-              data={measures!}
+              data={measures}
               searchName="unit"
               fileName="Measure"
               exportDataFields={measuresController}
@@ -45,4 +51,5 @@ const MeasureListContainer = () => {
     </div>
   );
 };
+
 export default MeasureListContainer;
