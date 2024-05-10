@@ -114,6 +114,8 @@ const BreakFormContainer = ({ data }: { data: BreaksData | undefined }) => {
   useEffect(() => {
     form.setValue("start_time", "");
     form.setValue("end_time", "");
+    form.setValue("shift_name", "");
+    form.setValue("name", "");
   }, []);
 
   const onSubmit = async (values: z.infer<typeof BreakSchema>) => {

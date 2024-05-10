@@ -248,7 +248,7 @@ export const UpdateStatus = ({ row }: any) => {
     endDate: data.endDate,
     actual_hour: data.actual_hour,
     forman: foremans.map(({ id, ...data }) => `${id}`),
-    formanAndAttachment: [],
+    attachment: data.attachment,
     project_id: data.project_id,
     resourceId: data.resourceId,
     prepared_quantity: data.prepared_quantity,

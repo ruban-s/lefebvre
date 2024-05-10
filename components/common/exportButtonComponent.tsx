@@ -27,6 +27,7 @@ interface ExportButtonComponentProps {
   nameChangeFunction: Function;
   exportDataFields?: string[];
   data: any[];
+  fullexport?: boolean;
 }
 
 const ExportButtonComponent = ({
@@ -36,6 +37,7 @@ const ExportButtonComponent = ({
   nameChangeFunction,
   exportDataFields,
   data,
+  fullexport = false,
 }: ExportButtonComponentProps) => {
   const [selectedFields, setSelectedFields] = useState<string[] | undefined>(
     exportDataFields!
@@ -58,55 +60,59 @@ const ExportButtonComponent = ({
             You can export this fila as a {lable}.
           </DialogDescription>
         </DialogHeader>
-        <div>Available Data Fields :</div>
-        <div className="grid grid-cols-3 gap-2">
-          {defaultFiedls.map((info, index) => {
-            if (
-              info === "image" ||
-              info === "images" ||
-              info === "image+path" ||
-              info === "attachment"
-            )
-              return;
-            return (
-              <div className="p-2 mx-2 border border-1 " key={index}>
-                <Checkbox
-                  className="mr-2"
-                  id={info}
-                  checked={selectedFields?.includes(info)}
-                  onCheckedChange={(value) => {
-                    if (value) {
-                      setSelectedFields((items) => [...items!, info!]);
-                    } else {
-                      var data = selectedFields?.filter(
-                        (item) => item !== info
-                      );
-                      setSelectedFields((items) => [...data!]);
-                    }
-                  }}
-                />
-                <Label htmlFor={info}>
-                  {info === "forman"
-                    ? "Foreman"
-                    : info.replaceAll("_", " ").charAt(0).toUpperCase() +
-                      info
-                        .replaceAll("_", " ")
-                        .slice(1)
-                        .replace(/([a-z])([A-Z])/g, "$1 $2")}
-                </Label>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">
-            <p className="sr-only">File Name:</p>
-            <Input
-              value={exportFileName}
-              onChange={(value) => nameChangeFunction(value.target.value)}
-            />
+        {!fullexport && <div>Available Data Fields :</div>}{" "}
+        {!fullexport && (
+          <div className="grid grid-cols-3 gap-2">
+            {defaultFiedls.map((info, index) => {
+              if (
+                info === "image" ||
+                info === "images" ||
+                info === "image+path" ||
+                info === "attachment"
+              )
+                return;
+              return (
+                <div className="p-2 mx-2 border border-1 " key={index}>
+                  <Checkbox
+                    className="mr-2"
+                    id={info}
+                    checked={selectedFields?.includes(info)}
+                    onCheckedChange={(value) => {
+                      if (value) {
+                        setSelectedFields((items) => [...items!, info!]);
+                      } else {
+                        var data = selectedFields?.filter(
+                          (item) => item !== info
+                        );
+                        setSelectedFields((items) => [...data!]);
+                      }
+                    }}
+                  />
+                  <Label htmlFor={info}>
+                    {info === "forman"
+                      ? "Foreman"
+                      : info.replaceAll("_", " ").charAt(0).toUpperCase() +
+                        info
+                          .replaceAll("_", " ")
+                          .slice(1)
+                          .replace(/([a-z])([A-Z])/g, "$1 $2")}
+                  </Label>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
+        {
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <p className="sr-only">File Name:</p>
+              <Input
+                value={exportFileName}
+                onChange={(value) => nameChangeFunction(value.target.value)}
+              />
+            </div>
+          </div>
+        }
         <DialogFooter className="sm:justify-start">
           <DialogClose asChild>
             <Button type="button" variant="secondary">
@@ -119,8 +125,12 @@ const ExportButtonComponent = ({
               variant="default"
               className="bg-theme"
               onClick={() => {
-                console.log(selectedFields);
-                exportFunction(selectedFields);
+                console.log(fullexport);
+                if (fullexport) {
+                  exportFunction(defaultFiedls);
+                } else {
+                  exportFunction(selectedFields);
+                }
               }}>
               <FaFileCsv className="mr-1" /> Export {lable}
             </Button>

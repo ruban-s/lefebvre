@@ -40,7 +40,13 @@ import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays, addDays } from "date-fns";
 import ProjectListCombo from "../../common/projectListCombo";
-import { MeasureData, ProjectData, ResourceData, WorkOrderData } from "@/types";
+import {
+  MeasureData,
+  ProjectData,
+  ResourceData,
+  ResourceWorkOdderData,
+  WorkOrderData,
+} from "@/types";
 import WorkOrderListCombo from "@/components/common/workOrderListCombo";
 import {
   DropdownMenu,
@@ -152,6 +158,13 @@ const WorkOrderResourceFormContainer = () => {
     control: form.control,
     name: "resources",
   });
+
+  const fetchResourceWorkOrder = async () => {
+    const data = await getAllResourceWorkOrder();
+    const newData = JSON.parse(data.data);
+    return newData;
+  };
+
   useEffect(() => {
     if (workOrder) {
       setProject(workOrder.project_id);
@@ -173,7 +186,7 @@ const WorkOrderResourceFormContainer = () => {
         startDate: `${workOrder.startDate}` || "-",
         estimated_hour: `${workOrder.estimated_hour}` || "-",
         forman: workOrder.forman || [],
-        formanAndAttachment: workOrder.formanAndAttachment || [],
+        attachment: workOrder.attachment || [],
         quantity_unit: `${workOrder.quantity_unit}` || "-",
         required_quantity: `${workOrder.required_quantity}` || "-",
         ballance_hour: `${workOrder.ballance_hour}`,
@@ -186,9 +199,30 @@ const WorkOrderResourceFormContainer = () => {
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
   ) => {
-    // console.log(values.resources);
-    creatWorkOrder.mutate(values.resources);
-    dialogRef.current?.click();
+    const data = await fetchResourceWorkOrder();
+    const filteredData = values.resources?.filter((val) =>
+      data?.some(
+        (res: any) =>
+          res.project_id === val.project_id &&
+          res.work_order_id === val.work_order_id &&
+          res.sqNumber === val.sqNumber
+      )
+    );
+
+    const duplicateSqNumbers = filteredData?.map((item) => item.sqNumber);
+
+    if (duplicateSqNumbers && duplicateSqNumbers.length > 0) {
+      toast.error(
+        `Duplicate sequence numbers : ${duplicateSqNumbers.toString()}`,
+        {
+          position: "top-right",
+          dismissible: true,
+        }
+      );
+    } else {
+      creatWorkOrder.mutate(values.resources);
+      dialogRef.current?.click();
+    }
   };
   const { data: measures } = useQuery({
     queryKey: ["measure"],
@@ -315,7 +349,7 @@ const WorkOrderResourceFormContainer = () => {
                                             endDate: `${selectedWorkOrder?.end_date}`,
                                             estimated_hour: "",
                                             forman: [],
-                                            formanAndAttachment: [],
+                                            attachment: [],
                                             quantity_unit: "",
                                             required_quantity: "",
                                             startDate: `${selectedWorkOrder?.start_date}`,
@@ -449,7 +483,13 @@ const WorkOrderResourceFormContainer = () => {
                                       return (
                                         <FormItem>
                                           <FormControl>
-                                            <SqSelect
+                                            <Input
+                                              className="p-0 pl-2 h-[38px]"
+                                              type="string"
+                                              {...field}
+                                              placeholder=""
+                                            />
+                                            {/* <SqSelect
                                               fields={fields}
                                               resourceId={info.resourceId}
                                               value={form.watch(
@@ -489,7 +529,7 @@ const WorkOrderResourceFormContainer = () => {
                                                   value
                                                 );
                                               }}
-                                            />
+                                            /> */}
                                           </FormControl>
                                           <FormMessage />
                                         </FormItem>
@@ -572,9 +612,9 @@ const WorkOrderResourceFormContainer = () => {
                                           <FormControl>
                                             <Input
                                               className="p-0 pl-2 h-[38px]"
-                                              type="number"
+                                              type="text"
                                               {...field}
-                                              placeholder=""
+                                              placeholder="HH:MM"
                                             />
                                           </FormControl>
                                           <FormMessage />
@@ -721,7 +761,7 @@ const WorkOrderResourceFormContainer = () => {
                                   <FormField
                                     key={info.remark}
                                     control={form.control}
-                                    name={`resources.${index}.formanAndAttachment`}
+                                    name={`resources.${index}.attachment`}
                                     render={({ field }) => {
                                       return (
                                         <FormItem>
@@ -729,18 +769,12 @@ const WorkOrderResourceFormContainer = () => {
                                             <MultiFileSelect
                                               files={file}
                                               onChange={(e: any) => {
-                                                var data: object[] = [];
-
-                                                // selectedFile(e);
+                                                console.log(e);
                                                 form.setValue(
-                                                  `resources.${index}.formanAndAttachment`,
-                                                  [
-                                                    {
-                                                      attachment: e,
-                                                      forman: "0",
-                                                    },
-                                                  ]
+                                                  `resources.${index}.attachment`,
+                                                  e
                                                 );
+                                                selectedFile([]);
                                               }}
                                             />
                                           </FormControl>

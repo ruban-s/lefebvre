@@ -172,8 +172,9 @@ const WorkOrderFormContainer = () => {
     setProject(value);
     var startDate = value?.start_date!.toString().split("-");
     var endDate = value?.end_date!.toString().split("-");
+    form.setValue("start_date", value?.start_date!);
+    form.setValue("end_date", value?.end_date!);
     if (!workOrder) {
-      console.log("i am working");
       setFromDate(`${startDate[1]}-${startDate[0]}-${startDate[2]}`);
       setToDate(`${endDate[1]}-${endDate[0]}-${endDate[2]}`);
       setDateRange({

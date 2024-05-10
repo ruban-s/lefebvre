@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema } from "@/schemas";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-
+import { signIn } from "next-auth/react";
 import {
   Form,
   FormItem,
@@ -31,6 +31,11 @@ const LoginForm = () => {
   const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
     // console.log(values);
+
+    // signIn("credentials", {
+    //   username: values.username,
+    //   password: values.password,
+    // });
 
     await Login(values).then((callback) => {
       if (callback?.error == undefined) {

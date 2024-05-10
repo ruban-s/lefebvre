@@ -18,7 +18,7 @@ const MultiFileSelect = (props: props) => {
   const imageRef = useRef<HTMLInputElement>(null);
   const popRef = useRef<HTMLButtonElement>(null);
 
-  const [file, selectedFile] = useState<string[]>([]);
+  const [file, selectedFile] = useState<string[]>(props.files);
   const [loading, setloading] = useState<boolean>(false);
 
   const newData = async (value: FormData, name: string) => {
@@ -29,9 +29,9 @@ const MultiFileSelect = (props: props) => {
     popRef.current?.click();
     props.onChange([...file, data.data]);
   };
-  useEffect(() => {
-    selectedFile(props.files);
-  }, [props.files]);
+  // useEffect(() => {
+  //   selectedFile(props.files);
+  // }, [props.files]);
 
   return (
     <Popover>

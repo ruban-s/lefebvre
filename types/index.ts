@@ -141,7 +141,7 @@ export interface ResourceWorkOdderData {
   endDate: string;
   estimated_hour: string;
   forman: string[];
-  formanAndAttachment: FormanAndAttachment[];
+  attachment: attachment[];
   id: string;
   prepared_quantity: string;
   project_id: string;
@@ -169,7 +169,7 @@ export interface ShiftData {
   status: string;
   updatedDate: string;
 }
-export interface FormanAndAttachment {
+export interface attachment {
   attachment: string[];
   forman: string;
 }
@@ -187,6 +187,8 @@ export interface LabourData {
   labor_type_id: string;
   name: string;
   project_id: string;
+  is_production_editable: boolean;
+  is_super_admin_editable: boolean;
   punch_in_time: string;
   punch_out_time: string;
   quantity: string;

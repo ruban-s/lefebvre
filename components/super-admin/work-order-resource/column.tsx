@@ -1,5 +1,4 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ProjectData, ResourceWorkOdderData, WorkOrderData } from "@/types";
@@ -203,8 +202,8 @@ export const UpdateStatus = ({ row }: any) => {
     employee_id: data.employee_id,
     endDate: data.endDate,
     actual_hour: data.actual_hour,
-    forman: data.formanAndAttachment,
-    formanAndAttachment: [],
+    forman: data.attachment,
+    attachment: [],
     project_id: data.project_id,
     resourceId: data.resourceId,
     prepared_quantity: data.prepared_quantity,

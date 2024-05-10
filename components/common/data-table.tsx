@@ -58,6 +58,7 @@ interface DataTableProps<TData, TValue> {
   fileName: string;
   exportDataFields?: string[];
   data: TData[];
+  fullexport?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -65,6 +66,7 @@ export function DataTable<TData, TValue>({
   searchName,
   fileName,
   data,
+  fullexport = false,
   exportDataFields,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -98,9 +100,19 @@ export function DataTable<TData, TValue>({
   });
   //CSV Export
   const exportCSV = (value: any) => {
+    var newData: any = [];
+    console.log(value);
+    value.map(({ createdDate, updatedDate, ...info }: any, index: any) => {
+      return newData.push({
+        ...info,
+        createdDate: createdDate.toString().replaceAll(",", "/"),
+        updatedDate: updatedDate.toString().replaceAll(",", "/"),
+      });
+    });
+    // console.log(newData);
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      value.map((row: any) => Object.values(row).join(",")).join("\n");
+      newData.map((row: any) => Object.values(row).join(",")).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -122,8 +134,18 @@ export function DataTable<TData, TValue>({
     var header: any = [[]];
     var body: any = [];
     headerList.map((info: string, index) => {
-      header[0].push(info);
+      header[0].push(
+        `${
+          info.replaceAll("_", " ").charAt(0).toUpperCase() +
+          info
+            .replaceAll("_", " ")
+            .slice(1)
+            .replace(/([a-z])([A-Z])/g, "$1 $2")
+        }`
+      );
     });
+    console.log(headerList);
+    console.log(header);
     value.map((info: any, index: any) => {
       if (index > 0) {
         return body.push(Object.values(info));
@@ -227,12 +249,11 @@ export function DataTable<TData, TValue>({
               exportFileName={exportFileName}
               lable="CSV"
               exportFunction={(value: string[]) => {
-                console.log(value);
-
                 exportData("CSV", value);
               }}
               exportDataFields={exportDataFields}
               data={data}
+              fullexport={fullexport}
             />
             <ExportButtonComponent
               nameChangeFunction={(value: any) => {
@@ -241,11 +262,11 @@ export function DataTable<TData, TValue>({
               exportFileName={exportFileName}
               lable="PDF"
               exportFunction={(value: string[]) => {
-                console.log(value);
                 exportData("PDF", value);
               }}
               exportDataFields={exportDataFields}
               data={data}
+              fullexport={fullexport}
             />
             <ExportButtonComponent
               nameChangeFunction={(value: any) => {
@@ -254,10 +275,10 @@ export function DataTable<TData, TValue>({
               exportFileName={exportFileName}
               lable="XLSX"
               exportFunction={(value: string[]) => {
-                console.log(value);
                 exportData("XLSX", value);
               }}
               exportDataFields={exportDataFields}
+              fullexport={fullexport}
               data={data}
             />
           </DropdownMenuContent>
