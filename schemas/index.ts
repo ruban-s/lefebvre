@@ -99,7 +99,16 @@ export const ResourceWorkOrderSchema = z.object({
   quantity_unit: z.string().min(1, { message: "required!" }),
   remark: z.string().optional().default("--"),
   required_quantity: z.string().min(1, { message: "required!" }),
-  sqNumber: z.string().min(1, { message: "required!" }),
+  sqNumber: z
+    .string()
+    .min(1, { message: "required!" })
+    .refine(
+      (val) => {
+        const numberVal = parseInt(val);
+        return numberVal % 10 === 0;
+      },
+      { message: "values: multiple of 10" }
+    ),
   status: z.string().min(1, { message: "required!" }),
   ballance_hour: z.string().optional().default("--"),
   ballanced_quantity: z.string().optional().default("--"),
