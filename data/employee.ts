@@ -9,7 +9,6 @@ export const getAllEmployee = async () => {
   try {
     const axiosResponse = await Axios.get("/employee/getAllEmployees");
     const data = axiosResponse.data;
-
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
