@@ -31,7 +31,7 @@ export const IndirectCodeSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
 });
 export const ResourceSchema = z.object({
-  resource_id: z.string().min(1, { message: "Resource ID is required" }),
+  resource_id: z.string().min(1, { message: "Resource-ID is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   res_description: z.string().min(1, { message: "Description is required" }),
   res_note: z.string().optional(),
@@ -93,24 +93,13 @@ export const WorkOrderSchema = z.object({
   status: z.string().min(1, { message: "status is required" }),
 });
 export const ResourceWorkOrderSchema = z.object({
-  estimated_hour: z
-    .string()
-    .refine((arg) => arg.match(/^(0?[1-9]|1[0-2]):[0-5][0-9]$/)),
+  estimated_hour: z.string().min(1, { message: "required!" }),
   bench_mark_measure: z.string().optional().default("--"),
   bench_mark_unit: z.string().optional().default("--"),
   quantity_unit: z.string().min(1, { message: "required!" }),
   remark: z.string().optional().default("--"),
   required_quantity: z.string().min(1, { message: "required!" }),
-  sqNumber: z
-    .string()
-    .min(1, { message: "required!" })
-    .refine(
-      (val) => {
-        const numberVal = parseInt(val);
-        return numberVal % 10 === 0;
-      },
-      { message: "values: multiple of 10" }
-    ),
+  sqNumber: z.string().min(1, { message: "required!" }),
   status: z.string().min(1, { message: "required!" }),
   ballance_hour: z.string().optional().default("--"),
   ballanced_quantity: z.string().optional().default("--"),
@@ -119,7 +108,14 @@ export const ResourceWorkOrderSchema = z.object({
   endDate: z.string().optional().default("--"),
   actual_hour: z.string().optional().default("--"),
   forman: z.array(z.string().optional()).default([]),
-  attachment: z.array(z.string().optional()).default([]),
+  formanAndAttachment: z
+    .array(
+      z.object({
+        attachment: z.array(z.string().optional()).optional(),
+        forman: z.string(),
+      })
+    )
+    .default([]),
   project_id: z.string().optional().default("--"),
   resourceId: z.string().optional().default("--"),
   prepared_quantity: z.string().optional().default("--"),
