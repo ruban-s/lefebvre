@@ -40,13 +40,7 @@ import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays, addDays } from "date-fns";
 import ProjectListCombo from "../../common/projectListCombo";
-import {
-  MeasureData,
-  ProjectData,
-  ResourceData,
-  ResourceWorkOdderData,
-  WorkOrderData,
-} from "@/types";
+import { MeasureData, ProjectData, ResourceData, WorkOrderData } from "@/types";
 import WorkOrderListCombo from "@/components/common/workOrderListCombo";
 import {
   DropdownMenu,
@@ -74,8 +68,6 @@ import { getAllResources } from "@/data/resources";
 import { getAllMeasure } from "@/data/measure";
 import { Table } from "lucide-react";
 import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import SqSelect from "@/components/common/sq-secelct";
-import MultiFileSelect from "@/components/common/multiFileSelect";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -91,8 +83,6 @@ const WorkOrderResourceFormContainer = () => {
   >();
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [workOderList, setWorkOrderList] = useState<WorkOrderData[]>([]);
-  const [file, selectedFile] = useState<string[]>([]);
-
   const {
     data: resource,
     isLoading,
@@ -146,7 +136,6 @@ const WorkOrderResourceFormContainer = () => {
   const degaultValusSet = {
     project_id: "",
     work_order_id: "",
-    resources: [],
   };
   const form = useForm<z.infer<typeof ResourceWorkOrderListSchema>>({
     resolver: zodResolver(ResourceWorkOrderListSchema),
@@ -158,13 +147,6 @@ const WorkOrderResourceFormContainer = () => {
     control: form.control,
     name: "resources",
   });
-
-  const fetchResourceWorkOrder = async () => {
-    const data = await getAllResourceWorkOrder();
-    const newData = JSON.parse(data.data);
-    return newData;
-  };
-
   useEffect(() => {
     if (workOrder) {
       setProject(workOrder.project_id);
@@ -199,30 +181,8 @@ const WorkOrderResourceFormContainer = () => {
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
   ) => {
-    const data = await fetchResourceWorkOrder();
-    const filteredData = values.resources?.filter((val) =>
-      data?.some(
-        (res: any) =>
-          res.project_id === val.project_id &&
-          res.work_order_id === val.work_order_id &&
-          res.sqNumber === val.sqNumber
-      )
-    );
-
-    const duplicateSqNumbers = filteredData?.map((item) => item.sqNumber);
-
-    if (duplicateSqNumbers && duplicateSqNumbers.length > 0) {
-      toast.error(
-        `Duplicate sequence numbers : ${duplicateSqNumbers.toString()}`,
-        {
-          position: "top-right",
-          dismissible: true,
-        }
-      );
-    } else {
-      creatWorkOrder.mutate(values.resources);
-      dialogRef.current?.click();
-    }
+    creatWorkOrder.mutate(values.resources);
+    dialogRef.current?.click();
   };
   const { data: measures } = useQuery({
     queryKey: ["measure"],
@@ -251,7 +211,7 @@ const WorkOrderResourceFormContainer = () => {
     setWorkOrder(value);
   };
   // const checkValue = (value: any) => {
-  //   var newData = fields.filter((info) => info.resourceId === value);
+  //   var newData = fields.filter((info: any) => info.resourceId === value);
   //   return newData.length > 0 ? true : false;
   // };
 
@@ -307,15 +267,15 @@ const WorkOrderResourceFormContainer = () => {
                     );
                   }}
                 />
-                <FormField
-                  control={form.control}
-                  name="resources"
-                  render={({ field }) => {
-                    return (
-                      <FormItem className=" col-span-2">
-                        <FormLabel>Resource Id</FormLabel>
-                        <FormControl>
-                          <div className="flex flex-row">
+                <div className="flex justify-between items-start">
+                  <FormField
+                    control={form.control}
+                    name="resources"
+                    render={({ field }) => {
+                      return (
+                        <FormItem className="w-auto flex flex-col mt-3">
+                          <FormLabel>Resource Id</FormLabel>
+                          <FormControl>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <div className="w-auto flex">
@@ -366,37 +326,37 @@ const WorkOrderResourceFormContainer = () => {
                                 })}
                               </DropdownMenuContent>
                             </DropdownMenu>
-                            {fields.length > 0 && (
-                              <div className="flex-1 flex-wrap  rounded-sm border-dashed border-2 p-2 mx-2">
-                                <p className=" w-full text-sm ml-4 mb-1">
-                                  Selected Resource Ids
-                                </p>
-                                {fields.map((info: any, index) => {
-                                  return (
-                                    <Badge
-                                      key={index}
-                                      className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
-                                      {index + 1} | {info.resourceId}
-                                      <div className=" bg-white rounded-full text-red-500 ml-2">
-                                        <IoMdCloseCircle
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            remove(index);
-                                          }}
-                                        />
-                                      </div>
-                                    </Badge>
-                                  );
-                                })}
-                              </div>
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                  {fields.length > 0 && (
+                    <div className="w-[300px]  bg-slate-100 rounded-sm">
+                      <p className=" w-full text-sm ml-4 mb-1">
+                        Selected Resource Ids
+                      </p>
+                      {fields.map((info: any, index) => {
+                        return (
+                          <Badge
+                            key={index}
+                            className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
+                            {index + 1} | {info["resourceId"]}
+                            <div className=" bg-white rounded-full text-red-500 ml-2">
+                              <IoMdCloseCircle
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  remove(index);
+                                }}
+                              />
+                            </div>
+                          </Badge>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
               <Dialog>
                 <DialogTrigger className="mt-2" ref={dialogRef}>
@@ -472,11 +432,11 @@ const WorkOrderResourceFormContainer = () => {
                                 key={index}
                                 className="border-b border-gray-200 dark:border-gray-700">
                                 <td className="px-6 w-[150px] py-4 text-sm border border-slate-300">
-                                  {info.resourceId}
+                                  {info["resourceId"]}
                                 </td>
                                 <td className=" w-[150px] text-sm border border-slate-300">
                                   <FormField
-                                    key={info.sqNumber}
+                                    key={info["sqNumber"]}
                                     control={form.control}
                                     name={`resources.${index}.sqNumber`}
                                     render={({ field }) => {
@@ -484,52 +444,11 @@ const WorkOrderResourceFormContainer = () => {
                                         <FormItem>
                                           <FormControl>
                                             <Input
-                                              className="p-0 pl-2 h-[38px]"
-                                              type="string"
+                                              className="p-0 pl-2 h-[38px] "
+                                              type="number"
                                               {...field}
                                               placeholder=""
                                             />
-                                            {/* <SqSelect
-                                              fields={fields}
-                                              resourceId={info.resourceId}
-                                              value={form.watch(
-                                                `resources.${index}.sqNumber`
-                                              )}
-                                              index={index}
-                                              onChange={(value: any) => {
-                                                // console.log(
-                                                //   form.watch("resources")!
-                                                // );
-                                                var data = form
-                                                  .watch("resources")!
-                                                  .filter(
-                                                    (filterInfo) =>
-                                                      filterInfo.resourceId ===
-                                                      info.resourceId
-                                                  );
-                                                var filterdData = data.filter(
-                                                  (filterSq) =>
-                                                    filterSq.sqNumber == value
-                                                );
-                                                if (filterdData.length > 0) {
-                                                  return toast.error(
-                                                    `Something went wrong`,
-                                                    {
-                                                      description: `Resource ID : \" ${info.resourceId} \" has the same Seq No, try to change the Seq No value`,
-                                                      position: "top-right",
-                                                      dismissible: true,
-                                                    }
-                                                  );
-                                                }
-                                                form.clearErrors(
-                                                  `resources.${index}.sqNumber`
-                                                );
-                                                form.setValue(
-                                                  `resources.${index}.sqNumber`,
-                                                  value
-                                                );
-                                              }}
-                                            /> */}
                                           </FormControl>
                                           <FormMessage />
                                         </FormItem>
@@ -612,9 +531,9 @@ const WorkOrderResourceFormContainer = () => {
                                           <FormControl>
                                             <Input
                                               className="p-0 pl-2 h-[38px]"
-                                              type="text"
+                                              type="number"
                                               {...field}
-                                              placeholder="HH:MM"
+                                              placeholder=""
                                             />
                                           </FormControl>
                                           <FormMessage />
@@ -719,14 +638,6 @@ const WorkOrderResourceFormContainer = () => {
                                               <SelectItem value="Released">
                                                 Released
                                               </SelectItem>
-                                              <SelectItem value="Closed">
-                                                Closed
-                                              </SelectItem>
-                                              <SelectItem
-                                                value="Canceled"
-                                                disabled>
-                                                Canceled
-                                              </SelectItem>
                                             </SelectContent>
                                           </Select>
                                           <FormMessage />
@@ -758,32 +669,6 @@ const WorkOrderResourceFormContainer = () => {
                                   />
                                 </td>
                                 <td className="w-[200px] text-sm border border-slate-300">
-                                  <FormField
-                                    key={info.remark}
-                                    control={form.control}
-                                    name={`resources.${index}.attachment`}
-                                    render={({ field }) => {
-                                      return (
-                                        <FormItem>
-                                          <FormControl>
-                                            <MultiFileSelect
-                                              files={file}
-                                              onChange={(e: any) => {
-                                                console.log(e);
-                                                form.setValue(
-                                                  `resources.${index}.attachment`,
-                                                  e
-                                                );
-                                                selectedFile([]);
-                                              }}
-                                            />
-                                          </FormControl>
-                                          <FormMessage />
-                                        </FormItem>
-                                      );
-                                    }}
-                                  />
-
                                   {/* <FormField
                                     key={info.remark}
                                     control={form.control}
