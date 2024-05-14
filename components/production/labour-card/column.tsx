@@ -307,7 +307,6 @@ export const UpdateStatus = ({ row }: any) => {
     shiftEnd: any
   ) {
     shift.data?.map((info: ShiftData, index) => {
-      console.log(info);
       if (
         info.shift_end_time === shiftStart &&
         info.shift_end_time === shiftEnd
