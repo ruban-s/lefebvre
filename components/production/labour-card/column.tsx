@@ -397,7 +397,8 @@ export const UpdateStatus = ({ row }: any) => {
               value={
                 data.punch_out_time === ""
                   ? "--"
-                  : getTimeDifference(data.punch_in_time, data.punch_out_time)
+                  : // : getTimeDifference(data.punch_in_time, data.punch_out_time)
+                    "--"
               }
               isInput
             />

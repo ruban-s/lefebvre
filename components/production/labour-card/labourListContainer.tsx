@@ -22,6 +22,7 @@ const LabourListContainer = () => {
   if (isError) {
     return <p>error</p>;
   }
+  console.log(data);
   return (
     <div className="w-[100%] h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
       {isLoading ? (
