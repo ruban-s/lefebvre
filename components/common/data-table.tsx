@@ -134,6 +134,7 @@ export function DataTable<TData, TValue>({
   };
   const exportPDF = (value: any) => {
     var headerList = Object.keys(value[0]);
+    console.log(headerList[0]);
     var header: any = [[]];
     var body: any = [];
     headerList.map((info: string, index) => {
@@ -158,6 +159,25 @@ export function DataTable<TData, TValue>({
       body: body,
       theme: "grid",
       styles: { minCellWidth: 15 },
+      horizontalPageBreak: true,
+      // horizontalPageBreakRepeat: header[0][0],
+      horizontalPageBreakBehaviour: "immediately",
+      didDrawPage: function (data: any) {
+        const docAny: any = doc;
+        const pageCount = docAny.internal.getNumberOfPages();
+        const pageWidth = docAny.internal.pageSize.width;
+        docAny.setFontSize(10);
+        const textWidth =
+          (docAny.getStringUnitWidth("Page " + pageCount) *
+            docAny.internal.getFontSize()) /
+          docAny.internal.scaleFactor;
+        const xPos = (pageWidth - textWidth) / 2;
+        docAny.text(
+          "Page " + pageCount,
+          xPos,
+          docAny.internal.pageSize.height - 10
+        );
+      },
     });
     doc.save(exportFileName + ".pdf");
   };
