@@ -26,9 +26,9 @@ import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import StatusBadge from "@/components/common/status-badge";
 import ViewTabField from "@/components/common/viewTabField";
-import { Switch } from "@radix-ui/react-switch";
-import { getAllShift } from "@/data/shift";
+import { Switch } from "@/components/ui/switch";
 import { updateLabourCard } from "@/data/labour-card";
+import { getAllShift } from "@/data/shift";
 
 // export const CellFunction = ({ row }: any) => {
 //   const queryClient = useQueryClient();
@@ -306,7 +306,7 @@ export const UpdateStatus = ({ row }: any) => {
     shiftStart: any,
     shiftEnd: any
   ) {
-    shift.data?.map((info: ShiftData) => {
+    shift.data?.map((info: ShiftData, index) => {
       console.log(info);
       if (
         info.shift_end_time === shiftStart &&
@@ -404,7 +404,7 @@ export const UpdateStatus = ({ row }: any) => {
             {Object.keys(data).map((dataValue, index) => {
               if (dataValue === "is_production_editable") {
                 return (
-                  <div className="flex items-center space-x-2" key={index}>
+                  <div className="flex items-center space-x-2">
                     <Switch
                       id={dataValue}
                       checked={toogle}
@@ -577,5 +577,11 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <StatusBadge row={row} />,
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return <UpdateStatus row={row} />;
+    },
   },
 ];

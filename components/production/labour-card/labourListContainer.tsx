@@ -38,9 +38,10 @@ const LabourListContainer = () => {
               labourCardFields={labourCardMaintanceField}
               columns={projectColumns}
               data={labours!}
-              searchName="project_id"
-              fileName="Project"
+              searchName="employee_id"
+              fileName="Labour Card"
               exportDataFields={projectController}
+              fullexport={true}
             />
           </div>
         </>
