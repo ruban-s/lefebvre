@@ -38,10 +38,9 @@ const LabourListContainer = () => {
             <DataTable
               columns={projectColumns}
               data={labours!}
-              searchName="employee_id"
-              fileName="Labour Card"
+              searchName="project_id"
+              fileName="Project"
               exportDataFields={projectController}
-              fullexport={true}
             />
           </div>
         </>

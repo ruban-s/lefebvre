@@ -312,7 +312,6 @@ export const UpdateStatus = ({ row }: any) => {
                 onselect={(value: DateRange) => {
                   payLoad.start_date = format(value?.from!, "dd-LL-y");
                   payLoad.end_date = format(value?.to!, "dd-LL-y");
-                  console.log(dateRange);
                 }}
                 selectedData={dateRange}
                 disabled={[]}

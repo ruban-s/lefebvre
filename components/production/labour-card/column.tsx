@@ -2,13 +2,13 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { LabourData, ProjectData, ShiftData } from "@/types";
+import { LabourData, ProjectData } from "@/types";
 import { useProjectStore } from "@/state";
 
 import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
 import { IoIosWarning } from "react-icons/io";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteProject, updateProject } from "@/data/projects";
 import { toast } from "sonner";
 import { MdDelete } from "react-icons/md";
@@ -40,16 +40,12 @@ import { MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import StatusBadge from "@/components/common/status-badge";
-import ViewTabField from "@/components/common/viewTabField";
-import { Switch } from "@/components/ui/switch";
-import { updateLabourCard } from "@/data/labour-card";
-import { getAllShift } from "@/data/shift";
 
 // export const CellFunction = ({ row }: any) => {
 //   const queryClient = useQueryClient();
@@ -599,11 +595,5 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <StatusBadge row={row} />,
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return <UpdateStatus row={row} />;
-    },
   },
 ];
