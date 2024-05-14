@@ -101,15 +101,16 @@ export function DataTable<TData, TValue>({
   //CSV Export
   const exportCSV = (value: any) => {
     var newData: any = [];
-    console.log(value);
     value.map(({ createdDate, updatedDate, ...info }: any, index: any) => {
       return newData.push({
         ...info,
-        createdDate: createdDate.toString().replaceAll(",", "/"),
+        createdDate:
+          createdDate !== null
+            ? createdDate.toString().replaceAll(",", "/")
+            : "null",
         updatedDate: updatedDate.toString().replaceAll(",", "/"),
       });
     });
-    // console.log(newData);
     const csvContent =
       "data:text/csv;charset=utf-8," +
       newData.map((row: any) => Object.values(row).join(",")).join("\n");
