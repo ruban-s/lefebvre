@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
 import { projectColumns } from "./column";
 import { getAllLabourCard } from "@/data/labour-card";
-import { projectController } from "@/config/const";
+import { labourCardMaintanceField, projectController } from "@/config/const";
 
 const LabourListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -22,7 +22,6 @@ const LabourListContainer = () => {
   if (isError) {
     return <p>error</p>;
   }
-  console.log(data);
   return (
     <div className="w-[100%] h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
       {isLoading ? (
@@ -36,6 +35,7 @@ const LabourListContainer = () => {
           </div>
           <div className="w-full ">
             <DataTable
+              labourCardFields={labourCardMaintanceField}
               columns={projectColumns}
               data={labours!}
               searchName="project_id"

@@ -1,32 +1,11 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { LabourData, ProjectData, ShiftData } from "@/types";
-import { useProjectStore } from "@/state";
 
-import TableActionButtonComponents from "@/components/common/tableActionButtonComponents";
 import { TbEdit } from "react-icons/tb";
-import { IoIosWarning } from "react-icons/io";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteProject, updateProject } from "@/data/projects";
 import { toast } from "sonner";
-import { MdDelete } from "react-icons/md";
-import { Badge } from "@/components/ui/badge";
-import { Popover, PopoverContent } from "@/components/ui/popover";
-import { PopoverTrigger } from "@radix-ui/react-popover";
-import { RxCaretSort } from "react-icons/rx";
-import Link from "next/link";
-import { FaFileCsv } from "react-icons/fa6";
-import { FaFilePdf } from "react-icons/fa6";
-import { BsFiletypeXlsx } from "react-icons/bs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -234,7 +213,6 @@ import { updateLabourCard } from "@/data/labour-card";
 // };
 export const UpdateStatus = ({ row }: any) => {
   const data = row.original;
-  console.log(data);
   const ref = useRef<HTMLButtonElement>(null);
   const [toogle, setToogle] = useState<boolean>(data.is_production_editable);
 
