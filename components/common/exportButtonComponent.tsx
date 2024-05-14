@@ -28,6 +28,7 @@ interface ExportButtonComponentProps {
   exportDataFields?: string[];
   data: any[];
   fullexport?: boolean;
+  labourCardFields?: any;
 }
 
 const ExportButtonComponent = ({
@@ -37,6 +38,7 @@ const ExportButtonComponent = ({
   nameChangeFunction,
   exportDataFields,
   data,
+  labourCardFields,
   fullexport = false,
 }: ExportButtonComponentProps) => {
   const [selectedFields, setSelectedFields] = useState<string[] | undefined>(
@@ -126,7 +128,9 @@ const ExportButtonComponent = ({
               className="bg-theme"
               onClick={() => {
                 console.log(fullexport);
-                if (fullexport) {
+                if (fullexport && labourCardFields) {
+                  exportFunction(labourCardFields);
+                } else if (fullexport) {
                   exportFunction(defaultFiedls);
                 } else {
                   exportFunction(selectedFields);

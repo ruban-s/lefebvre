@@ -59,6 +59,7 @@ interface DataTableProps<TData, TValue> {
   exportDataFields?: string[];
   data: TData[];
   fullexport?: boolean;
+  labourCardFields?: any;
 }
 
 export function DataTable<TData, TValue>({
@@ -68,6 +69,7 @@ export function DataTable<TData, TValue>({
   data,
   fullexport = false,
   exportDataFields,
+  labourCardFields,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -270,6 +272,7 @@ export function DataTable<TData, TValue>({
                   exportDataFields={exportDataFields}
                   data={data}
                   fullexport={fullexport}
+                  labourCardFields={labourCardFields}
                 />
                 <ExportButtonComponent
                   nameChangeFunction={(value: any) => {
@@ -283,6 +286,7 @@ export function DataTable<TData, TValue>({
                   exportDataFields={exportDataFields}
                   data={data}
                   fullexport={fullexport}
+                  labourCardFields={labourCardFields}
                 />
                 <ExportButtonComponent
                   nameChangeFunction={(value: any) => {
@@ -296,6 +300,7 @@ export function DataTable<TData, TValue>({
                   exportDataFields={exportDataFields}
                   fullexport={fullexport}
                   data={data}
+                  labourCardFields={labourCardFields}
                 />
               </DropdownMenuContent>
             </DropdownMenu>
