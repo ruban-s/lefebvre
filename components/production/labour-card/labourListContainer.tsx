@@ -22,10 +22,6 @@ const LabourListContainer = () => {
   });
   const fullData = data;
   // const labours = data;
-
-  if (isError) {
-    return <p>error</p>;
-  }
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
   const [fromDate, setFromDate] = useState<string | undefined>("");
@@ -102,6 +98,10 @@ const LabourListContainer = () => {
       fetchData(fullData);
     }
   }, [fullData, fromDate, toDate]);
+
+  if (isError) {
+    return <p>error</p>;
+  }
 
   return (
     <div className="w-[100%] h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
