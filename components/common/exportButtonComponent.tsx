@@ -127,7 +127,6 @@ const ExportButtonComponent = ({
               variant="default"
               className="bg-theme"
               onClick={() => {
-                console.log(fullexport);
                 if (fullexport && labourCardFields) {
                   exportFunction(labourCardFields);
                 } else if (fullexport) {
