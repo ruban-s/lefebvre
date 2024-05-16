@@ -10,13 +10,23 @@ import {
 } from "react-icons/fa";
 import { GiCoffeeCup, GiThermometerScale } from "react-icons/gi";
 import { IoCalendar } from "react-icons/io5";
-import { MdSpaceDashboard } from "react-icons/md";
+import {
+  MdBatteryChargingFull,
+  MdManageAccounts,
+  MdOutlineSummarize,
+  MdSpaceDashboard,
+  MdWork,
+} from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
-import { CgWorkAlt } from "react-icons/cg";
+import { CgSandClock, CgWorkAlt } from "react-icons/cg";
 import { FaClipboardList } from "react-icons/fa";
 import { TbLockExclamation, TbLockCheck, TbLockCancel } from "react-icons/tb";
 import { TiCancelOutline } from "react-icons/ti";
 import { IoCloseCircle } from "react-icons/io5";
+import { GrResources, GrUserManager } from "react-icons/gr";
+import { FaTicket } from "react-icons/fa6";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { BsLightningChargeFill } from "react-icons/bs";
 
 export const BASE_URL = "http://208.109.9.243:8082";
 export const adminTabs: TabData[] = [
@@ -163,6 +173,80 @@ export const SuperAdminTabs: TabData[] = [
     label: "Labour Card",
     icon: FaClipboardList,
     link: "/super-admin/labour-card",
+  },
+];
+export const ReportTabs: TabData[] = [
+  {
+    id: 1,
+    label: "Project Summary",
+    icon: MdOutlineSummarize,
+    link: "/report/project_summary",
+  },
+  {
+    id: 2,
+    label: "Workorder Report",
+    icon: MdWork,
+    link: "/report/workorder_report",
+  },
+  {
+    id: 3,
+    label: "Resource Report",
+    icon: GrResources,
+    link: "/report/resource_report",
+  },
+  {
+    id: 4,
+    label: "Labour Ticket Report",
+    icon: FaTicket,
+    link: "/report/labour_ticket_report",
+  },
+  {
+    id: 5,
+    label: "Foreman Report",
+    icon: GrUserManager,
+    link: "/report/foreman_report",
+  },
+  {
+    id: 6,
+    label: "Need to Fill",
+    icon: GrUserManager,
+    link: "/report/foreman_report",
+  },
+  {
+    id: 7,
+    label: "Hours To Complete",
+    icon: CgSandClock,
+    link: "/report/hours_to_complete",
+  },
+  {
+    id: 8,
+    label: "Capacity Utilisation",
+    icon: MdBatteryChargingFull,
+    link: "/report/capacity_utilisation",
+  },
+  {
+    id: 9,
+    label: "Employee Efficiency",
+    icon: BsLightningChargeFill,
+    link: "/report/employee_efficiency",
+  },
+  {
+    id: 10,
+    label: "Indirect Report",
+    icon: HiOutlineDocumentReport,
+    link: "/report/indirect_report",
+  },
+  {
+    id: 11,
+    label: "Employee",
+    icon: MdManageAccounts,
+    link: "/report/employee",
+  },
+  {
+    id: 12,
+    label: "Need to Fill",
+    icon: GrUserManager,
+    link: "/report/foreman_report",
   },
 ];
 
@@ -334,4 +418,20 @@ export const labourCardMaintanceField = [
   "remark",
   "createdDate",
   "updatedDate",
+];
+
+export const ProjectSummaryController = [
+  "projectId",
+  "description",
+  "customer_name",
+  "status",
+  "start_date",
+  "end_date",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "total_work_order",
+  "released_work_order",
+  "unreleased_work_order",
+  "closed_work_order",
 ];

@@ -200,3 +200,20 @@ export interface LabourData {
   updatedDate: string;
   work_order_id: string;
 }
+
+// Reports
+export interface ProjectSummary {
+  projectId: string;
+  description: string;
+  customer_name: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  estimated_hour: string;
+  actual_hour: string;
+  variance: string;
+  total_work_order: string;
+  released_work_order: string;
+  unreleased_work_order: string;
+  closed_work_order: string;
+}

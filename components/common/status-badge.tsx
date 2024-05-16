@@ -10,7 +10,8 @@ const StatusBadge = ({ row }: { row: any }) => {
           : row.original.status === "Unreleased" ||
             row.original.status === "Inactive"
           ? "bg-red-500"
-          : row.original.status === "Canceled"
+          : row.original.status === "Canceled" ||
+            row.original.status === "Closed"
           ? "bg-orange-500"
           : "bg-black"
       }`}>
