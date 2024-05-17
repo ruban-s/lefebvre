@@ -217,3 +217,19 @@ export interface ProjectSummary {
   unreleased_work_order: string;
   closed_work_order: string;
 }
+
+export interface WorkOrderDataReport {
+  project_id: string;
+  description: string;
+  customer_name: string;
+  work_order_Id: string;
+  work_order_description: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  estimated_hour: string;
+  actual_hour: string;
+  variance: string;
+  required_quantity: string;
+  prepared_quantity: string;
+}

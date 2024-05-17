@@ -435,3 +435,19 @@ export const ProjectSummaryController = [
   "unreleased_work_order",
   "closed_work_order",
 ];
+
+export const workOrderDataReportController = [
+  "project_id",
+  "description",
+  "customer_name",
+  "work_order_Id",
+  "work_order_description",
+  "status",
+  "start_date",
+  "end_date",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "required_quantity",
+  "prepared_quantity",
+];
