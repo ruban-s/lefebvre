@@ -200,3 +200,147 @@ export interface LabourData {
   updatedDate: string;
   work_order_id: string;
 }
+
+// Reports
+export interface ProjectSummary {
+  projectId: string;
+  description: string;
+  customer_name: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  estimated_hour: string;
+  actual_hour: string;
+  variance: string;
+  total_work_order: string;
+  released_work_order: string;
+  unreleased_work_order: string;
+  closed_work_order: string;
+}
+
+export interface WorkOrderDataReport {
+  project_id: string;
+  description: string;
+  customer_name: string;
+  work_order_Id: string;
+  work_order_description: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  estimated_hour: string;
+  actual_hour: string;
+  variance: string;
+  required_quantity: string;
+  prepared_quantity: string;
+}
+
+export interface ResourceReport {
+  project_id: string;
+  description: string;
+  customer_name: string;
+  work_order_Id: string;
+  work_order_description: string;
+  sq_no: string;
+  resource_id: string;
+  bench_mark_measure: string;
+  bench_mark_unit: string;
+  estimated_hour: string;
+  actual_hour: string;
+  variance: string;
+  required_quantity: string;
+  prepared_quantity: string;
+  unit_measure: string;
+  forman: string;
+  status: string;
+}
+
+export interface CapacityUtilisation {
+  resource_id: string;
+  project_id: string;
+  description: string;
+  customer_name: string;
+  work_order_Id: string;
+  work_order_description: string;
+  estimated_hour: string;
+  actual_hour: string;
+  balance_hour_to_complete: string;
+  required_quantity: string;
+  prepared_quantity: string;
+  balance_quantity: string;
+  end_date: string;
+  status: string;
+}
+
+export interface EmployeeEfficiency {
+  employee_id: string;
+  employee_name: string;
+  designation: string;
+  project_id: string;
+  project_description: string;
+  work_order_description: string;
+  resource_id: string;
+  estimated_hour: string;
+  actual_hour: string;
+  required_quantity: string;
+  prepared_quantity: string;
+  estimated_hrs_qty: string;
+  actula_hrs_qty: string;
+  efficiency: string;
+}
+
+export interface EmployeeReport {
+  employee_id: string;
+  employee_name: string;
+  designation: string;
+  status: string;
+  team_leader: string;
+}
+
+export interface IndirectReport {
+  date: string;
+  employee_id: string;
+  employee_name: string;
+  designation: string;
+  attendance_type: string;
+  type: any;
+  gl_code: any;
+  gl_description: string;
+  in_time: string;
+  out_time: string | null;
+  system_in_time: string;
+  system_out_time: string;
+  work_hours: string;
+  break_hours: string;
+  effective_work_hours: string;
+  effective_work_hour_forman: string | null;
+}
+
+export interface LabourTicketReport {
+  transaction_id: number;
+  employee_id: string | null;
+  employee_name: string;
+  designation: string;
+  attendance_type: string;
+  type: string | null;
+  gl_code: string | null;
+  gl_description: string | null;
+  project_id: string;
+  work_order_id: string;
+  sq_no: string | null;
+  resource_id: string;
+  in_time: string;
+  out_time: string | null;
+  system_in_time: string;
+  system_out_time: string;
+  work_hours: string;
+  break_hours: string;
+  effective_work_hours: string;
+  effective_work_hour_forman: string | null;
+  prepared_quantity: number | null;
+  shift_start_time: string | null;
+  shift_end_time: string | null;
+  shift_date: string;
+  forman: string | null;
+  forman_name: string;
+  remark_by_forman: string | null;
+}
