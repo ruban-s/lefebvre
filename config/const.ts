@@ -10,13 +10,23 @@ import {
 } from "react-icons/fa";
 import { GiCoffeeCup, GiThermometerScale } from "react-icons/gi";
 import { IoCalendar } from "react-icons/io5";
-import { MdSpaceDashboard } from "react-icons/md";
+import {
+  MdBatteryChargingFull,
+  MdManageAccounts,
+  MdOutlineSummarize,
+  MdSpaceDashboard,
+  MdWork,
+} from "react-icons/md";
 import { TbReportAnalytics } from "react-icons/tb";
-import { CgWorkAlt } from "react-icons/cg";
+import { CgSandClock, CgWorkAlt } from "react-icons/cg";
 import { FaClipboardList } from "react-icons/fa";
 import { TbLockExclamation, TbLockCheck, TbLockCancel } from "react-icons/tb";
 import { TiCancelOutline } from "react-icons/ti";
 import { IoCloseCircle } from "react-icons/io5";
+import { GrResources, GrUserManager } from "react-icons/gr";
+import { FaTicket } from "react-icons/fa6";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { BsLightningChargeFill } from "react-icons/bs";
 
 export const BASE_URL = "http://208.109.9.243:8082";
 export const adminTabs: TabData[] = [
@@ -45,7 +55,6 @@ export const adminTabs: TabData[] = [
   { id: 8, label: "Indirect-code", icon: FaCogs, link: "/indirect-code" },
   { id: 9, label: "Resources", icon: FaUserCog, link: "/resources" },
   { id: 10, label: "Users", icon: FaUsers, link: "/user" },
-  { id: 11, label: "Report", icon: TbReportAnalytics, link: "/report" },
 ];
 export const plannerTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
@@ -125,6 +134,12 @@ export const productionTabs: TabData[] = [
     icon: FaIdCardAlt,
     link: "/production/labour-card",
   },
+  {
+    id: 8,
+    label: "Report",
+    icon: TbReportAnalytics,
+    link: "/production/report",
+  },
 ];
 export const SuperAdminTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
@@ -163,6 +178,80 @@ export const SuperAdminTabs: TabData[] = [
     label: "Labour Card",
     icon: FaClipboardList,
     link: "/super-admin/labour-card",
+  },
+];
+export const ReportTabs: TabData[] = [
+  {
+    id: 1,
+    label: "Project Summary",
+    icon: MdOutlineSummarize,
+    link: "/production/report/project_summary",
+  },
+  {
+    id: 2,
+    label: "Workorder Report",
+    icon: MdWork,
+    link: "/production/report/workorder_report",
+  },
+  {
+    id: 3,
+    label: "Resource Report",
+    icon: GrResources,
+    link: "/production/report/resource_report",
+  },
+  {
+    id: 4,
+    label: "Labour Ticket Report",
+    icon: FaTicket,
+    link: "/production/report/labour_ticket_report",
+  },
+  {
+    id: 5,
+    label: "Foreman Report",
+    icon: GrUserManager,
+    link: "/production/report/foreman_report",
+  },
+  {
+    id: 6,
+    label: "Need to Fill",
+    icon: GrUserManager,
+    link: "/production/report/foreman_report",
+  },
+  {
+    id: 7,
+    label: "Hours To Complete",
+    icon: CgSandClock,
+    link: "/production/report/hours_to_complete",
+  },
+  {
+    id: 8,
+    label: "Capacity Utilisation",
+    icon: MdBatteryChargingFull,
+    link: "/production/report/capacity_utilisation",
+  },
+  {
+    id: 9,
+    label: "Employee Efficiency",
+    icon: BsLightningChargeFill,
+    link: "/production/report/employee_efficiency",
+  },
+  {
+    id: 10,
+    label: "Indirect Report",
+    icon: HiOutlineDocumentReport,
+    link: "/production/report/indirect_report",
+  },
+  {
+    id: 11,
+    label: "Employee",
+    icon: MdManageAccounts,
+    link: "/production/report/employee",
+  },
+  {
+    id: 12,
+    label: "Need to Fill",
+    icon: GrUserManager,
+    link: "/production/report/foreman_report",
   },
 ];
 
@@ -334,4 +423,147 @@ export const labourCardMaintanceField = [
   "remark",
   "createdDate",
   "updatedDate",
+];
+
+export const ProjectSummaryController = [
+  "projectId",
+  "description",
+  "customer_name",
+  "status",
+  "start_date",
+  "end_date",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "total_work_order",
+  "released_work_order",
+  "unreleased_work_order",
+  "closed_work_order",
+];
+
+export const workOrderDataReportController = [
+  "project_id",
+  "description",
+  "customer_name",
+  "work_order_Id",
+  "work_order_description",
+  "status",
+  "start_date",
+  "end_date",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "required_quantity",
+  "prepared_quantity",
+];
+
+export const ResourceReportController = [
+  "project_id",
+  "description",
+  "customer_name",
+  "work_order_Id",
+  "work_order_description",
+  "sq_no",
+  "resource_id",
+  "bench_mark_measure",
+  "bench_mark_unit",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "required_quantity",
+  "prepared_quantity",
+  "unit_measure",
+  "forman",
+  "status",
+];
+
+export const CapacityUtilisationController = [
+  "resource_id",
+  "project_id",
+  "description",
+  "customer_name",
+  "work_order_Id",
+  "work_order_description",
+  "estimated_hour",
+  "actual_hour",
+  "balance_hour_to_complete",
+  "required_quantity",
+  "prepared_quantity",
+  "balance_quantity",
+  "end_date",
+  "status",
+];
+
+export const EmployeeEfficiencyController = [
+  "employee_id",
+  "employee_name",
+  "designation",
+  "project_id",
+  "project_description",
+  "work_order_description",
+  "resource_id",
+  "estimated_hour",
+  "actual_hour",
+  "required_quantity",
+  "prepared_quantity",
+  "estimated_hrs_qty",
+  "actula_hrs_qty",
+  "efficiency",
+];
+
+export const EmployeeReportController = [
+  "employee_id",
+  "employee_name",
+  "designation",
+  "status",
+  "team_leader",
+];
+
+export const IndirectReportController = [
+  "date",
+  "employee_id",
+  "employee_name",
+  "designation",
+  "attendance_type",
+  "type",
+  "gl_code",
+  "gl_description",
+  "in_time",
+  "out_time",
+  "system_in_time",
+  "system_out_time",
+  "work_hours",
+  "break_hours",
+  "effective_work_hours",
+  "effective_work_hour_forman",
+];
+
+export const LabourTicketController = [
+  "transaction_id",
+  "employee_id",
+  "employee_name",
+  "designation",
+  "attendance_type",
+  "type",
+  "gl_code",
+  "gl_description",
+  "project_id",
+  "work_order_id",
+  "sq_no",
+  "resource_id",
+  "in_time",
+  "out_time",
+  "system_in_time",
+  "system_out_time",
+  "work_hours",
+  "break_hours",
+  "effective_work_hours",
+  "effective_work_hour_forman",
+  "prepared_quantity",
+  "shift_start_time",
+  "shift_end_time",
+  "shift_date",
+  "forman",
+  "forman_name",
+  "remark_by_forman",
 ];
