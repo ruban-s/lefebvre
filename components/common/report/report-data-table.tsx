@@ -55,7 +55,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   searchField: string;
   filterColumn?: string;
-  title: string;
+  title?: string;
   options?: {
     label: string;
     value: string;
@@ -255,7 +255,8 @@ export function ReportDataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-auto  flex flex-row space-x-1 text-bold">
+                  className="ml-auto  flex flex-row space-x-1 text-bold"
+                  disabled={data.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
               </DropdownMenuTrigger>

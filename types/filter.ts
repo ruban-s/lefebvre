@@ -12,3 +12,14 @@ export const statuses = [
     label: "Closed",
   },
 ];
+
+export const activeInactiveStatuses = [
+  {
+    value: "Active",
+    label: "Active",
+  },
+  {
+    value: "Inactive",
+    label: "Inactive",
+  },
+];

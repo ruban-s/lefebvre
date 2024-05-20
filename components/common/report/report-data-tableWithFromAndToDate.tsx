@@ -71,7 +71,7 @@ interface DataTableProps<TData, TValue> {
   disableDateTime?: boolean;
 }
 
-export function ReportDataTableWithTimeRange<TData, TValue>({
+export function ReportDataTableWithFromAndToDate<TData, TValue>({
   fullData,
   columns,
   searchName,
