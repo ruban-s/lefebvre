@@ -61,7 +61,6 @@ const WorkOrderListCombo = ({
       var selectedWorkOrder = workOrders?.filter(
         (info) => info.work_order_id === value
       );
-      console.log(selectedWorkOrder);
       // setValues(selectedWorkOrder![0]);
       onChange(selectedWorkOrder![0]);
       // setValues(value);

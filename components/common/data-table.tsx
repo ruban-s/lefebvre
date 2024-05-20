@@ -134,7 +134,6 @@ export function DataTable<TData, TValue>({
   };
   const exportPDF = (value: any) => {
     var headerList = Object.keys(value[0]);
-    console.log(headerList[0]);
     var header: any = [[]];
     var body: any = [];
     headerList.map((info: string, index) => {
