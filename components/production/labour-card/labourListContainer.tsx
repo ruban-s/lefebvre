@@ -23,15 +23,12 @@ const LabourListContainer = () => {
   const fullData = data;
   // const labours = data;
 
-  if (isError) {
-    return <p>error</p>;
-  }
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
   const [fromDate, setFromDate] = useState<string | undefined>("");
   const [toDate, setToDate] = useState<string | undefined>("");
   const [tableData, setTableDate] = useState([]);
-
+  
   const setRange = (date: DateRange | undefined) => {
     setDateRange(date);
     const fromDate = date?.from;
@@ -39,15 +36,15 @@ const LabourListContainer = () => {
     const formattedFromDate = fromDate
       ? format(new Date(fromDate), "yyyy-MM-dd")
       : "";
-    const formattedToDate = toDate
+      const formattedToDate = toDate
       ? format(new Date(toDate), "yyyy-MM-dd")
       : "";
-    setFromDate(formattedFromDate);
-    setToDate(formattedToDate);
-  };
-
-  const fetchData = (tempData: any) => {
-    if (fromDate && toDate) {
+      setFromDate(formattedFromDate);
+      setToDate(formattedToDate);
+    };
+    
+    const fetchData = (tempData: any) => {
+      if (fromDate && toDate) {
       const filteredData = tempData.filter((item: any) => {
         const dateStr = item.createdDate;
         if (item.createdDate) {
@@ -96,13 +93,17 @@ const LabourListContainer = () => {
       setTableDate(filteredData);
     }
   };
-
+  
   useEffect(() => {
     if (fullData) {
       fetchData(fullData);
     }
   }, [fullData, fromDate, toDate]);
-
+  
+  if (isError) {
+    return <p>error</p>;
+  }
+  
   return (
     <div className="w-[100%] h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
       {isLoading ? (
