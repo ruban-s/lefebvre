@@ -76,9 +76,6 @@ const IndirectReportFormContainer = ({
     const formattedStartDate = format(startDate, "yyyy-MM-dd");
     const formattedEndDate = format(endDate, "yyyy-MM-dd");
 
-    console.log(formattedStartDate);
-    console.log(formattedEndDate);
-
     changeFilterValue({
       formattedStartDate,
       formattedEndDate,

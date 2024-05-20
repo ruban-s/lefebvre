@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
 import { DataTableFacetedFilter } from "./report-data-table-faceted-filter";
-import { Button } from "@/components/ui/button"; // Assuming you have a Button component in your project
-import { Cross2Icon } from "@radix-ui/react-icons"; // Assuming you're using Radix Icons
+import { Button } from "@/components/ui/button";
+import { RxCross2 } from "react-icons/rx";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -50,7 +50,7 @@ export function DataTableToolBar<TData>({
           onClick={() => table.resetColumnFilters()}
           className="h-8 px-2 lg:px-3">
           Reset
-          <Cross2Icon className="ml-2 h-4 w-4" />
+          <RxCross2 className="ml-2 h-4 w-4" />
         </Button>
       )}
     </div>

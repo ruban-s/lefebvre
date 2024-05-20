@@ -24,7 +24,6 @@ export const CellFunction = ({ row }: any) => {
   const user = row.original;
   const setUser = useStore((state: any) => state.setUser);
   const handleUpdateUser = () => {
-    console.log(user);
     setUser({ ...user }); // Updating user object
   };
   const deleteItem = useMutation({
