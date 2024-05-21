@@ -1,10 +1,32 @@
-"use client";
-import { EmployeeReport } from "@/types";
+// forman_id: number;
+// forman_name: string;
+// project_id: string;
+// description: string;
+// customer_name: string;
+// work_order_Id: string;
+// work_order_description: string;
+// sq_no: number;
+// resource_id: string;
+// bench_mark_measure: number;
+// bench_mark_unit: string;
+// estimated_hour: string;
+// actual_hour: string | null;
+// variance: number;
+// required_quantity: number;
+// prepared_quantity: number | null;
+// unit_measure: string;
+// efficiency: number;
+// status: string;
+
+import StatusBadge from "@/components/common/status-badge";
+import { FormanReport } from "@/types";
+import { statuses } from "@/types/filter";
 import { ColumnDef } from "@tanstack/react-table";
 import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -13,31 +35,45 @@ import {
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { activeInactiveStatuses } from "@/types/filter";
-import StatusBadge from "@/components/common/status-badge";
 
-export const Columns: ColumnDef<EmployeeReport>[] = [
+export const Columns: ColumnDef<FormanReport>[] = [
   {
-    accessorKey: "employee_id",
-    header: "EmployeeId",
+    accessorKey: "project_id",
+    header: "ProjectId",
   },
   {
-    accessorKey: "employee_name",
-    header: "EmployeeName",
+    accessorKey: "customer_name",
+    header: "Name",
   },
   {
-    accessorKey: "designation",
-    header: "Designation",
+    accessorKey: "work_order_Id",
+    header: "WorkOrderId",
   },
   {
-    accessorKey: "team_leader",
-    header: "TeamLeader",
+    accessorKey: "description",
+    header: "Description",
+  },
+  {
+    accessorKey: "sq_no",
+    header: "SequenceNo",
+  },
+  {
+    accessorKey: "required_quantity",
+    header: "RequiredQuantity",
+  },
+  {
+    accessorKey: "unit_measure",
+    header: "UnitMeasure",
+  },
+  {
+    accessorKey: "efficiency",
+    header: "Efficiency",
   },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = activeInactiveStatuses.find(
+      const status = statuses.find(
         (status) => status.value === row.getValue("status")
       );
 
@@ -46,9 +82,6 @@ export const Columns: ColumnDef<EmployeeReport>[] = [
       }
 
       return <StatusBadge row={row} />;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {
@@ -68,7 +101,7 @@ const ViewStatus = ({ row }: any) => {
       </DialogTrigger>
       <DialogContent className="w-[600px]">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
-          <DialogTitle className="text-white">View EmployeeReport</DialogTitle>
+          <DialogTitle className="text-white">View FormanReport</DialogTitle>
         </DialogHeader>
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {

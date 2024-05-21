@@ -51,26 +51,6 @@ const WorkOrderReportListContainer = ({
     setToDate(formattedToDate);
   };
 
-  // const { data, isLoading, isError } = useQuery({
-  //   queryKey: ["work-order-report"],
-  //   queryFn: async () => {
-  //     if (filterData.status !== "" && filterData.project_id !== "") {
-  //       const data = await getWorkOrderReport({
-  //         status: filterData.status,
-  //         project_id: filterData.project_id,
-  //       });
-  //       return JSON.parse(data.data) as WorkOrderDataReport[];
-  //     }
-  //     if (defaultData && defaultData.project_id) {
-  //       const data = await getWorkOrderReport({
-  //         status: defaultData.status,
-  //         project_id: defaultData.project_id.project_id,
-  //       });
-  //       return JSON.parse(data.data) as WorkOrderDataReport[];
-  //     }
-  //   },
-  // });
-
   const fetchFullData = async () => {
     if (filterData.status !== "" && filterData.project_id !== "") {
       const data = await getWorkOrderReport({
@@ -150,7 +130,7 @@ const WorkOrderReportListContainer = ({
               fromDate={fromDate}
               toDate={toDate}
               disabledDates={disabledDates}
-              searchName="project_id"
+              searchName="work_order_Id"
               fileName="WorkOrderReport"
               exportDataFields={workOrderDataReportController}
               fullexport={true}

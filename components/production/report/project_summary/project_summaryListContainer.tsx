@@ -27,7 +27,7 @@ const ProjectSummaryListContainer = () => {
       ) : (
         <>
           <div className="bg-theme w-full pl-2 py-2 ">
-            <p className="text-lg font-bold text-white ">{"WorkOrders"}</p>
+            <p className="text-lg font-bold text-white ">{"Project Summary"}</p>
           </div>
           <div className="w-full  ">
             <ReportDataTable
