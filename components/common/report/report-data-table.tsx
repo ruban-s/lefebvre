@@ -224,6 +224,10 @@ export function ReportDataTable<TData, TValue>({
     );
   };
 
+  const filteredDataArr = table.getFilteredRowModel().rows.map((row: any) => {
+    return row.original;
+  });
+
   return (
     <div className=" ml-auto mr-auto w-[375px]  sm:w-[500px] md:w-[720px] lg:w-[100%]  h-auto pr-4 mb-6">
       {data === undefined ? (
@@ -247,7 +251,7 @@ export function ReportDataTable<TData, TValue>({
               table={table}
               searchField={searchField}
               filterColumn={filterColumn}
-              title={title}
+              title={title!}
               options={options}
               placeholder={placeholder}
             />
@@ -256,7 +260,7 @@ export function ReportDataTable<TData, TValue>({
                 <Button
                   variant="outline"
                   className="ml-auto  flex flex-row space-x-1 text-bold"
-                  disabled={data.length === 0}>
+                  disabled={filteredDataArr.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
               </DropdownMenuTrigger>

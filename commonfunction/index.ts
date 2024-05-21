@@ -1,4 +1,5 @@
 import { getAllProject } from "@/data/projects";
+import { getAllUser } from "@/data/user";
 import { getAllWorkOrder } from "@/data/work-order";
 
 export async function fetchProjectId() {
@@ -13,5 +14,16 @@ export async function fetchWorkOrderId(project_id: string) {
   const filteredData = parsedData
     .filter((data) => data.project_id === project_id)
     .map((data) => data.work_order_id);
+  return filteredData;
+}
+
+export async function fetchFormanList() {
+  const data = await getAllUser();
+  const parsedData = JSON.parse(data.data) as any[];
+  const filteredData = parsedData
+    .filter(
+      (data) => data.role_name && data.role_name.toLowerCase() === "foreman"
+    )
+    .map((data) => ({ id: data.id.toString(), name: data.name }));
   return filteredData;
 }
