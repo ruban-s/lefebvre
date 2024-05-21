@@ -82,11 +82,13 @@ const ViewStatus = ({ row }: any) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <GrFormView className="text-2xl" />
+        <GrFormView className="text-2xl" />ß
       </DialogTrigger>
       <DialogContent className="w-[600px]">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
-          <DialogTitle className="text-white">View WorkOrder</DialogTitle>
+          <DialogTitle className="text-white">
+            View CapacityUtilisation
+          </DialogTitle>
         </DialogHeader>
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {

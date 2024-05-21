@@ -22,6 +22,7 @@ const WorkOrderResourceListContainer = () => {
       return newData;
     },
   });
+
   const workOrderResource = data;
   useEffect(() => {
     var filterClosedData = data?.filter((info) => info.status !== "Closed");

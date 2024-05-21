@@ -477,6 +477,28 @@ export const ResourceReportController = [
   "status",
 ];
 
+export const FormanReportController = [
+  "forman_id",
+  "forman_name",
+  "project_id",
+  "description",
+  "customer_name",
+  "work_order_Id",
+  "work_order_description",
+  "sq_no",
+  "resource_id",
+  "bench_mark_measure",
+  "bench_mark_unit",
+  "estimated_hour",
+  "actual_hour",
+  "variance",
+  "required_quantity",
+  "prepared_quantity",
+  "unit_measure",
+  "efficiency",
+  "status",
+];
+
 export const CapacityUtilisationController = [
   "resource_id",
   "project_id",

@@ -192,7 +192,9 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
     doc.save(exportFileName + ".pdf");
   };
   const exportData = (value: string, dataField: string[]) => {
-    console.log(data.length);
+    const dataArray = table.getFilteredRowModel().rows.map((row: any) => {
+      return row.original;
+    });
     if (data.length < 1) {
       return toast.warning(`Data not Found`, {
         description: "You can not export this file",
@@ -211,14 +213,13 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
           .replace(/([a-z])([A-Z])/g, "$1 $2");
     });
     exportData.push(obj1);
-    data.map((info: any, index) => {
+    dataArray.map((info: any, index) => {
       var obj2: any = {};
       dataField.map((field: string, fieldIndex) => {
-        obj2[`${field}`] = info[`${field}`];
+        obj2[field] = info[field];
       });
       exportData.push(obj2);
     });
-
     if (value === "CSV") {
       exportCSV(exportData);
     }
@@ -232,6 +233,10 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
       `${fileName}-${new Date().toISOString().replace(/:/g, "-")}`
     );
   };
+
+  const filteredDataArr = table.getFilteredRowModel().rows.map((row: any) => {
+    return row.original;
+  });
 
   return (
     <div className=" ml-auto mr-auto w-[375px]  sm:w-[500px] md:w-[720px] lg:w-[100%]  h-auto pr-4 mb-6">
@@ -298,7 +303,7 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
                 <Button
                   variant="outline"
                   className="ml-2  flex flex-row space-x-1 text-bold"
-                  disabled={data.length === 0}>
+                  disabled={filteredDataArr.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
               </DropdownMenuTrigger>

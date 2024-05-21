@@ -5,6 +5,13 @@ export const WorkOrderReportSchema = z.object({
   project_id: z.string().min(1, { message: "ProjectId is Required" }),
 });
 
+export const FormanReportSchema = z.object({
+  status: z.string().min(1, { message: "Status is Required" }),
+  project_id: z.string().min(1, { message: "ProjectId is Required" }),
+  work_order_Id: z.string().min(1, { message: "WorkOrderId is Required" }),
+  forman_id: z.string().min(1, { message: "FormanId is Required" }),
+});
+
 export const ResourceReportSchema = z.object({
   status: z.string().min(1, { message: "Status is Required" }),
   project_id: z.string().min(1, { message: "ProjectId is Required" }),
