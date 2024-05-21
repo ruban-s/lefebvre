@@ -35,8 +35,9 @@ const WorkOrderResourceListContainer = () => {
   }, [workOrderResource]);
 
   if (isError) {
-    return <p>error</p>;
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
   }
+
   return (
     <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
       {isLoading ? (

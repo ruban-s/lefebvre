@@ -100,7 +100,7 @@ const LabourListContainer = () => {
   }, [fullData, fromDate, toDate]);
 
   if (isError) {
-    return <p>error</p>;
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
   }
 
   return (
