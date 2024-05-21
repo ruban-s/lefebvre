@@ -247,7 +247,7 @@ export function ReportDataTable<TData, TValue>({
               table={table}
               searchField={searchField}
               filterColumn={filterColumn}
-              title={title}
+              title={title!}
               options={options}
               placeholder={placeholder}
             />
