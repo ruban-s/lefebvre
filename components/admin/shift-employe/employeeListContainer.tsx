@@ -48,6 +48,10 @@ const EmployeeListContainer = () => {
   });
   const employees = data;
 
+  if (isError) {
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
+  }
+
   return (
     <div className="w-full h-auto bg-white  shadow-sm">
       {isLoading ? (
@@ -91,86 +95,93 @@ const EmployeeListContainer = () => {
                 <div className="my-3 p-2 w-[130px]  bg-neutral-100  border-0 border-l-2 border-l-neutral-500">
                   <p className="text-md text-neutral-700">Last Shift</p>
                 </div>
-                {employees?.map((info, index) => {
-                  if (info.previous_shift_id) {
-                    var newShift = shift?.filter(
-                      (shiftInfo) => shiftInfo.id == info.previous_shift_id
-                    );
-                    if (
-                      newShift![0].shift_type === "Day" &&
-                      info.designation_id !== "FOREMEN"
-                    ) {
-                      return (
-                        <div
-                          key={index}
-                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg rounded-lg">
-                          <p className="text-sm font-bold">
-                            {info.first_name}
-                            {info.last_name}
-                            <span>
-                              <Badge
-                                className={`rounded-sm mr-2 ml-2 ${
-                                  info.status === "Active"
-                                    ? "bg-green-500"
-                                    : "bg-slate-500"
-                                }`}>
-                                {info.status}
-                              </Badge>
-                              <Badge
-                                className={`rounded-sm bg-slate-500
-                                `}>
-                                {" "}
-                                {info.previous_shift_name}
-                              </Badge>
-                            </span>
-                          </p>
-                        </div>
+                {employees !== undefined &&
+                  employees?.map((info, index) => {
+                    if (info.previous_shift_id) {
+                      console.log(info.previous_shift_id);
+                      var newShift = shift?.filter(
+                        (shiftInfo) => shiftInfo.id == info.previous_shift_id
                       );
+                      if (
+                        newShift &&
+                        newShift.length > 0 &&
+                        newShift![0].shift_type === "Day" &&
+                        info.designation_id !== "FOREMEN"
+                      ) {
+                        return (
+                          <div
+                            key={index}
+                            className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg rounded-lg">
+                            <p className="text-sm font-bold">
+                              {info.first_name}
+                              {info.last_name}
+                              <span>
+                                <Badge
+                                  className={`rounded-sm mr-2 ml-2 ${
+                                    info.status === "Active"
+                                      ? "bg-green-500"
+                                      : "bg-slate-500"
+                                  }`}>
+                                  {info.status}
+                                </Badge>
+                                <Badge
+                                  className={`rounded-sm bg-slate-500
+                                `}>
+                                  {" "}
+                                  {info.previous_shift_name}
+                                </Badge>
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      }
                     }
-                  }
-                })}
+                  })}
                 <div className="my-3 p-2 w-[130px]  bg-green-100  border-0 border-l-2 border-l-green-500">
                   <p className="text-md text-green-700">Current Shift</p>
                 </div>
-                {employees?.map((info, index) => {
-                  if (info.current_shift_id) {
-                    var newShift = shift?.filter(
-                      (shiftInfo) => shiftInfo.id == info.current_shift_id
-                    );
-                    if (
-                      newShift![0].shift_type === "Day" &&
-                      info.designation_id !== "FOREMEN"
-                    ) {
-                      return (
-                        <div
-                          key={index}
-                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
-                          <p className="text-sm font-bold">
-                            {info.first_name}
-                            {info.last_name}
-                            <span>
-                              <Badge
-                                className={`rounded-sm mr-2 ml-2 ${
-                                  info.status === "Active"
-                                    ? "bg-green-500"
-                                    : "bg-slate-500"
-                                }`}>
-                                {info.status}
-                              </Badge>
-                              <Badge
-                                className={`rounded-sm bg-slate-500
-                                `}>
-                                {" "}
-                                {info.previous_shift_name}
-                              </Badge>
-                            </span>
-                          </p>
-                          <div></div>
-                        </div>
+                {employees !== undefined &&
+                  employees?.map((info, index) => {
+                    if (info.current_shift_id) {
+                      var newShift = shift?.filter(
+                        (shiftInfo) => shiftInfo.id == info.current_shift_id
                       );
+                      if (
+                        newShift &&
+                        newShift.length > 0 &&
+                        newShift![0].shift_type === "Day" &&
+                        info.designation_id !== "FOREMEN"
+                      ) {
+                        return (
+                          <div
+                            key={index}
+                            className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
+                            <p className="text-sm font-bold">
+                              {info.first_name}
+                              {info.last_name}
+                              <span>
+                                <Badge
+                                  className={`rounded-sm mr-2 ml-2 ${
+                                    info.status === "Active"
+                                      ? "bg-green-500"
+                                      : "bg-slate-500"
+                                  }`}>
+                                  {info.status}
+                                </Badge>
+                                <Badge
+                                  className={`rounded-sm bg-slate-500
+                                `}>
+                                  {" "}
+                                  {info.previous_shift_name}
+                                </Badge>
+                              </span>
+                            </p>
+                            <div></div>
+                          </div>
+                        );
+                      }
                     }
-                  }
-                })}
+                  })}
               </ScrollArea>
             </div>
             <div className="flex-1 h-[800px] m-2 ">
@@ -181,85 +192,91 @@ const EmployeeListContainer = () => {
                 <div className="my-3 p-2 w-[130px]  bg-neutral-100  border-0 border-l-2 border-l-neutral-500">
                   <p className="text-md text-neutral-700">Last Shift</p>
                 </div>
-                {employees?.map((info, index) => {
-                  if (info.previous_shift_id) {
-                    var newShift = shift?.filter(
-                      (shiftInfo) => shiftInfo.id == info.previous_shift_id
-                    );
-                    if (
-                      newShift![0].shift_type === "Night" &&
-                      info.designation_id !== "FOREMEN"
-                    ) {
-                      return (
-                        <div
-                          key={index}
-                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg">
-                          <p className="text-sm font-bold">
-                            {info.first_name}
-                            {info.last_name}
-                            <span>
-                              <Badge
-                                className={`rounded-sm mr-2 ml-2 ${
-                                  info.status === "Active"
-                                    ? "bg-green-500"
-                                    : "bg-slate-500"
-                                }`}>
-                                {info.status}
-                              </Badge>
-                              <Badge
-                                className={`rounded-sm bg-slate-500
-                                `}>
-                                {" "}
-                                {info.previous_shift_name}
-                              </Badge>
-                            </span>
-                          </p>
-                        </div>
+                {employees !== undefined &&
+                  employees?.map((info, index) => {
+                    if (info.previous_shift_id) {
+                      var newShift = shift?.filter(
+                        (shiftInfo) => shiftInfo.id == info.previous_shift_id
                       );
+                      if (
+                        newShift &&
+                        newShift.length > 0 &&
+                        newShift![0].shift_type === "Night" &&
+                        info.designation_id !== "FOREMEN"
+                      ) {
+                        return (
+                          <div
+                            key={index}
+                            className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200  cursor-pointer hover:shadow-lg">
+                            <p className="text-sm font-bold">
+                              {info.first_name}
+                              {info.last_name}
+                              <span>
+                                <Badge
+                                  className={`rounded-sm mr-2 ml-2 ${
+                                    info.status === "Active"
+                                      ? "bg-green-500"
+                                      : "bg-slate-500"
+                                  }`}>
+                                  {info.status}
+                                </Badge>
+                                <Badge
+                                  className={`rounded-sm bg-slate-500
+                                `}>
+                                  {" "}
+                                  {info.previous_shift_name}
+                                </Badge>
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      }
                     }
-                  }
-                })}
+                  })}
                 <div className="my-3 p-2 w-[130px]  bg-green-100  border-0 border-l-2 border-l-green-500">
                   <p className="text-md text-green-700">Current Shift</p>
                 </div>
-                {employees?.map((info, index) => {
-                  if (info.current_shift_id) {
-                    var newShift = shift?.filter(
-                      (shiftInfo) => shiftInfo.id == info.current_shift_id
-                    );
-                    if (
-                      newShift![0].shift_type === "Night" &&
-                      info.designation_id !== "FOREMEN"
-                    ) {
-                      return (
-                        <div
-                          key={index}
-                          className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
-                          <p className="text-sm font-bold">
-                            {info.first_name}
-                            {info.last_name}
-                            <span>
-                              <Badge
-                                className={`rounded-sm mr-2 ml-2 ${
-                                  info.status === "Active"
-                                    ? "bg-green-500"
-                                    : "bg-slate-500"
-                                }`}>
-                                {info.status}
-                              </Badge>
-                              <Badge
-                                className={`rounded-sm bg-slate-500
-                                `}>
-                                {" "}
-                                {info.previous_shift_name}
-                              </Badge>
-                            </span>
-                          </p>
-                        </div>
+                {employees !== undefined &&
+                  employees?.map((info, index) => {
+                    if (info.current_shift_id) {
+                      var newShift = shift?.filter(
+                        (shiftInfo) => shiftInfo.id == info.current_shift_id
                       );
+                      if (
+                        newShift &&
+                        newShift.length > 0 &&
+                        newShift![0].shift_type === "Night" &&
+                        info.designation_id !== "FOREMEN"
+                      ) {
+                        return (
+                          <div
+                            key={index}
+                            className="w-full mb-2 shadow-sm p-2 border border-1 border-slate-200 rounded-md  cursor-pointer hover:shadow-lg">
+                            <p className="text-sm font-bold">
+                              {info.first_name}
+                              {info.last_name}
+                              <span>
+                                <Badge
+                                  className={`rounded-sm mr-2 ml-2 ${
+                                    info.status === "Active"
+                                      ? "bg-green-500"
+                                      : "bg-slate-500"
+                                  }`}>
+                                  {info.status}
+                                </Badge>
+                                <Badge
+                                  className={`rounded-sm bg-slate-500
+                                `}>
+                                  {" "}
+                                  {info.previous_shift_name}
+                                </Badge>
+                              </span>
+                            </p>
+                          </div>
+                        );
+                      }
                     }
-                  }
-                })}
+                  })}
               </ScrollArea>
             </div>
             <div className="flex-1 h-[800px] m-2 ">
@@ -267,36 +284,37 @@ const EmployeeListContainer = () => {
                 <p className="text-lg text-white">No Shift</p>
               </div>
               <ScrollArea className=" w-full h-[730px] border-1 border border-slate-400 p-2">
-                {employees?.map((info, index) => {
-                  if (!info.current_shift_id && !info.previous_shift_id) {
-                    return (
-                      <div
-                        key={index}
-                        className="w-full mb-2 shadow-sm p-2  cursor-pointer">
-                        <p className="text-sm font-bold">
-                          {info.first_name}
-                          {info.last_name}
-                          <span>
-                            <Badge
-                              className={`rounded-sm mr-2 ml-2 ${
-                                info.status === "Active"
-                                  ? "bg-green-500"
-                                  : "bg-slate-500"
-                              }`}>
-                              {info.status}
-                            </Badge>
-                            <Badge
-                              className={`rounded-sm bg-slate-500
+                {employees !== undefined &&
+                  employees?.map((info, index) => {
+                    if (!info.current_shift_id && !info.previous_shift_id) {
+                      return (
+                        <div
+                          key={index}
+                          className="w-full mb-2 shadow-sm p-2  cursor-pointer">
+                          <p className="text-sm font-bold">
+                            {info.first_name}
+                            {info.last_name}
+                            <span>
+                              <Badge
+                                className={`rounded-sm mr-2 ml-2 ${
+                                  info.status === "Active"
+                                    ? "bg-green-500"
+                                    : "bg-slate-500"
+                                }`}>
+                                {info.status}
+                              </Badge>
+                              <Badge
+                                className={`rounded-sm bg-slate-500
                                 `}>
-                              {" "}
-                              {info.previous_shift_name}
-                            </Badge>
-                          </span>
-                        </p>
-                      </div>
-                    );
-                  }
-                })}
+                                {" "}
+                                {info.previous_shift_name}
+                              </Badge>
+                            </span>
+                          </p>
+                        </div>
+                      );
+                    }
+                  })}
               </ScrollArea>
             </div>
           </div>

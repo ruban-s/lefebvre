@@ -24,6 +24,10 @@ const UserListContainer = (props: UserListContainerProps) => {
   });
   const breaks = data;
 
+  if (isError) {
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
+  }
+
   return (
     <div className="w-[100%] h-auto bg-white  shadow-sm">
       {isLoading ? (

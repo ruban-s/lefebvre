@@ -18,7 +18,7 @@ const AttendanceListContainer = () => {
   });
   const attendanceType = data;
   if (isError) {
-    return <p>i am error</p>;
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
   }
   return (
     <div className="w-full h-auto bg-white  shadow-sm">

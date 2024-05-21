@@ -24,11 +24,7 @@ const BreakFormListContainer = (props: BreakFormListContainerProps) => {
   const breaks = data;
 
   if (isError) {
-    return (
-      <div>
-        <p>something went wrong</p>
-      </div>
-    );
+    return <p className="w-full bg-white px-1 py-2">Data not found</p>;
   }
 
   return (
