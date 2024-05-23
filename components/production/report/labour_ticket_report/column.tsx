@@ -66,7 +66,7 @@ const ViewStatus = ({ row }: any) => {
       <DialogTrigger asChild>
         <GrFormView className="text-2xl" />
       </DialogTrigger>
-      <DialogContent className="w-[600px]">
+      <DialogContent className="w-[600px] max-h-[90%] overflow-y-auto">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
           <DialogTitle className="text-white">
             View LabourTicketReport
