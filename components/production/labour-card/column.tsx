@@ -403,7 +403,7 @@ export const UpdateStatus = ({ row }: any) => {
             {Object.keys(data).map((dataValue, index) => {
               if (dataValue === "is_production_editable") {
                 return (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2" key={index}>
                     <Switch
                       id={dataValue}
                       checked={toogle}

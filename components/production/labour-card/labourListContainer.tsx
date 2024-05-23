@@ -27,7 +27,7 @@ const LabourListContainer = () => {
   const [fromDate, setFromDate] = useState<string | undefined>("");
   const [toDate, setToDate] = useState<string | undefined>("");
   const [tableData, setTableDate] = useState([]);
-
+  
   const setRange = (date: DateRange | undefined) => {
     setDateRange(date);
     const fromDate = date?.from;
@@ -35,7 +35,7 @@ const LabourListContainer = () => {
     const formattedFromDate = fromDate
       ? format(new Date(fromDate), "yyyy-MM-dd")
       : "";
-    const formattedToDate = toDate
+      const formattedToDate = toDate
       ? format(new Date(toDate), "yyyy-MM-dd")
       : "";
     setFromDate(formattedFromDate);
@@ -77,7 +77,7 @@ const LabourListContainer = () => {
       setTableDate(filteredData);
     }
   };
-
+  
   useEffect(() => {
     if (fullData) {
       fetchData(fullData);
