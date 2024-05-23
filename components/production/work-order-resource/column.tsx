@@ -37,7 +37,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
@@ -232,6 +232,19 @@ export const UpdateStatus = ({ row }: any) => {
   const data: ResourceWorkOdderData = row.original as ResourceWorkOdderData;
   const [foremans, setFormans] = useState<UserData[]>([]);
   const ref = useRef<HTMLButtonElement>(null);
+
+  const fetchData = async () => {
+    const data = await getAllUser();
+    const parsedData = JSON.parse(data.data);
+    const AssignedForman = parsedData.filter((data: any) =>
+      row.original.forman.includes(data.id.toString())
+    );
+    setFormans(AssignedForman);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [row.original.forman]);
 
   const payLoad = {
     estimated_hour: data.estimated_hour,
@@ -428,7 +441,6 @@ export const UpdateStatus = ({ row }: any) => {
                     </div>
                   </PopoverTrigger>
                 )}
-
                 {foremans.length > 0 && (
                   <PopoverTrigger asChild className="w-full col-span-2">
                     <div className="w-full flex flex-row flex-wrap mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
@@ -457,14 +469,6 @@ export const UpdateStatus = ({ row }: any) => {
                     </div>
                   </PopoverTrigger>
                 )}
-
-                {/* <Button
-                  variant="secondary"
-                  role="combobox"
-                  className="w-auto justify-between"
-                  onClick={() => setOpen(!isOpen)}>
-                  {!isOpen ? <RxCaretSort /> : <IoCloseSharp />}
-                </Button> */}
                 <PopoverContent>
                   <Command>
                     <CommandInput
@@ -542,11 +546,7 @@ export const UpdateStatus = ({ row }: any) => {
           </div>
           <DialogFooter>
             <DialogClose>
-              <Button
-                variant={"secondary"}
-                onClick={() => {
-                  setFormans([]);
-                }}>
+              <Button variant={"secondary"} onClick={() => fetchData()}>
                 Close
               </Button>
             </DialogClose>
@@ -558,7 +558,6 @@ export const UpdateStatus = ({ row }: any) => {
                   // if (foremans.length > 0) {
                   //   payLoad.forman = foremans[0].id.toString();
                   // }
-                  console.log(payLoad);
                   updateItem.mutate(payLoad);
                   setFormans([]);
                 }}>
