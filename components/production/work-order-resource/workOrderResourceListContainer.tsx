@@ -54,7 +54,7 @@ const WorkOrderResourceListContainer = () => {
             <DataTable
               columns={workOrderListcolumns}
               data={workOrderResourceList!}
-              searchName="resourceId"
+              searchName="project_id"
               fileName="ResourceWorkOrder"
               exportDataFields={resourceController}
             />
