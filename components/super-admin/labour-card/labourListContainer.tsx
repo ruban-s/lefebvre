@@ -55,48 +55,33 @@ const LabourListContainer = () => {
 
   const fetchData = (tempData: any) => {
     if (fromDate && toDate) {
+      const formattedFromDate = format(fromDate, "dd-MM-yyyy");
+      const formattedToDate = format(toDate, "dd-MM-yyyy");
       const filteredData = tempData.filter((item: any) => {
-        const dateStr = item.createdDate;
-        if (item.createdDate) {
-          const parsedDate = parse(
-            dateStr,
-            "MMM dd, yyyy, h:mm:ss a",
-            new Date()
-          );
-          const formattedDate = format(parsedDate, "yyyy-MM-dd");
-          return formattedDate >= fromDate && formattedDate <= toDate;
+        const dateStr = item.shift_date;
+        if (dateStr) {
+          return dateStr >= formattedFromDate && dateStr <= formattedToDate;
         }
         return false;
       });
       setTableDate(filteredData);
     } else if (fromDate) {
+      const formattedFromDate = format(fromDate, "dd-MM-yyyy");
       const filteredData = tempData.filter((item: any) => {
-        const dateStr = item.createdDate;
-        if (item.createdDate) {
-          const parsedDate = parse(
-            dateStr,
-            "MMM dd, yyyy, h:mm:ss a",
-            new Date()
-          );
-          const formattedDate = format(parsedDate, "yyyy-MM-dd");
-          return formattedDate === fromDate;
+        const dateStr = item.shift_date;
+        if (dateStr) {
+          return dateStr === formattedFromDate;
         }
         return false;
       });
       setTableDate(filteredData);
     } else {
       const today = new Date();
-      const formattedTodayDate = format(today, "yyyy-MM-dd");
+      const formattedTodayDate = format(today, "dd-MM-yyyy");
       const filteredData = tempData?.filter((item: any) => {
-        const dateStr = item.createdDate;
-        if (item.createdDate) {
-          const parsedDate = parse(
-            dateStr,
-            "MMM dd, yyyy, h:mm:ss a",
-            new Date()
-          );
-          const formattedDate = format(parsedDate, "yyyy-MM-dd");
-          return formattedDate === formattedTodayDate;
+        const dateStr = item.shift_date;
+        if (dateStr) {
+          return dateStr === formattedTodayDate;
         }
         return false;
       });

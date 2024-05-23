@@ -153,24 +153,27 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "remark",
     header: "Remark",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.remark.substring(0, 30)}{" "}
-        {row.original.remark.length > 30 && "..."}
-        {row.original.remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+    cell: ({ row }) =>
+      row.original.remark && (
+        <div className="flex justify-start items-center">
+          {row.original.remark.substring(0, 30)}{" "}
+          {row.original.remark.length > 30 && "..."}
+          {row.original.remark.length > 30 && (
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Remark:</p>
-              <p className="text-sm text-neutral-500">{row.original.remark}</p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Planner Remark:</p>
+                <p className="text-sm text-neutral-500">
+                  {row.original.remark}
+                </p>
+              </PopoverContent>
+            </Popover>
+          )}
+        </div>
+      ),
   },
 
   {
