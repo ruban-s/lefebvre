@@ -281,8 +281,6 @@ export const UpdateStatus = ({ row }: any) => {
     from: new Date(data.start_date),
     to: new Date(data.end_date),
   });
-  var startDate = data?.start_date!.toString().split("-");
-  var endDate = data?.end_date!.toString().split("-");
   useEffect(() => {
     var startDate = data?.start_date!.toString().split("-");
     var endDate = data?.end_date!.toString().split("-");
@@ -374,7 +372,13 @@ export const UpdateStatus = ({ row }: any) => {
         });
       });
 
-      setDateRange(undefined);
+      const updatedValue = JSON.parse(value.data);
+      var startDate = updatedValue?.start_date!.toString().split("-");
+      var endDate = updatedValue?.end_date!.toString().split("-");
+      setDateRange({
+        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      });
     },
     onError: (value) => {
       console.log(value);
@@ -455,8 +459,12 @@ export const UpdateStatus = ({ row }: any) => {
               <div>Start Date - End Date</div>
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "dd-LL-y");
-                  payLoad.end_date = format(value?.to!, "dd-LL-y");
+                  if (value?.from) {
+                    payLoad.start_date = format(value.from, "dd-MM-yyyy");
+                  }
+                  if (value?.to) {
+                    payLoad.end_date = format(value.to, "dd-MM-yyyy");
+                  }
                 }}
                 selectedData={dateRange!}
                 disabled={[]}

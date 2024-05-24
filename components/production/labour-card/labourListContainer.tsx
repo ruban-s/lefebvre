@@ -24,58 +24,58 @@ const LabourListContainer = () => {
   // const labours = data;
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
-  const [fromDate, setFromDate] = useState<string | undefined>("");
-  const [toDate, setToDate] = useState<string | undefined>("");
+  const [fromDate, setFromDate] = useState<Date | undefined>();
+  const [toDate, setToDate] = useState<Date | undefined>();
   const [tableData, setTableDate] = useState([]);
 
   const setRange = (date: DateRange | undefined) => {
     setDateRange(date);
     const fromDate = date?.from;
     const toDate = date?.to;
-    const formattedFromDate = fromDate
-      ? format(new Date(fromDate), "yyyy-MM-dd")
-      : "";
-    const formattedToDate = toDate
-      ? format(new Date(toDate), "yyyy-MM-dd")
-      : "";
+    const formattedFromDate = fromDate ? new Date(fromDate) : undefined;
+    formattedFromDate?.setHours(0, 0, 0, 0);
+    const formattedToDate = toDate ? new Date(toDate) : undefined;
+    formattedToDate?.setHours(0, 0, 0, 0);
     setFromDate(formattedFromDate);
     setToDate(formattedToDate);
   };
 
   const fetchData = (tempData: any) => {
+    let filteredData;
     if (fromDate && toDate) {
-      const formattedFromDate = format(fromDate, "dd-MM-yyyy");
-      const formattedToDate = format(toDate, "dd-MM-yyyy");
-      const filteredData = tempData.filter((item: any) => {
-        const dateStr = item.shift_date;
-        if (dateStr) {
-          return dateStr >= formattedFromDate && dateStr <= formattedToDate;
+      filteredData = tempData.filter((item: any) => {
+        if (item.shift_date) {
+          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+          dateStr.setHours(0, 0, 0, 0);
+          return (
+            dateStr.getTime() >= fromDate.getTime() &&
+            dateStr.getTime() <= toDate.getTime()
+          );
         }
-        return false;
       });
-      setTableDate(filteredData);
     } else if (fromDate) {
-      const formattedFromDate = format(fromDate, "dd-MM-yyyy");
-      const filteredData = tempData.filter((item: any) => {
-        const dateStr = item.shift_date;
-        if (dateStr) {
-          return dateStr === formattedFromDate;
+      filteredData = tempData.filter((item: any) => {
+        if (item.shift_date) {
+          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+          dateStr.setHours(0, 0, 0, 0);
+          return dateStr.getTime() === fromDate.getTime();
         }
-        return false;
       });
-      setTableDate(filteredData);
     } else {
-      const today = new Date();
-      const formattedTodayDate = format(today, "dd-MM-yyyy");
-      const filteredData = tempData?.filter((item: any) => {
-        const dateStr = item.shift_date;
-        if (dateStr) {
-          return dateStr === formattedTodayDate;
+      filteredData = tempData.filter((item: any) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (item.shift_date) {
+          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+          dateStr.setHours(0, 0, 0, 0);
+          if (dateStr === today) {
+            console.log(dateStr);
+          }
+          return dateStr.getTime() === today.getTime();
         }
-        return false;
       });
-      setTableDate(filteredData);
     }
+    setTableDate(filteredData);
   };
 
   useEffect(() => {

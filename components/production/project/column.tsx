@@ -16,9 +16,6 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import Link from "next/link";
-import { FaFileCsv } from "react-icons/fa6";
-import { FaFilePdf } from "react-icons/fa6";
-import { BsFiletypeXlsx } from "react-icons/bs";
 import {
   Select,
   SelectContent,
@@ -41,7 +38,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -235,8 +232,13 @@ export const UpdateStatus = ({ row }: any) => {
           queryKey: [info],
         });
       });
-
-      setDateRange(undefined);
+      const updatedValue = JSON.parse(value.data);
+      var startDate = updatedValue?.start_date!.toString().split("-");
+      var endDate = updatedValue?.end_date!.toString().split("-");
+      setDateRange({
+        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      });
     },
     onError: (value) => {
       console.log(value);
@@ -310,9 +312,13 @@ export const UpdateStatus = ({ row }: any) => {
 
               <DatePickerWithRange
                 onselect={(value: DateRange) => {
-                  payLoad.start_date = format(value?.from!, "dd-LL-y");
-                  payLoad.end_date = format(value?.to!, "dd-LL-y");
-                  console.log(dateRange);
+                  if (value?.from) {
+                    payLoad.start_date = format(value.from, "dd-MM-yyyy");
+                  }
+                  if (value?.to) {
+                    payLoad.end_date = format(value.to, "dd-MM-yyyy");
+                  }
+                  // setDateRange(value);
                 }}
                 selectedData={dateRange}
                 disabled={[]}
@@ -512,7 +518,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge row={row} />,
+    cell: ({ row }) => <StatusBar row={row} />,
   },
   {
     id: "actions",
@@ -521,3 +527,32 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     },
   },
 ];
+
+const StatusBar = ({ row }: { row: any }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());
+  endDate.setHours(0, 0, 0, 0);
+
+  return (
+    <Badge
+      className={`cursor-pointer rounded-md ${
+        (row.original.status === "Released" ||
+          row.original.status === "Active") &&
+        endDate < today
+          ? "bg-yellow-500"
+          : row.original.status === "Released" ||
+            row.original.status === "Active"
+          ? "bg-green-500"
+          : row.original.status === "Unreleased" ||
+            row.original.status === "Inactive"
+          ? "bg-red-500"
+          : row.original.status === "Canceled" ||
+            row.original.status === "Closed"
+          ? "bg-orange-500"
+          : "bg-black"
+      }`}>
+      {row.original.status}
+    </Badge>
+  );
+};
