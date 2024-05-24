@@ -246,6 +246,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
               var file = info.split("/")[info.split("/").length - 1];
               return (
                 <Link
+                  target="_blank"
                   href={info}
                   key={index}
                   className="flex justify-center items-center m-1">

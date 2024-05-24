@@ -190,6 +190,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
               console.log(row.original.images);
               return (
                 <Link
+                  target="_blank"
                   key={index}
                   href={info}
                   className="flex justify-center items-center m-1">
