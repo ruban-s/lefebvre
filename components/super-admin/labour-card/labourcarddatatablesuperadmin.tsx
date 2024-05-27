@@ -299,7 +299,8 @@ export function LabourCardDataTableSuperAdmin<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-2  flex flex-row space-x-1 text-bold">
+                  className="ml-2  flex flex-row space-x-1 text-bold"
+                  disabled={data.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
               </DropdownMenuTrigger>

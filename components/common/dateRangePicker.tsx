@@ -22,6 +22,7 @@ interface DatePickerWithRangeProps {
   onselect: Function;
   fromDate?: string;
   toDate?: string;
+  changeDateRange?: Function;
 }
 
 export function DatePickerWithRange({
@@ -36,6 +37,8 @@ export function DatePickerWithRange({
   React.useEffect(() => {
     setDate(selectedData);
   }, [selectedData]);
+
+  console.log(selectedData);
 
   return (
     <div className={cn("grid gap-2", className)}>

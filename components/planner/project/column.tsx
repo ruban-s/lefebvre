@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 import { ProjectData } from "@/types";
 import { useProjectStore } from "@/state";
 
@@ -17,10 +16,7 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import Link from "next/link";
-import { FaFileCsv } from "react-icons/fa6";
-import { FaFilePdf } from "react-icons/fa6";
-import { BsFiletypeXlsx } from "react-icons/bs";
-import StatusBadge from "@/components/common/status-badge";
+import { parse } from "date-fns";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -185,7 +181,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
           <PopoverContent className="w-[200px] ">
             {row.original.images.map((info, index) => {
               var file = info.split("/")[info.split("/").length - 1];
-              console.log(row.original.images);
               return (
                 <Link
                   key={index}
@@ -206,7 +201,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge row={row} />,
+    cell: ({ row }) => <StatusBar row={row} />,
   },
   {
     id: "actions",
@@ -215,3 +210,46 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     },
   },
 ];
+
+const StatusBar = ({ row }: { row: any }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());
+  endDate.setHours(0, 0, 0, 0);
+
+  const badgeClass = (() => {
+    if (
+      (row.original.status === "Released" ||
+        row.original.status === "Active") &&
+      endDate < today
+    ) {
+      return "bg-yellow-500";
+    }
+    if (
+      row.original.status === "Released" ||
+      row.original.status === "Active"
+    ) {
+      return "bg-green-500";
+    }
+    if (
+      row.original.status === "Unreleased" ||
+      row.original.status === "Inactive"
+    ) {
+      return "bg-red-500";
+    }
+    if (
+      row.original.status === "Canceled" ||
+      row.original.status === "Closed"
+    ) {
+      return "bg-orange-500";
+    }
+    return "bg-black";
+  })();
+
+  return (
+    <Badge className={`cursor-pointer rounded-md ${badgeClass}`}>
+      {row.original.status}
+    </Badge>
+  );
+};
