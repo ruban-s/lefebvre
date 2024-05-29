@@ -71,6 +71,7 @@ const MultiFileSelect = (props: props) => {
           className="h-[1px] w-[1px] ring-0"
           placeholder=""
           onChange={(e: any) => {
+            console.log(e.target?.files[0]);
             const formData = new FormData();
             e.target?.files[0] &&
               formData.append("file", e.target?.files[0] as File);
@@ -81,6 +82,7 @@ const MultiFileSelect = (props: props) => {
         <div
           className="w-full h-[20px] absolute top-0 left-0  p-4 py-6 cursor-pointer rounded-sm bg-slate-50 flex justify-center items-center shadow-sm"
           onClick={() => {
+            console.log(imageRef.current?.click());
             imageRef.current?.click();
 
             console.log(imageRef.current?.files?.length);

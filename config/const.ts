@@ -27,6 +27,7 @@ import { GrResources, GrUserManager } from "react-icons/gr";
 import { FaTicket } from "react-icons/fa6";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { BsLightningChargeFill } from "react-icons/bs";
+import { GrDocumentVerified } from "react-icons/gr";
 
 export const BASE_URL = "http://208.109.9.243:8082";
 export const adminTabs: TabData[] = [
@@ -112,30 +113,18 @@ export const productionTabs: TabData[] = [
   },
   {
     id: 4,
-    label: "Closed Project",
-    icon: TbLockCancel,
-    link: "/production/closed-project",
+    label: "Status",
+    icon: GrDocumentVerified,
+    link: "/production/status",
   },
   {
     id: 5,
-    label: "Unreleased Project",
-    icon: TbLockExclamation,
-    link: "/production/unreleased-project",
-  },
-  {
-    id: 6,
-    label: "Released Project",
-    icon: TbLockCheck,
-    link: "/production/released-project",
-  },
-  {
-    id: 7,
     label: "Labour Card Maintenance",
     icon: FaIdCardAlt,
     link: "/production/labour-card",
   },
   {
-    id: 8,
+    id: 6,
     label: "Report",
     icon: TbReportAnalytics,
     link: "/production/report",
@@ -188,12 +177,6 @@ export const ReportTabs: TabData[] = [
     link: "/production/report/project_summary",
   },
   {
-    id: 2,
-    label: "Workorder Report",
-    icon: MdWork,
-    link: "/production/report/workorder_report",
-  },
-  {
     id: 3,
     label: "Resource Report",
     icon: GrResources,
@@ -208,12 +191,6 @@ export const ReportTabs: TabData[] = [
   {
     id: 5,
     label: "Foreman Report",
-    icon: GrUserManager,
-    link: "/production/report/foreman_report",
-  },
-  {
-    id: 6,
-    label: "Need to Fill",
     icon: GrUserManager,
     link: "/production/report/foreman_report",
   },
@@ -249,7 +226,7 @@ export const ReportTabs: TabData[] = [
   },
   {
     id: 12,
-    label: "Need to Fill",
+    label: "Real Time Employee Work Allotment",
     icon: GrUserManager,
     link: "/production/report/foreman_report",
   },

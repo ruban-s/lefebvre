@@ -49,6 +49,7 @@ import {
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { DatePickerWithRange } from "../dateRangePicker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,6 +65,11 @@ interface DataTableProps<TData, TValue> {
   fileName: string;
   fullexport?: boolean;
   exportDataFields?: string[];
+  setRange?: Function;
+  dateRange?: any;
+  fromDate?: any;
+  toDate?: any;
+  disabledDates?: any;
 }
 
 export function ReportDataTable<TData, TValue>({
@@ -77,6 +83,11 @@ export function ReportDataTable<TData, TValue>({
   fileName,
   fullexport,
   exportDataFields,
+  setRange,
+  dateRange,
+  fromDate,
+  toDate,
+  disabledDates,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -255,11 +266,22 @@ export function ReportDataTable<TData, TValue>({
               options={options}
               placeholder={placeholder}
             />
+            <span className="ml-auto">
+              {setRange && (
+                <DatePickerWithRange
+                  onselect={setRange}
+                  selectedData={dateRange!}
+                  fromDate={fromDate}
+                  toDate={toDate}
+                  disabled={disabledDates}
+                />
+              )}
+            </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-auto  flex flex-row space-x-1 text-bold"
+                  className="ml-2  flex flex-row space-x-1 text-bold"
                   disabled={filteredDataArr.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>

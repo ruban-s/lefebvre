@@ -1,31 +1,21 @@
 "use client";
-import { DataTable } from "@/components/common/data-table";
 import { getWorkOrderReport } from "@/data/report/workorderReport";
 import Loading from "@/loading";
 import { WorkOrderDataReport } from "@/types";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { columns } from "./column";
 import { workOrderDataReportController } from "@/config/const";
-import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
-import { ReportDataTableWithTimeRange } from "@/components/common/report/report-data-tableWithTimeFilter";
 import { parse, format } from "date-fns";
+import { statuses } from "@/types/filter";
+import { ReportDataTable } from "@/components/common/report/report-data-table";
 
 interface WorkOrderRepportListContainerProps {
-  filterData: {
-    status: string;
-    project_id: string;
-  };
-  defaultData: {
-    status: string;
-    project_id: any;
-  };
+  projectId: string;
 }
 
 const WorkOrderReportListContainer = ({
-  filterData,
-  defaultData,
+  projectId,
 }: WorkOrderRepportListContainerProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
@@ -51,22 +41,6 @@ const WorkOrderReportListContainer = ({
     setToDate(formattedToDate);
   };
 
-  const fetchFullData = async () => {
-    if (filterData.status !== "" && filterData.project_id !== "") {
-      const data = await getWorkOrderReport({
-        status: filterData.status,
-        project_id: filterData.project_id,
-      });
-      return JSON.parse(data.data) as WorkOrderDataReport[];
-    } else if (defaultData && defaultData.project_id) {
-      const data = await getWorkOrderReport({
-        status: defaultData.status,
-        project_id: defaultData.project_id.project_id,
-      });
-      return JSON.parse(data.data) as WorkOrderDataReport[];
-    }
-  };
-
   const fetchData = (tempData: any) => {
     if (fromDate && toDate) {
       const filterData = tempData.filter((item: any) => {
@@ -90,6 +64,14 @@ const WorkOrderReportListContainer = ({
     setTableDate(tempData);
   };
 
+  const fetchFullData = async () => {
+    const data = await getWorkOrderReport({
+      project_id: projectId,
+    });
+    const responseData = data!.data as WorkOrderDataReport[];
+    return responseData;
+  };
+
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -98,9 +80,8 @@ const WorkOrderReportListContainer = ({
         setFullData(WorkOrderReportData);
       }
     };
-
     loadData();
-  }, [filterData, defaultData]);
+  }, [projectId]);
 
   useEffect(() => {
     if (fullData) {
@@ -121,19 +102,22 @@ const WorkOrderReportListContainer = ({
             <p className="text-lg font-bold text-white ">{"WorkOrderReport"}</p>
           </div>
           <div className="w-full ">
-            <ReportDataTableWithTimeRange
-              fullData={fullData!}
+            <ReportDataTable
               columns={columns}
               data={tableData!}
+              searchField="work_order_Id"
+              filterColumn="status"
+              title="Status"
+              options={statuses}
+              placeholder="Search by WorkOrder Id"
+              fileName="WorkOrderReport"
+              fullexport={true}
+              exportDataFields={workOrderDataReportController}
               setRange={setRange}
               dateRange={dateRange}
               fromDate={fromDate}
               toDate={toDate}
               disabledDates={disabledDates}
-              searchName="work_order_Id"
-              fileName="WorkOrderReport"
-              exportDataFields={workOrderDataReportController}
-              fullexport={true}
             />
           </div>
         </>

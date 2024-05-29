@@ -93,7 +93,7 @@ export const WorkOrderSchema = z.object({
   status: z.string().min(1, { message: "status is required" }),
 });
 export const ResourceWorkOrderSchema = z.object({
-  estimated_hour: z.string().min(1, { message: "required!" }),
+  estimated_hour: z.string().refine((arg) => arg.match(/^\d{1,3}:[0-5][0-9]$/)),
   bench_mark_measure: z.string().optional().default("--"),
   bench_mark_unit: z.string().optional().default("--"),
   quantity_unit: z.string().min(1, { message: "required!" }),

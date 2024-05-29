@@ -19,11 +19,9 @@ import {
 import { WorkOrderReportSchema } from "@/schemas/reportindex";
 import { ProjectData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CiSearch } from "react-icons/ci";
-import { IoMdCloseCircle } from "react-icons/io";
 import { z } from "zod";
 
 interface WorkOrderReportFormContainerProps {

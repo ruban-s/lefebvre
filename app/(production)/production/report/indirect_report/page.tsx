@@ -3,6 +3,7 @@ import IndirectReportFormContainer from "@/components/production/report/indirect
 import IndirectReportListContainer from "@/components/production/report/indirect_report/indirect_reportListContainer";
 import LayoutContainer from "@/components/common/layout-container";
 import { useState } from "react";
+import BackButton from "@/components/common/back-button";
 
 const IndirectReport = () => {
   const [filterData, setFilterData] = useState({
@@ -24,6 +25,7 @@ const IndirectReport = () => {
 
   return (
     <LayoutContainer>
+      <BackButton />
       <div className="w-full min-h-[200px] p-2 ">
         <IndirectReportFormContainer
           defaultValue={defaultData}

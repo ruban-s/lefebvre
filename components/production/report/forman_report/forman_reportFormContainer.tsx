@@ -213,7 +213,7 @@ const FormanReportFormContainer = ({
                             {formanList.map((forman, index) => {
                               return (
                                 <SelectItem key={index} value={forman.id}>
-                                  {`${forman.id} ${forman.name}`}
+                                  {`${forman.name}`}
                                 </SelectItem>
                               );
                             })}

@@ -1,23 +1,3 @@
-// forman_id: number;
-// forman_name: string;
-// project_id: string;
-// description: string;
-// customer_name: string;
-// work_order_Id: string;
-// work_order_description: string;
-// sq_no: number;
-// resource_id: string;
-// bench_mark_measure: number;
-// bench_mark_unit: string;
-// estimated_hour: string;
-// actual_hour: string | null;
-// variance: number;
-// required_quantity: number;
-// prepared_quantity: number | null;
-// unit_measure: string;
-// efficiency: number;
-// status: string;
-
 import StatusBadge from "@/components/common/status-badge";
 import { FormanReport } from "@/types";
 import { statuses } from "@/types/filter";

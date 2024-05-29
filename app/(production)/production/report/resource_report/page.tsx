@@ -4,6 +4,8 @@ import ResourceReportFormContainer from "@/components/production/report/resource
 import ResourceReportListContainer from "@/components/production/report/resource_report/resource_report_listContainer";
 import LayoutContainer from "@/components/common/layout-container";
 import { useEffect, useState } from "react";
+import ResourceReportWithFilterContainer from "@/components/production/report/resource_report/resource_report_listWithFilter";
+import BackButton from "@/components/common/back-button";
 
 const ResourceReport = () => {
   const [filterData, setFilterData] = useState({
@@ -29,7 +31,8 @@ const ResourceReport = () => {
   useEffect(() => {
     const ProjectId = async () => {
       const id = await fetchProjectId();
-      const firstWorkOrder = await WorkOrderId(id[0].project_id);
+      const firstWorkOrder =
+        id.length > 0 ? await WorkOrderId(id[0].project_id) : "";
       setDefaultData((prevDefault: any) => ({
         ...prevDefault,
         project_id: id[0],
@@ -53,6 +56,7 @@ const ResourceReport = () => {
 
   return (
     <LayoutContainer>
+      <BackButton />
       <div className="w-full min-h-[200px] p-2 ">
         <ResourceReportFormContainer
           changeFilterData={handleFilterDataChange}
@@ -62,7 +66,7 @@ const ResourceReport = () => {
         />
       </div>
       <div className="w-full min-h-[400px] p-2 ">
-        <ResourceReportListContainer
+        <ResourceReportWithFilterContainer
           filterData={filterData}
           defaultData={defaultData}
         />

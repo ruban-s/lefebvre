@@ -550,20 +550,31 @@ export const UpdateStatus = ({ row }: any) => {
                 Close
               </Button>
             </DialogClose>
-            <DialogClose>
+            {payLoad.forman.length === 0 ? (
               <Button
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  // if (foremans.length > 0) {
-                  //   payLoad.forman = foremans[0].id.toString();
-                  // }
-                  updateItem.mutate(payLoad);
-                  setFormans([]);
+                  toast.error(`Forman field is mandatory`, {
+                    position: "top-right",
+                    dismissible: true,
+                  });
                 }}>
                 Save
               </Button>
-            </DialogClose>
+            ) : (
+              <DialogClose>
+                <Button
+                  variant={"default"}
+                  className="bg-theme"
+                  onClick={() => {
+                    updateItem.mutate(payLoad);
+                    setFormans([]);
+                  }}>
+                  Save
+                </Button>
+              </DialogClose>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

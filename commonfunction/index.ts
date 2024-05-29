@@ -1,4 +1,5 @@
 import { getAllProject } from "@/data/projects";
+import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 import { getAllUser } from "@/data/user";
 import { getAllWorkOrder } from "@/data/work-order";
 
@@ -14,6 +15,21 @@ export async function fetchWorkOrderId(project_id: string) {
   const filteredData = parsedData
     .filter((data) => data.project_id === project_id)
     .map((data) => data.work_order_id);
+  return filteredData;
+}
+
+export async function fetchReourceId(
+  project_id: string,
+  work_order_id: string
+) {
+  const data = await getAllResourceWorkOrder();
+  const parsedData = JSON.parse(data.data) as any[];
+  const filteredData = parsedData
+    .filter(
+      (data) =>
+        data.project_id === project_id && data.work_order_id === work_order_id
+    )
+    .map((data) => data.resourceId);
   return filteredData;
 }
 

@@ -127,17 +127,13 @@ const WorkOrderFormContainer = () => {
       setProject(workOrder?.project_id);
       selectedFile(workOrder?.images!);
       form.setValue("project_id", workOrder?.project_id!);
+      form.setValue("work_order_id", workOrder?.work_order_id!);
       form.setValue("planner_remark", workOrder?.planner_remark!);
       form.setValue("start_date", workOrder?.start_date!);
       form.setValue("end_date", workOrder?.end_date!);
       form.setValue("status", workOrder?.status!);
       form.setValue("images", workOrder?.images!);
       form.setValue("production_remark", workOrder?.production_remark!);
-
-      form.setValue(
-        "work_order_id",
-        workOrder?.project_id! + "-" + workOrder?.work_order_id!
-      );
       form.setValue("description", workOrder?.description!);
       var startDate = workOrder?.start_date!.toString().split("-");
       var endDate = workOrder?.end_date!.toString().split("-");
@@ -167,7 +163,9 @@ const WorkOrderFormContainer = () => {
 
       return;
     }
-    form.setValue("work_order_id", value.project_id + "-");
+    if (!workOrder?.work_order_id) {
+      form.setValue("work_order_id", value.project_id + "-");
+    }
     form.setValue("project_id", value.project_id);
     setProject(value);
     var startDate = value?.start_date!.toString().split("-");
