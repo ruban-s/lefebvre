@@ -16,26 +16,6 @@ import { statuses } from "@/types/filter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-/*
-project_id: string;
-  description: string;
-  customer_name: string;
-  work_order_Id: string;
-  work_order_description: string;
-  sq_no: string;
-  resource_id: string;
-  bench_mark_measure: string;
-  bench_mark_unit: string;
-  estimated_hour: string;
-  actual_hour: string;
-  variance: string;
-  required_quantity: string;
-  prepared_quantity: string;
-  unit_measure: string;
-  forman: string;
-  status: string;
-
-*/
 export const Columns: ColumnDef<ResourceReport>[] = [
   {
     accessorKey: "project_id",
@@ -54,23 +34,48 @@ export const Columns: ColumnDef<ResourceReport>[] = [
     accessorKey: "sq_no",
     header: "Seq No",
   },
-
-  {
-    accessorKey: "bench_mark_measure",
-    header: "Bench Mark Measure",
-  },
-  {
-    accessorKey: "bench_mark_unit",
-    header: "Bench Mark Unit",
-  },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: ({ table }) => {
+      var Sum = 0;
+      table.getRowModel().rows.map((row: any) => {
+        Sum += parseInt(row.original.estimated_hour);
+      });
+      return (
+        <span>
+          EstimatedHour
+          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+        </span>
+      );
+    },
   },
-
+  {
+    accessorKey: "actual_hour",
+    header: ({ table }) => {
+      var Sum = 0;
+      table.getRowModel().rows.map((row: any) => {
+        Sum += parseInt(row.original.actual_hour);
+      });
+      return (
+        <span>
+          ActualHour
+          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+        </span>
+      );
+    },
+  },
   {
     accessorKey: "required_quantity",
     header: "Required Quantity",
+  },
+  {
+    header: "Balanced Hour",
+    accessorKey: "balanced_hour",
+    cell: ({ row }: { row: any }) => {
+      const balancedHour =
+        row.original.estimated_hour - row.original.actual_hour;
+      return <span>{balancedHour}</span>;
+    },
   },
   {
     accessorKey: "status",
@@ -79,10 +84,15 @@ export const Columns: ColumnDef<ResourceReport>[] = [
       const status = statuses.find(
         (status) => status.value === row.getValue("status")
       );
+
       if (!status) {
         return null;
       }
+
       return <StatusBadge row={row} />;
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

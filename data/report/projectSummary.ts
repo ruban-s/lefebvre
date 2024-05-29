@@ -38,12 +38,21 @@ export const getProjectSummary = async (status: string) => {
       const axiosResponseClosed = await Axios.get(
         `/report/projectSummeryReport?project_status=Closed`
       );
+      const axiosResponseCancelled = await Axios.get(
+        `/report/projectSummeryReport?project_status=Cancelled`
+      );
 
       const releasedData = JSON.parse(axiosResponseReleased.data.data);
       const unreleasedData = JSON.parse(axiosResponseUnreleased.data.data);
       const closedData = JSON.parse(axiosResponseClosed.data.data);
+      const cancelledData = JSON.parse(axiosResponseCancelled.data.data);
 
-      data = [...releasedData, ...unreleasedData, ...closedData];
+      data = [
+        ...releasedData,
+        ...unreleasedData,
+        ...closedData,
+        ...cancelledData,
+      ];
     }
     const response: ProjectResponseData = {
       status: true,

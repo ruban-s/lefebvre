@@ -72,9 +72,6 @@ import {
 } from "@/components/ui/select";
 import { getAllResources } from "@/data/resources";
 import { getAllMeasure } from "@/data/measure";
-import { Table } from "lucide-react";
-import { TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import SqSelect from "@/components/common/sq-secelct";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
@@ -208,6 +205,19 @@ const WorkOrderResourceFormContainer = () => {
           res.sqNumber === val.sqNumber
       )
     );
+
+    if (workOrder && filteredData?.length === 1) {
+      const filteredDataFirstData = filteredData?.[0];
+      if (
+        workOrder.project_id == filteredDataFirstData.project_id &&
+        workOrder.resourceId == filteredDataFirstData.resourceId &&
+        workOrder.sqNumber == filteredDataFirstData.sqNumber
+      ) {
+        creatWorkOrder.mutate(values.resources);
+        dialogRef.current?.click();
+        return;
+      }
+    }
 
     const duplicateSqNumbers = filteredData?.map((item) => item.sqNumber);
 

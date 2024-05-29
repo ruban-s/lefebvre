@@ -49,6 +49,7 @@ import {
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { Textarea } from "@/components/ui/textarea";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -141,7 +142,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     accessorKey: "project_id",
     header: "Project ID",
   },
-
   {
     accessorKey: "start_date",
     header: "Start Date",
@@ -282,6 +282,8 @@ export const UpdateStatus = ({ row }: any) => {
     from: new Date(data.start_date),
     to: new Date(data.end_date),
   });
+  const [file, selectedFile] = useState<string[]>([]);
+  const [updatedImages, setUpdatedImages] = useState<string[]>([]);
   useEffect(() => {
     var startDate = data?.start_date!.toString().split("-");
     var endDate = data?.end_date!.toString().split("-");
@@ -289,6 +291,7 @@ export const UpdateStatus = ({ row }: any) => {
       from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
       to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
     });
+    setUpdatedImages(data.images);
   }, []);
   const payLoad = {
     work_order_id: data.work_order_id,
@@ -315,6 +318,7 @@ export const UpdateStatus = ({ row }: any) => {
       const deleteCode: any = await updateWorkOrder({
         id: data.id,
         ...value,
+        images: updatedImages,
       });
       if (value.status !== "Released") {
         var resourceWorkOrderList = resourceWorkOrder?.filter(
@@ -469,6 +473,17 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
                 selectedData={dateRange!}
                 disabled={[]}
+              />
+            </div>
+            <div className="col-span-2">
+              <div>Attachment</div>
+              <MultiFileSelect
+                files={file}
+                onChange={(e: any) => {
+                  selectedFile(e);
+                  // form.setValue("images", [...form.watch("images")!, ...e]);
+                  setUpdatedImages([...updatedImages, ...e]);
+                }}
               />
             </div>
             <div className=" col-span-2">

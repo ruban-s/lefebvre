@@ -3,6 +3,7 @@ import LayoutContainer from "@/components/common/layout-container";
 import { useState } from "react";
 import LabourTicketReportFormContainer from "@/components/production/report/labour_ticket_report/labour_ticket_reportFormContainer";
 import LabourTicketReportListContainer from "@/components/production/report/labour_ticket_report/labour_ticket_reportListContainer";
+import BackButton from "@/components/common/back-button";
 
 const LabourTicketReport = () => {
   const [filterData, setFilterData] = useState({
@@ -24,6 +25,7 @@ const LabourTicketReport = () => {
 
   return (
     <LayoutContainer>
+      <BackButton />
       <div className="w-full min-h-[200px] p-2 ">
         <LabourTicketReportFormContainer
           defaultValue={defaultData}

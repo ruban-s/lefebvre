@@ -4,6 +4,7 @@ import {
   fetchProjectId,
   fetchWorkOrderId,
 } from "@/commonfunction";
+import BackButton from "@/components/common/back-button";
 import LayoutContainer from "@/components/common/layout-container";
 import FormanReportFormContainer from "@/components/production/report/forman_report/forman_reportFormContainer";
 import FormanReportListContainer from "@/components/production/report/forman_report/forman_reportListContainer";
@@ -43,7 +44,9 @@ const FormanReport = () => {
       const formanList = await fetchFormanList();
       setFormanList(formanList);
       const id = await fetchProjectId();
-      const firstWorkOrder = await WorkOrderId(id[0].project_id);
+      console.log(id);
+      const firstWorkOrder =
+        id.length > 0 ? await WorkOrderId(id[0].project_id) : "";
       setDefaultData((prevDefault: any) => ({
         ...prevDefault,
         project_id: id[0],
@@ -70,6 +73,7 @@ const FormanReport = () => {
 
   return (
     <LayoutContainer>
+      <BackButton />
       <div className="w-full min-h-[200px] p-2 ">
         <FormanReportFormContainer
           changeFilterData={handleFilterDataChange}

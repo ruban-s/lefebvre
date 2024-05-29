@@ -15,10 +15,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-
+import Link from "next/link";
 export const columns: ColumnDef<ProjectSummary>[] = [
   {
     accessorKey: "projectId",
@@ -49,6 +50,13 @@ export const columns: ColumnDef<ProjectSummary>[] = [
     header: "Description",
   },
   {
+    accessorKey: "work_order",
+    header: "WorkOrder",
+    cell: ({ row }) => {
+      return <SearchByWorkOrder row={row} />;
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
@@ -73,6 +81,18 @@ export const columns: ColumnDef<ProjectSummary>[] = [
     },
   },
 ];
+
+const SearchByWorkOrder = ({ row }: any) => {
+  return (
+    <div className="border-2 rounded-sm capitalize p-2">
+      <Link
+        href={`/production/report/project_summary/${row.original.projectId}`}
+        className="flex flex-row justify-center items-center">
+        View WorkOrder
+      </Link>
+    </div>
+  );
+};
 
 const ViewStatus = ({ row }: any) => {
   const viewData = row.original;

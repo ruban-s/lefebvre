@@ -273,7 +273,8 @@ export function DataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-auto  flex flex-row space-x-1 text-bold">
+                  className="ml-auto  flex flex-row space-x-1 text-bold"
+                  disabled={data.length < 1}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
               </DropdownMenuTrigger>

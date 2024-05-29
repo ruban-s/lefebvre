@@ -16,6 +16,7 @@ import {
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
@@ -24,7 +25,7 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
   },
   {
     accessorKey: "customer_name",
-    header: "Name",
+    header: "P.O Name",
   },
   {
     accessorKey: "work_order_Id",
@@ -35,12 +36,49 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
     header: "Description",
   },
   {
+    accessorKey: "estimated_hour",
+    header: ({ table }) => {
+      var Sum = 0;
+      table.getRowModel().rows.map((row: any) => {
+        Sum += parseInt(row.original.estimated_hour);
+      });
+      return (
+        <span>
+          EstimatedHour
+          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "actual_hour",
+    header: ({ table }) => {
+      var Sum = 0;
+      table.getRowModel().rows.map((row: any) => {
+        Sum += parseInt(row.original.actual_hour);
+      });
+      return (
+        <span>
+          ActualHour
+          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "start_date",
     header: "StartDate",
   },
   {
     accessorKey: "end_date",
     header: "EndDate",
+  },
+  {
+    accessorKey: "resource_id",
+    header: "ResourceId",
+    cell: ({ row }) => {
+      return <SearchResourceId row={row} />;
+    },
   },
   {
     accessorKey: "status",
@@ -56,14 +94,42 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
 
       return <StatusBadge row={row} />;
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
-    id: "actions",
+    id: "action",
     cell: ({ row }) => {
+      const status = statuses.find(
+        (status) => status.value === row.getValue("status")
+      );
+
+      if (!status) {
+        return null;
+      }
+
       return <ViewStatus row={row} />;
     },
   },
 ];
+
+const SearchResourceId = ({ row }: any) => {
+  return (
+    <div className="border-2 rounded-sm capitalize p-2">
+      <Link
+        href={{
+          pathname: `/production/report/project_summary/${row.original.project_id}`,
+          query: {
+            work_order_id: row.original.work_order_Id,
+          },
+        }}
+        className="flex flex-row justify-center items-center">
+        View ResourceId
+      </Link>
+    </div>
+  );
+};
 
 const ViewStatus = ({ row }: any) => {
   const viewData = row.original;

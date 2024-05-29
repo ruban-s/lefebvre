@@ -4,28 +4,21 @@ import { ResourceReport } from "@/types";
 import { useEffect, useState } from "react";
 import { Columns } from "./column";
 import { ResourceReportController } from "@/config/const";
-import { Button } from "@/components/ui/button";
 import { DateRange } from "react-day-picker";
 import { ReportDataTableWithTimeRange } from "@/components/common/report/report-data-tableWithTimeFilter";
 import { parse, format } from "date-fns";
 import { getResourceReport } from "@/data/report/resourceReport";
+import { ReportDataTable } from "@/components/common/report/report-data-table";
+import { statuses } from "@/types/filter";
 
 interface ResourceReportListContainerProps {
-  filterData: {
-    status: string;
-    project_id: string;
-    work_order_Id: string;
-  };
-  defaultData: {
-    status: string;
-    project_id: any;
-    work_order_Id: string;
-  };
+  projectId: string;
+  workOrderId: string;
 }
 
 const ResourceReportContainer = ({
-  filterData,
-  defaultData,
+  projectId,
+  workOrderId,
 }: ResourceReportListContainerProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
@@ -50,37 +43,15 @@ const ResourceReportContainer = ({
   };
 
   const fetchFullData = async () => {
-    if (
-      filterData.status !== "" &&
-      filterData.project_id !== "" &&
-      filterData.work_order_Id !== ""
-    ) {
-      const data = await getResourceReport({
-        resource_status: filterData.status,
-        project_id: filterData.project_id,
-        work_order_Id: filterData.work_order_Id,
-      });
-      const parsedData = JSON.parse(data.data) as ResourceReport[];
-      setTableDate(parsedData);
-      setFullData(parsedData);
-      setIsLoading(false);
-      return;
-    } else if (
-      defaultData.status != "" &&
-      defaultData.project_id != "" &&
-      defaultData.work_order_Id != ""
-    ) {
-      const data = await getResourceReport({
-        resource_status: defaultData.status,
-        project_id: defaultData.project_id.project_id,
-        work_order_Id: defaultData.work_order_Id,
-      });
-      const parsedData = JSON.parse(data.data) as ResourceReport[];
-      setTableDate(parsedData);
-      setFullData(parsedData);
-      setIsLoading(false);
-      return;
-    }
+    const data = await getResourceReport({
+      project_id: projectId,
+      work_order_Id: workOrderId,
+    });
+    const responseData = data!.data as ResourceReport[];
+    setTableDate(responseData);
+    setFullData(responseData);
+    setIsLoading(false);
+    return;
   };
 
   useEffect(() => {
@@ -89,7 +60,7 @@ const ResourceReportContainer = ({
       await fetchFullData();
     };
     loadData();
-  }, [filterData, defaultData]);
+  }, [projectId, workOrderId]);
 
   return (
     <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
@@ -103,20 +74,17 @@ const ResourceReportContainer = ({
             <p className="text-lg font-bold text-white ">{"ResourceReport"}</p>
           </div>
           <div className="w-full ">
-            <ReportDataTableWithTimeRange
-              fullData={fullData!}
+            <ReportDataTable
               columns={Columns}
               data={tableData!}
-              setRange={setRange}
-              dateRange={dateRange}
-              fromDate={fromDate}
-              toDate={toDate}
-              disabledDates={disabledDates}
-              searchName="project_id"
-              fileName="WorkOrderReport"
-              exportDataFields={ResourceReportController}
+              searchField="resource_id"
+              filterColumn="status"
+              title="Status"
+              options={statuses}
+              placeholder="Search by Resource Id"
+              fileName="ResourceReport"
               fullexport={true}
-              disableDateTime={true}
+              exportDataFields={ResourceReportController}
             />
           </div>
         </>

@@ -9,6 +9,7 @@ export const getAllMeasure = async () => {
   try {
     const axiosResponse = await Axios.get("/unit_measure/getAllUnitMeasures");
     const data = axiosResponse.data;
+    console.log(JSON.stringify(data));
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
