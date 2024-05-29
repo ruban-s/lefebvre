@@ -108,7 +108,7 @@ const ViewStatus = ({ row }: any) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <GrFormView className="text-2xl" />
+        <GrFormView className="text-2xl cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="w-[600px]">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">

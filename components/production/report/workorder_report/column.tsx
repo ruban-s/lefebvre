@@ -17,6 +17,13 @@ import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RxCaretSort } from "react-icons/rx";
+import { useSearchParams } from "next/navigation";
 
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
@@ -34,6 +41,30 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.description && (
+          <div className="flex justify-start items-center">
+            {row.original.description.substring(0, 30)}{" "}
+            {row.original.description.length > 30 && "..."}
+            {row.original.description.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "estimated_hour",
@@ -84,39 +115,27 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = statuses.find(
-        (status) => status.value === row.getValue("status")
-      );
-
-      if (!status) {
-        return null;
-      }
-
       return <StatusBadge row={row} />;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {
     id: "action",
     cell: ({ row }) => {
-      const status = statuses.find(
-        (status) => status.value === row.getValue("status")
-      );
-
-      if (!status) {
-        return null;
-      }
-
       return <ViewStatus row={row} />;
     },
   },
 ];
 
 const SearchResourceId = ({ row }: any) => {
+  const searchParams = useSearchParams();
+  const work_order_id = searchParams.get("work_order_id");
   return (
-    <div className="border-2 rounded-sm capitalize p-2">
+    <div
+      className={`border-2 rounded-sm capitalize p-2  ${
+        work_order_id === row.original.work_order_Id
+          ? "bg-black text-white"
+          : ""
+      }`}>
       <Link
         href={{
           pathname: `/production/report/project_summary/${row.original.project_id}`,
@@ -124,7 +143,7 @@ const SearchResourceId = ({ row }: any) => {
             work_order_id: row.original.work_order_Id,
           },
         }}
-        className="flex flex-row justify-center items-center">
+        className={`flex flex-row justify-center items-center`}>
         View ResourceId
       </Link>
     </div>
@@ -136,7 +155,7 @@ const ViewStatus = ({ row }: any) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <GrFormView className="text-2xl" />
+        <GrFormView className="text-2xl cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="w-[600px]">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">

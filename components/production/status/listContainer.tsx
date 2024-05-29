@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { Columns } from "./column";
 
 const StatusListContainer = () => {
+  const [allProjectList, setAllProjects] = useState<ProjectData[]>([]);
   const [releasedProjectList, setReleasedProjects] = useState<ProjectData[]>(
     []
   );
@@ -20,6 +21,14 @@ const StatusListContainer = () => {
   const [cancelledProjectList, setCancelledProjects] = useState<ProjectData[]>(
     []
   );
+
+  const { data: allProject, error: allProjectError } = useQuery({
+    queryKey: ["released-project"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return JSON.parse(data.data) as ProjectData[];
+    },
+  });
 
   const { data: releasedProject, error: releasedProjectError } = useQuery({
     queryKey: ["released-project"],
@@ -54,6 +63,9 @@ const StatusListContainer = () => {
   });
 
   useEffect(() => {
+    if (allProject) {
+      setAllProjects(allProject);
+    }
     if (releasedProject) {
       setReleasedProjects(
         releasedProject.filter((info) => info.status === "Released")
@@ -77,8 +89,11 @@ const StatusListContainer = () => {
   }, [releasedProject, unReleasedProject, closedProject, cancelledProject]);
 
   return (
-    <Tabs defaultValue="released_project" className="w-full w-sm">
+    <Tabs defaultValue="all" className="w-full w-sm">
       <TabsList className="bg-theme text-white">
+        <TabsTrigger value="all" className="text-sm font-extrabold">
+          All
+        </TabsTrigger>
         <TabsTrigger
           value="released_project"
           className="text-sm font-extrabold">
@@ -88,6 +103,25 @@ const StatusListContainer = () => {
         <TabsTrigger value="closed_project">Closed Project</TabsTrigger>
         <TabsTrigger value="cancelled_project">Cancelled Project</TabsTrigger>
       </TabsList>
+      <TabsContent value="all">
+        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
+          {allProjectError ? (
+            <div className="w-full min-h-[500px] justify-center items-center flex">
+              <Loading />
+            </div>
+          ) : (
+            <div className="w-full">
+              <DataTable
+                columns={Columns}
+                data={allProjectList}
+                searchName="project_id"
+                fileName="AllProject"
+                exportDataFields={projectController}
+              />
+            </div>
+          )}
+        </div>
+      </TabsContent>
       <TabsContent value="released_project">
         <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
           {releasedProjectError ? (

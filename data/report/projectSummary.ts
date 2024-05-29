@@ -28,6 +28,11 @@ export const getProjectSummary = async (status: string) => {
         `/report/projectSummeryReport?project_status=Closed`
       );
       data = JSON.parse(axiosResponse.data.data);
+    } else if (status === "Cancelled") {
+      const axiosResponse = await Axios.get(
+        `/report/projectSummeryReport?project_status=Cancelled`
+      );
+      data = JSON.parse(axiosResponse.data.data);
     } else if (status === "All") {
       const axiosResponseReleased = await Axios.get(
         `/report/projectSummeryReport?project_status=Released`
