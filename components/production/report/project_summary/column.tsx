@@ -16,10 +16,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { RxCaretSort } from "react-icons/rx";
 export const columns: ColumnDef<ProjectSummary>[] = [
   {
     accessorKey: "projectId",
@@ -27,7 +34,7 @@ export const columns: ColumnDef<ProjectSummary>[] = [
   },
   {
     accessorKey: "customer_name",
-    header: "Name",
+    header: "P.O Name",
   },
   {
     accessorKey: "estimated_hour",
@@ -48,6 +55,30 @@ export const columns: ColumnDef<ProjectSummary>[] = [
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.description && (
+          <div className="flex justify-start items-center">
+            {row.original.description.substring(0, 30)}{" "}
+            {row.original.description.length > 30 && "..."}
+            {row.original.description.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "work_order",
@@ -60,18 +91,7 @@ export const columns: ColumnDef<ProjectSummary>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = statuses.find(
-        (status) => status.value === row.getValue("status")
-      );
-
-      if (!status) {
-        return null;
-      }
-
       return <StatusBadge row={row} />;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {
@@ -99,7 +119,7 @@ const ViewStatus = ({ row }: any) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <GrFormView className="text-2xl" />
+        <GrFormView className="text-2xl cursor-pointer" />
       </DialogTrigger>
       <DialogContent className="w-[600px]">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
