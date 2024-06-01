@@ -11,7 +11,7 @@ export default {
         const validatedFields = LoginSchema.safeParse(credentials);
         if (validatedFields.success) {
           const authResponse = await fetch(
-            "http://208.109.9.243:8082/user/login",
+            "http://194.62.96.140:8082/user/login",
             {
               method: "POST",
               headers: {

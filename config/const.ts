@@ -29,7 +29,7 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 import { BsLightningChargeFill } from "react-icons/bs";
 import { GrDocumentVerified } from "react-icons/gr";
 
-export const BASE_URL = "http://208.109.9.243:8082";
+export const BASE_URL = "http://194.62.96.140:8082";
 export const adminTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
   { id: 2, label: "Dashboard", icon: MdSpaceDashboard, link: "/dashboard" },
