@@ -167,15 +167,22 @@ const ProjectSummaryListContainer = () => {
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={columns}
-                  data={allProjectList}
-                  searchName="project_id"
-                  fileName="AllProject"
-                  exportDataFields={ProjectSummaryController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Project Summary"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={columns}
+                    data={allProjectList}
+                    searchName="project_id"
+                    fileName="AllProject"
+                    exportDataFields={ProjectSummaryController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -186,15 +193,22 @@ const ProjectSummaryListContainer = () => {
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={columns}
-                  data={releasedProjectList}
-                  searchName="project_id"
-                  fileName="ReleasedProject"
-                  exportDataFields={ProjectSummaryController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Project Summary"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={columns}
+                    data={releasedProjectList}
+                    searchName="project_id"
+                    fileName="ReleasedProject"
+                    exportDataFields={ProjectSummaryController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -205,15 +219,22 @@ const ProjectSummaryListContainer = () => {
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={columns}
-                  data={unReleasedProjectList}
-                  searchName="project_id"
-                  fileName="UnReleasedProject"
-                  exportDataFields={ProjectSummaryController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Project Summary"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={columns}
+                    data={unReleasedProjectList}
+                    searchName="project_id"
+                    fileName="UnReleasedProject"
+                    exportDataFields={ProjectSummaryController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -224,15 +245,22 @@ const ProjectSummaryListContainer = () => {
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={columns}
-                  data={closedProjectList}
-                  searchName="project_id"
-                  fileName="ClosedProject"
-                  exportDataFields={ProjectSummaryController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Project Summary"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={columns}
+                    data={closedProjectList}
+                    searchName="project_id"
+                    fileName="ClosedProject"
+                    exportDataFields={ProjectSummaryController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -243,15 +271,22 @@ const ProjectSummaryListContainer = () => {
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={columns}
-                  data={cancelledProjectList}
-                  searchName="project_id"
-                  fileName="CancelledProject"
-                  exportDataFields={ProjectSummaryController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Project Summary"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={columns}
+                    data={cancelledProjectList}
+                    searchName="project_id"
+                    fileName="CancelledProject"
+                    exportDataFields={ProjectSummaryController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>

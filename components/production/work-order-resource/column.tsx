@@ -39,7 +39,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
@@ -61,6 +61,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { getAllLabourCard } from "@/data/labour-card";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -219,7 +220,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge row={row} />,
+    cell: ({ row }) => <StatusBar row={row} />,
   },
   {
     id: "actions",
@@ -228,6 +229,47 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     },
   },
 ];
+
+const StatusBar = ({ row }: { row: any }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDate = parse(row.original?.endDate, "dd-MM-yyyy", new Date());
+  endDate.setHours(0, 0, 0, 0);
+  const badgeClass = (() => {
+    if (
+      (row.original.status === "Released" ||
+        row.original.status === "Active") &&
+      endDate < today
+    ) {
+      return "bg-yellow-500";
+    }
+    if (
+      row.original.status === "Released" ||
+      row.original.status === "Active"
+    ) {
+      return "bg-green-500";
+    }
+    if (
+      row.original.status === "Unreleased" ||
+      row.original.status === "Inactive"
+    ) {
+      return "bg-red-500";
+    }
+    if (
+      row.original.status === "Canceled" ||
+      row.original.status === "Closed"
+    ) {
+      return "bg-orange-500";
+    }
+    return "bg-black";
+  })();
+
+  return (
+    <Badge className={`cursor-pointer rounded-md ${badgeClass}`}>
+      {row.original.status}
+    </Badge>
+  );
+};
 export const UpdateStatus = ({ row }: any) => {
   const data: ResourceWorkOdderData = row.original as ResourceWorkOdderData;
   const [foremans, setFormans] = useState<UserData[]>([]);
@@ -273,59 +315,87 @@ export const UpdateStatus = ({ row }: any) => {
   const queryClient = useQueryClient();
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
-      console.log({
-        id: data.id,
-        ...value,
-      });
-      const deleteCode: any = await updateResourceWorkOrder({
-        id: data.id,
-        ...value,
-      });
-      return deleteCode;
-    },
-    onSuccess: (value) => {
-      if (
-        value?.status ||
-        value?.message === `For input string: ""` ||
-        value?.message === `For input string: "[]"`
-      ) {
-        if (value?.message === `For input string: ""`) {
-          toast.success(`Data updated successfully!`, {
-            description: `Data updated successfully!`,
-            position: "top-right",
-            dismissible: true,
+      // console.log({
+      //   id: data.id,
+      //   ...value,
+      // });
+      // const deleteCode: any = await updateResourceWorkOrder({
+      //   id: data.id,
+      //   ...value,
+      // });
+      // return deleteCode;
+      return new Promise(async (resolve, reject) => {
+        try {
+          const labourCardData = await getAllLabourCard();
+          const labourCards = JSON.parse(labourCardData.data);
+          const filterLabourCards = labourCards.filter((val: any) => {
+            return (
+              val.project_id === value.project_id &&
+              val.work_order_id === value.work_order_id &&
+              val.resource_id === value.resourceId &&
+              val.sq_no === value.sq_no
+            );
           });
-        } else if (value?.message === `For input string: ""`) {
-          toast.success(`Data updated successfully!`, {
-            description: `Data updated successfully!`,
-            position: "top-right",
-            dismissible: true,
-          });
-        } else {
-          toast.success(`${value.message}`, {
-            description: `${value.message}`,
-            position: "top-right",
-            dismissible: true,
-          });
+          if (filterLabourCards.length > 0) {
+            reject(new Error("WorkOrderId existing in Labour card"));
+          } else {
+            const deleteCode: any = await updateResourceWorkOrder({
+              id: data.id,
+              ...value,
+            });
+            queryClient.invalidateQueries({
+              queryKey: ["resource-work-orders"],
+            });
+            resolve(deleteCode);
+          }
+        } catch (err) {
+          reject(err);
         }
-      } else {
-        toast.error(`Something went wrong`, {
-          description: "Data not updated contact the admin",
-          position: "top-right",
-          dismissible: true,
-        });
-      }
-      queryClient.invalidateQueries({
-        queryKey: ["resource-work-orders"],
       });
     },
-    onError: (value) => {
-      console.log(value);
-      toast.error(`Something went wrong`, {
-        position: "top-right",
-        dismissible: true,
-      });
-    },
+    // onSuccess: (value) => {
+    //   if (
+    //     value?.status ||
+    //     value?.message === `For input string: ""` ||
+    //     value?.message === `For input string: "[]"`
+    //   ) {
+    //     if (value?.message === `For input string: ""`) {
+    //       toast.success(`Data updated successfully!`, {
+    //         description: `Data updated successfully!`,
+    //         position: "top-right",
+    //         dismissible: true,
+    //       });
+    //     } else if (value?.message === `For input string: ""`) {
+    //       toast.success(`Data updated successfully!`, {
+    //         description: `Data updated successfully!`,
+    //         position: "top-right",
+    //         dismissible: true,
+    //       });
+    //     } else {
+    //       toast.success(`${value.message}`, {
+    //         description: `${value.message}`,
+    //         position: "top-right",
+    //         dismissible: true,
+    //       });
+    //     }
+    //   } else {
+    //     toast.error(`Something went wrong`, {
+    //       description: "Data not updated contact the admin",
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   }
+    //   queryClient.invalidateQueries({
+    //     queryKey: ["resource-work-orders"],
+    //   });
+    // },
+    // onError: (value) => {
+    //   console.log(value);
+    //   toast.error(`Something went wrong`, {
+    //     position: "top-right",
+    //     dismissible: true,
+    //   });
+    // },
   });
   const { data: workOrders } = useQuery({
     queryKey: ["work-orders"],
@@ -348,6 +418,17 @@ export const UpdateStatus = ({ row }: any) => {
       return JSON.parse(data.data) as UserData[];
     },
   });
+
+  const handleUpdate = (value: any) => {
+    toast.promise(updateItem.mutateAsync(value), {
+      loading: "Loading...",
+      success: "ResourceId Updated successfully!",
+      error: "Error updating ResourceId - Contact the admin",
+      position: "top-right",
+      dismissible: true,
+    });
+  };
+
   return (
     <>
       <TbEdit
@@ -568,7 +649,8 @@ export const UpdateStatus = ({ row }: any) => {
                   variant={"default"}
                   className="bg-theme"
                   onClick={() => {
-                    updateItem.mutate(payLoad);
+                    // updateItem.mutate(payLoad);
+                    handleUpdate(payLoad);
                     setFormans([]);
                   }}>
                   Save

@@ -11,6 +11,7 @@ export const uploadImage = async (formData: FormData, name: string) => {
     );
 
     const data = axiosResponse.data;
+    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

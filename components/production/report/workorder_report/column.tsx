@@ -28,15 +28,15 @@ import { useSearchParams } from "next/navigation";
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
     accessorKey: "project_id",
-    header: "ProjectId",
+    header: "Project ID",
   },
   {
     accessorKey: "customer_name",
-    header: "P.O Name",
+    header: "Customer Name",
   },
   {
     accessorKey: "work_order_Id",
-    header: "WorkOrderId",
+    header: "WorkOrder ID",
   },
   {
     accessorKey: "description",
@@ -75,7 +75,7 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
       });
       return (
         <span>
-          EstimatedHour
+          Estimated Hour
           <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
         </span>
       );
@@ -90,23 +90,32 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
       });
       return (
         <span>
-          ActualHour
+          Actual Hour
           <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
         </span>
       );
     },
   },
   {
+    header: "Balance Hour",
+    accessorKey: "balanced_hour",
+    cell: ({ row }: { row: any }) => {
+      const balancedHour =
+        row.original.estimated_hour - row.original.actual_hour;
+      return <span>{balancedHour}</span>;
+    },
+  },
+  {
     accessorKey: "start_date",
-    header: "StartDate",
+    header: "Start Date",
   },
   {
     accessorKey: "end_date",
-    header: "EndDate",
+    header: "End Date",
   },
   {
     accessorKey: "resource_id",
-    header: "ResourceId",
+    header: "View Resource ID",
     cell: ({ row }) => {
       return <SearchResourceId row={row} />;
     },
@@ -144,7 +153,7 @@ const SearchResourceId = ({ row }: any) => {
           },
         }}
         className={`flex flex-row justify-center items-center`}>
-        View ResourceId
+        Resource
       </Link>
     </div>
   );
@@ -164,7 +173,13 @@ const ViewStatus = ({ row }: any) => {
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {
             return (
-              <div className="items-center gap-4" key={index}>
+              <div
+                className={`items-center gap-4 ${
+                  key === "variance"
+                    ? "sm:col-span-2 md:col-span-2 lg:col-span-2"
+                    : ""
+                }`}
+                key={index}>
                 <div className="mb-1 capitalize">{key}</div>
                 <Input disabled value={value as string} />
               </div>

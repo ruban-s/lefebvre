@@ -29,7 +29,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
@@ -48,6 +48,7 @@ import {
 } from "@/data/resource-work-order";
 import { Textarea } from "@/components/ui/textarea";
 import MultiFileSelect from "@/components/common/multiFileSelect";
+import { getAllLabourCard } from "@/data/labour-card";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -239,18 +240,18 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
             Attachment
           </PopoverTrigger>
 
-          <PopoverContent className="w-[200px] ">
+          <PopoverContent className="w-full flex flex-col gap-2 max-w-sm">
             {row.original.images.map((info, index) => {
-              var file = info.split("/")[info.split("/").length - 1];
               return (
                 <Link
                   target="_blank"
-                  href={info}
                   key={index}
-                  className="flex justify-center items-center m-1">
+                  href={info}
+                  className="flex flex-row gap-2 w-full">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
                   {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
+                  <span>{index + 1}</span>
                   {info.split("/")[4]}
                 </Link>
               );
@@ -263,7 +264,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge row={row} />,
+    cell: ({ row }) => <StatusBar row={row} />,
   },
   {
     id: "actions",
@@ -272,6 +273,48 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     },
   },
 ];
+
+const StatusBar = ({ row }: { row: any }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());
+  endDate.setHours(0, 0, 0, 0);
+  const badgeClass = (() => {
+    if (
+      (row.original.status === "Released" ||
+        row.original.status === "Active") &&
+      endDate < today
+    ) {
+      return "bg-yellow-500";
+    }
+    if (
+      row.original.status === "Released" ||
+      row.original.status === "Active"
+    ) {
+      return "bg-green-500";
+    }
+    if (
+      row.original.status === "Unreleased" ||
+      row.original.status === "Inactive"
+    ) {
+      return "bg-red-500";
+    }
+    if (
+      row.original.status === "Canceled" ||
+      row.original.status === "Closed"
+    ) {
+      return "bg-orange-500";
+    }
+    return "bg-black";
+  })();
+
+  return (
+    <Badge className={`cursor-pointer rounded-md ${badgeClass}`}>
+      {row.original.status}
+    </Badge>
+  );
+};
+
 export const UpdateStatus = ({ row }: any) => {
   const ref = useRef<HTMLButtonElement>(null);
   const data = row.original;
@@ -313,83 +356,115 @@ export const UpdateStatus = ({ row }: any) => {
   });
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await updateWorkOrder({
-        id: data.id,
-        ...value,
-        images: updatedImages,
-      });
-      if (value.status !== "Released") {
-        var resourceWorkOrderList = resourceWorkOrder?.filter(
-          (info) => info.project_id === value.project_id
-        );
-        resourceWorkOrderList?.map(async (resourceWorkData, index) => {
-          const payLoad = {
-            estimated_hour: resourceWorkData.estimated_hour,
-            bench_mark_measure: resourceWorkData.bench_mark_measure,
-            bench_mark_unit: resourceWorkData.bench_mark_unit,
-            remark: resourceWorkData.remark,
-            required_quantity: resourceWorkData.required_quantity,
-            sqNumber: resourceWorkData.sqNumber,
-            status: value.status,
-            ballance_hour: resourceWorkData.ballance_hour,
-            ballanced_quantity: resourceWorkData.ballanced_quantity,
-            employee_id: resourceWorkData.employee_id,
-            endDate: resourceWorkData.endDate,
-            actual_hour: resourceWorkData.actual_hour,
-            forman: resourceWorkData.forman,
-            project_id: resourceWorkData.project_id,
-            resourceId: resourceWorkData.resourceId,
-            prepared_quantity: resourceWorkData.prepared_quantity,
-            startDate: resourceWorkData.startDate,
-            work_order_id: resourceWorkData.work_order_id,
-            quantity_unit: resourceWorkData.quantity_unit,
-          };
+      return new Promise(async (resolve, reject) => {
+        try {
+          const labourCardData = await getAllLabourCard();
+          const labourCards = JSON.parse(labourCardData.data);
 
-          const { status, ...data } = resourceWorkData;
-          status === "Released" &&
-            (await updateResourceWorkOrder({
-              id: resourceWorkData.id,
-              ...payLoad,
-            }));
-        });
-      }
-      return deleteCode;
-    },
-    onSuccess: (value) => {
-      if (value?.status) {
-        toast.success(`${value.message}`, {
-          description: `${value.message}`,
-          position: "top-right",
-          dismissible: true,
-        });
-      } else {
-        toast.error(`Something went wrong`, {
-          description: "Data not updated contact the admin",
-          position: "top-right",
-          dismissible: true,
-        });
-      }
-      ["work-orders", "resource-work-orders"].map((info, index) => {
-        queryClient.invalidateQueries({
-          queryKey: [info],
-        });
-      });
+          const filterLabourCards = labourCards.filter(
+            (val: any) =>
+              val.project_id === value.project_id &&
+              val.work_order_id === value.work_order_id
+          );
+          if (filterLabourCards.length > 0) {
+            reject(new Error("WorkOrderId existing in Labour card"));
+          } else {
+            const deleteCode: any = await updateWorkOrder({
+              id: data.id,
+              ...value,
+              images: updatedImages,
+            });
+            resolve(deleteCode);
+            if (value.status !== "Released") {
+              var resourceWorkOrderList = resourceWorkOrder?.filter(
+                (info) => info.project_id === value.project_id
+              );
+              resourceWorkOrderList?.map(async (resourceWorkData, index) => {
+                const payLoad = {
+                  estimated_hour: resourceWorkData.estimated_hour,
+                  bench_mark_measure: resourceWorkData.bench_mark_measure,
+                  bench_mark_unit: resourceWorkData.bench_mark_unit,
+                  remark: resourceWorkData.remark,
+                  required_quantity: resourceWorkData.required_quantity,
+                  sqNumber: resourceWorkData.sqNumber,
+                  status: value.status,
+                  ballance_hour: resourceWorkData.ballance_hour,
+                  ballanced_quantity: resourceWorkData.ballanced_quantity,
+                  employee_id: resourceWorkData.employee_id,
+                  endDate: resourceWorkData.endDate,
+                  actual_hour: resourceWorkData.actual_hour,
+                  forman: resourceWorkData.forman,
+                  project_id: resourceWorkData.project_id,
+                  resourceId: resourceWorkData.resourceId,
+                  prepared_quantity: resourceWorkData.prepared_quantity,
+                  startDate: resourceWorkData.startDate,
+                  work_order_id: resourceWorkData.work_order_id,
+                  quantity_unit: resourceWorkData.quantity_unit,
+                };
 
-      const updatedValue = JSON.parse(value.data);
-      var startDate = updatedValue?.start_date!.toString().split("-");
-      var endDate = updatedValue?.end_date!.toString().split("-");
-      setDateRange({
-        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+                const { status, ...data } = resourceWorkData;
+                status === "Released" &&
+                  (await updateResourceWorkOrder({
+                    id: resourceWorkData.id,
+                    ...payLoad,
+                  }));
+              });
+            }
+            ["work-orders", "resource-work-orders"].map((info, index) => {
+              queryClient.invalidateQueries({
+                queryKey: [info],
+              });
+            });
+
+            const updatedValue = JSON.parse(deleteCode.data);
+            var startDate = updatedValue?.start_date!.toString().split("-");
+            var endDate = updatedValue?.end_date!.toString().split("-");
+            setDateRange({
+              from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+              to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+            });
+            return deleteCode;
+          }
+        } catch (err) {
+          reject(err);
+        }
       });
     },
-    onError: (value) => {
-      console.log(value);
-      toast.error(`Something went wrong`, {
-        position: "top-right",
-        dismissible: true,
-      });
-    },
+    // onSuccess: (value) => {
+    //   if (value?.status) {
+    //     toast.success(`${value.message}`, {
+    //       description: `${value.message}`,
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   } else {
+    //     toast.error(`Something went wrong`, {
+    //       description: "Data not updated contact the admin",
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   }
+    //   ["work-orders", "resource-work-orders"].map((info, index) => {
+    //     queryClient.invalidateQueries({
+    //       queryKey: [info],
+    //     });
+    //   });
+
+    //   const updatedValue = JSON.parse(value.data);
+    //   var startDate = updatedValue?.start_date!.toString().split("-");
+    //   var endDate = updatedValue?.end_date!.toString().split("-");
+    //   setDateRange({
+    //     from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+    //     to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+    //   });
+    // },
+    // onError: (value) => {
+    //   console.log(value);
+    //   toast.error(`Something went wrong`, {
+    //     position: "top-right",
+    //     dismissible: true,
+    //   });
+    // },
   });
   const {
     data: projects,
@@ -402,6 +477,17 @@ export const UpdateStatus = ({ row }: any) => {
       return JSON.parse(data.data) as ProjectData[];
     },
   });
+
+  const handleUpdate = (value: any) => {
+    toast.promise(updateItem.mutateAsync(value), {
+      loading: "Loading...",
+      success: "WorkOrder Updated successfully!",
+      error: "Error updating project - Contact the admin",
+      position: "top-right",
+      dismissible: true,
+    });
+  };
+
   return (
     <>
       <TbEdit
@@ -480,7 +566,7 @@ export const UpdateStatus = ({ row }: any) => {
                 onChange={(e: any) => {
                   selectedFile(e);
                   // form.setValue("images", [...form.watch("images")!, ...e]);
-                  setUpdatedImages([...updatedImages, ...e]);
+                  setUpdatedImages([...e]);
                 }}
               />
             </div>
@@ -517,7 +603,8 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  updateItem.mutate(payLoad);
+                  handleUpdate(payLoad);
+                  // updateItem.mutate(payLoad);
                 }}>
                 Save
               </Button>

@@ -154,13 +154,15 @@ const WorkOrderReportListContainer = ({
           <TabsTrigger
             value="released_project"
             className="text-sm font-extrabold">
-            Released Project
+            Released Work Order
           </TabsTrigger>
           <TabsTrigger value="unReleased_project">
-            Unreleased Project
+            Unreleased Work Order
           </TabsTrigger>
-          <TabsTrigger value="closed_project">Closed Project</TabsTrigger>
-          <TabsTrigger value="cancelled_project">Cancelled Project</TabsTrigger>
+          <TabsTrigger value="closed_project">Closed Work Order</TabsTrigger>
+          <TabsTrigger value="cancelled_project">
+            Cancelled Work Order
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
@@ -169,22 +171,29 @@ const WorkOrderReportListContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <ReportDataTable
-                  columns={columns}
-                  data={allWorkOrderList!}
-                  searchField="work_order_Id"
-                  placeholder="Search by WorkOrder Id"
-                  fileName="AllWorkOrderReport"
-                  fullexport={true}
-                  exportDataFields={workOrderDataReportController}
-                  setRange={setRange}
-                  dateRange={dateRange}
-                  fromDate={fromDate}
-                  toDate={toDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Work Order Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <ReportDataTable
+                    columns={columns}
+                    data={allWorkOrderList!}
+                    searchField="work_order_Id"
+                    placeholder="Search by WorkOrder Id"
+                    fileName="AllWorkOrderReport"
+                    fullexport={true}
+                    exportDataFields={workOrderDataReportController}
+                    setRange={setRange}
+                    dateRange={dateRange}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -195,22 +204,29 @@ const WorkOrderReportListContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <ReportDataTable
-                  columns={columns}
-                  data={releasedWorkOrderList!}
-                  searchField="work_order_Id"
-                  placeholder="Search by WorkOrder Id"
-                  fileName="ReleasedWorkOrderReport"
-                  fullexport={true}
-                  exportDataFields={workOrderDataReportController}
-                  setRange={setRange}
-                  dateRange={dateRange}
-                  fromDate={fromDate}
-                  toDate={toDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Work Order Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <ReportDataTable
+                    columns={columns}
+                    data={releasedWorkOrderList!}
+                    searchField="work_order_Id"
+                    placeholder="Search by WorkOrder Id"
+                    fileName="ReleasedWorkOrderReport"
+                    fullexport={true}
+                    exportDataFields={workOrderDataReportController}
+                    setRange={setRange}
+                    dateRange={dateRange}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -221,22 +237,29 @@ const WorkOrderReportListContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <ReportDataTable
-                  columns={columns}
-                  data={unReleasedWorkOrderList!}
-                  searchField="work_order_Id"
-                  placeholder="Search by WorkOrder Id"
-                  fileName="UnreleasedWorkOrderReport"
-                  fullexport={true}
-                  exportDataFields={workOrderDataReportController}
-                  setRange={setRange}
-                  dateRange={dateRange}
-                  fromDate={fromDate}
-                  toDate={toDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Work Order Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <ReportDataTable
+                    columns={columns}
+                    data={unReleasedWorkOrderList!}
+                    searchField="work_order_Id"
+                    placeholder="Search by WorkOrder Id"
+                    fileName="UnreleasedWorkOrderReport"
+                    fullexport={true}
+                    exportDataFields={workOrderDataReportController}
+                    setRange={setRange}
+                    dateRange={dateRange}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -247,22 +270,29 @@ const WorkOrderReportListContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <ReportDataTable
-                  columns={columns}
-                  data={closedWorkOrderList!}
-                  searchField="work_order_Id"
-                  placeholder="Search by WorkOrder Id"
-                  fileName="ClosedWorkOrderReport"
-                  fullexport={true}
-                  exportDataFields={workOrderDataReportController}
-                  setRange={setRange}
-                  dateRange={dateRange}
-                  fromDate={fromDate}
-                  toDate={toDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Work Order Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <ReportDataTable
+                    columns={columns}
+                    data={closedWorkOrderList!}
+                    searchField="work_order_Id"
+                    placeholder="Search by WorkOrder Id"
+                    fileName="ClosedWorkOrderReport"
+                    fullexport={true}
+                    exportDataFields={workOrderDataReportController}
+                    setRange={setRange}
+                    dateRange={dateRange}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -273,22 +303,29 @@ const WorkOrderReportListContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <ReportDataTable
-                  columns={columns}
-                  data={cancelledWorkOrderList!}
-                  searchField="work_order_Id"
-                  placeholder="Search by WorkOrder Id"
-                  fileName="CancelledWorkOrderReport"
-                  fullexport={true}
-                  exportDataFields={workOrderDataReportController}
-                  setRange={setRange}
-                  dateRange={dateRange}
-                  fromDate={fromDate}
-                  toDate={toDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Work Order Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <ReportDataTable
+                    columns={columns}
+                    data={cancelledWorkOrderList!}
+                    searchField="work_order_Id"
+                    placeholder="Search by WorkOrder Id"
+                    fileName="CancelledWorkOrderReport"
+                    fullexport={true}
+                    exportDataFields={workOrderDataReportController}
+                    setRange={setRange}
+                    dateRange={dateRange}
+                    fromDate={fromDate}
+                    toDate={toDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>

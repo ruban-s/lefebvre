@@ -339,7 +339,7 @@ export const UpdateStatus = ({ row }: any) => {
       <Dialog>
         <DialogTrigger ref={ref}></DialogTrigger>
         <DialogContent
-          className="sm:max-w-[800px]"
+          className="sm:max-w-[800px] h-full max-h-[900px] overflow-auto"
           onInteractOutside={(e) => {
             e.preventDefault();
           }}>
@@ -403,7 +403,7 @@ export const UpdateStatus = ({ row }: any) => {
             {Object.keys(data).map((dataValue, index) => {
               if (dataValue === "is_production_editable") {
                 return (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2" key={index}>
                     <Switch
                       id={dataValue}
                       checked={toogle}

@@ -129,6 +129,12 @@ export const productionTabs: TabData[] = [
     icon: TbReportAnalytics,
     link: "/production/report",
   },
+  {
+    id: 2,
+    label: "Dashboard",
+    icon: MdSpaceDashboard,
+    link: "/production/dashboard",
+  },
 ];
 export const SuperAdminTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },

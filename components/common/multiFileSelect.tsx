@@ -26,6 +26,7 @@ const MultiFileSelect = (props: props) => {
     var data = await uploadImage(value, name);
     setloading(false);
     selectedFile((e) => [...e, data.data]);
+
     popRef.current?.click();
     props.onChange([...file, data.data]);
   };
@@ -64,14 +65,13 @@ const MultiFileSelect = (props: props) => {
         )}{" "}
         {file.length > 0 && `| selected- ${file.length}`}
       </PopoverTrigger>
-      <PopoverContent className="relative min-w-[400px] max-w-auto">
+      <PopoverContent className="relative min-w-[400px] w-full ">
         <Input
           ref={imageRef}
           type="file"
           className="h-[1px] w-[1px] ring-0"
           placeholder=""
           onChange={(e: any) => {
-            console.log(e.target?.files[0]);
             const formData = new FormData();
             e.target?.files[0] &&
               formData.append("file", e.target?.files[0] as File);
@@ -82,22 +82,22 @@ const MultiFileSelect = (props: props) => {
         <div
           className="w-full h-[20px] absolute top-0 left-0  p-4 py-6 cursor-pointer rounded-sm bg-slate-50 flex justify-center items-center shadow-sm"
           onClick={() => {
-            console.log(imageRef.current?.click());
             imageRef.current?.click();
-
-            console.log(imageRef.current?.files?.length);
           }}>
           Add File
         </div>
-        <div className="w-auto mt-5">
+        <div className="mt-10">
           {file.map((info, index) => {
             var data = info.split(".");
             data.pop();
             return (
               <div
                 key={index}
-                className="flex flex-row justify-start w-full items-center gap-4">
-                <div>{data}</div>
+                className="flex flex-row justify-between w-full items-center gap-4">
+                <div className="w-[90%] flex flex-row gap-2 items-start">
+                  <span className="font-black">{index + 1} </span>
+                  {data}
+                </div>
                 <div
                   className="w-5 h-5 justify-center p-3 border-1 border-red-500 border flex items-center bg-red-50 text-red-500 rounded-sm shadow-sm cursor-pointer"
                   onClick={() => {

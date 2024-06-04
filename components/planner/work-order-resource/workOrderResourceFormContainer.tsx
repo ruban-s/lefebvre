@@ -104,6 +104,7 @@ const WorkOrderResourceFormContainer = () => {
 
   const creatWorkOrder = useMutation({
     mutationFn: async (value: any) => {
+      console.log(value);
       const breake = workOrder
         ? await updateResourceWorkOrder({ id: workOrder?.id, ...value[0] })
         : await createResourceWorkOrder(value);
