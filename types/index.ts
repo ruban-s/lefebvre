@@ -213,9 +213,9 @@ export interface ProjectSummary {
   actual_hour: string;
   variance: string;
   total_work_order: string;
+  closed_work_order: string;
   released_work_order: string;
   unreleased_work_order: string;
-  closed_work_order: string;
 }
 
 export interface WorkOrderDataReport {
@@ -224,7 +224,6 @@ export interface WorkOrderDataReport {
   customer_name: string;
   work_order_Id: string;
   work_order_description: string;
-  status: string;
   start_date: string;
   end_date: string;
   estimated_hour: string;
@@ -232,6 +231,7 @@ export interface WorkOrderDataReport {
   variance: string;
   required_quantity: string;
   prepared_quantity: string;
+  status: string;
 }
 
 export interface ResourceReport {

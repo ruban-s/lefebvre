@@ -23,7 +23,7 @@ export const Columns: ColumnDef<ResourceReport>[] = [
   },
   {
     accessorKey: "work_order_Id",
-    header: "Work Order Id",
+    header: "Work Order ID",
   },
 
   {
@@ -43,7 +43,7 @@ export const Columns: ColumnDef<ResourceReport>[] = [
       });
       return (
         <span>
-          EstimatedHour
+          Estimated Hour
           <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
         </span>
       );
@@ -58,15 +58,11 @@ export const Columns: ColumnDef<ResourceReport>[] = [
       });
       return (
         <span>
-          ActualHour
+          Actual Hour
           <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
         </span>
       );
     },
-  },
-  {
-    accessorKey: "required_quantity",
-    header: "Required Quantity",
   },
   {
     header: "Balanced Hour",
@@ -78,21 +74,27 @@ export const Columns: ColumnDef<ResourceReport>[] = [
     },
   },
   {
+    accessorKey: "required_quantity",
+    header: "Required qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared qty",
+  },
+  {
+    header: "Balance qty",
+    accessorKey: "balanced_quantity",
+    cell: ({ row }: { row: any }) => {
+      const balancedQuantity =
+        row.original.required_quantity - row.original.prepared_quantity;
+      return <span>{balancedQuantity}</span>;
+    },
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const status = statuses.find(
-        (status) => status.value === row.getValue("status")
-      );
-
-      if (!status) {
-        return null;
-      }
-
       return <StatusBadge row={row} />;
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {
@@ -117,7 +119,13 @@ const ViewStatus = ({ row }: any) => {
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {
             return (
-              <div className="items-center gap-4" key={index}>
+              <div
+                className={`items-center gap-4 ${
+                  key === "variance" || key === "work_order_description"
+                    ? "sm:col-span-2 md:col-span-2 lg:col-span-2"
+                    : ""
+                }`}
+                key={index}>
                 <div className="mb-1 capitalize">{key}</div>
                 <Input disabled value={value as string} />
               </div>

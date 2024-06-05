@@ -102,7 +102,7 @@ const ResourceReportContainer = ({
       ) : (
         <>
           <div className="bg-theme w-full pl-2 py-2 ">
-            <p className="text-lg font-bold text-white ">{"ResourceReport"}</p>
+            <p className="text-lg font-bold text-white ">{"Resource Report"}</p>
           </div>
           <div className="w-full ">
             <ReportDataTable
@@ -128,13 +128,15 @@ const ResourceReportContainer = ({
           <TabsTrigger
             value="released_project"
             className="text-sm font-extrabold">
-            Released Project
+            Released Resource
           </TabsTrigger>
           <TabsTrigger value="unReleased_project">
-            Unreleased Project
+            Unreleased Resource
           </TabsTrigger>
-          <TabsTrigger value="closed_project">Closed Project</TabsTrigger>
-          <TabsTrigger value="cancelled_project">Cancelled Project</TabsTrigger>
+          <TabsTrigger value="closed_project">Closed Resource</TabsTrigger>
+          <TabsTrigger value="cancelled_project">
+            Cancelled Resource
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="all">
           <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
@@ -143,15 +145,22 @@ const ResourceReportContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={Columns}
-                  data={allResourceReport}
-                  searchName="resource_id"
-                  fileName="AllResourceId"
-                  exportDataFields={ResourceReportController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Resource Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={Columns}
+                    data={allResourceReport}
+                    searchName="resource_id"
+                    fileName="AllResourceId"
+                    exportDataFields={ResourceReportController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -162,15 +171,22 @@ const ResourceReportContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={Columns}
-                  data={releasedResourceReport}
-                  searchName="resource_id"
-                  fileName="ReleasedResourceId"
-                  exportDataFields={ResourceReportController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Resource Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={Columns}
+                    data={releasedResourceReport}
+                    searchName="resource_id"
+                    fileName="ReleasedResourceId"
+                    exportDataFields={ResourceReportController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -181,15 +197,22 @@ const ResourceReportContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={Columns}
-                  data={unReleasedResourceReport}
-                  searchName="resource_id"
-                  fileName="UnReleasedResourceId"
-                  exportDataFields={ResourceReportController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Resource Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={Columns}
+                    data={unReleasedResourceReport}
+                    searchName="resource_id"
+                    fileName="UnReleasedResourceId"
+                    exportDataFields={ResourceReportController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -200,15 +223,22 @@ const ResourceReportContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={Columns}
-                  data={closedResourceReport}
-                  searchName="resource_id"
-                  fileName="ClosedResourceId"
-                  exportDataFields={ResourceReportController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Resource Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={Columns}
+                    data={closedResourceReport}
+                    searchName="resource_id"
+                    fileName="ClosedResourceId"
+                    exportDataFields={ResourceReportController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>
@@ -219,15 +249,22 @@ const ResourceReportContainer = ({
                 <Loading />
               </div>
             ) : (
-              <div className="w-full">
-                <DataTable
-                  columns={Columns}
-                  data={cancelledResourceReport}
-                  searchName="resource_id"
-                  fileName="CancelledResourceId"
-                  exportDataFields={ResourceReportController}
-                />
-              </div>
+              <>
+                <div className="bg-theme w-full pl-2 py-2 ">
+                  <p className="text-lg font-bold text-white ">
+                    {"Resource Report"}
+                  </p>
+                </div>
+                <div className="w-full">
+                  <DataTable
+                    columns={Columns}
+                    data={cancelledResourceReport}
+                    searchName="resource_id"
+                    fileName="CancelledResourceId"
+                    exportDataFields={ResourceReportController}
+                  />
+                </div>
+              </>
             )}
           </div>
         </TabsContent>

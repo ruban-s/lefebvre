@@ -16,6 +16,12 @@ import {
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RxCaretSort } from "react-icons/rx";
 
 export const Columns: ColumnDef<IndirectReport>[] = [
   {
@@ -24,15 +30,43 @@ export const Columns: ColumnDef<IndirectReport>[] = [
   },
   {
     accessorKey: "employee_name",
-    header: "Name",
+    header: "Employee Name",
   },
   {
-    accessorKey: "attendance_type",
-    header: "AttendanceType",
+    accessorKey: "designation",
+    header: "Designation",
   },
   {
     accessorKey: "gl_code",
     header: "GlCode",
+  },
+  {
+    accessorKey: "gl_description",
+    header: "GlDescription",
+    cell: ({ row }) => (
+      <>
+        {row.original.gl_description && (
+          <div className="flex justify-start items-center">
+            {row.original.gl_description.substring(0, 30)}{" "}
+            {row.original.gl_description.length > 30 && "..."}
+            {row.original.gl_description.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.gl_description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "in_time",
@@ -41,14 +75,6 @@ export const Columns: ColumnDef<IndirectReport>[] = [
   {
     accessorKey: "out_time",
     header: "OutTime",
-  },
-  {
-    accessorKey: "system_in_time",
-    header: "SystemInTime",
-  },
-  {
-    accessorKey: "system_out_time",
-    header: "SystemOutTime",
   },
   {
     accessorKey: "date",

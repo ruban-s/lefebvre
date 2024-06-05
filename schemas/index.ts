@@ -31,7 +31,7 @@ export const IndirectCodeSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
 });
 export const ResourceSchema = z.object({
-  resource_id: z.string().min(1, { message: "Resource ID is required" }),
+  resource_id: z.string().min(1, { message: "Resource-ID is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   res_description: z.string().min(1, { message: "Description is required" }),
   res_note: z.string().optional(),
@@ -93,7 +93,7 @@ export const WorkOrderSchema = z.object({
   status: z.string().min(1, { message: "status is required" }),
 });
 export const ResourceWorkOrderSchema = z.object({
-  estimated_hour: z.string().refine((arg) => arg.match(/^\d{1,3}:[0-5][0-9]$/)),
+  estimated_hour: z.string().refine((arg) => arg.match(/^\d{1,4}:[0-5][0-9]$/)),
   bench_mark_measure: z.string().optional().default("--"),
   bench_mark_unit: z.string().optional().default("--"),
   quantity_unit: z.string().min(1, { message: "required!" }),

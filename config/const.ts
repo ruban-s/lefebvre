@@ -32,7 +32,6 @@ import { GrDocumentVerified } from "react-icons/gr";
 export const BASE_URL = "http://194.62.96.140:8082";
 export const adminTabs: TabData[] = [
   { id: 1, label: "Home", icon: FaHome, link: "/" },
-  { id: 2, label: "Dashboard", icon: MdSpaceDashboard, link: "/dashboard" },
   { id: 3, label: "Measures", icon: GiThermometerScale, link: "/measures" },
   {
     id: 4,
@@ -128,6 +127,12 @@ export const productionTabs: TabData[] = [
     label: "Report",
     icon: TbReportAnalytics,
     link: "/production/report",
+  },
+  {
+    id: 2,
+    label: "Dashboard",
+    icon: MdSpaceDashboard,
+    link: "/production/dashboard",
   },
 ];
 export const SuperAdminTabs: TabData[] = [
@@ -228,7 +233,7 @@ export const ReportTabs: TabData[] = [
     id: 12,
     label: "Real Time Employee Work Allotment",
     icon: GrUserManager,
-    link: "/production/report/foreman_report",
+    link: "/production/report/real_time_employee",
   },
 ];
 

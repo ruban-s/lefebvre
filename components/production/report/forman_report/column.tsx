@@ -19,31 +19,27 @@ import { Button } from "@/components/ui/button";
 export const Columns: ColumnDef<FormanReport>[] = [
   {
     accessorKey: "project_id",
-    header: "ProjectId",
+    header: "Project ID",
   },
   {
     accessorKey: "customer_name",
-    header: "Name",
+    header: "Customer Name",
   },
   {
     accessorKey: "work_order_Id",
-    header: "WorkOrderId",
+    header: "Work Order ID",
   },
   {
     accessorKey: "description",
     header: "Description",
   },
   {
-    accessorKey: "sq_no",
-    header: "SequenceNo",
-  },
-  {
     accessorKey: "required_quantity",
-    header: "RequiredQuantity",
+    header: "Required qty",
   },
   {
     accessorKey: "unit_measure",
-    header: "UnitMeasure",
+    header: "Unit Measure",
   },
   {
     accessorKey: "efficiency",
