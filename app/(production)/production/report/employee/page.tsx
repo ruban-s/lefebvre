@@ -2,6 +2,7 @@
 import EmployeeReportListContainer from "@/components/production/report/employee_report/employee_reportListContainer";
 import LayoutContainer from "@/components/common/layout-container";
 import BackButton from "@/components/common/back-button";
+import Image from "next/image";
 
 const EmployeeReport = () => {
   return (
@@ -12,6 +13,19 @@ const EmployeeReport = () => {
       </div>
     </LayoutContainer>
   );
+  // return (
+  //   <div className="w-full h-full flex justify-center items-center bg-white">
+  //     <div className="w-[150px] h-150px">
+  //       <Image
+  //         src="/bg-waiting.jpeg"
+  //         width={200}
+  //         height={200}
+  //         alt="LEFEBVRE"
+  //         className="object-contain rounded-lg  "
+  //       />
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default EmployeeReport;
