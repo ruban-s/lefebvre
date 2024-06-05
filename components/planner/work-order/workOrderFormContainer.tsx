@@ -47,6 +47,10 @@ import ProjectListCombo from "../../common/projectListCombo";
 import { ProjectData, WorkOrderData } from "@/types";
 import { uploadImage } from "@/data/common";
 import MultiFileSelect from "@/components/common/multiFileSelect";
+import {
+  getAllResourceWorkOrder,
+  updateResourceWorkOrder,
+} from "@/data/resource-work-order";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -60,6 +64,7 @@ const WorkOrderFormContainer = () => {
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [file, selectedFile] = useState<string[]>([]);
+  const [makeEmpty, setMakeEmpty] = useState<boolean>(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
@@ -69,14 +74,80 @@ const WorkOrderFormContainer = () => {
     },
   });
 
+  const checkDupliacteWorkOrder = async (value: any) => {
+    const allWorkOrder = await getAllWorkOrder();
+    const parsedWorkOrder = JSON.parse(allWorkOrder?.data);
+    const filteredWorkOrder = parsedWorkOrder.filter((val: any) => {
+      return (
+        val.project_id === value.project_id &&
+        val.work_order_id === value.work_order_id &&
+        val.id !== workOrder?.id
+      );
+    });
+    return filteredWorkOrder;
+  };
+
   const creatWorkOrder = useMutation({
     mutationFn: async (value: any) => {
-      console.log(value);
-      const breake = workOrder
-        ? await updateWorkOrder({ id: workOrder?.id, ...value })
-        : await createWorkOrder(value);
+      let breake: any = [];
+      if (workOrder) {
+        const duplicateWorkOrder = await checkDupliacteWorkOrder(value);
+        if (duplicateWorkOrder.length > 0)
+          return new Error(`WorkOrderId is duplicated`);
+      }
+      if (
+        workOrder &&
+        (workOrder?.work_order_id !== value.work_order_id ||
+          workOrder?.project_id !== value.project_id)
+      ) {
+        const Resources = await getAllResourceWorkOrder();
+        const parsedResources = JSON.parse(Resources.data);
+        for (const resource of parsedResources) {
+          if (
+            resource.project_id === workOrder.project_id &&
+            resource.work_order_id === workOrder.work_order_id
+          ) {
+            const updatedResourceVal = {
+              id: resource?.id,
+              estimated_hour: resource.estimated_hour,
+              bench_mark_measure: resource.bench_mark_measure,
+              bench_mark_unit: resource.bench_mark_unit,
+              quantity_unit: resource.quantity_unit,
+              remark: resource.remark,
+              required_quantity: resource.required_quantity,
+              sqNumber: resource.sqNumber,
+              status: resource.status,
+              ballance_hour: resource.ballance_hour,
+              ballanced_quantity: resource.ballanced_quantity,
+              production_remark: resource.production_remark,
+              employee_id: resource.employee_id,
+              endDate: resource.endDate,
+              actual_hour: resource.actual_hour,
+              forman: resource.forman,
+              attachment: resource.attachment,
+              project_id: value.project_id,
+              resourceId: resource.resourceId,
+              prepared_quantity: resource.prepared_quantity,
+              startDate: resource.startDate,
+              work_order_id: value.work_order_id,
+            };
+            const updatedResourceWorkOrder = await updateResourceWorkOrder({
+              ...updatedResourceVal,
+              id: resource?.id,
+            });
+          }
+        }
+        breake = await updateWorkOrder({ id: workOrder?.id, ...value });
+      } else if (workOrder) {
+        breake = await updateWorkOrder({ id: workOrder?.id, ...value });
+      } else {
+        breake = await createWorkOrder(value);
+      }
+      // const breake = workOrder
+      //   ? await updateWorkOrder({ id: workOrder?.id, ...value })
+      //   : await createWorkOrder(value);
       setDateRange(undefined);
-      selectedFile([]);
+      setMakeEmpty(true);
       removeWorkOrder();
       return breake;
     },
@@ -90,6 +161,7 @@ const WorkOrderFormContainer = () => {
         form.reset();
         setProject(undefined);
         setRange(undefined);
+        selectedFile([]);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -97,8 +169,10 @@ const WorkOrderFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: ["work-orders"],
+      ["work-orders", "resource-work-orders"].map((info, index) => {
+        queryClient.invalidateQueries({
+          queryKey: [info],
+        });
       });
     },
     onError: (value) => {
@@ -389,14 +463,15 @@ const WorkOrderFormContainer = () => {
                             <MultiFileSelect
                               files={file}
                               onChange={(e: any) => {
-                                console.log("rithi", e);
                                 selectedFile(e);
-                                form.setValue("images", [
-                                  ...form.watch("images")!,
-                                  ...e,
-                                ]);
+                                form.setValue("images", [...e]);
                               }}
                             />
+                            {workOrder ? (
+                              <h1>({workOrder.images.length}) files</h1>
+                            ) : (
+                              ""
+                            )}
                           </div>
                           {/* <Input
                             multiple={true}
@@ -447,7 +522,6 @@ const WorkOrderFormContainer = () => {
                     setProject(undefined);
                     setRange(undefined);
                     setDisbleDates([]);
-                    selectedFile([]);
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

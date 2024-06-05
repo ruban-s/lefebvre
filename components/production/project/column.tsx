@@ -49,6 +49,7 @@ import {
   getAllResourceWorkOrder,
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
+import { getAllLabourCard } from "@/data/labour-card";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -156,98 +157,196 @@ export const UpdateStatus = ({ row }: any) => {
 
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
-      const deleteCode: any = await updateProject(value);
-      if (value.status !== "Released") {
-        var workOrderList = workOrders?.filter(
-          (info) => info.project_id === value.project_id
-        );
-        workOrderList?.map(async (workOrderData, index) => {
-          const { status, ...data } = workOrderData;
-          const payLoad = {
-            work_order_id: workOrderData.work_order_id,
-            description: workOrderData.description,
-            images: workOrderData.images,
-            planner_remark: workOrderData.planner_remark,
-            project_id: workOrderData.project_id,
-            start_date: workOrderData.start_date,
-            end_date: workOrderData.end_date,
-            production_remark: value.production_remark,
-            status: value.status,
-          };
-          status === "Released" &&
-            (await updateWorkOrder({ id: workOrderData.id, ...payLoad }));
-        });
-        var resourceWorkOrderList = resourceWorkOrder?.filter(
-          (info) => info.project_id === value.project_id
-        );
-        resourceWorkOrderList?.map(async (resourceWorkData, index) => {
-          const payLoad = {
-            estimated_hour: resourceWorkData.estimated_hour,
-            bench_mark_measure: resourceWorkData.bench_mark_measure,
-            bench_mark_unit: resourceWorkData.bench_mark_unit,
-            remark: resourceWorkData.remark,
-            required_quantity: resourceWorkData.required_quantity,
-            sqNumber: resourceWorkData.sqNumber,
-            status: value.status,
-            ballance_hour: resourceWorkData.ballance_hour,
-            ballanced_quantity: resourceWorkData.ballanced_quantity,
-            employee_id: resourceWorkData.employee_id,
-            endDate: resourceWorkData.endDate,
-            actual_hour: resourceWorkData.actual_hour,
-            forman: resourceWorkData.forman,
-            project_id: resourceWorkData.project_id,
-            resourceId: resourceWorkData.resourceId,
-            prepared_quantity: resourceWorkData.prepared_quantity,
-            startDate: resourceWorkData.startDate,
-            work_order_id: resourceWorkData.work_order_id,
-            quantity_unit: resourceWorkData.quantity_unit,
-          };
+      // const deleteCode: any = await updateProject(value);
+      // if (value.status !== "Released") {
+      //   var workOrderList = workOrders?.filter(
+      //     (info) => info.project_id === value.project_id
+      //   );
+      //   workOrderList?.map(async (workOrderData, index) => {
+      //     const { status, ...data } = workOrderData;
+      //     const payLoad = {
+      //       work_order_id: workOrderData.work_order_id,
+      //       description: workOrderData.description,
+      //       images: workOrderData.images,
+      //       planner_remark: workOrderData.planner_remark,
+      //       project_id: workOrderData.project_id,
+      //       start_date: workOrderData.start_date,
+      //       end_date: workOrderData.end_date,
+      //       production_remark: value.production_remark,
+      //       status: value.status,
+      //     };
+      //     status === "Released" &&
+      //       (await updateWorkOrder({ id: workOrderData.id, ...payLoad }));
+      //   });
+      //   var resourceWorkOrderList = resourceWorkOrder?.filter(
+      //     (info) => info.project_id === value.project_id
+      //   );
+      //   resourceWorkOrderList?.map(async (resourceWorkData, index) => {
+      //     const payLoad = {
+      //       estimated_hour: resourceWorkData.estimated_hour,
+      //       bench_mark_measure: resourceWorkData.bench_mark_measure,
+      //       bench_mark_unit: resourceWorkData.bench_mark_unit,
+      //       remark: resourceWorkData.remark,
+      //       required_quantity: resourceWorkData.required_quantity,
+      //       sqNumber: resourceWorkData.sqNumber,
+      //       status: value.status,
+      //       ballance_hour: resourceWorkData.ballance_hour,
+      //       ballanced_quantity: resourceWorkData.ballanced_quantity,
+      //       employee_id: resourceWorkData.employee_id,
+      //       endDate: resourceWorkData.endDate,
+      //       actual_hour: resourceWorkData.actual_hour,
+      //       forman: resourceWorkData.forman,
+      //       project_id: resourceWorkData.project_id,
+      //       resourceId: resourceWorkData.resourceId,
+      //       prepared_quantity: resourceWorkData.prepared_quantity,
+      //       startDate: resourceWorkData.startDate,
+      //       work_order_id: resourceWorkData.work_order_id,
+      //       quantity_unit: resourceWorkData.quantity_unit,
+      //     };
 
-          const { status, ...data } = resourceWorkData;
-          status === "Released" &&
-            (await updateResourceWorkOrder({
-              id: resourceWorkData.id,
-              ...payLoad,
-            }));
-        });
-      }
-      return deleteCode;
-    },
-    onSuccess: (value) => {
-      if (value?.status) {
-        toast.success(`${value.message}`, {
-          description: `${value.message}`,
-          position: "top-right",
-          dismissible: true,
-        });
-      } else {
-        toast.error(`Something went wrong`, {
-          description: "Data not updated contact the admin",
-          position: "top-right",
-          dismissible: true,
-        });
-      }
-      ["projects", "work-orders", "resource-work-orders"].map((info, index) => {
-        queryClient.invalidateQueries({
-          queryKey: [info],
-        });
+      //     const { status, ...data } = resourceWorkData;
+      //     status === "Released" &&
+      //       (await updateResourceWorkOrder({
+      //         id: resourceWorkData.id,
+      //         ...payLoad,
+      //       }));
+      //   });
+      // }
+      // return deleteCode;
+      return new Promise(async (resolve, reject) => {
+        try {
+          const data = await getAllLabourCard();
+          const labourCards = JSON.parse(data.data);
+
+          const filterLabourCards = labourCards.filter(
+            (val: any) => val.project_id === value.project_id
+          );
+
+          if (filterLabourCards.length > 0) {
+            reject(new Error("ProjectId existing in Labour card"));
+          } else {
+            const deleteCode: any = await updateProject(value);
+            resolve(deleteCode);
+            if (value.status !== "Released") {
+              var workOrderList = workOrders?.filter(
+                (info) => info.project_id === value.project_id
+              );
+              workOrderList?.map(async (workOrderData, index) => {
+                const { status, ...data } = workOrderData;
+                const payLoad = {
+                  work_order_id: workOrderData.work_order_id,
+                  description: workOrderData.description,
+                  images: workOrderData.images,
+                  planner_remark: workOrderData.planner_remark,
+                  project_id: workOrderData.project_id,
+                  start_date: workOrderData.start_date,
+                  end_date: workOrderData.end_date,
+                  production_remark: value.production_remark,
+                  status: value.status,
+                };
+                status === "Released" &&
+                  (await updateWorkOrder({ id: workOrderData.id, ...payLoad }));
+              });
+              var resourceWorkOrderList = resourceWorkOrder?.filter(
+                (info) => info.project_id === value.project_id
+              );
+              resourceWorkOrderList?.map(async (resourceWorkData, index) => {
+                const payLoad = {
+                  estimated_hour: resourceWorkData.estimated_hour,
+                  bench_mark_measure: resourceWorkData.bench_mark_measure,
+                  bench_mark_unit: resourceWorkData.bench_mark_unit,
+                  remark: resourceWorkData.remark,
+                  required_quantity: resourceWorkData.required_quantity,
+                  sqNumber: resourceWorkData.sqNumber,
+                  status: value.status,
+                  ballance_hour: resourceWorkData.ballance_hour,
+                  ballanced_quantity: resourceWorkData.ballanced_quantity,
+                  employee_id: resourceWorkData.employee_id,
+                  endDate: resourceWorkData.endDate,
+                  actual_hour: resourceWorkData.actual_hour,
+                  forman: resourceWorkData.forman,
+                  project_id: resourceWorkData.project_id,
+                  resourceId: resourceWorkData.resourceId,
+                  prepared_quantity: resourceWorkData.prepared_quantity,
+                  startDate: resourceWorkData.startDate,
+                  work_order_id: resourceWorkData.work_order_id,
+                  quantity_unit: resourceWorkData.quantity_unit,
+                };
+
+                const { status, ...data } = resourceWorkData;
+                status === "Released" &&
+                  (await updateResourceWorkOrder({
+                    id: resourceWorkData.id,
+                    ...payLoad,
+                  }));
+              });
+            }
+            ["projects", "work-orders", "resource-work-orders"].map(
+              (info, index) => {
+                queryClient.invalidateQueries({
+                  queryKey: [info],
+                });
+              }
+            );
+            const updatedValue = JSON.parse(value.data);
+            var startDate = updatedValue?.start_date!.toString().split("-");
+            var endDate = updatedValue?.end_date!.toString().split("-");
+            setDateRange({
+              from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+              to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+            });
+          }
+        } catch (err) {
+          reject(err);
+        }
       });
-      const updatedValue = JSON.parse(value.data);
-      var startDate = updatedValue?.start_date!.toString().split("-");
-      var endDate = updatedValue?.end_date!.toString().split("-");
-      setDateRange({
-        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
-      });
     },
-    onError: (value) => {
-      console.log(value);
-      toast.error(`Something went wrong`, {
-        position: "top-right",
-        dismissible: true,
-      });
-    },
+    // onSuccess: (value) => {
+    //   if (value?.status) {
+    //     toast.success(`${value.message}`, {
+    //       description: `${value.message}`,
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   } else {
+    //     toast.error(`Something went wrong`, {
+    //       description: "Data not updated contact the admin",
+    //       position: "top-right",
+    //       dismissible: true,
+    //     });
+    //   }
+    //   ["projects", "work-orders", "resource-work-orders"].map((info, index) => {
+    //     queryClient.invalidateQueries({
+    //       queryKey: [info],
+    //     });
+    //   });
+    //   const updatedValue = JSON.parse(value.data);
+    //   var startDate = updatedValue?.start_date!.toString().split("-");
+    //   var endDate = updatedValue?.end_date!.toString().split("-");
+    //   setDateRange({
+    //     from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+    //     to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+    //   });
+    // },
+    // onError: (value) => {
+    //   console.log(value);
+    //   toast.error(`Something went wrong`, {
+    //     position: "top-right",
+    //     dismissible: true,
+    //   });
+    // },
   });
+
+  const handleUpdate = (value: any) => {
+    toast.promise(updateItem.mutateAsync(value), {
+      loading: "Loading...",
+      success: "Project Updated successfully!",
+      error: "Error updating project - Contact the admin",
+      position: "top-right",
+      dismissible: true,
+    });
+  };
+
   return (
     <>
       <TbEdit
@@ -356,7 +455,8 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  updateItem.mutate(payLoad);
+                  // updateItem.mutate(payLoad);
+                  handleUpdate(payLoad);
                 }}>
                 Save
               </Button>

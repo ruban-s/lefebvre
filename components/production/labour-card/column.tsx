@@ -339,7 +339,7 @@ export const UpdateStatus = ({ row }: any) => {
       <Dialog>
         <DialogTrigger ref={ref}></DialogTrigger>
         <DialogContent
-          className="sm:max-w-[800px]"
+          className="sm:max-w-[800px] h-full max-h-[900px] overflow-auto"
           onInteractOutside={(e) => {
             e.preventDefault();
           }}>

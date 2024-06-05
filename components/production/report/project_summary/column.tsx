@@ -30,27 +30,11 @@ import { RxCaretSort } from "react-icons/rx";
 export const columns: ColumnDef<ProjectSummary>[] = [
   {
     accessorKey: "projectId",
-    header: "ProjectId",
+    header: "Project ID",
   },
   {
     accessorKey: "customer_name",
-    header: "P.O Name",
-  },
-  {
-    accessorKey: "estimated_hour",
-    header: "EstimatedHour",
-  },
-  {
-    accessorKey: "actual_hour",
-    header: "ActualHour",
-  },
-  {
-    accessorKey: "start_date",
-    header: "StartDate",
-  },
-  {
-    accessorKey: "end_date",
-    header: "EndDate",
+    header: "Customer Name",
   },
   {
     accessorKey: "description",
@@ -81,8 +65,24 @@ export const columns: ColumnDef<ProjectSummary>[] = [
     ),
   },
   {
+    accessorKey: "estimated_hour",
+    header: "Estimated Hour",
+  },
+  {
+    accessorKey: "actual_hour",
+    header: "Actual Hour",
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
+  },
+  {
     accessorKey: "work_order",
-    header: "WorkOrder",
+    header: "View WorkOrder",
     cell: ({ row }) => {
       return <SearchByWorkOrder row={row} />;
     },
@@ -108,7 +108,7 @@ const SearchByWorkOrder = ({ row }: any) => {
       <Link
         href={`/production/report/project_summary/${row.original.projectId}`}
         className="flex flex-row justify-center items-center">
-        View WorkOrder
+        WorkOrder
       </Link>
     </div>
   );
@@ -128,7 +128,13 @@ const ViewStatus = ({ row }: any) => {
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {
             return (
-              <div className="items-center gap-4" key={index}>
+              <div
+                className={`items-center gap-4 ${
+                  key === "variance"
+                    ? "sm:col-span-2 md:col-span-2 lg:col-span-2"
+                    : ""
+                }`}
+                key={index}>
                 <div className="mb-1 capitalize">{key}</div>
                 <Input disabled value={value as string} />
               </div>

@@ -31,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
@@ -237,7 +237,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     accessorKey: "status",
     header: "Status",
-    cell: ({ row }) => <StatusBadge row={row} />,
+    cell: ({ row }) => <StatusBar row={row} />,
   },
   {
     id: "actions",
@@ -458,5 +458,34 @@ export const UpdateStatus = ({ row }: any) => {
         </DialogContent>
       </Dialog>
     </>
+  );
+};
+
+const StatusBar = ({ row }: { row: any }) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());
+  endDate.setHours(0, 0, 0, 0);
+
+  return (
+    <Badge
+      className={`cursor-pointer rounded-md ${
+        (row.original.status === "Released" ||
+          row.original.status === "Active") &&
+        endDate < today
+          ? "bg-yellow-500"
+          : row.original.status === "Released" ||
+            row.original.status === "Active"
+          ? "bg-green-500"
+          : row.original.status === "Unreleased" ||
+            row.original.status === "Inactive"
+          ? "bg-red-500"
+          : row.original.status === "Canceled" ||
+            row.original.status === "Closed"
+          ? "bg-orange-500"
+          : "bg-black"
+      }`}>
+      {row.original.status}
+    </Badge>
   );
 };

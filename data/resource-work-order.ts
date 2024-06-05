@@ -44,13 +44,10 @@ export const createResourceWorkOrder = async (
   value: z.infer<typeof ResourceWorkOrderSchema>[]
 ) => {
   try {
-    console.log(value);
     const axiosResponse = await Axios.post("/resource/multiple-create", value);
     const data = axiosResponse.data;
-    console.log(data);
     return data;
   } catch (error) {
-    console.log(error);
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),
@@ -65,7 +62,6 @@ export const updateResourceWorkOrder = async (value: any) => {
     const data = axiosResponse.data;
     return data;
   } catch (error) {
-    // console.log(error);
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),

@@ -17,27 +17,27 @@ import { Button } from "@/components/ui/button";
 export const Columns: ColumnDef<LabourTicketReport>[] = [
   {
     accessorKey: "transaction_id",
-    header: "TransactionId",
+    header: "Transaction Id",
   },
   {
     accessorKey: "employee_id",
-    header: "EmployeeId",
+    header: "Employee Id",
   },
   {
     accessorKey: "employee_name",
-    header: "EmployeeName",
+    header: "Employee Name",
   },
   {
     accessorKey: "attendance_type",
-    header: "AttendanceType",
+    header: "Attendance Type",
   },
   {
     accessorKey: "project_id",
-    header: "ProjectId",
+    header: "Project Id",
   },
   {
     accessorKey: "work_order_id",
-    header: "WorkOrderId",
+    header: "Work Order ID",
   },
   {
     accessorKey: "sq_no",
@@ -45,11 +45,11 @@ export const Columns: ColumnDef<LabourTicketReport>[] = [
   },
   {
     accessorKey: "resource_id",
-    header: "Resource No",
+    header: "Resource ID",
   },
   {
     accessorKey: "forman_name",
-    header: "Forman Name",
+    header: "Forman",
   },
   {
     id: "actions",

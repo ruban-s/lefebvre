@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { undefined } from "zod";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 interface DatePickerWithRangeProps {
   className?: React.HTMLAttributes<HTMLDivElement>;
@@ -37,8 +38,6 @@ export function DatePickerWithRange({
   React.useEffect(() => {
     setDate(selectedData);
   }, [selectedData]);
-
-  console.log(selectedData);
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -79,6 +78,15 @@ export function DatePickerWithRange({
             numberOfMonths={2}
             disabled={disabled}
           />
+          <PopoverClose className="w-full">
+            <div className="w-full flex flex-row justify-end p-3">
+              <Button
+                variant={"ghost"}
+                className="bg-blue-400 hover:bg-blue-700 hover:text-white text-white">
+                Apply
+              </Button>
+            </div>
+          </PopoverClose>
         </PopoverContent>
       </Popover>
     </div>

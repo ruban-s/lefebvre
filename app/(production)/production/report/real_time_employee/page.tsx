@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-const HoursToComplete = () => {
-  // return <div>HoursToComplete</div>;
+const RealTime = () => {
   return (
     <div className="w-full h-full flex justify-center items-center bg-white">
       <div className="w-[150px] h-150px">
@@ -17,4 +16,4 @@ const HoursToComplete = () => {
   );
 };
 
-export default HoursToComplete;
+export default RealTime;
