@@ -25,7 +25,13 @@ import {
 
 import { toast } from "sonner";
 import { Button } from "../../ui/button";
-import { useEffect, useState, useRef } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  ReactHTMLElement,
+  ReactElement,
+} from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createResourceWorkOrder,
@@ -265,6 +271,19 @@ const WorkOrderResourceFormContainer = () => {
   //   var newData = fields.filter((info) => info.resourceId === value);
   //   return newData.length > 0 ? true : false;
   // };
+
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [benchUnitIsOpen, setBenchUnitIsOpen] = useState<boolean>(false);
+  const [quantityUnitIsOpen, setQuantityUnitIsOpen] = useState<boolean>(false);
+
+  const toggleUnitIsOpen = () => {
+    setBenchUnitIsOpen(!benchUnitIsOpen);
+  };
+
+  const toggleQuantityUnitIsOpen = () => {
+    setQuantityUnitIsOpen(!quantityUnitIsOpen);
+  };
 
   return (
     <div className="w-full h-auto bg-white  shadow-sm ring-1 ring-theme rounded-sm">
@@ -591,20 +610,47 @@ const WorkOrderResourceFormContainer = () => {
                                                 value
                                               );
                                             }}>
-                                            <SelectTrigger>
+                                            <SelectTrigger
+                                              onClick={toggleUnitIsOpen}>
                                               <SelectValue placeholder="Select Unit" />
                                             </SelectTrigger>
-                                            <SelectContent>
-                                              {measures?.map((info, index) => {
-                                                return (
-                                                  <SelectItem
-                                                    value={info.unit}
-                                                    key={index}>
-                                                    {info.unit}
-                                                  </SelectItem>
-                                                );
-                                              })}
-                                            </SelectContent>
+                                            {benchUnitIsOpen && (
+                                              <SelectContent>
+                                                <div
+                                                  className="border-b-2 border-gray-300 w-full cursor-pointer"
+                                                  onClick={() => {
+                                                    form.setValue(
+                                                      `resources.${index}.bench_mark_unit`,
+                                                      ""
+                                                    );
+                                                    toggleUnitIsOpen();
+                                                  }}>
+                                                  <div className="w-full flex flex-row items-center justify-between px-2 pb-1">
+                                                    <p className="text-blue-400">
+                                                      Clear
+                                                    </p>
+                                                    <div className="text-blue-400">
+                                                      <IoMdClose />
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+                                                {measures?.map(
+                                                  (info, index) => {
+                                                    return (
+                                                      <SelectItem
+                                                        onClick={
+                                                          toggleUnitIsOpen
+                                                        }
+                                                        value={info.unit}
+                                                        key={index}>
+                                                        {info.unit}
+                                                      </SelectItem>
+                                                    );
+                                                  }
+                                                )}
+                                              </SelectContent>
+                                            )}
                                           </Select>
                                           <FormMessage />
                                         </FormItem>
@@ -677,20 +723,48 @@ const WorkOrderResourceFormContainer = () => {
                                                 value
                                               );
                                             }}>
-                                            <SelectTrigger>
+                                            <SelectTrigger
+                                              onClick={
+                                                toggleQuantityUnitIsOpen
+                                              }>
                                               <SelectValue placeholder="Select Unit" />
                                             </SelectTrigger>
-                                            <SelectContent>
-                                              {measures?.map((info, index) => {
-                                                return (
-                                                  <SelectItem
-                                                    value={info.unit}
-                                                    key={index}>
-                                                    {info.unit}
-                                                  </SelectItem>
-                                                );
-                                              })}
-                                            </SelectContent>
+                                            {quantityUnitIsOpen && (
+                                              <SelectContent>
+                                                <div
+                                                  className="border-b-2 border-gray-300 w-full cursor-pointer"
+                                                  onClick={() => {
+                                                    form.setValue(
+                                                      `resources.${index}.quantity_unit`,
+                                                      ""
+                                                    );
+                                                    toggleQuantityUnitIsOpen();
+                                                  }}>
+                                                  <div className="w-full flex flex-row items-center justify-between px-2 pb-1">
+                                                    <p className="text-blue-400">
+                                                      Clear
+                                                    </p>
+                                                    <div className="text-blue-400">
+                                                      <IoMdClose />
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                {measures?.map(
+                                                  (info, index) => {
+                                                    return (
+                                                      <SelectItem
+                                                        onClick={
+                                                          toggleQuantityUnitIsOpen
+                                                        }
+                                                        value={info.unit}
+                                                        key={index}>
+                                                        {info.unit}
+                                                      </SelectItem>
+                                                    );
+                                                  }
+                                                )}
+                                              </SelectContent>
+                                            )}
                                           </Select>
                                           <FormMessage />
                                         </FormItem>

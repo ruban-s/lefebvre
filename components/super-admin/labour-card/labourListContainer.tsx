@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DateRange } from "react-day-picker";
 import { parse, format } from "date-fns";
 import { LabourCardDataTableSuperAdmin } from "./labourcarddatatablesuperadmin";
+import Image from "next/image";
 
 const LabourListContainer = () => {
   const { data, isLoading, isError } = useQuery({
@@ -110,7 +111,15 @@ const LabourListContainer = () => {
       <TabsContent
         value="labourCardDashboard"
         className="w-full h-full flex justify-center items-center">
-        <div className="w-full h-full bg-white rounded-sm shadow-sm">de</div>
+        <div className="w-full h-full bg-white rounded-sm shadow-sm flex flex-row justify-center items-center">
+          <Image
+            src="/bg-waiting.jpeg"
+            width={200}
+            height={200}
+            alt="LEFEBVRE"
+            className="object-contain rounded-lg  "
+          />
+        </div>
       </TabsContent>
       <TabsContent value="labourCardList">
         <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
