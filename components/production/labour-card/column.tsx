@@ -29,6 +29,7 @@ import ViewTabField from "@/components/common/viewTabField";
 import { Switch } from "@/components/ui/switch";
 import { updateLabourCard } from "@/data/labour-card";
 import { getAllShift } from "@/data/shift";
+import { labourCardMaintanceField } from "@/config/const";
 
 // export const CellFunction = ({ row }: any) => {
 //   const queryClient = useQueryClient();
@@ -347,10 +348,12 @@ export const UpdateStatus = ({ row }: any) => {
             <DialogTitle className="text-white">Change Status</DialogTitle>
           </DialogHeader>
           <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3  gap-2">
-            {Object.keys(data).map((dataValue, index) => {
+            {labourCardMaintanceField.map((dataValue, index) => {
               if (
                 dataValue === "is_production_editable" ||
-                dataValue === "is_super_admin_editable"
+                dataValue === "is_super_admin_editable" ||
+                dataValue === "break_type" ||
+                dataValue === "gl_code"
               ) {
                 return null;
               }
@@ -370,26 +373,16 @@ export const UpdateStatus = ({ row }: any) => {
               );
             })}
             <ViewTabField
-              heading={"Work Hour"}
-              value={
-                data.punch_out_time === ""
-                  ? "--"
-                  : // : getTimeDifference(data.punch_in_time, data.punch_out_time)
-                    "--"
-              }
+              heading={"gl_code"}
+              value={data.gl_code !== "" ? data.gl_code.split("&")[0] : "--"}
               isInput
             />
             <ViewTabField
-              heading={"Break Duration"}
-              value={breakDuration(
-                data.punch_in_time,
-                data.punch_out_time,
-                data.shift_start_time,
-                data.shift_end_time
-              )}
+              heading={"gl_description"}
+              value={data.gl_code !== "" ? data.gl_code.split("&")[1] : "--"}
               isInput
             />
-            <ViewTabField
+            {/* <ViewTabField
               heading={"Effective Work Hour"}
               value={"--"}
               isInput
@@ -398,9 +391,9 @@ export const UpdateStatus = ({ row }: any) => {
               heading={"Effective Work Hour Formate"}
               value={"--"}
               isInput
-            />
+            /> */}
 
-            {Object.keys(data).map((dataValue, index) => {
+            {/* {Object.keys(data).map((dataValue, index) => {
               if (dataValue === "is_production_editable") {
                 return (
                   <div className="flex items-center space-x-2" key={index}>
@@ -420,7 +413,7 @@ export const UpdateStatus = ({ row }: any) => {
                 );
               }
               return null;
-            })}
+            })} */}
             {/* <ViewTabField
               heading="Project Id"
               value={data.project_id}
@@ -485,6 +478,10 @@ export const projectColumns: ColumnDef<LabourData>[] = [
   {
     accessorKey: "gl_code",
     header: "GL Code",
+    cell: ({ row }) => {
+      const glCode = row.original.gl_code.split("&")[0];
+      return <p>{glCode}</p>;
+    },
   },
   {
     accessorKey: "project_id",
