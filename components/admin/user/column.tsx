@@ -109,6 +109,10 @@ export const columns: ColumnDef<UserData>[] = [
     header: "Username",
   },
   {
+    accessorKey: "password",
+    header: "Password",
+  },
+  {
     accessorKey: "email",
     header: "Email",
   },

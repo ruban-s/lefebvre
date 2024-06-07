@@ -345,7 +345,7 @@ export const UpdateStatus = ({ row }: any) => {
             e.preventDefault();
           }}>
           <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
-            <DialogTitle className="text-white">Change Status</DialogTitle>
+            <DialogTitle className="text-white">Labour Card</DialogTitle>
           </DialogHeader>
           <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3  gap-2">
             {labourCardMaintanceField.map((dataValue, index) => {
