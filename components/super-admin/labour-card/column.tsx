@@ -46,6 +46,8 @@ import { format } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
 import StatusBadge from "@/components/common/status-badge";
+import ViewTabField from "@/components/common/viewTabField";
+import { labourCardMaintanceField } from "@/config/const";
 
 // export const CellFunction = ({ row }: any) => {
 //   const queryClient = useQueryClient();
@@ -275,71 +277,86 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "forman_id",
     header: "Forman",
   },
-
-  // {
-  //   accessorKey: "planner_remark",
-  //   header: "Remarks",
-  //   cell: ({ row }) => (
-  //     <div className="flex justify-start items-center">
-  //       {row.original.planner_remark.substring(0, 30)}{" "}
-  //       {row.original.planner_remark.length > 30 && "..."}
-  //       {row.original.planner_remark.length > 30 && (
-  //         <Popover>
-  //           <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-  //             <RxCaretSort className="text-theme" size={20} />
-  //           </PopoverTrigger>
-
-  //           <PopoverContent className="w-[400px] ">
-  //             <p className="mb-2 text-bold">Description:</p>
-  //             <p className="text-sm text-neutral-500">
-  //               {row.original.description}
-  //             </p>
-  //           </PopoverContent>
-  //         </Popover>
-  //       )}
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   accessorKey: "images",
-  //   header: "Attachments",
-  //   cell: ({ row }) => {
-  //     var files = row.original.images;
-
-  //     if (files.length < 1) return <p>--</p>;
-  //     return (
-  //       <Popover>
-  //         <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-  //           Attachment
-  //         </PopoverTrigger>
-
-  //         <PopoverContent className="w-[200px] ">
-  //           {row.original.images.map((info, index) => {
-  //             var file = info.split("/")[info.split("/").length - 1];
-  //             return (
-  //               <Link
-  //                 href={info}
-  //                 className="flex justify-center items-center m-1">
-  //                 {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
-  //                 {file.split(".")[1] === "pdf" && <FaFilePdf />}
-  //                 {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-  //                 {info.split("/")[4]}
-  //               </Link>
-  //             );
-  //           })}
-  //         </PopoverContent>
-  //       </Popover>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   cell: ({ row }) => <UpdateStatus row={row} />,
-  // },
   {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <StatusBadge row={row} />,
   },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      return <UpdateStatus row={row} />;
+    },
+  },
 ];
+
+const UpdateStatus = ({ row }: any) => {
+  const data = row.original;
+  return (
+    <Dialog>
+      <DialogTrigger>
+        <TbEdit />
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[800px] h-full max-h-[900px] overflow-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3  gap-2">
+          {labourCardMaintanceField.map((dataValue, index) => {
+            if (
+              dataValue === "is_production_editable" ||
+              dataValue === "is_super_admin_editable" ||
+              dataValue === "break_type" ||
+              dataValue === "gl_code"
+            ) {
+              return null;
+            }
+            return (
+              <ViewTabField
+                key={index}
+                heading={
+                  dataValue.replaceAll("_", " ").charAt(0).toUpperCase() +
+                  dataValue
+                    .replaceAll("_", " ")
+                    .slice(1)
+                    .replace(/([a-z])([A-Z])/g, "$1 $2")
+                }
+                value={data[`${dataValue}`]}
+                isInput
+              />
+            );
+          })}
+          <ViewTabField
+            heading={"gl_code"}
+            value={data.gl_code !== "" ? data.gl_code.split("&")[0] : "--"}
+            isInput
+          />
+          <ViewTabField
+            heading={"gl_description"}
+            value={data.gl_code !== "" ? data.gl_code.split("&")[1] : "--"}
+            isInput
+          />
+        </div>
+
+        <DialogFooter>
+          <DialogClose>
+            <Button variant={"secondary"} onClick={() => {}}>
+              Close
+            </Button>
+          </DialogClose>
+          <DialogClose>
+            <Button
+              variant={"default"}
+              className="bg-theme"
+              // onClick={() => {
+              //   console.log(toogle);
+              //   payLoad.is_production_editable = toogle;
+              //   console.log(payLoad);
+              //   updateItem.mutate(payLoad);
+              // }}>
+            >
+              Save
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};

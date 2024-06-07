@@ -8,6 +8,7 @@ import {
 import { FaRegClock } from "react-icons/fa";
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "../ui/button";
+import { PopoverClose } from "@radix-ui/react-popover";
 interface CustomTimePickerProps {
   value: string;
   onChange: Function;
@@ -133,6 +134,9 @@ const CustomTimePicker = ({ value, onChange }: CustomTimePickerProps) => {
               )}
             </ScrollArea>
           </div>
+          <PopoverClose className="w-full flex flex-row justify-end">
+            <Button className="bg-blue-400 p-2 rounded-sm">Close</Button>
+          </PopoverClose>
         </PopoverContent>
       </Popover>
     </div>

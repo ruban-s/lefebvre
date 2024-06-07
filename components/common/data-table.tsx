@@ -357,10 +357,12 @@ export function DataTable<TData, TValue>({
                           ? "Note"
                           : column.id === "indirectCode"
                           ? "Indirect Code ID"
+                          : column.id === "images"
+                          ? "Attachments"
                           : column.id === "name"
                           ? fileName === "Attendance-Type"
                             ? "Attendance Type"
-                            : "GL-Code"
+                            : "Name"
                           : column.id.toString().replace("_", " ")}
                       </DropdownMenuCheckboxItem>
                     );

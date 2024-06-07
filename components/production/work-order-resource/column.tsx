@@ -135,7 +135,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "work_order_id",
     header: "Work Order Id",
   },
-
   {
     accessorKey: "resourceId",
     header: "Resource ID",
@@ -144,7 +143,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",

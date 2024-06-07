@@ -198,7 +198,7 @@ const FormanReportFormContainer = ({
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>FormanId</FormLabel>
+                        <FormLabel>ForemanId</FormLabel>
                         <Select
                           disabled={disable}
                           value={form.watch("forman_id")}
