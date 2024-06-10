@@ -225,7 +225,10 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hours",
   },
-
+  {
+    accessorKey: "actual_hour",
+    header: "Actual Hours",
+  },
   {
     accessorKey: "required_quantity",
     header: "Required Quantity",
