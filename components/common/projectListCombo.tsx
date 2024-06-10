@@ -36,7 +36,11 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
     queryKey: ["projects"],
     queryFn: async () => {
       const data = await getAllProject();
-      return JSON.parse(data.data) as any[];
+      const parsedData = JSON.parse(data.data) as any[];
+      const filteredData = parsedData.filter(
+        (data: any) => data.status !== "Closed"
+      );
+      return filteredData as any[];
     },
   });
   const projects = data;
