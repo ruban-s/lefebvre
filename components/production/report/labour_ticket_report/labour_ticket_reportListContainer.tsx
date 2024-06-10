@@ -32,6 +32,8 @@ const LabourTicketReportListContainer = ({
   const [tableData, setTableDate] = useState<LabourTicketReport[] | undefined>(
     []
   );
+  const [fromDate, setFromDate] = useState<string | undefined>("");
+  const [toDate, setToDate] = useState<string | undefined>("");
   const [fullData, setFullData] = useState<LabourTicketReport[] | undefined>();
   const fetchFullData = async () => {
     if (filterData.from_date !== "" && filterData.to_date !== "") {
@@ -39,6 +41,8 @@ const LabourTicketReportListContainer = ({
         filterData.from_date,
         filterData.to_date
       );
+      setFromDate(filterData.from_date);
+      setToDate(filterData.to_date);
       setTableDate(JSON.parse(data.data) as LabourTicketReport[]);
       setIsLoading(false);
       return;
@@ -51,6 +55,8 @@ const LabourTicketReportListContainer = ({
         new Date(defaultData.to_date),
         "yyyy-MM-dd"
       );
+      setFromDate(filterData.from_date);
+      setToDate(filterData.to_date);
       const data = await getIndirectReport(formattedFromDate, formattedToDate);
       setTableDate(JSON.parse(data.data) as LabourTicketReport[]);
       setIsLoading(false);
@@ -86,6 +92,8 @@ const LabourTicketReportListContainer = ({
               fileName="LabourTicketReport"
               fullexport={true}
               exportDataFields={LabourTicketController}
+              fromDate={fromDate}
+              toDate={toDate}
             />
           </div>
         </>

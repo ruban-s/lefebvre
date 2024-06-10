@@ -43,7 +43,7 @@ import * as XLSX from "xlsx";
 import React, { useEffect, useState } from "react";
 
 import { toast } from "sonner";
-import { object } from "zod";
+import { date, object } from "zod";
 import ExportButtonComponent from "@/components/common/exportButtonComponent";
 import {
   Select,
@@ -143,8 +143,17 @@ export function LabourCardDataTable<TData, TValue>({
     const workbook = XLSX.utils.book_new();
     const header: any = Object.values(data[0]);
     const body: any = [];
+    let dateHeader: any = [new Date().toLocaleDateString()];
+    if (fromDate !== undefined) {
+      dateHeader.pop();
+      dateHeader.push(fromDate?.toLocaleDateString());
+    }
+    if (toDate !== undefined) {
+      dateHeader.push("-");
+      dateHeader.push(toDate?.toLocaleDateString());
+    }
     data.map((info: any, index: number) => body.push(Object.values(info)));
-    const ws = XLSX.utils.aoa_to_sheet([header, ...body.slice(1)]);
+    const ws = XLSX.utils.aoa_to_sheet([dateHeader, header, ...body.slice(1)]);
     XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");
     XLSX.writeFile(workbook, exportFileName + ".xlsx");
   };

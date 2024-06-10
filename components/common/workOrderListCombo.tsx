@@ -49,7 +49,13 @@ const WorkOrderListCombo = ({
     queryKey: ["work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
-      return JSON.parse(data.data) as WorkOrderData[];
+      // console.log(JSON.parse(data.data) as WorkOrderData[]);
+      const parsedData = JSON.parse(data.data) as WorkOrderData[];
+      const filteredData = parsedData.filter(
+        (data: any) => data.status !== "Closed"
+      );
+      return filteredData as WorkOrderData[];
+      // return JSON.parse(data.data) as WorkOrderData[];
     },
   });
 

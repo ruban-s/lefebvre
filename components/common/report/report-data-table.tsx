@@ -50,6 +50,7 @@ import {
 } from "react-icons/md";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { DatePickerWithRange } from "../dateRangePicker";
+import { format, parse } from "date-fns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -138,8 +139,19 @@ export function ReportDataTable<TData, TValue>({
     const workbook = XLSX.utils.book_new();
     const header: any = Object.values(value[0]);
     const body: any = [];
+    let dateHeader: any = [new Date().toLocaleDateString()];
+    if (fromDate !== undefined && fromDate !== "") {
+      dateHeader.pop();
+      const formattedDate = format(fromDate, "dd/MM/yyyy");
+      dateHeader.push(formattedDate);
+    }
+    if (toDate !== undefined && fromDate !== "") {
+      dateHeader.push("-");
+      const formattedDate = format(toDate, "dd/MM/yyyy");
+      dateHeader.push(formattedDate);
+    }
     value.map((info: any, index: number) => body.push(Object.values(info)));
-    const ws = XLSX.utils.aoa_to_sheet([header, ...body.slice(1)]);
+    const ws = XLSX.utils.aoa_to_sheet([dateHeader, header, ...body.slice(1)]);
     XLSX.utils.book_append_sheet(workbook, ws, "Sheet1");
     XLSX.writeFile(workbook, exportFileName + ".xlsx");
   };
