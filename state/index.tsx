@@ -66,7 +66,9 @@ export const useWorkOrderStore = create((set) => ({
 var resourceWorkOrder: ResourceWorkOdderData | null = null;
 export const useResourceWorkOrderStore = create((set) => ({
   resourceWorkOrder: resourceWorkOrder, // Object value with initial properties
-  setResourceWorkOrder: (resourceWorkOrder: any) => set({ resourceWorkOrder }),
+  setResourceWorkOrder: (resourceWorkOrder: any) => {
+    set({ resourceWorkOrder });
+  },
   removeResourceWorkOrder: (resourceWorkOrder: any) =>
     set({ resourceWorkOrder: null }), // Action to update user object
 }));

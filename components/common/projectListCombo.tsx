@@ -27,8 +27,13 @@ import { ProjectData } from "@/types";
 interface ProjectListComboProps {
   value: any | undefined;
   onChange: Function;
+  disabled?: boolean;
 }
-const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
+const ProjectListCombo = ({
+  value,
+  onChange,
+  disabled,
+}: ProjectListComboProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [values, setValues] = useState<any | undefined>(value);
 
@@ -38,7 +43,7 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
       const data = await getAllProject();
       const parsedData = JSON.parse(data.data) as any[];
       const filteredData = parsedData.filter(
-        (data: any) => data.status !== "Closed"
+        (data: any) => data.status !== "Closed" && data.status !== "Canceled"
       );
       return filteredData as any[];
     },
@@ -67,7 +72,8 @@ const ProjectListCombo = ({ value, onChange }: ProjectListComboProps) => {
         className="w-full flex justify-end  items-end"
         onTouchStart={() => {
           setOpen(!open);
-        }}>
+        }}
+        disabled={disabled}>
         <Button
           variant="outline"
           role="combobox"

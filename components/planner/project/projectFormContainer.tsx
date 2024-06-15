@@ -34,13 +34,12 @@ import { createProject, updateProject } from "@/data/projects";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { useProjectStore } from "@/state";
-import { useRouter } from "next/navigation";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
-import CustomImageInput from "@/components/common/customImageInput";
 import { uploadImage } from "@/data/common";
 import MultiFileSelect from "@/components/common/multiFileSelect";
+import { getAllLabourCard } from "@/data/labour-card";
 
 const ProjectFormContainer = () => {
   const project = useProjectStore((state: any) => state.project); // Accessing the project object
@@ -50,6 +49,7 @@ const ProjectFormContainer = () => {
   const [file, selectedFile] = useState<string[]>([]);
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [disableTrue, setDisableTrue] = useState<boolean>(false);
 
   const creatProject = useMutation({
     mutationFn: async (value: any) => {
@@ -67,7 +67,7 @@ const ProjectFormContainer = () => {
           position: "top-right",
           dismissible: true,
         });
-
+        setDisableTrue(false);
         form.reset();
         selectedFile([]);
       } else {
@@ -102,30 +102,60 @@ const ProjectFormContainer = () => {
     },
   });
   useEffect(() => {
+    const fetchData = async () => {
+      if (project) {
+        try {
+          const data = await getAllLabourCard();
+          const labourCards = JSON.parse(data.data);
+
+          const filterLabourCards = labourCards.filter(
+            (val: any) => val.project_id === project.project_id
+          );
+
+          if (filterLabourCards.length > 0) {
+            setDisableTrue(true);
+          }
+          var startDate = project?.start_date!.toString().split("-");
+          var endDate = project?.end_date!.toString().split("-");
+          console.log(startDate, endDate);
+          selectedFile(project?.images!);
+          setDateRange({
+            from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+            to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+          });
+          form.setValue("project_id", project?.project_id!);
+          form.setValue("planner_remark", project?.planner_remark!);
+          form.setValue("start_date", project?.start_date!);
+          form.setValue("end_date", project?.end_date!);
+          form.setValue("status", project?.status!);
+          form.setValue("customer_name", project?.customer_name!);
+          form.setValue("description", project?.description!);
+          form.setValue("images", project?.images!);
+          form.setValue("production_remark", project?.production_remark!);
+        } catch (error) {
+          console.log(error);
+          toast.error(`Something went wrong`, {
+            position: "top-right",
+            dismissible: true,
+          });
+        }
+      }
+    };
+
     if (project) {
-      var startDate = project?.start_date!.toString().split("-");
-      var endDate = project?.end_date!.toString().split("-");
-      selectedFile(project?.images!);
-      setDateRange({
-        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      toast.promise(fetchData(), {
+        loading: "Loading...",
+        success: "Project is ready for editing!",
+        error: "Unable to Edit",
+        position: "top-right",
+        dismissible: true,
       });
-      form.setValue("project_id", project?.project_id!);
-      form.setValue("planner_remark", project?.planner_remark!);
-      form.setValue("start_date", project?.start_date!);
-      form.setValue("end_date", project?.end_date!);
-      form.setValue("status", project?.status!);
-      form.setValue("customer_name", project?.customer_name!);
-      form.setValue("description", project?.description!);
-      form.setValue("images", project?.images!);
-      form.setValue("production_remark", project?.production_remark!);
     }
   }, [project]);
 
   const onSubmit = async (values: z.infer<typeof ProjectSchema>) => {
     const { project_id, ...data } = values;
     const payload = { project_id: `${project_id}`.toUpperCase(), ...data };
-    console.log(payload);
     creatProject.mutate(payload);
   };
   const newData = async (value: FormData, name: string) => {
@@ -158,6 +188,15 @@ const ProjectFormContainer = () => {
     return;
   };
 
+  const clearItem = () => {
+    form.reset();
+    form.clearErrors();
+    removeProject();
+    selectedFile([]);
+    setRange(undefined);
+    setDisableTrue(false);
+  };
+
   return (
     <div className="w-full h-auto bg-white  shadow-sm ring-1 ring-theme rounded-sm">
       <div className="bg-theme w-full pl-2 py-2 ">
@@ -183,6 +222,7 @@ const ProjectFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Project ID"
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -202,6 +242,7 @@ const ProjectFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Customer Name"
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -221,6 +262,7 @@ const ProjectFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Description"
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -455,10 +497,11 @@ const ProjectFormContainer = () => {
                     type="button"
                     className="ml-2"
                     onClick={() => {
-                      form.reset();
-                      form.clearErrors();
-                      removeProject();
-                      selectedFile([]);
+                      // form.reset();
+                      // form.clearErrors();
+                      // removeProject();
+                      // selectedFile([]);
+                      clearItem();
                     }}>
                     {"Clear"}
                     <IoMdCloseCircle className="ml-2 text-black" size={20} />

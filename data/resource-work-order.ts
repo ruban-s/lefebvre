@@ -29,6 +29,7 @@ export const getAllResourceWorkOrderByStatus = async (value: string) => {
     const axiosResponse = await Axios.get(
       `/resource/getResourceByStatus?Resource_status=${value}`
     );
+    console.log(axiosResponse);
     const data = axiosResponse.data;
     return data;
   } catch (error) {

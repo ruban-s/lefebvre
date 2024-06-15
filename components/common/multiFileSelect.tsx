@@ -12,6 +12,7 @@ import { uploadImage } from "@/data/common";
 interface props {
   files: string[];
   onChange: Function;
+  disabled?: boolean;
 }
 
 const MultiFileSelect = (props: props) => {
@@ -36,7 +37,10 @@ const MultiFileSelect = (props: props) => {
 
   return (
     <Popover>
-      <PopoverTrigger className="flex justify-start items-center " ref={popRef}>
+      <PopoverTrigger
+        className="flex justify-start items-center "
+        ref={popRef}
+        disabled={props.disabled}>
         {loading && (
           <div role="status">
             <svg

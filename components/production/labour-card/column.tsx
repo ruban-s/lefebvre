@@ -484,6 +484,14 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     },
   },
   {
+    accessorKey: "gl_description",
+    header: "GL Description",
+    cell: ({ row }) => {
+      const glCode = row.original.gl_code.split("&")[1];
+      return <p>{glCode}</p>;
+    },
+  },
+  {
     accessorKey: "project_id",
     header: "Project Id",
   },

@@ -28,12 +28,14 @@ interface ProjectListComboProps {
   onChange: Function;
   project_id: string | undefined;
   work_order_id: string | undefined;
+  disabled?: boolean;
 }
 const WorkOrderListCombo = ({
   value,
   onChange,
   project_id,
   work_order_id,
+  disabled,
 }: ProjectListComboProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [values, setValues] = useState<any | undefined>(value);
@@ -88,6 +90,7 @@ const WorkOrderListCombo = ({
       <PopoverTrigger
         asChild
         className="w-full flex justify-end  items-end"
+        disabled={disabled}
         onTouchStart={() => {
           setOpen(!open);
         }}>

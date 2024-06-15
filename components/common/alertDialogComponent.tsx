@@ -53,7 +53,7 @@ const AlertDialogComponent = ({
           )}
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className="w-[700px]">
+      <AlertDialogContent className="w-[700px] max-h-[80%] overflow-auto ">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-destructive flex justify-start items-center text-md font-semibold ">
             {AlertIcon && <AlertIcon className="mr-4" />}
@@ -66,8 +66,9 @@ const AlertDialogComponent = ({
             <AlertDialogDescription>{children}</AlertDialogDescription>
           )}
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="sticky bottom-0 bg-white p-4">
           <AlertDialogCancel
+            className="border-2 border-gray-400"
             onClick={() => {
               alertcloseAllFunction && alertcloseAllFunction();
               //   ref.current?.click();
@@ -76,7 +77,7 @@ const AlertDialogComponent = ({
           </AlertDialogCancel>
           {alertactionFunction && (
             <AlertDialogAction
-              className="bg-destructive"
+              className="bg-destructive border-2 border-gray-400"
               onClick={() => {
                 alertactionFunction();
               }}>

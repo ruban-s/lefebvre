@@ -108,14 +108,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Customer Name",
   },
   {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
-  },
-  {
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
@@ -138,6 +130,30 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: "estimateHour",
+    header: "Estimated Hrs",
+  },
+  {
+    accessorKey: "actualHour",
+    header: "Actual Hrs",
+  },
+  {
+    accessorKey: "balanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }: { row: any }) => {
+      const balanceHrs = row.original.actualHour - row.original.estimateHour;
+      return <p>{balanceHrs}</p>;
+    },
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",

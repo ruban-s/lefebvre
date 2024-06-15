@@ -104,19 +104,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Work Order Id",
   },
   {
-    accessorKey: "project_id",
-    header: "Project ID",
-  },
-
-  {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
-  },
-  {
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
@@ -143,6 +130,30 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
         )}
       </>
     ),
+  },
+  {
+    accessorKey: "estimateHour",
+    header: "Estimated Hrs",
+  },
+  {
+    accessorKey: "actualHour",
+    header: "Actual Hrs",
+  },
+  {
+    accessorKey: "balanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }: { row: any }) => {
+      const balanceHrs = row.original.actualHour - row.original.estimateHour;
+      return <p>{balanceHrs}</p>;
+    },
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",

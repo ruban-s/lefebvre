@@ -77,7 +77,7 @@ const ClosedProject = () => {
       <TabsList className="bg-theme text-white">
         <TabsTrigger value="project">Closed Project</TabsTrigger>
         <TabsTrigger value="workOrder">Closed Work Order</TabsTrigger>
-        <TabsTrigger value="resource">Closed Work Order Resource</TabsTrigger>
+        <TabsTrigger value="resource">Closed Resource</TabsTrigger>
       </TabsList>
       <TabsContent value="project">
         <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">

@@ -116,6 +116,22 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "End Date",
   },
   {
+    accessorKey: "estimateHour",
+    header: "Estimated Hrs",
+  },
+  {
+    accessorKey: "actualHour",
+    header: "Actual Hrs",
+  },
+  {
+    accessorKey: "balanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }: { row: any }) => {
+      const balanceHrs = row.original.actualHour - row.original.estimateHour;
+      return <p>{balanceHrs}</p>;
+    },
+  },
+  {
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
