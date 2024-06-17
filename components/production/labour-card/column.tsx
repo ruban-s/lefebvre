@@ -631,10 +631,10 @@ export const projectColumns: ColumnDef<LabourData>[] = [
       return <UpdateStatus row={row} />;
     },
   },
-  {
-    id: "delete",
-    cell: ({ row }) => {
-      return <DeleteCard row={row} />;
-    },
-  },
+  // {
+  //   id: "delete",
+  //   cell: ({ row }) => {
+  //     return <DeleteCard row={row} />;
+  //   },
+  // },
 ];
