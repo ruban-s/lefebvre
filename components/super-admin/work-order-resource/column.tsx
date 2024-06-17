@@ -138,7 +138,33 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: "Estimated Hrs",
+    cell: ({ row }: { row: any }) => {
+      const estimated = parseFloat(row.original.estimated_hour);
+      return <p>{estimated.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "actual_hour",
+    header: "Actual Hrs",
+    cell: ({ row }: { row: any }) => {
+      const actual_hour = parseFloat(row.original.actual_hour);
+      return <p>{actual_hour.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "ballance_hour",
+    header: "Balanced Hrs",
+    cell: ({ row }: { row: any }) => {
+      const actual = parseFloat(row.original.actual_hour);
+      const estimated = parseFloat(row.original.estimated_hour);
+      const balanceHour = estimated - actual;
+      return (
+        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balanceHour.toFixed(2)}
+        </p>
+      );
+    },
   },
 
   {

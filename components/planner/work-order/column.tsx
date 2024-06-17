@@ -28,6 +28,7 @@ export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const workOrders = {
     ...row.original,
+    estimateHour: parseFloat(row.original.estimateHour).toFixed(2),
     actualHour: parseFloat(row.original.actualHour).toFixed(2),
     ballance_hour: (
       parseFloat(row.original.estimateHour) -
@@ -223,7 +224,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>

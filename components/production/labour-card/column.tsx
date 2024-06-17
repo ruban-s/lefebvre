@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { MoreHorizontal } from "lucide-react";
+import { Delete, MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -27,9 +27,52 @@ import { DialogClose } from "@radix-ui/react-dialog";
 import StatusBadge from "@/components/common/status-badge";
 import ViewTabField from "@/components/common/viewTabField";
 import { Switch } from "@/components/ui/switch";
-import { updateLabourCard } from "@/data/labour-card";
+import { deleteLabourCard, updateLabourCard } from "@/data/labour-card";
 import { getAllShift } from "@/data/shift";
 import { labourCardMaintanceField } from "@/config/const";
+import { MdDelete } from "react-icons/md";
+
+const DeleteCard = ({ row }: { row: any }) => {
+  console.log(row.original);
+  const queryClient = useQueryClient();
+  const deleteItem = useMutation({
+    mutationFn: async (value: any) => {
+      const deleteCode: any = await deleteLabourCard(value);
+      return deleteCode;
+    },
+    onSuccess: (value) => {
+      if (value?.status) {
+        toast.success(`${value.message}`, {
+          description: `${value.message}`,
+          position: "top-right",
+          dismissible: true,
+        });
+      } else {
+        toast.error(`Something went wrong`, {
+          description: "Data not updated contact the admin",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["labour-card"],
+      });
+    },
+    onError: (value) => {
+      toast.error(`Something went wrong`, {
+        position: "top-right",
+        dismissible: true,
+      });
+    },
+  });
+  return (
+    <button
+      className="text-red-600"
+      onClick={() => deleteItem.mutate(row.original.id)}>
+      <MdDelete />
+    </button>
+  );
+};
 
 // export const CellFunction = ({ row }: any) => {
 //   const queryClient = useQueryClient();
@@ -588,4 +631,10 @@ export const projectColumns: ColumnDef<LabourData>[] = [
       return <UpdateStatus row={row} />;
     },
   },
+  // {
+  //   id: "delete",
+  //   cell: ({ row }) => {
+  //     return <DeleteCard row={row} />;
+  //   },
+  // },
 ];
