@@ -128,10 +128,6 @@ export const CellFunction = ({ row }: any) => {
 
 export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
-    accessorKey: "project_id",
-    header: "Project ID",
-  },
-  {
     accessorKey: "work_order_id",
     header: "Work Order Id",
   },
@@ -153,15 +149,23 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: "Estimated Hrs",
   },
   {
     accessorKey: "actual_hour",
-    header: "Actual Hours",
+    header: "Actual Hrs",
+  },
+  {
+    accessorKey: "ballance_hour",
+    header: "Balanced Hrs",
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
   },
   {
     accessorKey: "quantity_unit",

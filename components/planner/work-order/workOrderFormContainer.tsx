@@ -51,6 +51,7 @@ import {
   getAllResourceWorkOrder,
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
+import { getAllLabourCard } from "@/data/labour-card";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -65,6 +66,7 @@ const WorkOrderFormContainer = () => {
   const [toDate, setToDate] = useState<string>("");
   const [file, selectedFile] = useState<string[]>([]);
   const [makeEmpty, setMakeEmpty] = useState<boolean>(false);
+  const [disableTrue, setDisableTrue] = useState<boolean>(false);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
@@ -162,6 +164,7 @@ const WorkOrderFormContainer = () => {
         setProject(undefined);
         setRange(undefined);
         selectedFile([]);
+        setDisableTrue(false);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -197,24 +200,53 @@ const WorkOrderFormContainer = () => {
     },
   });
   useEffect(() => {
-    if (workOrder) {
-      setProject(workOrder?.project_id);
-      selectedFile(workOrder?.images!);
-      form.setValue("project_id", workOrder?.project_id!);
-      form.setValue("work_order_id", workOrder?.work_order_id!);
-      form.setValue("planner_remark", workOrder?.planner_remark!);
-      form.setValue("start_date", workOrder?.start_date!);
-      form.setValue("end_date", workOrder?.end_date!);
-      form.setValue("status", workOrder?.status!);
-      form.setValue("images", workOrder?.images!);
-      form.setValue("production_remark", workOrder?.production_remark!);
-      form.setValue("description", workOrder?.description!);
-      var startDate = workOrder?.start_date!.toString().split("-");
-      var endDate = workOrder?.end_date!.toString().split("-");
+    const fetchData = async () => {
+      try {
+        const data = await getAllLabourCard();
+        const labourCards = JSON.parse(data.data);
 
-      setDateRange({
-        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+        const filterLabourCards = labourCards.filter(
+          (val: any) =>
+            val.project_id === workOrder.project_id &&
+            val.work_order_id === workOrder.work_order_id
+        );
+
+        if (filterLabourCards.length > 0) {
+          setDisableTrue(true);
+        }
+
+        setProject(workOrder?.project_id);
+        selectedFile(workOrder?.images!);
+        form.setValue("project_id", workOrder?.project_id!);
+        form.setValue("work_order_id", workOrder?.work_order_id!);
+        form.setValue("planner_remark", workOrder?.planner_remark!);
+        form.setValue("start_date", workOrder?.start_date!);
+        form.setValue("end_date", workOrder?.end_date!);
+        form.setValue("status", workOrder?.status!);
+        form.setValue("images", workOrder?.images!);
+        form.setValue("production_remark", workOrder?.production_remark!);
+        form.setValue("description", workOrder?.description!);
+        var startDate = workOrder?.start_date!.toString().split("-");
+        var endDate = workOrder?.end_date!.toString().split("-");
+
+        setDateRange({
+          from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+          to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+        });
+      } catch (err) {
+        toast.error(`Something went wrong`, {
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+    };
+    if (workOrder) {
+      toast.promise(fetchData(), {
+        loading: "Loading...",
+        success: "Project is ready for editing!",
+        error: "Unable to Edit",
+        position: "top-right",
+        dismissible: true,
       });
     }
   }, [workOrder]);
@@ -333,6 +365,7 @@ const WorkOrderFormContainer = () => {
                           <ProjectListCombo
                             value={selectedProject}
                             onChange={chooseProject}
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -352,6 +385,7 @@ const WorkOrderFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Work Order Id"
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -371,6 +405,7 @@ const WorkOrderFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Description"
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -522,6 +557,7 @@ const WorkOrderFormContainer = () => {
                     setProject(undefined);
                     setRange(undefined);
                     setDisbleDates([]);
+                    setDisableTrue(false);
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

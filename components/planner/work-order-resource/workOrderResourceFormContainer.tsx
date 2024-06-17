@@ -41,8 +41,6 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { useResourceWorkOrderStore } from "@/state";
-import { useRouter } from "next/navigation";
-import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
 import { format, differenceInDays, addDays } from "date-fns";
 import ProjectListCombo from "../../common/projectListCombo";
@@ -79,6 +77,7 @@ import {
 import { getAllResources } from "@/data/resources";
 import { getAllMeasure } from "@/data/measure";
 import MultiFileSelect from "@/components/common/multiFileSelect";
+import { getAllLabourCard } from "@/data/labour-card";
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -95,6 +94,7 @@ const WorkOrderResourceFormContainer = () => {
   const dialogRef = useRef<HTMLButtonElement>(null);
   const [workOderList, setWorkOrderList] = useState<WorkOrderData[]>([]);
   const [file, selectedFile] = useState<string[]>([]);
+  const [disableTrue, setDisableTrue] = useState<boolean>(false);
 
   const {
     data: resource,
@@ -170,39 +170,84 @@ const WorkOrderResourceFormContainer = () => {
   };
 
   useEffect(() => {
+    setDisableTrue(false);
+    const fetchData = async () => {
+      try {
+        form.reset();
+        const data = await getAllLabourCard();
+        const labourCards = JSON.parse(data.data);
+
+        const filterLabourCards = labourCards.filter(
+          (val: any) =>
+            val.project_id === workOrder.project_id &&
+            val.work_order_id === workOrder.work_order_id &&
+            val.resource_id === workOrder.resourceId &&
+            val.sq_no === workOrder.sqNumber
+        );
+
+        if (filterLabourCards.length > 0) {
+          setDisableTrue(true);
+        }
+
+        setProject(workOrder.project_id);
+        setWorkOrder(workOrder.work_order_id);
+        append({
+          actual_hour: `${workOrder.actual_hour}` || "-",
+          bench_mark_measure: `${workOrder.bench_mark_measure}` || "-",
+          prepared_quantity: `${workOrder.prepared_quantity}` || "-",
+          production_remark: `${workOrder.production_remark}` || "-",
+          remark: `${workOrder.remark}` || "-",
+          sqNumber: `${workOrder.sqNumber}` || "-",
+          project_id: `${workOrder.project_id}` || "-",
+          resourceId: `${workOrder.resourceId}` || "-",
+          status: `${workOrder.status}` || "-",
+          work_order_id: `${workOrder.work_order_id}` || "-",
+          bench_mark_unit: `${workOrder.bench_mark_unit}` || "-",
+          employee_id: `${workOrder.employee_id}` || "-",
+          endDate: `${workOrder.endDate}` || "-",
+          startDate: `${workOrder.startDate}` || "-",
+          estimated_hour: `${workOrder.estimated_hour}` || "-",
+          forman: workOrder.forman || [],
+          attachment: workOrder.attachment || [],
+          quantity_unit: `${workOrder.quantity_unit}` || "-",
+          required_quantity: `${workOrder.required_quantity}` || "-",
+          ballance_hour: `${workOrder.ballance_hour}`,
+          ballanced_quantity: `${workOrder.ballanced_quantity}` || "-",
+        });
+      } catch (error) {
+        toast.error(`Something went wrong`, {
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+    };
+
     if (workOrder) {
-      setProject(workOrder.project_id);
-      setWorkOrder(workOrder.work_order_id);
-      append({
-        actual_hour: `${workOrder.actual_hour}` || "-",
-        bench_mark_measure: `${workOrder.bench_mark_measure}` || "-",
-        prepared_quantity: `${workOrder.prepared_quantity}` || "-",
-        production_remark: `${workOrder.production_remark}` || "-",
-        remark: `${workOrder.remark}` || "-",
-        sqNumber: `${workOrder.sqNumber}` || "-",
-        project_id: `${workOrder.project_id}` || "-",
-        resourceId: `${workOrder.resourceId}` || "-",
-        status: `${workOrder.status}` || "-",
-        work_order_id: `${workOrder.work_order_id}` || "-",
-        bench_mark_unit: `${workOrder.bench_mark_unit}` || "-",
-        employee_id: `${workOrder.employee_id}` || "-",
-        endDate: `${workOrder.endDate}` || "-",
-        startDate: `${workOrder.startDate}` || "-",
-        estimated_hour: `${workOrder.estimated_hour}` || "-",
-        forman: workOrder.forman || [],
-        attachment: workOrder.attachment || [],
-        quantity_unit: `${workOrder.quantity_unit}` || "-",
-        required_quantity: `${workOrder.required_quantity}` || "-",
-        ballance_hour: `${workOrder.ballance_hour}`,
-        ballanced_quantity: `${workOrder.ballanced_quantity}` || "-",
+      toast.promise(fetchData(), {
+        loading: "Loading...",
+        success: "Project is ready for editing!",
+        error: "Unable to Edit",
+        position: "top-right",
+        dismissible: true,
       });
-      // setEdit(true);
     }
   }, [workOrder]);
 
   const onSubmit = async (
     values: z.infer<typeof ResourceWorkOrderListSchema>
   ) => {
+    const uniqueSqNo = () => {
+      const sqNumbers = values.resources?.map((res) => res.sqNumber);
+      const uniqueSqNo = new Set(sqNumbers);
+      return uniqueSqNo.size === values.resources?.length;
+    };
+    if (!uniqueSqNo()) {
+      toast.error(`Duplicate sequence numbers While creating`, {
+        position: "top-right",
+        dismissible: true,
+      });
+      return;
+    }
     const data = await fetchResourceWorkOrder();
     const filteredData = values.resources?.filter((val) =>
       data?.some(
@@ -310,6 +355,7 @@ const WorkOrderResourceFormContainer = () => {
                           <ProjectListCombo
                             value={selectedProject}
                             onChange={chooseProject}
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -330,6 +376,7 @@ const WorkOrderResourceFormContainer = () => {
                             value={selectedWorkOrder}
                             onChange={chooseWorkOrder}
                             project_id={selectedProject?.project_id}
+                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />
@@ -351,7 +398,8 @@ const WorkOrderResourceFormContainer = () => {
                                 <div className="w-auto flex">
                                   <Button
                                     variant="outline"
-                                    className="w-auto flex justify-start items-start border-dashed border-2 ">
+                                    className="w-auto flex justify-start items-start border-dashed border-2 "
+                                    disabled={disableTrue}>
                                     +
                                   </Button>
                                 </div>
@@ -365,6 +413,7 @@ const WorkOrderResourceFormContainer = () => {
                                       <Button
                                         variant={"ghost"}
                                         className="px-1 py-0"
+                                        disabled={disableTrue}
                                         onClick={() => {
                                           append({
                                             actual_hour: "",
@@ -407,11 +456,18 @@ const WorkOrderResourceFormContainer = () => {
                                       key={index}
                                       className="rounded-sm ml-3 mb-1 bg-neutral-200 text-black">
                                       {index + 1} | {info.resourceId}
-                                      <div className=" bg-white rounded-full text-red-500 ml-2">
+                                      <div
+                                        className={`bg-white rounded-full text-red-500 ml-2 ${
+                                          disableTrue
+                                            ? `cursor-inherit`
+                                            : `cursor-pointer`
+                                        }`}>
                                         <IoMdCloseCircle
                                           onClick={(e) => {
-                                            e.stopPropagation();
-                                            remove(index);
+                                            if (!disableTrue) {
+                                              e.stopPropagation();
+                                              remove(index);
+                                            }
                                           }}
                                         />
                                       </div>
@@ -514,6 +570,7 @@ const WorkOrderResourceFormContainer = () => {
                                         <FormItem>
                                           <FormControl>
                                             <Input
+                                              disabled={disableTrue}
                                               className="p-0 pl-2 h-[38px]"
                                               type="string"
                                               {...field}
@@ -611,7 +668,8 @@ const WorkOrderResourceFormContainer = () => {
                                               );
                                             }}>
                                             <SelectTrigger
-                                              onClick={toggleUnitIsOpen}>
+                                              onClick={toggleUnitIsOpen}
+                                              disabled={disableTrue}>
                                               <SelectValue placeholder="Select Unit" />
                                             </SelectTrigger>
                                             {benchUnitIsOpen && (
@@ -724,9 +782,8 @@ const WorkOrderResourceFormContainer = () => {
                                               );
                                             }}>
                                             <SelectTrigger
-                                              onClick={
-                                                toggleQuantityUnitIsOpen
-                                              }>
+                                              onClick={toggleQuantityUnitIsOpen}
+                                              disabled={disableTrue}>
                                               <SelectValue placeholder="Select Unit" />
                                             </SelectTrigger>
                                             {quantityUnitIsOpen && (
@@ -861,6 +918,7 @@ const WorkOrderResourceFormContainer = () => {
                                                 );
                                                 selectedFile([]);
                                               }}
+                                              disabled={disableTrue}
                                             />
                                           </FormControl>
                                           <FormMessage />
@@ -1211,6 +1269,7 @@ const WorkOrderResourceFormContainer = () => {
                     removeResourceWorkOrder();
                     setProject(undefined);
                     setWorkOrder(undefined);
+                    setDisableTrue(false);
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

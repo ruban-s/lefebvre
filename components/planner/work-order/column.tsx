@@ -17,9 +17,7 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import Link from "next/link";
-import StatusBadge from "@/components/common/status-badge";
 import { getAllLabourCard } from "@/data/labour-card";
-import { getAllResources } from "@/data/resources";
 import {
   deleteResourceWorkOrder,
   getAllResourceWorkOrder,
@@ -28,45 +26,19 @@ import { parse } from "date-fns";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const workOrders = row.original;
+  const workOrders = {
+    ...row.original,
+    actualHour: parseFloat(row.original.actualHour).toFixed(2),
+    ballance_hour: (
+      parseFloat(row.original.estimateHour) -
+      parseFloat(row.original.actualHour)
+    ).toFixed(2),
+  };
   const setWorkOrder = useWorkOrderStore((state: any) => state.setWorkOrder);
   const handleUpdateUser = () => {
-    toast.promise(
-      new Promise(async (resolve, reject) => {
-        try {
-          const data = await getAllLabourCard();
-          const labourCards = JSON.parse(data.data);
-
-          const filterLabourCards = labourCards.filter(
-            (val: any) =>
-              val.project_id === workOrders.projectId &&
-              val.work_order_id === workOrders.workOrderId
-          );
-
-          if (filterLabourCards.length > 0) {
-            reject(new Error("WorkOrderId existing in Labour card"));
-          } else {
-            resolve({});
-            setWorkOrder({ ...workOrders });
-          }
-        } catch (err) {
-          reject(err);
-        }
-      }),
-      {
-        loading: "Loading...",
-        success: "WorkOrder id is ready for editing!",
-        error: "Unable to Edit: WorkOrderId existing in Labour card",
-        position: "top-right",
-        dismissible: true,
-      }
-    );
+    setWorkOrder({ ...workOrders });
   };
   const deleteItem = useMutation({
-    // mutationFn: async (value: any) => {
-    //   const deleteCode: any = await deleteWorkOrder(value);
-    //   return deleteCode;
-    // },
     mutationFn: async ({
       id,
       projectId,
@@ -112,30 +84,6 @@ export const CellFunction = ({ row }: any) => {
         }
       });
     },
-    // onSuccess: (value) => {
-    //   if (value?.status) {
-    //     toast.success(`${value.message}`, {
-    //       description: `${value.message}`,
-    //       position: "top-right",
-    //       dismissible: true,
-    //     });
-    //   } else {
-    //     toast.error(`Something went wrong`, {
-    //       description: "Data not updated contact the admin",
-    //       position: "top-right",
-    //       dismissible: true,
-    //     });
-    //   }
-    //   queryClient.invalidateQueries({
-    //     queryKey: ["work-orders"],
-    //   });
-    // },
-    // onError: (value) => {
-    //   toast.error(`Something went wrong`, {
-    //     position: "top-right",
-    //     dismissible: true,
-    //   });
-    // },
   });
 
   const handleDelete = () => {

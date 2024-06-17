@@ -500,14 +500,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Customer Name",
   },
   {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
-  },
-  {
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
@@ -530,6 +522,14 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",

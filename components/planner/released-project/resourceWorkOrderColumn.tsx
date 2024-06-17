@@ -102,10 +102,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "project_id",
-    header: "Project ID",
-  },
-  {
     accessorKey: "work_order_id",
     header: "Work Order Id",
   },
@@ -129,12 +125,28 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: "Estimated Hrs",
   },
-
+  {
+    accessorKey: "actual_hour",
+    header: "Actual Hrs",
+  },
+  {
+    accessorKey: "balanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }: { row: any }) => {
+      console.log(row.original);
+      const balanceHrs = row.original.actualHour - row.original.estimateHour;
+      return <p>{balanceHrs}</p>;
+    },
+  },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
   },
   {
     accessorKey: "quantity_unit",

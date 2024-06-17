@@ -26,62 +26,17 @@ import { deleteWorkOrder, getAllWorkOrder } from "@/data/work-order";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const project = row.original;
+  const project = {
+    ...row.original,
+    actualHour: parseFloat(row.original.actualHour).toFixed(2),
+    ballance_hour: (
+      parseFloat(row.original.estimateHour) -
+      parseFloat(row.original.actualHour)
+    ).toFixed(2),
+  };
   const setProject = useProjectStore((state: any) => state.setProject);
-  const handleUpdateUser = async () => {
-    // const data: any = await getAllLabourCard();
-    // const labourCards = JSON.parse(data.data);
-    // const promise = () =>
-    //   new Promise((resolve) =>
-    //     setTimeout(() => resolve({ name: "Sonner" }), 2000)
-    //   );
-    // const filterLabourCards = labourCards.filter((val: any) => {
-    //   return val.project_id === project.project_id;
-    // });
-    // if (filterLabourCards.length > 0) {
-    //   toast.promise(promise, {
-    //     loading: "Loading...",
-    //     success: (data) => {
-    //       return `${data.name} toast has been added`;
-    //     },
-    //     error: "Error",
-    //   });
-    //   toast.error(`Unable to Edit`, {
-    //     description: `ProjectId existing in Labour card`,
-    //     position: "top-right",
-    //     dismissible: true,
-    //   });
-    // } else {
-    //   setProject({ ...project });
-    // }
-    toast.promise(
-      new Promise(async (resolve, reject) => {
-        try {
-          const data = await getAllLabourCard();
-          const labourCards = JSON.parse(data.data);
-
-          const filterLabourCards = labourCards.filter(
-            (val: any) => val.project_id === project.project_id
-          );
-
-          if (filterLabourCards.length > 0) {
-            reject(new Error("ProjectId existing in Labour card"));
-          } else {
-            resolve({});
-            setProject({ ...project });
-          }
-        } catch (error) {
-          reject(error);
-        }
-      }),
-      {
-        loading: "Loading...",
-        success: "Project is ready for editing!",
-        error: "Unable to Edit: ProjectId existing in Labour card",
-        position: "top-right",
-        dismissible: true,
-      }
-    );
+  const handleUpdateUser = () => {
+    setProject({ ...project });
   };
   const deleteItem = useMutation({
     mutationFn: async ({ id, projectId }: { id: any; projectId: any }) => {
@@ -184,7 +139,7 @@ export const CellFunction = ({ row }: any) => {
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
       values={project}
-      alertdescription="  This action cannot be undone. This will permanently delete
+      alertdescription="This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={handleDelete}
     />

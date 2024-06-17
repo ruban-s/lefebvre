@@ -151,8 +151,11 @@ export const UpdateStatus = ({ row }: any) => {
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const deleteCode: any = await updateProject(value);
-      console.log(value.status);
-      if (value.status === "Closed" || value.status === "Canceled") {
+      if (
+        value.status === "Closed" ||
+        value.status === "Canceled" ||
+        value.status === "Released"
+      ) {
         var workOrderList = workOrders?.filter(
           (info) => info.project_id === value.project_id
         );
@@ -321,6 +324,9 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
+                  <SelectItem value="Released" className="text-orange-500">
+                    Released
+                  </SelectItem>
                   <SelectItem value="Closed">Closed</SelectItem>
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled

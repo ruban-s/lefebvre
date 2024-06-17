@@ -22,43 +22,19 @@ import { parse } from "date-fns";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const workOrders = row.original;
+  const workOrders = {
+    ...row.original,
+    actual_hour: parseFloat(row.original.actual_hour).toFixed(2),
+    ballance_hour: (
+      parseFloat(row.original.estimated_hour) -
+      parseFloat(row.original.actual_hour)
+    ).toFixed(2),
+  };
   const setResourceWorkOrder = useResourceWorkOrderStore(
     (state: any) => state.setResourceWorkOrder
   );
   const handleUpdateUser = () => {
-    toast.promise(
-      new Promise(async (resolve, reject) => {
-        try {
-          const data = await getAllLabourCard();
-          const labourCards = JSON.parse(data.data);
-
-          const filterLabourCards = labourCards.filter(
-            (val: any) =>
-              val.project_id === workOrders.project_id &&
-              val.work_order_id === workOrders.work_order_id &&
-              val.resource_id === workOrders.resourceId &&
-              val.sq_no === workOrders.sq_no
-          );
-
-          if (filterLabourCards.length > 0) {
-            reject(new Error("WorkOrderId existing in Labour card"));
-          } else {
-            resolve({});
-            setResourceWorkOrder({ ...workOrders });
-          }
-        } catch (err) {
-          reject(err);
-        }
-      }),
-      {
-        loading: "Loading...",
-        success: "ResourceId is ready for editing!",
-        error: "Unable to Edit: ResourceId existing in Labour card",
-        position: "top-right",
-        dismissible: true,
-      }
-    );
+    setResourceWorkOrder({ ...workOrders });
   };
   const deleteItem = useMutation({
     // mutationFn: async (value: any) => {
@@ -173,28 +149,6 @@ export const CellFunction = ({ row }: any) => {
 };
 
 export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "project_id",
     header: "Project ID",
@@ -228,6 +182,24 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "actual_hour",
     header: "Actual Hours",
+    cell: ({ row }: { row: any }) => {
+      const actual_hour = parseFloat(row.original.actual_hour);
+      return <p>{actual_hour.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "ballance_hour",
+    header: "Balanced hrs",
+    cell: ({ row }: { row: any }) => {
+      const actual = parseFloat(row.original.actual_hour);
+      const estimated = parseFloat(row.original.estimated_hour);
+      const balanceHour = estimated - actual;
+      return (
+        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balanceHour.toFixed(2)}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "required_quantity",
@@ -279,7 +251,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
 ];
 
 const StatusBar = ({ row }: { row: any }) => {
-  console.log(row);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const endDate = parse(row.original?.endDate, "dd-MM-yyyy", new Date());
