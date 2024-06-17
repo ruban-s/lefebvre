@@ -108,6 +108,36 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Customer Name",
   },
   {
+    accessorKey: "estimateHour",
+    header: "Estimate Hrs",
+    cell: ({ row }) => {
+      const estimate = parseFloat(row.original.estimateHour);
+      return <p>{estimate.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "actualHour",
+    header: "Actual Hrs",
+    cell: ({ row }) => {
+      const actual = parseFloat(row.original.actualHour);
+      return <p>{actual.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = parseFloat(row.original.estimateHour);
+      const actual = parseFloat(row.original.actualHour);
+      const balance = estimate - actual;
+      return (
+        <p className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance.toFixed(2)}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
   },

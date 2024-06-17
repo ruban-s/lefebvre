@@ -417,7 +417,13 @@ export const UpdateStatus = ({ row }: any) => {
             );
           });
           if (filterLabourCards.length > 0) {
-            reject(new Error("WorkOrderId existing in Labour card"));
+            if (value.status === "Unreleased") {
+              reject(
+                new Error(
+                  "WorkOrderId existing in Labour card,Unable to edit status"
+                )
+              );
+            }
           } else {
             const deleteCode: any = await updateResourceWorkOrder({
               id: data.id,
@@ -500,7 +506,6 @@ export const UpdateStatus = ({ row }: any) => {
   });
 
   const handleUpdate = (value: any) => {
-    console.log(value);
     toast.promise(updateItem.mutateAsync(value), {
       loading: "Loading...",
       success: "ResourceId Updated successfully!",

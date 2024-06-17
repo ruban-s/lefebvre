@@ -393,7 +393,12 @@ export const UpdateStatus = ({ row }: any) => {
               val.work_order_id === value.work_order_id
           );
           if (filterLabourCards.length > 0) {
-            reject(new Error("WorkOrderId existing in Labour card"));
+            if (value.status === "Unreleased")
+              reject(
+                new Error(
+                  "WorkOrderId existing in Labour card,Unable to edit status"
+                )
+              );
           } else {
             const deleteCode: any = await updateWorkOrder({
               id: data.id,
@@ -583,6 +588,12 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
                 selectedData={dateRange!}
                 disabled={[]}
+                tab="production"
+                file="workOrder"
+                matcher={{
+                  from: data.start_date!,
+                  to: data.end_date!,
+                }}
               />
             </div>
             <div className="col-span-2">

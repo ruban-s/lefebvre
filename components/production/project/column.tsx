@@ -221,9 +221,13 @@ export const UpdateStatus = ({ row }: any) => {
           const filterLabourCards = labourCards.filter(
             (val: any) => val.project_id === value.project_id
           );
-
           if (filterLabourCards.length > 0) {
-            reject(new Error("ProjectId existing in Labour card"));
+            if (value.status === "Unreleased")
+              reject(
+                new Error(
+                  "ProjectId existing in Labour card.Unable to edit status"
+                )
+              );
           } else {
             const deleteCode: any = await updateProject(value);
             resolve(deleteCode);
@@ -421,6 +425,12 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
                 selectedData={dateRange}
                 disabled={[]}
+                tab="planner"
+                file="project"
+                matcher={{
+                  from: data.start_date!,
+                  to: data.end_date!,
+                }}
               />
             </div>
 
@@ -615,9 +625,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     accessorKey: "images",
     header: "Attachments",
     cell: ({ row }) => {
-      console.log(row.original);
       var files = row.original.images;
-
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>
