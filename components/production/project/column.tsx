@@ -221,9 +221,13 @@ export const UpdateStatus = ({ row }: any) => {
           const filterLabourCards = labourCards.filter(
             (val: any) => val.project_id === value.project_id
           );
-
           if (filterLabourCards.length > 0) {
-            reject(new Error("ProjectId existing in Labour card"));
+            if (value.status === "Unreleased")
+              reject(
+                new Error(
+                  "ProjectId existing in Labour card.Unable to edit status"
+                )
+              );
           } else {
             const deleteCode: any = await updateProject(value);
             resolve(deleteCode);
@@ -421,6 +425,12 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
                 selectedData={dateRange}
                 disabled={[]}
+                tab="planner"
+                file="project"
+                matcher={{
+                  from: data.start_date!,
+                  to: data.end_date!,
+                }}
               />
             </div>
 
@@ -532,6 +542,36 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "End Date",
   },
   {
+    accessorKey: "estimateHour",
+    header: "Estimate Hrs",
+    cell: ({ row }) => {
+      const estimate = parseFloat(row.original.estimateHour);
+      return <p>{estimate.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "actualHour",
+    header: "Actual Hrs",
+    cell: ({ row }) => {
+      const actual = parseFloat(row.original.actualHour);
+      return <p>{actual.toFixed(2)}</p>;
+    },
+  },
+  {
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = parseFloat(row.original.estimateHour);
+      const actual = parseFloat(row.original.actualHour);
+      const balance = estimate - actual;
+      return (
+        <p className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance.toFixed(2)}
+        </p>
+      );
+    },
+  },
+  {
     accessorKey: "planner_remark",
     header: "Planner Remarks",
     cell: ({ row }) =>
@@ -586,7 +626,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>

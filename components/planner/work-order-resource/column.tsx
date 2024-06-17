@@ -24,6 +24,7 @@ export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const workOrders = {
     ...row.original,
+    estimated_hour: parseFloat(row.original.estimated_hour).toFixed(2),
     actual_hour: parseFloat(row.original.actual_hour).toFixed(2),
     ballance_hour: (
       parseFloat(row.original.estimated_hour) -
@@ -178,6 +179,10 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hours",
+    cell: ({ row }: { row: any }) => {
+      const estimated = parseFloat(row.original.estimated_hour);
+      return <p>{estimated.toFixed(2)}</p>;
+    },
   },
   {
     accessorKey: "actual_hour",

@@ -28,6 +28,7 @@ export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const project = {
     ...row.original,
+    estimateHour: parseFloat(row.original.estimateHour).toFixed(2),
     actualHour: parseFloat(row.original.actualHour).toFixed(2),
     ballance_hour: (
       parseFloat(row.original.estimateHour) -

@@ -119,17 +119,31 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   {
     accessorKey: "estimateHour",
     header: "Estimated Hrs",
+    cell: ({ row }) => {
+      const estimate_hrs = parseFloat(row.original.estimateHour);
+      return <p>{estimate_hrs.toFixed(2)}</p>;
+    },
   },
   {
     accessorKey: "actualHour",
     header: "Actual Hrs",
+    cell: ({ row }) => {
+      const actual_hrs = parseFloat(row.original.actualHour);
+      return <p>{actual_hrs.toFixed(2)}</p>;
+    },
   },
   {
     accessorKey: "balanceHour",
     header: "Balance Hrs",
     cell: ({ row }: { row: any }) => {
-      const balanceHrs = row.original.actualHour - row.original.estimateHour;
-      return <p>{balanceHrs}</p>;
+      const estimated = parseFloat(row.original.estimateHour);
+      const actual = parseFloat(row.original.actualHour);
+      const balanceHour = estimated - actual;
+      return (
+        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balanceHour.toFixed(2)}
+        </p>
+      );
     },
   },
   {

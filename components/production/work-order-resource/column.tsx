@@ -150,14 +150,32 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
+    cell: ({ row }: { row: any }) => {
+      const estimated = parseFloat(row.original.estimated_hour);
+      return <p>{estimated.toFixed(2)}</p>;
+    },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
+    cell: ({ row }: { row: any }) => {
+      const actual_hour = parseFloat(row.original.actual_hour);
+      return <p>{actual_hour.toFixed(2)}</p>;
+    },
   },
   {
     accessorKey: "ballance_hour",
     header: "Balanced Hrs",
+    cell: ({ row }: { row: any }) => {
+      const actual = parseFloat(row.original.actual_hour);
+      const estimated = parseFloat(row.original.estimated_hour);
+      const balanceHour = estimated - actual;
+      return (
+        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balanceHour.toFixed(2)}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "required_quantity",
@@ -399,7 +417,13 @@ export const UpdateStatus = ({ row }: any) => {
             );
           });
           if (filterLabourCards.length > 0) {
-            reject(new Error("WorkOrderId existing in Labour card"));
+            if (value.status === "Unreleased") {
+              reject(
+                new Error(
+                  "WorkOrderId existing in Labour card,Unable to edit status"
+                )
+              );
+            }
           } else {
             const deleteCode: any = await updateResourceWorkOrder({
               id: data.id,
@@ -482,7 +506,6 @@ export const UpdateStatus = ({ row }: any) => {
   });
 
   const handleUpdate = (value: any) => {
-    console.log(value);
     toast.promise(updateItem.mutateAsync(value), {
       loading: "Loading...",
       success: "ResourceId Updated successfully!",

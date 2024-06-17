@@ -41,3 +41,21 @@ export const updateLabourCard = async (value: any) => {
     return errorResponse;
   }
 };
+
+export const deleteLabourCard = async (value: any) => {
+  try {
+    const axiosResponse = await Axios.delete(
+      `/labor/web/deleteLabor?id=${value}`
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
+    console.log(error);
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};

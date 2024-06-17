@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { SlCalender } from "react-icons/sl";
-import { addDays, format, differenceInDays } from "date-fns";
+import { addDays, format, differenceInDays, parse } from "date-fns";
 import { DateRange, Matcher } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -24,6 +24,9 @@ interface DatePickerWithRangeProps {
   fromDate?: string;
   toDate?: string;
   changeDateRange?: Function;
+  tab?: string;
+  file?: string;
+  matcher?: any;
 }
 
 export function DatePickerWithRange({
@@ -33,6 +36,9 @@ export function DatePickerWithRange({
   selectedData,
   fromDate,
   toDate,
+  tab,
+  file,
+  matcher,
 }: DatePickerWithRangeProps) {
   const [date, setDate] = React.useState<DateRange | undefined>();
   React.useEffect(() => {
@@ -65,19 +71,46 @@ export function DatePickerWithRange({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            initialFocus={false}
-            mode="range"
-            fromDate={new Date(fromDate!)}
-            toDate={new Date(toDate!)}
-            selected={date}
-            onSelect={(data) => {
-              setDate(data);
-              onselect(data);
-            }}
-            numberOfMonths={2}
-            disabled={disabled}
-          />
+          {!tab && !file && (
+            <Calendar
+              initialFocus={false}
+              mode="range"
+              fromDate={new Date(fromDate!)}
+              toDate={new Date(toDate!)}
+              selected={date}
+              onSelect={(data) => {
+                setDate(data);
+                onselect(data);
+              }}
+              numberOfMonths={2}
+              disabled={disabled}
+            />
+          )}
+          {tab && file && (
+            <Calendar
+              initialFocus={false}
+              mode="range"
+              fromDate={new Date(fromDate!)}
+              toDate={new Date(toDate!)}
+              selected={date}
+              onSelect={(data) => {
+                setDate(data);
+                onselect(data);
+              }}
+              numberOfMonths={2}
+              disabled={(date) => {
+                const fromDate = parse(
+                  matcher?.from!,
+                  "dd-MM-yyyy",
+                  new Date()
+                );
+                fromDate.setHours(0, 0, 0, 0);
+                const toDate = parse(matcher?.to!, "dd-MM-yyyy", new Date());
+                toDate.setHours(0, 0, 0, 0);
+                return date < fromDate || date > toDate;
+              }}
+            />
+          )}
           <PopoverClose className="w-full">
             <div className="w-full flex flex-row justify-end p-3">
               <Button

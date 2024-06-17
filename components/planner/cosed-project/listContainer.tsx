@@ -71,7 +71,7 @@ const ClosedProject = () => {
       setResourceWorkOrders(
         resourceWorkOrder.filter((info, index) => info.status === "Closed")
       );
-  }, []);
+  }, [projects, workOrders, resourceWorkOrder]);
   return (
     <Tabs defaultValue="project" className="w-full">
       <TabsList className="bg-theme text-white">
