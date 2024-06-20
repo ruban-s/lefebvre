@@ -14,10 +14,12 @@ import { GrFormViewHide } from "react-icons/gr";
 import CustomImageInput from "./customImageInput";
 import { Badge } from "../ui/badge";
 import ViewTabField from "./viewTabField";
+import { Input } from "../ui/input";
 // import { convertToUAEFormat } from "@/action/common-action";
 
 interface TableActionButtonComponentsProps {
   values?: any;
+  dynamicValues?: any;
   primaryLable: string;
   primaryAction: Function;
   primaryIcon: IconType;
@@ -43,6 +45,7 @@ const TableActionButtonComponents = ({
   alertIcon: AlertIcon,
   alertcloseAllFunction,
   values,
+  dynamicValues,
   alertlableIcon: AlertLebleIcon,
 }: TableActionButtonComponentsProps) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -69,34 +72,97 @@ const TableActionButtonComponents = ({
             <div className="w-full text-lg ml-1 font-bold text-theme">
               <p>Details:</p>
             </div>
+            {values && (
+              <div className="w-full grid grid-cols-2 gap-3">
+                {Object.keys(values).map((info, index) => {
+                  if (["image_path", "image"].includes(info)) {
+                    return (
+                      <div
+                        key={index}
+                        className="w-full row-span-2 h-auto m-2 my-3 flex items-center justify-start">
+                        <div className="w-1/4 text-neutral-400">
+                          {info.charAt(0).toUpperCase() +
+                            info.replace("_", "-").slice(1)}
+                        </div>
+                        {values[info] ? (
+                          <CustomImageInput
+                            value={values[`${info}`]}
+                            disable={true}
+                            onChange={(value: string) => {}}
+                          />
+                        ) : (
+                          "--"
+                        )}
+                      </div>
+                    );
+                  }
+                  // if (
+                  //   [
+                  //     "forman",
+                  //     "res_note",
+                  //     "token",
+                  //     "res_status",
+                  //     "sq_number",
+                  //     "role_name",
+                  //   ].includes(info)
+                  // ) {
+                  //   return null;
+                  // }
+                  return (
+                    <>
+                      {values[`${info}`] && (
+                        <ViewTabField
+                          heading={
+                            info.replaceAll("_", " ").charAt(0).toUpperCase() +
+                            info
+                              .replaceAll("_", " ")
+                              .slice(1)
+                              .replace(/([a-z])([A-Z])/g, "$1 $2")
+                          }
+                          value={values[`${info}`]}
+                          isInput={true}
+                        />
+                      )}
+                      {/* <div
+                    key={index}
+                    className="w-full h-auto m-2 my-3 flex items-center justify-start ">
+                    <div className="w-1/4 text-neutral-400">
+                      {info.charAt(0).toUpperCase() +
+                        info.replace("_", "-").slice(1)}
+                    </div>
+                    <div className="w-[300px] h-auto  text-pretty flex  text-bold text-sm   text-black font-bold">
+                      :{values[`${info}`] || "--"}
+                    </div>
+                  </div> */}
+                    </>
+                  );
+                })}
+              </div>
+            )}
 
-            <div className="w-full grid grid-cols-2 gap-3">
+            {dynamicValues && (
+              <div className="w-full grid grid-cols-2 gap-3">
+                {dynamicValues.map((data: any, index: any) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`${
+                        data.cover === "half" ? "col-span-1" : "col-span-2"
+                      } space-y-1`}>
+                      <h1>{data.name}</h1>
+                      <Input
+                        disabled
+                        value={data.value ? data.value : "--"}
+                        className="border-2 border-[#c2c2c2] text-black"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* <div className="w-full grid grid-cols-2 gap-3">
               {Object.keys(values).map((info, index) => {
-                // console.log(convertToUAEFormat(values[`${info}`]))
-                // if (["status", "designation_id"].includes(info)) {
-                //   return (
-                //     <div
-                //       key={index}
-                //       className="w-full h-auto m-2 my-3 flex items-center justify-start">
-                //       <div className="w-1/4 text-neutral-400">
-                //         {info.charAt(0).toUpperCase() +
-                //           info.replace("_", "-").slice(1)}
-                //       </div>
-                //       <div className="flex-1 text-bold text-sm  text-black font-bold">
-                //         {" "}
-                //         :{" "}
-                //         <Badge
-                //           className={`cursor-pointer rounded-md    bg-neutral-500 ${
-                //             values[info] === "Active" && "bg-green-500"
-                //           }
-                //           ${values[info] === "Inactive" && "bg-red-500"}
-                //        `}>
-                //           {values[info]}
-                //         </Badge>
-                //       </div>
-                //     </div>
-                //   );
-                // }
                 if (["image_path", "image"].includes(info)) {
                   return (
                     <div
@@ -145,7 +211,7 @@ const TableActionButtonComponents = ({
                         isInput={true}
                       />
                     )}
-                    {/* <div
+                    <div
                     key={index}
                     className="w-full h-auto m-2 my-3 flex items-center justify-start ">
                     <div className="w-1/4 text-neutral-400">
@@ -155,11 +221,11 @@ const TableActionButtonComponents = ({
                     <div className="w-[300px] h-auto  text-pretty flex  text-bold text-sm   text-black font-bold">
                       :{values[`${info}`] || "--"}
                     </div>
-                  </div> */}
+                  </div> 
                   </>
                 );
               })}
-            </div>
+            </div> */}
           </AlertDialogComponent>
           <Button
             variant={"ghost"}

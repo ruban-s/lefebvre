@@ -102,10 +102,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "project_id",
-    header: "Project ID",
-  },
-  {
     accessorKey: "work_order_id",
     header: "Work Order Id",
   },
@@ -131,7 +127,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hours",
   },
-
   {
     accessorKey: "required_quantity",
     header: "Required Quantity",

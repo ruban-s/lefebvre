@@ -45,6 +45,7 @@ const ClosedProject = () => {
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
+      console.log(newProject);
       setProjects(newProject.filter((info, index) => info.status === "Closed"));
       return JSON.parse(data.data) as ProjectData[];
     },
@@ -60,7 +61,9 @@ const ClosedProject = () => {
       return JSON.parse(data.data) as ResourceWorkOdderData[];
     },
   });
+  console.log(projects);
   useEffect(() => {
+    console.log(projects);
     projects &&
       setProjects(projects.filter((info, index) => info.status === "Closed"));
     workOrders &&
