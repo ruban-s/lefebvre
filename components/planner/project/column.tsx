@@ -26,18 +26,31 @@ import { deleteWorkOrder, getAllWorkOrder } from "@/data/work-order";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const project = {
-    ...row.original,
-    estimateHour: parseFloat(row.original.estimateHour).toFixed(2),
-    actualHour: parseFloat(row.original.actualHour).toFixed(2),
-    ballance_hour: (
-      parseFloat(row.original.estimateHour) -
-      parseFloat(row.original.actualHour)
-    ).toFixed(2),
-  };
+  const rowData = row.original;
+
+  const project = [
+    { name: "Id", value: rowData.id, cover: "half" },
+    { name: "ProjectId", value: rowData.project, cover: "half" },
+    { name: "Customer Name", value: rowData.customer_name, cover: "full" },
+    { name: "Description", value: rowData.description, cover: "full" },
+    { name: "Start Date", value: rowData.start_date, cover: "half" },
+    { name: "End Date", value: rowData.end_date, cover: "half" },
+    { name: "EstimateHour", value: rowData.estimateHour, cover: "half" },
+    { name: "ActualHour", value: rowData.actualHour, cover: "half" },
+    {
+      name: "Balance Hour",
+      value: (
+        parseFloat(rowData.estimateHour) - parseFloat(rowData.actualHour)
+      ).toFixed(2),
+      cover: "full",
+    },
+    { name: "Planner Remark", value: rowData.planner_remark, cover: "full" },
+    { name: "Status", value: rowData.status, cover: "half" },
+  ];
+
   const setProject = useProjectStore((state: any) => state.setProject);
   const handleUpdateUser = () => {
-    setProject({ ...project });
+    setProject({ ...rowData });
   };
   const deleteItem = useMutation({
     mutationFn: async ({ id, projectId }: { id: any; projectId: any }) => {
@@ -116,7 +129,10 @@ export const CellFunction = ({ row }: any) => {
 
   const handleDelete = () => {
     toast.promise(
-      deleteItem.mutateAsync({ id: project.id, projectId: project.project_id }),
+      deleteItem.mutateAsync({
+        id: rowData.id,
+        projectId: rowData.project_id,
+      }),
       {
         loading: "Loading...",
         success: "Project deleted successfully!",
@@ -139,7 +155,7 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
-      values={project}
+      dynamicValues={project}
       alertdescription="This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={handleDelete}
@@ -148,28 +164,6 @@ export const CellFunction = ({ row }: any) => {
 };
 
 export const projectColumns: ColumnDef<ProjectData>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "project_id",
     header: "Project ID",
@@ -177,14 +171,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "customer_name",
     header: "Customer Name",
-  },
-  {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
   },
   {
     accessorKey: "description",
@@ -209,6 +195,14 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",
@@ -249,16 +243,17 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
 
           <PopoverContent className="w-[200px] ">
             {row.original.images.map((info, index) => {
-              var file = info.split("/")[info.split("/").length - 1];
               return (
                 <Link
+                  target="_blank"
                   key={index}
                   href={info}
                   className="flex justify-center items-center m-1">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
                   {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-                  {info.split("/")[4]}
+                  {/* {info.split("/")[4]} */}
+                  {info}
                 </Link>
               );
             })}

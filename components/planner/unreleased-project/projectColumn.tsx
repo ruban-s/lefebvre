@@ -77,28 +77,6 @@ export const CellFunction = ({ row }: any) => {
 };
 
 export const projectColumns: ColumnDef<ProjectData>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "project_id",
     header: "Project ID",
@@ -106,14 +84,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "customer_name",
     header: "Customer Name",
-  },
-  {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
   },
   {
     accessorKey: "description",
@@ -138,6 +108,14 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         )}
       </div>
     ),
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",

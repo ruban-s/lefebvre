@@ -1,5 +1,5 @@
 "use server";
-import { Axios } from "@/action/axios";
+import { Axios, ImageAxios } from "@/action/axios";
 import { ResponseData } from "@/types";
 import { headers } from "next/headers";
 
@@ -9,9 +9,7 @@ export const uploadImage = async (formData: FormData, name: string) => {
       `/uploadFile?fileName=${name}`,
       formData
     );
-
     const data = axiosResponse.data;
-    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {

@@ -62,6 +62,7 @@ const ProjectFormContainer = () => {
     },
     onSuccess: (value) => {
       if (value.status) {
+        console.log(value);
         toast.success(`${value.message}`, {
           description: `${value.message}`,
           position: "top-right",
@@ -117,7 +118,6 @@ const ProjectFormContainer = () => {
           }
           var startDate = project?.start_date!.toString().split("-");
           var endDate = project?.end_date!.toString().split("-");
-          console.log(startDate, endDate);
           selectedFile(project?.images!);
           setDateRange({
             from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
@@ -154,6 +154,7 @@ const ProjectFormContainer = () => {
   }, [project]);
 
   const onSubmit = async (values: z.infer<typeof ProjectSchema>) => {
+    // console.log(values);
     const { project_id, ...data } = values;
     const payload = { project_id: `${project_id}`.toUpperCase(), ...data };
     creatProject.mutate(payload);
@@ -352,10 +353,9 @@ const ProjectFormContainer = () => {
                             <MultiFileSelect
                               files={file}
                               onChange={(e: any) => {
-                                console.log("rithi", e);
                                 selectedFile(e);
                                 form.setValue("images", [
-                                  ...form.watch("images")!,
+                                  // ...form.watch("images")!,
                                   ...e,
                                 ]);
                               }}
@@ -474,39 +474,16 @@ const ProjectFormContainer = () => {
                   {project ? "Update Project" : "Add Project"}
                   <FaUser className="ml-2 text-white" size={16} />
                 </Button>
-                {!project && (
-                  <Button
-                    variant={"secondary"}
-                    type="button"
-                    className="ml-2"
-                    onClick={() => {
-                      form.reset();
-                      form.clearErrors();
-                      setRange(undefined);
-                      // setRefreshcalender(!refreshCalender);
-                      // setEdit(false);
-                    }}>
-                    Clear
-                    <IoMdCloseCircle className="ml-2 text-black" size={20} />
-                  </Button>
-                )}
-
-                {project && (
-                  <Button
-                    variant={"secondary"}
-                    type="button"
-                    className="ml-2"
-                    onClick={() => {
-                      // form.reset();
-                      // form.clearErrors();
-                      // removeProject();
-                      // selectedFile([]);
-                      clearItem();
-                    }}>
-                    {"Clear"}
-                    <IoMdCloseCircle className="ml-2 text-black" size={20} />
-                  </Button>
-                )}
+                <Button
+                  variant={"secondary"}
+                  type="button"
+                  className="ml-2"
+                  onClick={() => {
+                    clearItem();
+                  }}>
+                  {"Clear"}
+                  <IoMdCloseCircle className="ml-2 text-black" size={20} />
+                </Button>
               </div>
             </form>
           </Form>

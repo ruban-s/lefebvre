@@ -11,3 +11,10 @@ export const Axios = axios.create({
     Authorization: `${token?.value}`,
   },
 });
+
+export const ImageAxios = axios.create({
+  baseURL: "http://194.62.96.140",
+  headers: {
+    Authorization: `${token?.value}`,
+  },
+});

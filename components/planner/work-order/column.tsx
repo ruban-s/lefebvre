@@ -26,15 +26,36 @@ import { parse } from "date-fns";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const workOrders = {
-    ...row.original,
-    estimateHour: parseFloat(row.original.estimateHour).toFixed(2),
-    actualHour: parseFloat(row.original.actualHour).toFixed(2),
-    ballance_hour: (
-      parseFloat(row.original.estimateHour) -
-      parseFloat(row.original.actualHour)
-    ).toFixed(2),
-  };
+  // const workOrders = {
+  //   ...row.original,
+  //   estimateHour: parseFloat(row.original.estimateHour).toFixed(2),
+  //   actualHour: parseFloat(row.original.actualHour).toFixed(2),
+  //   ballance_hour: (
+  //     parseFloat(row.original.estimateHour) -
+  //     parseFloat(row.original.actualHour)
+  //   ).toFixed(2),
+  // };
+  const workOrders = row.original;
+
+  const dynamicWorkOrder = [
+    { name: "Id", value: workOrders.id, cover: "half" },
+    { name: "WorkOrder Id", value: workOrders.work_order_id, cover: "half" },
+    { name: "Description", value: workOrders.description, cover: "full" },
+    { name: "Start Date", value: workOrders.start_date, cover: "half" },
+    { name: "End Date", value: workOrders.end_date, cover: "half" },
+    { name: "EstimateHour", value: workOrders.estimateHour, cover: "half" },
+    { name: "ActualHour", value: workOrders.actualHour, cover: "half" },
+    {
+      name: "Balance Hour",
+      value: (
+        parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
+      ).toFixed(2),
+      cover: "full",
+    },
+    { name: "Planner Remark", value: workOrders.planner_remark, cover: "full" },
+    { name: "Status", value: workOrders.status, cover: "half" },
+  ];
+
   const setWorkOrder = useWorkOrderStore((state: any) => state.setWorkOrder);
   const handleUpdateUser = () => {
     setWorkOrder({ ...workOrders });
@@ -117,7 +138,7 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
-      values={workOrders}
+      dynamicValues={dynamicWorkOrder}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={() => {

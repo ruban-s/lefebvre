@@ -19,18 +19,80 @@ import { RxCaretSort } from "react-icons/rx";
 import StatusBadge from "@/components/common/status-badge";
 import { getAllLabourCard } from "@/data/labour-card";
 import { parse } from "date-fns";
+import { getAllUser } from "@/data/user";
+import { useEffect, useState } from "react";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
-  const workOrders = {
-    ...row.original,
-    estimated_hour: parseFloat(row.original.estimated_hour).toFixed(2),
-    actual_hour: parseFloat(row.original.actual_hour).toFixed(2),
-    ballance_hour: (
-      parseFloat(row.original.estimated_hour) -
-      parseFloat(row.original.actual_hour)
-    ).toFixed(2),
+  const workOrders = row.original;
+  const [foreman, setForeman] = useState();
+
+  const fetchFormans = async () => {
+    const formans = await getAllUser();
+    const data = JSON.parse(formans?.data);
+    const names = row.original.forman?.map((formanId: string) => {
+      const forman = data.find((employee: any) => {
+        return employee.id === parseInt(formanId);
+      });
+      return forman ? forman.name : "";
+    });
+    setForeman(names);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchFormans();
+    };
+    fetchData();
+  }, [row.original.forman]);
+
+  const dynamicWorkOrder = [
+    { name: "Id", value: workOrders.id, cover: "half" },
+    { name: "WorkOrder Id", value: workOrders.work_order_id, cover: "half" },
+    { name: "Resource", value: workOrders.resourceId, cover: "half" },
+    { name: "Sq no", value: workOrders.sqNumber, cover: "half" },
+    { name: "Description", value: workOrders.description, cover: "full" },
+    { name: "Start Date", value: workOrders.start_date, cover: "half" },
+    { name: "End Date", value: workOrders.end_date, cover: "half" },
+    {
+      name: "Bench Mark Measure",
+      value: workOrders.bench_mark_measure,
+      cover: "half",
+    },
+    {
+      name: "Bench Mark Unit",
+      value: workOrders.bench_mark_unit,
+      cover: "half",
+    },
+    { name: "EstimateHour", value: workOrders.estimateHour, cover: "half" },
+    { name: "ActualHour", value: workOrders.actualHour, cover: "half" },
+    {
+      name: "Balance Hour",
+      value: (
+        parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
+      ).toFixed(2),
+      cover: "full",
+    },
+    {
+      name: "Required Qty",
+      value: workOrders.required_quantity,
+      cover: "half",
+    },
+    {
+      name: "Prepared Qty",
+      value: workOrders.prepared_quantity,
+      cover: "half",
+    },
+    {
+      name: "Balance Qty",
+      value:
+        parseInt(workOrders.required_quantity) -
+        parseInt(workOrders.prepared_quantity),
+      cover: "full",
+    },
+    { name: "Forman", value: foreman, cover: "half" },
+    { name: "Status", value: workOrders.status, cover: "half" },
+  ];
   const setResourceWorkOrder = useResourceWorkOrderStore(
     (state: any) => state.setResourceWorkOrder
   );
@@ -138,7 +200,7 @@ export const CellFunction = ({ row }: any) => {
       alertIcon={IoIosWarning}
       alertactionLable="Delete"
       alertcloseAllFunction={() => {}}
-      values={workOrders}
+      dynamicValues={dynamicWorkOrder}
       alertdescription="  This action cannot be undone. This will permanently delete
                     your data and remove from our server."
       alertactionFunction={() => {

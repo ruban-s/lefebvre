@@ -102,10 +102,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: "project_id",
-    header: "Project ID",
-  },
-  {
     accessorKey: "work_order_id",
     header: "Work Order Id",
   },
@@ -118,7 +114,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
@@ -159,7 +154,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
   },
   {
     accessorKey: "quantity_unit",

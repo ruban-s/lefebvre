@@ -8,6 +8,7 @@ import {
 import { VscFileSubmodule } from "react-icons/vsc";
 import { Input } from "../ui/input";
 import { uploadImage } from "@/data/common";
+import { Button } from "../ui/button";
 
 interface props {
   files: string[];
@@ -20,28 +21,29 @@ const MultiFileSelect = (props: props) => {
   const popRef = useRef<HTMLButtonElement>(null);
 
   const [file, selectedFile] = useState<string[]>(props.files);
-  const [loading, setloading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const newData = async (value: FormData, name: string) => {
-    setloading(true);
+    setLoading(true);
     var data = await uploadImage(value, name);
-    setloading(false);
-    selectedFile((e) => [...e, data.data]);
-
-    popRef.current?.click();
+    setLoading(false);
     props.onChange([...file, data.data]);
+    popRef.current?.click();
   };
-  // useEffect(() => {
-  //   selectedFile(props.files);
-  // }, [props.files]);
+
+  useEffect(() => {
+    selectedFile(props.files);
+  }, [props.files]);
+
+  console.log(file?.length);
 
   return (
     <Popover>
       <PopoverTrigger
-        className="flex justify-start items-center "
+        className="flex justify-start items-center"
         ref={popRef}
         disabled={props.disabled}>
-        {loading && (
+        {loading ? (
           <div role="status">
             <svg
               aria-hidden="true"
@@ -60,16 +62,15 @@ const MultiFileSelect = (props: props) => {
             </svg>
             <span className="sr-only">Loading...</span>
           </div>
-        )}
-        {!loading && (
+        ) : (
           <VscFileSubmodule
             className="p-2 bg-slate-50 shadow-sm rounded-sm text-black"
             size={40}
           />
-        )}{" "}
-        {file.length > 0 && `| selected- ${file.length}`}
+        )}
+        {file?.length > 0 && `| selected- ${file.length}`}
       </PopoverTrigger>
-      <PopoverContent className="relative min-w-[400px] w-full ">
+      <PopoverContent className="relative min-w-[400px] w-full">
         <Input
           ref={imageRef}
           type="file"
@@ -77,42 +78,39 @@ const MultiFileSelect = (props: props) => {
           placeholder=""
           onChange={(e: any) => {
             const formData = new FormData();
-            e.target?.files[0] &&
-              formData.append("file", e.target?.files[0] as File);
-            e.target?.files[0] && newData(formData, e.target?.files[0].name);
+            if (e.target?.files[0]) {
+              formData.append("file", e.target.files[0]);
+              newData(formData, e.target.files[0].name);
+            }
           }}
         />
-
         <div
-          className="w-full h-[20px] absolute top-0 left-0  p-4 py-6 cursor-pointer rounded-sm bg-slate-50 flex justify-center items-center shadow-sm"
+          className="w-full h-[20px] absolute top-0 left-0 p-4 py-6 cursor-pointer rounded-sm bg-slate-50 flex justify-center items-center shadow-sm"
           onClick={() => {
             imageRef.current?.click();
           }}>
           Add File
         </div>
         <div className="mt-10">
-          {file.map((info, index) => {
-            var data = info.split(".");
-            data.pop();
-            return (
-              <div
-                key={index}
-                className="flex flex-row justify-between w-full items-center gap-4">
-                <div className="w-[90%] flex flex-row gap-2 items-start">
-                  <span className="font-black">{index + 1} </span>
-                  {data}
-                </div>
-                <div
-                  className="w-5 h-5 justify-center p-3 border-1 border-red-500 border flex items-center bg-red-50 text-red-500 rounded-sm shadow-sm cursor-pointer"
-                  onClick={() => {
-                    selectedFile((e) => e.filter((item) => item !== info));
-                    popRef.current?.click();
-                  }}>
-                  x
-                </div>
+          {file?.map((info, index) => (
+            <div
+              key={index}
+              className="flex flex-row justify-between w-full items-center gap-4">
+              <div className="w-[90%] flex flex-row gap-2 items-start">
+                <span className="font-black">{index + 1} </span>
+                {info}
               </div>
-            );
-          })}
+              <div
+                className="w-5 h-5 justify-center p-3 border-1 border-red-500 border flex items-center bg-red-50 text-red-500 rounded-sm shadow-sm cursor-pointer"
+                onClick={() => {
+                  const cancelData = file.filter((_, i) => i !== index);
+                  props.onChange(cancelData);
+                  popRef.current?.click();
+                }}>
+                x
+              </div>
+            </div>
+          ))}
         </div>
       </PopoverContent>
     </Popover>

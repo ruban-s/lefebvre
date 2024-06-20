@@ -139,6 +139,7 @@ const WorkOrderFormContainer = () => {
             });
           }
         }
+        console.log(workOrder);
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });
       } else if (workOrder) {
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });
@@ -148,6 +149,7 @@ const WorkOrderFormContainer = () => {
       // const breake = workOrder
       //   ? await updateWorkOrder({ id: workOrder?.id, ...value })
       //   : await createWorkOrder(value);
+
       setDateRange(undefined);
       setMakeEmpty(true);
       removeWorkOrder();
@@ -252,6 +254,7 @@ const WorkOrderFormContainer = () => {
   }, [workOrder]);
 
   const onSubmit = async (values: z.infer<typeof WorkOrderSchema>) => {
+    console.log(values);
     creatWorkOrder.mutate(values);
   };
   const newData = async (value: FormData, name: string) => {
@@ -340,6 +343,16 @@ const WorkOrderFormContainer = () => {
     form.setValue("end_date", format(to, "dd-LL-y"));
 
     return;
+  };
+
+  const clearItem = () => {
+    form.reset();
+    form.clearErrors();
+    removeWorkOrder();
+    selectedFile([]);
+    setProject(undefined);
+    setRange(undefined);
+    setDisableTrue(false);
   };
 
   return (
@@ -502,11 +515,11 @@ const WorkOrderFormContainer = () => {
                                 form.setValue("images", [...e]);
                               }}
                             />
-                            {workOrder ? (
+                            {/* {workOrder ? (
                               <h1>({workOrder.images.length}) files</h1>
                             ) : (
                               ""
-                            )}
+                            )} */}
                           </div>
                           {/* <Input
                             multiple={true}
@@ -551,13 +564,7 @@ const WorkOrderFormContainer = () => {
                   type="button"
                   className="ml-2"
                   onClick={() => {
-                    form.reset();
-                    form.clearErrors();
-                    removeWorkOrder();
-                    setProject(undefined);
-                    setRange(undefined);
-                    setDisbleDates([]);
-                    setDisableTrue(false);
+                    clearItem();
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

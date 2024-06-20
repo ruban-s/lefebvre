@@ -59,8 +59,10 @@ export const getAllProjectByStatus = async (value: string) => {
 };
 export const createProject = async (value: z.infer<typeof ProjectSchema>) => {
   try {
+    console.log(value);
     const axiosResponse = await Axios.post("/project/create", value);
     const data = axiosResponse.data;
+    console.log(data);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
@@ -76,6 +78,7 @@ export const updateProject = async (value: ProjectData) => {
   try {
     const axiosResponse = await Axios.put("/project/update", value);
     const data = axiosResponse.data;
+    console.log(data);
     return data;
   } catch (error) {
     // console.log(error);
