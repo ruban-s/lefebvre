@@ -64,10 +64,10 @@ export const CellFunction = ({ row }: any) => {
       value: workOrders.bench_mark_unit,
       cover: "half",
     },
-    { name: "EstimateHour", value: workOrders.estimateHour, cover: "half" },
-    { name: "ActualHour", value: workOrders.actualHour, cover: "half" },
+    { name: "Estimate Hrs", value: workOrders.estimateHour, cover: "half" },
+    { name: "Actual Hrs", value: workOrders.actualHour, cover: "half" },
     {
-      name: "Balance Hour",
+      name: "Balance Hrs",
       value: (
         parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
       ).toFixed(2),
@@ -240,15 +240,15 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      // const estimated = parseFloat(row.original.estimated_hour);
+      return <p>{row.original.estimated_hour}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
-    header: "Actual Hours",
+    header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
       const actual_hour = parseFloat(row.original.actual_hour);
       return <p>{actual_hour.toFixed(2)}</p>;
@@ -256,7 +256,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "ballance_hour",
-    header: "Balanced hrs",
+    header: "Balanced Hrs",
     cell: ({ row }: { row: any }) => {
       const actual = parseFloat(row.original.actual_hour);
       const estimated = parseFloat(row.original.estimated_hour);
@@ -270,7 +270,25 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
+  },
+  {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "quantity_unit",

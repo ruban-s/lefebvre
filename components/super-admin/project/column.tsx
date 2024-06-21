@@ -390,6 +390,30 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Customer Name",
   },
   {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.description.substring(0, 30)}{" "}
+        {row.original.description.length > 30 && "..."}
+        {row.original.description.length > 30 && (
+          <Popover>
+            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+              <RxCaretSort className="text-theme" size={20} />
+            </PopoverTrigger>
+
+            <PopoverContent className="w-[400px] ">
+              <p className="mb-2 text-bold">Description:</p>
+              <p className="text-sm text-neutral-500">
+                {row.original.description}
+              </p>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+    ),
+  },
+  {
     accessorKey: "estimateHour",
     header: "Estimate Hrs",
     cell: ({ row }) => {
@@ -426,30 +450,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "end_date",
     header: "End Date",
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
   },
   {
     accessorKey: "planner_remark",
@@ -495,6 +495,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
                 <Link
                   href={info}
                   key={index}
+                  target="_blank"
                   className="flex justify-center items-center m-1">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}

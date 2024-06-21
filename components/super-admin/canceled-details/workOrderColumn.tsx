@@ -108,6 +108,34 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Project ID",
   },
   {
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.description && (
+          <div className="flex justify-start items-center">
+            {row.original.description.substring(0, 30)}{" "}
+            {row.original.description.length > 30 && "..."}
+            {row.original.description.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        )}
+      </>
+    ),
+  },
+  {
     accessorKey: "estimateHour",
     header: "Estimated Hrs",
     cell: ({ row }) => {
@@ -146,50 +174,46 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "End Date",
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <>
-        {row.original.description && (
-          <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
-              <Popover>
-                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                  <RxCaretSort className="text-theme" size={20} />
-                </PopoverTrigger>
-
-                <PopoverContent className="w-[400px] ">
-                  <p className="mb-2 text-bold">Description:</p>
-                  <p className="text-sm text-neutral-500">
-                    {row.original.description}
-                  </p>
-                </PopoverContent>
-              </Popover>
-            )}
-          </div>
-        )}
-      </>
-    ),
-  },
-  {
     accessorKey: "planner_remark",
-    header: "Remarks",
+    header: "Planner Remarks",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
+        {row.original.planner_remark?.substring(0, 30)}{" "}
+        {row.original.planner_remark?.length > 30 && "..."}
+        {row.original.planner_remark?.length > 30 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
             </PopoverTrigger>
 
             <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
+              <p className="mb-2 text-bold">Planner Remark:</p>
               <p className="text-sm text-neutral-500">
-                {row.original.description}
+                {row.original.planner_remark}
+              </p>
+            </PopoverContent>
+          </Popover>
+        )}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "production_remark",
+    header: "Production Remarks",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.production_remark?.substring(0, 30)}{" "}
+        {row.original.production_remark?.length > 30 && "..."}
+        {row.original.production_remark?.length > 30 && (
+          <Popover>
+            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+              <RxCaretSort className="text-theme" size={20} />
+            </PopoverTrigger>
+
+            <PopoverContent className="w-[400px] ">
+              <p className="mb-2 text-bold">Production remark:</p>
+              <p className="text-sm text-neutral-500">
+                {row.original.production_remark}
               </p>
             </PopoverContent>
           </Popover>

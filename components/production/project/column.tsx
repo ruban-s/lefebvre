@@ -50,6 +50,7 @@ import {
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { getAllLabourCard } from "@/data/labour-card";
+import MultiFileSelect from "@/components/common/multiFileSelect";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -113,6 +114,8 @@ export const CellFunction = ({ row }: any) => {
 };
 export const UpdateStatus = ({ row }: any) => {
   const data = row.original;
+  // const [file, selectedFile] = useState<string[]>([]);
+  const [updatedImages, setUpdatedImages] = useState<string[]>([]);
   const ref = useRef<HTMLButtonElement>(null);
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: data.start_date,
@@ -126,6 +129,7 @@ export const UpdateStatus = ({ row }: any) => {
       from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
       to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
     });
+    setUpdatedImages(data.images);
   }, []);
   const payLoad = {
     id: data.id,
@@ -433,7 +437,17 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
               />
             </div>
-
+            <div className="col-span-2">
+              <div>Attachment</div>
+              <MultiFileSelect
+                files={updatedImages}
+                onChange={(e: any) => {
+                  // selectedFile(e);
+                  // form.setValue("images", [...form.watch("images")!, ...e]);
+                  setUpdatedImages([...e]);
+                }}
+              />
+            </div>
             <div className="items-center gap-4">
               <div className="mb-1">Status</div>
               <Select
@@ -534,19 +548,11 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     ),
   },
   {
-    accessorKey: "start_date",
-    header: "Start Date",
-  },
-  {
-    accessorKey: "end_date",
-    header: "End Date",
-  },
-  {
     accessorKey: "estimateHour",
     header: "Estimate Hrs",
     cell: ({ row }) => {
       const estimate = parseFloat(row.original.estimateHour);
-      return <p>{estimate.toFixed(2)}</p>;
+      return <p>{row.original.estimateHour}</p>;
     },
   },
   {
@@ -554,7 +560,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Actual Hrs",
     cell: ({ row }) => {
       const actual = parseFloat(row.original.actualHour);
-      return <p>{actual.toFixed(2)}</p>;
+      return <p>{row.original.actualHour}</p>;
     },
   },
   {
@@ -570,6 +576,18 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
         </p>
       );
     },
+  },
+  {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
+  },
+  {
+    accessorKey: "start_date",
+    header: "Start Date",
+  },
+  {
+    accessorKey: "end_date",
+    header: "End Date",
   },
   {
     accessorKey: "planner_remark",
@@ -625,6 +643,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     accessorKey: "images",
     header: "Attachments",
     cell: ({ row }) => {
+      console.log(row);
       var files = row.original.images;
       if (files.length < 1) return <p>--</p>;
       return (

@@ -43,10 +43,10 @@ export const CellFunction = ({ row }: any) => {
     { name: "Description", value: workOrders.description, cover: "full" },
     { name: "Start Date", value: workOrders.start_date, cover: "half" },
     { name: "End Date", value: workOrders.end_date, cover: "half" },
-    { name: "EstimateHour", value: workOrders.estimateHour, cover: "half" },
-    { name: "ActualHour", value: workOrders.actualHour, cover: "half" },
+    { name: "Estimate Hrs", value: workOrders.estimateHour, cover: "half" },
+    { name: "Actual Hrs", value: workOrders.actualHour, cover: "half" },
     {
-      name: "Balance Hour",
+      name: "Balance Hrs",
       value: (
         parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
       ).toFixed(2),
@@ -287,6 +287,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
 ];
 
 const StatusBar = ({ row }: { row: any }) => {
+  console.log(row.original);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());

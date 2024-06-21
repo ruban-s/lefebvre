@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Popover,
@@ -10,37 +9,43 @@ import { Input } from "../ui/input";
 import { uploadImage } from "@/data/common";
 import { Button } from "../ui/button";
 
-interface props {
+interface Props {
   files: string[];
-  onChange: Function;
+  onChange: (files: string[]) => void;
   disabled?: boolean;
 }
 
-const MultiFileSelect = (props: props) => {
+const ResourceMultiFileSelect: React.FC<Props> = ({
+  files,
+  onChange,
+  disabled,
+}) => {
   const imageRef = useRef<HTMLInputElement>(null);
   const popRef = useRef<HTMLButtonElement>(null);
 
-  const [file, selectedFile] = useState<string[]>(props.files);
+  const [fileList, setFileList] = useState<string[]>(files);
   const [loading, setLoading] = useState<boolean>(false);
 
   const newData = async (value: FormData, name: string) => {
     setLoading(true);
-    var data = await uploadImage(value, name);
+    const data = await uploadImage(value, name);
     setLoading(false);
-    props.onChange([...file, data.data]);
+    const updatedFiles = [...fileList, data.data];
+    setFileList(updatedFiles);
+    onChange(updatedFiles);
     popRef.current?.click();
   };
 
   useEffect(() => {
-    selectedFile(props.files);
-  }, [props.files]);
+    setFileList(files);
+  }, [files]);
 
   return (
     <Popover>
       <PopoverTrigger
         className="flex justify-start items-center"
         ref={popRef}
-        disabled={props.disabled}>
+        disabled={disabled}>
         {loading ? (
           <div role="status">
             <svg
@@ -66,7 +71,7 @@ const MultiFileSelect = (props: props) => {
             size={40}
           />
         )}
-        {file?.length > 0 && `| selected- ${file.length}`}
+        {fileList.length > 0 && `| selected- ${fileList.length}`}
       </PopoverTrigger>
       <PopoverContent className="relative min-w-[400px] w-full border-2 border-gray-300">
         <Input
@@ -90,19 +95,20 @@ const MultiFileSelect = (props: props) => {
           Add File
         </div>
         <div className="mt-10">
-          {file?.map((info, index) => (
+          {fileList.map((info, index) => (
             <div
               key={index}
               className="flex flex-row justify-between w-full items-center gap-4">
               <div className="w-[90%] flex flex-row gap-2 items-start">
-                <span className="font-black">{index + 1} </span>
+                <span className="font-black">{index + 1}</span>
                 {info}
               </div>
               <div
                 className="w-5 h-5 justify-center p-3 border-1 border-red-500 border flex items-center bg-red-50 text-red-500 rounded-sm shadow-sm cursor-pointer"
                 onClick={() => {
-                  const cancelData = file.filter((_, i) => i !== index);
-                  props.onChange(cancelData);
+                  const updatedFiles = fileList.filter((_, i) => i !== index);
+                  setFileList(updatedFiles);
+                  onChange(updatedFiles);
                   popRef.current?.click();
                 }}>
                 x
@@ -115,4 +121,4 @@ const MultiFileSelect = (props: props) => {
   );
 };
 
-export default MultiFileSelect;
+export default ResourceMultiFileSelect;

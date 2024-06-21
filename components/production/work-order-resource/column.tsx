@@ -152,7 +152,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
       const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      return <p>{row.original.estimated_hour}</p>;
     },
   },
   {
@@ -160,7 +160,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
       const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      return <p>{row.original.actual_hour}</p>;
     },
   },
   {
@@ -561,7 +561,6 @@ export const UpdateStatus = ({ row }: any) => {
             </div>
             <div className="items-center gap-4">
               <div className="mb-1">Work Order Id</div>
-
               <Input disabled value={data.work_order_id} />
             </div>
 
@@ -595,11 +594,11 @@ export const UpdateStatus = ({ row }: any) => {
               <Input disabled value={data.quantity_unit} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Remark</div>
+              <div className="mb-1">Planner Remark</div>
               <Input disabled value={data.remark} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Foremans</div>
+              <div className="mb-1">Foreman</div>
               <Popover>
                 {foremans.length < 1 && (
                   <PopoverTrigger asChild className="w-full col-span-2">

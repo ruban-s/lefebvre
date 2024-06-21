@@ -139,7 +139,6 @@ const WorkOrderFormContainer = () => {
             });
           }
         }
-        console.log(workOrder);
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });
       } else if (workOrder) {
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });

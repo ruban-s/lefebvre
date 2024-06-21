@@ -69,6 +69,7 @@ export const ProjectSchema = z.object({
   images: z.array(z.string().optional()).optional(),
   planner_remark: z.string().optional(),
   production_remark: z.string().optional(),
+  requiredQuantity: z.string().optional(),
   project_id: z.string().min(1, { message: "Project ID is required" }),
   start_date: z
     .string()

@@ -139,6 +139,10 @@ export const Columns: ColumnDef<ProjectData>[] = [
     },
   },
   {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
   },

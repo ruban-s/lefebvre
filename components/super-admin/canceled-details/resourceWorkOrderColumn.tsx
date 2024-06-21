@@ -158,7 +158,11 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
   },
   {
     accessorKey: "quantity_unit",
@@ -167,7 +171,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
 
   {
     accessorKey: "remark",
-    header: "Remark",
+    header: "Planner Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
         {row.original.remark.substring(0, 30)}{" "}

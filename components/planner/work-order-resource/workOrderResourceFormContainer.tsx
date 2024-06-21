@@ -78,6 +78,8 @@ import { getAllResources } from "@/data/resources";
 import { getAllMeasure } from "@/data/measure";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
+import ResourceMultiFileSelect from "@/components/common/resourceMultiFileSelect";
+
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
     (state: any) => state.resourceWorkOrder
@@ -110,7 +112,6 @@ const WorkOrderResourceFormContainer = () => {
 
   const creatWorkOrder = useMutation({
     mutationFn: async (value: any) => {
-      console.log(value);
       const breake = workOrder
         ? await updateResourceWorkOrder({ id: workOrder?.id, ...value[0] })
         : await createResourceWorkOrder(value);
@@ -128,6 +129,10 @@ const WorkOrderResourceFormContainer = () => {
         setProject(undefined);
         setWorkOrder(undefined);
         fields.map((info, index) => remove(index));
+        form.clearErrors();
+        removeResourceWorkOrder();
+        selectedFile([]);
+        setDisableTrue(false);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -328,6 +333,16 @@ const WorkOrderResourceFormContainer = () => {
 
   const toggleQuantityUnitIsOpen = () => {
     setQuantityUnitIsOpen(!quantityUnitIsOpen);
+  };
+
+  const clearItem = () => {
+    form.reset();
+    form.clearErrors();
+    removeResourceWorkOrder();
+    selectedFile([]);
+    setProject(undefined);
+    setDisableTrue(false);
+    setWorkOrder(undefined);
   };
 
   return (
@@ -908,15 +923,15 @@ const WorkOrderResourceFormContainer = () => {
                                       return (
                                         <FormItem>
                                           <FormControl>
-                                            <MultiFileSelect
-                                              files={file}
+                                            <ResourceMultiFileSelect
+                                              files={
+                                                workOrder?.attachment || []
+                                              }
                                               onChange={(e: any) => {
-                                                console.log(e);
                                                 form.setValue(
                                                   `resources.${index}.attachment`,
                                                   e
                                                 );
-                                                selectedFile([]);
                                               }}
                                               disabled={disableTrue}
                                             />
@@ -1266,10 +1281,7 @@ const WorkOrderResourceFormContainer = () => {
                     fields.map((info, index) => {
                       return remove(index);
                     });
-                    removeResourceWorkOrder();
-                    setProject(undefined);
-                    setWorkOrder(undefined);
-                    setDisableTrue(false);
+                    clearItem();
                   }}>
                   Clear
                   <IoMdCloseCircle className="ml-2 text-black" size={20} />

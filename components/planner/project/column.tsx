@@ -30,15 +30,15 @@ export const CellFunction = ({ row }: any) => {
 
   const project = [
     { name: "Id", value: rowData.id, cover: "half" },
-    { name: "ProjectId", value: rowData.project, cover: "half" },
+    { name: "Project Id", value: rowData.project, cover: "half" },
     { name: "Customer Name", value: rowData.customer_name, cover: "full" },
     { name: "Description", value: rowData.description, cover: "full" },
     { name: "Start Date", value: rowData.start_date, cover: "half" },
     { name: "End Date", value: rowData.end_date, cover: "half" },
-    { name: "EstimateHour", value: rowData.estimateHour, cover: "half" },
-    { name: "ActualHour", value: rowData.actualHour, cover: "half" },
+    { name: "Estimate Hrs", value: rowData.estimateHour, cover: "half" },
+    { name: "Actual Hrs", value: rowData.actualHour, cover: "half" },
     {
-      name: "Balance Hour",
+      name: "Balance Hrs",
       value: (
         parseFloat(rowData.estimateHour) - parseFloat(rowData.actualHour)
       ).toFixed(2),
@@ -197,6 +197,10 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     ),
   },
   {
+    accessorKey: "requiredQuantity",
+    header: "Required Qty",
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
   },
@@ -233,7 +237,7 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-
+      console.log(row.original);
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>
@@ -241,19 +245,19 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
             Attachment
           </PopoverTrigger>
 
-          <PopoverContent className="w-[200px] ">
+          <PopoverContent className="w-full flex flex-col gap-2 max-w-sm">
             {row.original.images.map((info, index) => {
               return (
                 <Link
                   target="_blank"
                   key={index}
                   href={info}
-                  className="flex justify-center items-center m-1">
+                  className="flex flex-row gap-2 w-full">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
                   {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-                  {/* {info.split("/")[4]} */}
-                  {info}
+                  <span>{index + 1}</span>
+                  {info.split("/")[4]}
                 </Link>
               );
             })}

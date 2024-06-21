@@ -170,7 +170,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Estimated Hrs",
     cell: ({ row }) => {
       const estimated = parseFloat(row.original.estimateHour);
-      return <p>{estimated.toFixed(2)}</p>;
+      return <p>{row.original.estimateHour}</p>;
     },
   },
   {
@@ -178,7 +178,7 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Actual Hrs",
     cell: ({ row }) => {
       const actual = parseFloat(row.original.actualHour);
-      return <p>{actual.toFixed(2)}</p>;
+      return <p>{row.original.actualHour}</p>;
     },
   },
   {
@@ -194,6 +194,10 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
         </p>
       );
     },
+  },
+  {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
   },
   {
     accessorKey: "start_date",

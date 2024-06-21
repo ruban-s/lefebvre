@@ -166,41 +166,58 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
       );
     },
   },
-
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
+  },
+  {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
 
-  {
-    accessorKey: "remark",
-    header: "Remark",
-    cell: ({ row }) =>
-      row.original.remark && (
-        <div className="flex justify-start items-center">
-          {row.original.remark.substring(0, 30)}{" "}
-          {row.original.remark.length > 30 && "..."}
-          {row.original.remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
+  // {
+  //   accessorKey: "remark",
+  //   header: "Remark",
+  //   cell: ({ row }) =>
+  //     row.original.remark && (
+  //       <div className="flex justify-start items-center">
+  //         {row.original.remark.substring(0, 30)}{" "}
+  //         {row.original.remark.length > 30 && "..."}
+  //         {row.original.remark.length > 30 && (
+  //           <Popover>
+  //             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+  //               <RxCaretSort className="text-theme" size={20} />
+  //             </PopoverTrigger>
 
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
-  },
+  //             <PopoverContent className="w-[400px] ">
+  //               <p className="mb-2 text-bold">Planner Remark:</p>
+  //               <p className="text-sm text-neutral-500">
+  //                 {row.original.remark}
+  //               </p>
+  //             </PopoverContent>
+  //           </Popover>
+  //         )}
+  //       </div>
+  //     ),
+  // },
 
   {
     accessorKey: "status",
@@ -425,8 +442,8 @@ export const UpdateStatus = ({ row }: any) => {
               <Input disabled value={data.quantity_unit} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Remark</div>
-              <Input disabled value={data.remark} />
+              <div className="mb-1">Planner Remark</div>
+              <Input disabled value={data.remark ? data.remark : "--"} />
             </div>
             <div className="items-center gap-4">
               <div className="mb-1">Start Date</div>
