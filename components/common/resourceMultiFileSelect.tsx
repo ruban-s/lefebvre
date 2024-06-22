@@ -20,6 +20,7 @@ const ResourceMultiFileSelect: React.FC<Props> = ({
   onChange,
   disabled,
 }) => {
+  console.log(files);
   const imageRef = useRef<HTMLInputElement>(null);
   const popRef = useRef<HTMLButtonElement>(null);
 
@@ -37,6 +38,7 @@ const ResourceMultiFileSelect: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    console.log(files);
     setFileList(files);
   }, [files]);
 
@@ -71,7 +73,7 @@ const ResourceMultiFileSelect: React.FC<Props> = ({
             size={40}
           />
         )}
-        {fileList.length > 0 && `| selected- ${fileList.length}`}
+        {fileList?.length > 0 && `| selected- ${fileList.length}`}
       </PopoverTrigger>
       <PopoverContent className="relative min-w-[400px] w-full border-2 border-gray-300">
         <Input
@@ -95,7 +97,7 @@ const ResourceMultiFileSelect: React.FC<Props> = ({
           Add File
         </div>
         <div className="mt-10">
-          {fileList.map((info, index) => (
+          {fileList?.map((info, index) => (
             <div
               key={index}
               className="flex flex-row justify-between w-full items-center gap-4">
@@ -106,7 +108,7 @@ const ResourceMultiFileSelect: React.FC<Props> = ({
               <div
                 className="w-5 h-5 justify-center p-3 border-1 border-red-500 border flex items-center bg-red-50 text-red-500 rounded-sm shadow-sm cursor-pointer"
                 onClick={() => {
-                  const updatedFiles = fileList.filter((_, i) => i !== index);
+                  const updatedFiles = fileList?.filter((_, i) => i !== index);
                   setFileList(updatedFiles);
                   onChange(updatedFiles);
                   popRef.current?.click();

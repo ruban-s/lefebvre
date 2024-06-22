@@ -17,6 +17,7 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import StatusBadge from "@/components/common/status-badge";
+import { formatHours } from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -126,6 +127,9 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
+    cell: ({ row }) => {
+      return <p>{formatHours(row.original.estimated_hour)}</p>;
+    },
   },
   {
     accessorKey: "required_quantity",

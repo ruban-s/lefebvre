@@ -23,10 +23,22 @@ import {
   getAllResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { deleteWorkOrder, getAllWorkOrder } from "@/data/work-order";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const rowData = row.original;
+
+  const balanceValue = () => {
+    const estimate = calculateMinutes(rowData.estimateHour);
+    const actual = calculateMinutes(rowData.actualHour);
+    const balance = calculateBalanceHours(estimate, actual);
+    return balance.hours;
+  };
 
   const project = [
     { name: "Id", value: rowData.id, cover: "half" },
@@ -35,13 +47,19 @@ export const CellFunction = ({ row }: any) => {
     { name: "Description", value: rowData.description, cover: "full" },
     { name: "Start Date", value: rowData.start_date, cover: "half" },
     { name: "End Date", value: rowData.end_date, cover: "half" },
-    { name: "Estimate Hrs", value: rowData.estimateHour, cover: "half" },
-    { name: "Actual Hrs", value: rowData.actualHour, cover: "half" },
+    {
+      name: "Estimate Hrs",
+      value: formatHours(rowData.estimateHour),
+      cover: "half",
+    },
+    {
+      name: "Actual Hrs",
+      value: formatHours(rowData.actualHour),
+      cover: "half",
+    },
     {
       name: "Balance Hrs",
-      value: (
-        parseFloat(rowData.estimateHour) - parseFloat(rowData.actualHour)
-      ).toFixed(2),
+      value: balanceValue(),
       cover: "full",
     },
     { name: "Planner Remark", value: rowData.planner_remark, cover: "full" },
@@ -237,7 +255,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-      console.log(row.original);
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>

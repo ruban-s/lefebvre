@@ -568,6 +568,7 @@ const WorkOrderResourceFormContainer = () => {
                         </thead>
                         <tbody>
                           {fields.map((info: any, index) => {
+                            console.log(fields);
                             return (
                               <tr
                                 key={index}
@@ -925,9 +926,13 @@ const WorkOrderResourceFormContainer = () => {
                                           <FormControl>
                                             <ResourceMultiFileSelect
                                               files={
-                                                workOrder?.attachment || []
+                                                workOrder?.attachment ||
+                                                form.watch(
+                                                  `resources.${index}.attachment`
+                                                ) ||
+                                                []
                                               }
-                                              onChange={(e: any) => {
+                                              onChange={(e) => {
                                                 form.setValue(
                                                   `resources.${index}.attachment`,
                                                   e
@@ -941,27 +946,6 @@ const WorkOrderResourceFormContainer = () => {
                                       );
                                     }}
                                   />
-
-                                  {/* <FormField
-                                    key={info.remark}
-                                    control={form.control}
-                                    name={`resources.${index}.remark`}
-                                    render={({ field }) => {
-                                      return (
-                                        <FormItem>
-                                          <FormControl>
-                                            <Input
-                                              className="p-0 pl-2 h-[38px]"
-                                              type="number"
-                                              {...field}
-                                              placeholder=""
-                                            />
-                                          </FormControl>
-                                          <FormMessage />
-                                        </FormItem>
-                                      );
-                                    }}
-                                  /> */}
                                 </td>
                               </tr>
                             );

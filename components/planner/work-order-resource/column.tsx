@@ -21,6 +21,11 @@ import { getAllLabourCard } from "@/data/labour-card";
 import { parse } from "date-fns";
 import { getAllUser } from "@/data/user";
 import { useEffect, useState } from "react";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -37,6 +42,13 @@ export const CellFunction = ({ row }: any) => {
       return forman ? forman.name : "";
     });
     setForeman(names);
+  };
+
+  const balanceValue = () => {
+    const estimate = calculateMinutes(workOrders.estimated_hour);
+    const actual = calculateMinutes(workOrders.actual_hour);
+    const balance = calculateBalanceHours(estimate, actual);
+    return balance.hours;
   };
 
   useEffect(() => {
@@ -64,13 +76,19 @@ export const CellFunction = ({ row }: any) => {
       value: workOrders.bench_mark_unit,
       cover: "half",
     },
-    { name: "Estimate Hrs", value: workOrders.estimateHour, cover: "half" },
-    { name: "Actual Hrs", value: workOrders.actualHour, cover: "half" },
+    {
+      name: "Estimate Hrs",
+      value: formatHours(workOrders.estimated_hour),
+      cover: "half",
+    },
+    {
+      name: "Actual Hrs",
+      value: formatHours(workOrders.actual_hour),
+      cover: "half",
+    },
     {
       name: "Balance Hrs",
-      value: (
-        parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
-      ).toFixed(2),
+      value: balanceValue(),
       cover: "full",
     },
     {
@@ -242,28 +260,31 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      // const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{row.original.estimated_hour}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced Hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },

@@ -49,6 +49,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -169,28 +174,31 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     accessorKey: "estimateHour",
     header: "Estimated Hrs",
     cell: ({ row }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      return <p>{row.original.estimateHour}</p>;
+      const estimated = formatHours(row.original.estimateHour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actualHour",
     header: "Actual Hrs",
     cell: ({ row }) => {
-      const actual = parseFloat(row.original.actualHour);
-      return <p>{row.original.actualHour}</p>;
+      const actual = formatHours(row.original.actualHour);
+      return <p>{actual}</p>;
     },
   },
   {
-    accessorKey: "balanceHour",
+    accessorKey: "ballanceHour",
     header: "Balance Hrs",
-    cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      const actual = parseFloat(row.original.actualHour);
-      const balance = estimated - actual;
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimateHour);
+      const actual = calculateMinutes(row.original.actualHour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balance.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
@@ -353,7 +361,6 @@ export const UpdateStatus = ({ row }: any) => {
     from: new Date(data.start_date),
     to: new Date(data.end_date),
   });
-  const [file, selectedFile] = useState<string[]>([]);
   const [updatedImages, setUpdatedImages] = useState<string[]>([]);
   useEffect(() => {
     var startDate = data?.start_date!.toString().split("-");
@@ -396,6 +403,7 @@ export const UpdateStatus = ({ row }: any) => {
               val.project_id === value.project_id &&
               val.work_order_id === value.work_order_id
           );
+          console.log(filterLabourCards);
           if (filterLabourCards.length > 0) {
             if (value.status === "Unreleased")
               reject(
@@ -603,10 +611,8 @@ export const UpdateStatus = ({ row }: any) => {
             <div className="col-span-2">
               <div>Attachment</div>
               <MultiFileSelect
-                files={file}
+                files={updatedImages}
                 onChange={(e: any) => {
-                  selectedFile(e);
-                  // form.setValue("images", [...form.watch("images")!, ...e]);
                   setUpdatedImages([...e]);
                 }}
               />

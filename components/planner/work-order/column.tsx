@@ -23,6 +23,11 @@ import {
   getAllResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { parse } from "date-fns";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -36,6 +41,12 @@ export const CellFunction = ({ row }: any) => {
   //   ).toFixed(2),
   // };
   const workOrders = row.original;
+  const balanceValue = () => {
+    const estimate = calculateMinutes(workOrders.estimateHour);
+    const actual = calculateMinutes(workOrders.actualHour);
+    const balance = calculateBalanceHours(estimate, actual);
+    return balance.hours;
+  };
 
   const dynamicWorkOrder = [
     { name: "Id", value: workOrders.id, cover: "half" },
@@ -43,13 +54,19 @@ export const CellFunction = ({ row }: any) => {
     { name: "Description", value: workOrders.description, cover: "full" },
     { name: "Start Date", value: workOrders.start_date, cover: "half" },
     { name: "End Date", value: workOrders.end_date, cover: "half" },
-    { name: "Estimate Hrs", value: workOrders.estimateHour, cover: "half" },
-    { name: "Actual Hrs", value: workOrders.actualHour, cover: "half" },
+    {
+      name: "Estimate Hrs",
+      value: formatHours(workOrders.estimateHour),
+      cover: "half",
+    },
+    {
+      name: "Actual Hrs",
+      value: formatHours(workOrders.actualHour),
+      cover: "half",
+    },
     {
       name: "Balance Hrs",
-      value: (
-        parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
-      ).toFixed(2),
+      value: balanceValue(),
       cover: "full",
     },
     { name: "Planner Remark", value: workOrders.planner_remark, cover: "full" },
@@ -287,7 +304,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
 ];
 
 const StatusBar = ({ row }: { row: any }) => {
-  console.log(row.original);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const endDate = parse(row.original.end_date, "dd-MM-yyyy", new Date());

@@ -17,6 +17,11 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import StatusBadge from "@/components/common/status-badge";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -137,30 +142,33 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   },
   {
     accessorKey: "estimateHour",
-    header: "Estimated Hrs",
+    header: "Estimate Hrs",
     cell: ({ row }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimate = formatHours(row.original.estimateHour);
+      return <p>{estimate}</p>;
     },
   },
   {
     accessorKey: "actualHour",
     header: "Actual Hrs",
     cell: ({ row }) => {
-      const actual = parseFloat(row.original.actualHour);
-      return <p>{actual.toFixed(2)}</p>;
+      const actual = formatHours(row.original.actualHour);
+      return <p>{actual}</p>;
     },
   },
   {
-    accessorKey: "balanceHour",
+    accessorKey: "ballanceHour",
     header: "Balance Hrs",
-    cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      const actual = parseFloat(row.original.actualHour);
-      const balance = estimated - actual;
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimateHour);
+      const actual = calculateMinutes(row.original.actualHour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balance.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },

@@ -17,6 +17,11 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import StatusBadge from "@/components/common/status-badge";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -131,28 +136,31 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced Hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
