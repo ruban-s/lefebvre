@@ -133,7 +133,6 @@ const ProjectFormContainer = () => {
           form.setValue("description", project?.description!);
           form.setValue("images", project?.images!);
           form.setValue("production_remark", project?.production_remark!);
-          form.setValue("preparedQuantity", project?.preparedQuantity!);
           form.setValue("requiredQuantity", project?.requiredQuantity!);
         } catch (error) {
           console.log(error);
@@ -330,25 +329,6 @@ const ProjectFormContainer = () => {
                     );
                   }}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="prepared_quantity"
-                  render={({ field }) => {
-                    return (
-                      <FormItem>
-                        <FormLabel>Planner Remark</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            {...field}
-                            placeholder="Planner Remark"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                /> */}
                 <FormField
                   control={form.control}
                   name="status"

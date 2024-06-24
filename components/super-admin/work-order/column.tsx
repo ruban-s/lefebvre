@@ -115,28 +115,6 @@ export const CellFunction = ({ row }: any) => {
 };
 
 export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "work_order_id",
     header: "Work Order Id",
@@ -148,9 +126,9 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
       <>
         {row.original.description && (
           <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
+            {row.original.description.substring(0, 15)}{" "}
+            {row.original.description.length > 15 && "..."}
+            {row.original.description.length > 15 && (
               <Popover>
                 <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
                   <RxCaretSort className="text-theme" size={20} />
@@ -207,33 +185,60 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     },
   },
   {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.preparedQuantity?.length === 0 ||
+          row.original.preparedQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.preparedQuantity}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Remarks",
+    header: "Planner Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <>
+            {row.original.planner_remark.substring(0, 15)}{" "}
+            {row.original.planner_remark.length > 15 && "..."}
+            {row.original.planner_remark.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
         )}
       </div>
     ),
@@ -243,7 +248,6 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>
@@ -300,6 +304,7 @@ export const UpdateStatus = ({ row }: any) => {
     start_date: data.start_date,
     end_date: data.end_date,
     status: data.status,
+    preparedQuantity: data.preparedQuantity,
   };
 
   const queryClient = useQueryClient();
@@ -317,7 +322,11 @@ export const UpdateStatus = ({ row }: any) => {
         ...value,
       });
 
-      if (value.status === "Closed" || value.status === "Canceled") {
+      if (
+        value.status === "Closed" ||
+        value.status === "Canceled" ||
+        value.status === "Released"
+      ) {
         var resourceWorkOrderList = resourceWorkOrder?.filter(
           (info) => info.project_id === value.project_id
         );
@@ -367,7 +376,14 @@ export const UpdateStatus = ({ row }: any) => {
           dismissible: true,
         });
       }
-      ["work-orders", "resource-work-orders"].map((info, index) => {
+      [
+        "work-orders",
+        "resource-work-orders",
+        "cancelled-work-orders",
+        "cancelled-resource-work-orders",
+        "closed-work-orders",
+        "closed-resource-work-orders",
+      ].map((info, index) => {
         queryClient.invalidateQueries({
           queryKey: [info],
         });
@@ -396,20 +412,6 @@ export const UpdateStatus = ({ row }: any) => {
   });
   return (
     <>
-      {/* <TbEdit
-        onClick={() => {
-          const project: ProjectData[] | undefined = projects?.filter(
-            (info) => info.project_id == data.project_id
-          )!;
-          if (project[0]?.status === "Released") {
-            return ref.current?.click();
-          }
-          return toast.error(`Project ${data.project_id} not released!`, {
-            position: "top-right",
-            dismissible: true,
-          });
-        }}
-      /> */}
       <Dialog>
         <DialogTrigger ref={ref}>
           <TbEdit />
@@ -453,9 +455,15 @@ export const UpdateStatus = ({ row }: any) => {
               value={data.end_date}
               isInput={true}
             />
-            <div className=" col-span-2">
+            <div>
+              <p>Prepared Quantity</p>
+              <Input
+                value={payLoad.preparedQuantity}
+                onChange={(e) => (payLoad.preparedQuantity = e.target.value)}
+              />
+            </div>
+            <div className=" col-span-1">
               <div>Status</div>
-
               <Select
                 // value={payLoad.status}
                 onValueChange={(value) => {
@@ -465,8 +473,8 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
+                  <SelectItem value="Released">Released</SelectItem>
                   <SelectItem value="Closed">Closed</SelectItem>
-
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
                   </SelectItem>
@@ -485,7 +493,6 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  console.log(payLoad);
                   updateItem.mutate(payLoad);
                 }}>
                 Save

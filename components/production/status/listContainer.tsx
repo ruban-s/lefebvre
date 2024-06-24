@@ -6,87 +6,105 @@ import { getAllProject } from "@/data/projects";
 import Loading from "@/loading";
 import { ProjectData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
 import { Columns } from "./column";
 
 const StatusListContainer = () => {
-  const [allProjectList, setAllProjects] = useState<ProjectData[]>([]);
-  const [releasedProjectList, setReleasedProjects] = useState<ProjectData[]>(
-    []
+  const {
+    data: allProjects,
+    isLoading: isAllProjectsLoading,
+    error: allProjectsError,
+  } = useQuery({
+    queryKey: ["all-projects"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return JSON.parse(data.data) as ProjectData[];
+    },
+  });
+
+  const {
+    data: releasedProjects,
+    isLoading: isReleasedProjectsLoading,
+    error: releasedProjectsError,
+  } = useQuery({
+    queryKey: ["released-projects"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return (JSON.parse(data.data) as ProjectData[]).filter(
+        (info) => info.status === "Released"
+      );
+    },
+  });
+
+  const {
+    data: unreleasedProjects,
+    isLoading: isUnreleasedProjectsLoading,
+    error: unreleasedProjectsError,
+  } = useQuery({
+    queryKey: ["unreleased-projects"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return (JSON.parse(data.data) as ProjectData[]).filter(
+        (info) => info.status === "Unreleased"
+      );
+    },
+  });
+
+  const {
+    data: closedProjects,
+    isLoading: isClosedProjectsLoading,
+    error: closedProjectsError,
+  } = useQuery({
+    queryKey: ["closed-projects"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return (JSON.parse(data.data) as ProjectData[]).filter(
+        (info) => info.status === "Closed"
+      );
+    },
+  });
+
+  const {
+    data: cancelledProjects,
+    isLoading: isCancelledProjectsLoading,
+    error: cancelledProjectsError,
+  } = useQuery({
+    queryKey: ["cancelled-projects"],
+    queryFn: async () => {
+      const data = await getAllProject();
+      return (JSON.parse(data.data) as ProjectData[]).filter(
+        (info) => info.status === "Cancelled"
+      );
+    },
+  });
+
+  const renderDataTable = (
+    data: any,
+    isLoading: any,
+    error: any,
+    fileName: any
+  ) => (
+    <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
+      {isLoading ? (
+        <div className="w-full min-h-[500px] justify-center items-center flex">
+          <Loading />
+        </div>
+      ) : error ? (
+        <div className="w-full min-h-[500px] justify-center items-center flex">
+          <p>Error loading data</p>
+        </div>
+      ) : (
+        <div className="w-full">
+          <DataTable
+            columns={Columns}
+            data={data || []}
+            searchName="project_id"
+            fileName={fileName}
+            exportDataFields={projectController}
+          />
+        </div>
+      )}
+    </div>
   );
-  const [unReleasedProjectList, setUnReleasedProjects] = useState<
-    ProjectData[]
-  >([]);
-  const [closedProjectList, setClosedProjects] = useState<ProjectData[]>([]);
-  const [cancelledProjectList, setCancelledProjects] = useState<ProjectData[]>(
-    []
-  );
-
-  const { data: allProject, error: allProjectError } = useQuery({
-    queryKey: ["released-project"],
-    queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
-    },
-  });
-
-  const { data: releasedProject, error: releasedProjectError } = useQuery({
-    queryKey: ["released-project"],
-    queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
-    },
-  });
-
-  const { data: unReleasedProject, error: unReleasedProjectError } = useQuery({
-    queryKey: ["unReleased-project"],
-    queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
-    },
-  });
-
-  const { data: closedProject, error: closedProjectError } = useQuery({
-    queryKey: ["closed-project"],
-    queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
-    },
-  });
-
-  const { data: cancelledProject, error: cancelledProjectError } = useQuery({
-    queryKey: ["cancelled-project"],
-    queryFn: async () => {
-      const data = await getAllProject();
-      return JSON.parse(data.data) as ProjectData[];
-    },
-  });
-
-  useEffect(() => {
-    if (allProject) {
-      setAllProjects(allProject);
-    }
-    if (releasedProject) {
-      setReleasedProjects(
-        releasedProject.filter((info) => info.status === "Released")
-      );
-    }
-    if (unReleasedProject) {
-      setUnReleasedProjects(
-        unReleasedProject.filter((info) => info.status === "Unreleased")
-      );
-    }
-    if (closedProject) {
-      setClosedProjects(
-        closedProject.filter((info) => info.status === "Closed")
-      );
-    }
-    if (cancelledProject) {
-      setCancelledProjects(
-        cancelledProject.filter((info) => info.status === "Cancelled")
-      );
-    }
-  }, [releasedProject, unReleasedProject, closedProject, cancelledProject]);
 
   return (
     <Tabs defaultValue="all" className="w-full w-sm">
@@ -104,99 +122,44 @@ const StatusListContainer = () => {
         <TabsTrigger value="cancelled_project">Cancelled Project</TabsTrigger>
       </TabsList>
       <TabsContent value="all">
-        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
-          {allProjectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
-              <Loading />
-            </div>
-          ) : (
-            <div className="w-full">
-              <DataTable
-                columns={Columns}
-                data={allProjectList}
-                searchName="project_id"
-                fileName="AllProject"
-                exportDataFields={projectController}
-              />
-            </div>
-          )}
-        </div>
+        {renderDataTable(
+          allProjects,
+          isAllProjectsLoading,
+          allProjectsError,
+          "AllProject"
+        )}
       </TabsContent>
       <TabsContent value="released_project">
-        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
-          {releasedProjectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
-              <Loading />
-            </div>
-          ) : (
-            <div className="w-full">
-              <DataTable
-                columns={Columns}
-                data={releasedProjectList}
-                searchName="project_id"
-                fileName="ReleasedProject"
-                exportDataFields={projectController}
-              />
-            </div>
-          )}
-        </div>
+        {renderDataTable(
+          releasedProjects,
+          isReleasedProjectsLoading,
+          releasedProjectsError,
+          "ReleasedProject"
+        )}
       </TabsContent>
       <TabsContent value="unReleased_project">
-        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
-          {unReleasedProjectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
-              <Loading />
-            </div>
-          ) : (
-            <div className="w-full">
-              <DataTable
-                columns={Columns}
-                data={unReleasedProjectList}
-                searchName="project_id"
-                fileName="UnReleasedProject"
-                exportDataFields={projectController}
-              />
-            </div>
-          )}
-        </div>
+        {renderDataTable(
+          unreleasedProjects,
+          isUnreleasedProjectsLoading,
+          unreleasedProjectsError,
+          "UnreleasedProject"
+        )}
       </TabsContent>
       <TabsContent value="closed_project">
-        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
-          {closedProjectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
-              <Loading />
-            </div>
-          ) : (
-            <div className="w-full">
-              <DataTable
-                columns={Columns}
-                data={closedProjectList}
-                searchName="project_id"
-                fileName="ClosedProject"
-                exportDataFields={projectController}
-              />
-            </div>
-          )}
-        </div>
+        {renderDataTable(
+          closedProjects,
+          isClosedProjectsLoading,
+          closedProjectsError,
+          "ClosedProject"
+        )}
       </TabsContent>
       <TabsContent value="cancelled_project">
-        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
-          {cancelledProjectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
-              <Loading />
-            </div>
-          ) : (
-            <div className="w-full">
-              <DataTable
-                columns={Columns}
-                data={cancelledProjectList}
-                searchName="project_id"
-                fileName="CancelledProject"
-                exportDataFields={projectController}
-              />
-            </div>
-          )}
-        </div>
+        {renderDataTable(
+          cancelledProjects,
+          isCancelledProjectsLoading,
+          cancelledProjectsError,
+          "CancelledProject"
+        )}
       </TabsContent>
     </Tabs>
   );

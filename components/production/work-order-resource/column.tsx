@@ -148,10 +148,32 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
@@ -195,34 +217,53 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     header: "Prepared Qty",
   },
   {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
   {
     accessorKey: "remark",
-    header: "Planner Remark",
-    cell: ({ row }) =>
-      row.original.remark && (
+    header: "Remark",
+    cell: ({ row }) => {
+      return (
         <div className="flex justify-start items-center">
-          {row.original.remark.substring(0, 30)}{" "}
-          {row.original.remark.length > 30 && "..."}
-          {row.original.remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.remark}
-                </p>
-              </PopoverContent>
-            </Popover>
+          {row.original.remark.length === 0 ? (
+            "--"
+          ) : (
+            <div>
+              {row.original.remark && row.original.remark.substring(0, 30)}{" "}
+              {row.original.remark && row.original.remark.length > 30 && "..."}
+              {row.original.remark && row.original.remark.length > 30 && (
+                <Popover>
+                  <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                    <RxCaretSort className="text-theme" size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] ">
+                    <p className="mb-2 text-bold">Remark:</p>
+                    <p className="text-sm text-neutral-500">
+                      {row.original.remark}
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           )}
         </div>
-      ),
+      );
+    },
   },
   {
     accessorKey: "forman",
@@ -406,14 +447,12 @@ export const UpdateStatus = ({ row }: any) => {
               val.sq_no === value.sq_no
             );
           });
-          if (filterLabourCards.length > 0) {
-            if (value.status === "Unreleased") {
-              reject(
-                new Error(
-                  "WorkOrderId existing in Labour card,Unable to edit status"
-                )
-              );
-            }
+          if (filterLabourCards.length > 0 && value.status === "Unreleased") {
+            reject(
+              new Error(
+                "WorkOrderId existing in Labour card,Unable to edit status"
+              )
+            );
           } else {
             const deleteCode: any = await updateResourceWorkOrder({
               id: data.id,

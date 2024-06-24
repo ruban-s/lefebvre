@@ -52,40 +52,64 @@ const LabourListContainer = () => {
     setToDate(formattedToDate);
   };
 
+  const ReturnData = ({ data }: { data: any }) => {
+    const glCodeParts = data.gl_code ? data.gl_code.split("&")[0] : "--";
+    const glDescriptionParts = data.gl_code ? data.gl_code.split("&")[1] : "--";
+    return {
+      ...data,
+      gl_code: glCodeParts || "--",
+      gl_description: glDescriptionParts || "--",
+    };
+  };
+
   const fetchData = (tempData: any) => {
     let filteredData;
     if (fromDate && toDate) {
-      filteredData = tempData.filter((item: any) => {
-        if (item.shift_date) {
-          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
-          dateStr.setHours(0, 0, 0, 0);
-          return (
-            dateStr.getTime() >= fromDate.getTime() &&
-            dateStr.getTime() <= toDate.getTime()
-          );
-        }
-      });
-    } else if (fromDate) {
-      filteredData = tempData.filter((item: any) => {
-        if (item.shift_date) {
-          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
-          dateStr.setHours(0, 0, 0, 0);
-          return dateStr.getTime() === fromDate.getTime();
-        }
-      });
-    } else {
-      filteredData = tempData.filter((item: any) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        if (item.shift_date) {
-          const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
-          dateStr.setHours(0, 0, 0, 0);
-          if (dateStr === today) {
-            console.log(dateStr);
+      filteredData = tempData
+        .filter((item: any) => {
+          if (item.shift_date) {
+            const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+            dateStr.setHours(0, 0, 0, 0);
+            return (
+              dateStr.getTime() >= fromDate.getTime() &&
+              dateStr.getTime() <= toDate.getTime()
+            );
           }
-          return dateStr.getTime() === today.getTime();
-        }
-      });
+          return false;
+        })
+        .map((data: any) => {
+          return ReturnData({ data });
+        });
+    } else if (fromDate) {
+      filteredData = tempData
+        .filter((item: any) => {
+          if (item.shift_date) {
+            const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+            dateStr.setHours(0, 0, 0, 0);
+            return dateStr.getTime() === fromDate.getTime();
+          }
+          return false;
+        })
+        .map((data: any) => {
+          return ReturnData({ data });
+        });
+    } else {
+      filteredData = tempData
+        .filter((item: any) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (item.shift_date) {
+            const dateStr = parse(item.shift_date, "dd-MM-yyyy", new Date());
+            dateStr.setHours(0, 0, 0, 0);
+            if (dateStr === today) {
+              console.log(dateStr);
+            }
+            return dateStr.getTime() === today.getTime();
+          }
+        })
+        .map((data: any) => {
+          return ReturnData({ data });
+        });
     }
     setTableDate(filteredData);
   };

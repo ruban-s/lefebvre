@@ -384,6 +384,7 @@ export const labourCardMaintanceField = [
   "designation_id",
   "attendance_type",
   "gl_code",
+  "gl_description",
   "project_id",
   "work_order_id",
   "resource_id",

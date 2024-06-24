@@ -30,7 +30,7 @@ const UnreleasedProject = () => {
     error: workOrderError,
     isLoading: workOrderLoading,
   } = useQuery({
-    queryKey: ["work-orders"],
+    queryKey: ["unreleased-work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
@@ -43,7 +43,7 @@ const UnreleasedProject = () => {
     error: projectError,
     isLoading: projectLoading,
   } = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["unreleased-projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
@@ -56,7 +56,7 @@ const UnreleasedProject = () => {
     error: resourceError,
     isLoading: resourceLoading,
   } = useQuery({
-    queryKey: ["resource-work-orders"],
+    queryKey: ["unreleased-resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];

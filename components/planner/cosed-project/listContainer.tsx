@@ -23,7 +23,7 @@ const ClosedProject = () => {
     error: workOrderError,
     isLoading: workOrderLoading,
   } = useQuery({
-    queryKey: ["work-orders"],
+    queryKey: ["closed-work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
@@ -36,7 +36,7 @@ const ClosedProject = () => {
     error: projectError,
     isLoading: projectLoading,
   } = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["closed-projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
@@ -49,7 +49,7 @@ const ClosedProject = () => {
     error: resourceError,
     isLoading: resourceLoading,
   } = useQuery({
-    queryKey: ["resource-work-orders"],
+    queryKey: ["closed-resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];
@@ -57,7 +57,7 @@ const ClosedProject = () => {
     },
   });
 
-  console.log(projects!);
+  // console.log(projects!);
 
   return (
     <Tabs defaultValue="project" className="w-full">

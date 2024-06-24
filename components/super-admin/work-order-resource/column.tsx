@@ -121,7 +121,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "work_order_id",
-    header: "Work Order Id",
+    header: "Work Order ID",
   },
 
   {
@@ -132,14 +132,35 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
@@ -200,33 +221,6 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
-  // {
-  //   accessorKey: "remark",
-  //   header: "Remark",
-  //   cell: ({ row }) =>
-  //     row.original.remark && (
-  //       <div className="flex justify-start items-center">
-  //         {row.original.remark.substring(0, 30)}{" "}
-  //         {row.original.remark.length > 30 && "..."}
-  //         {row.original.remark.length > 30 && (
-  //           <Popover>
-  //             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-  //               <RxCaretSort className="text-theme" size={20} />
-  //             </PopoverTrigger>
-
-  //             <PopoverContent className="w-[400px] ">
-  //               <p className="mb-2 text-bold">Planner Remark:</p>
-  //               <p className="text-sm text-neutral-500">
-  //                 {row.original.remark}
-  //               </p>
-  //             </PopoverContent>
-  //           </Popover>
-  //         )}
-  //       </div>
-  //     ),
-  // },
-
   {
     accessorKey: "status",
     header: "Status",
@@ -339,7 +333,11 @@ export const UpdateStatus = ({ row }: any) => {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["resource-work-orders"],
+        queryKey: [
+          "resource-work-orders",
+          "cancelled-resource-work-orders",
+          "closed-resource-work-orders",
+        ],
       });
     },
     onError: (value) => {
@@ -472,6 +470,7 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
+                  <SelectItem value="Released">Released</SelectItem>
                   <SelectItem value="Closed">Closed</SelectItem>
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
@@ -491,7 +490,6 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  console.log(payLoad);
                   updateItem.mutate(payLoad);
                 }}>
                 Save

@@ -136,7 +136,9 @@ export const UpdateStatus = ({ row }: any) => {
     start_date: data.start_date,
     end_date: data.end_date,
     status: data.status,
+    preparedQuantity: data.preparedQuantity,
   };
+
   const queryClient = useQueryClient();
   const { data: workOrders } = useQuery({
     queryKey: ["work-orders"],
@@ -155,6 +157,7 @@ export const UpdateStatus = ({ row }: any) => {
 
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
+      console.log(value);
       const deleteCode: any = await updateProject(value);
       if (
         value.status === "Closed" ||
@@ -228,7 +231,17 @@ export const UpdateStatus = ({ row }: any) => {
           dismissible: true,
         });
       }
-      ["projects", "work-orders", "resource-work-orders"].map((info, index) => {
+      [
+        "projects",
+        "work-orders",
+        "resource-work-orders",
+        "cancelled-projects",
+        "cancelled-work-orders",
+        "cancelled-resource-work-orders",
+        "closed-projects",
+        "closed-work-orders",
+        "closed-resource-work-orders",
+      ].map((info, index) => {
         queryClient.invalidateQueries({
           queryKey: [info],
         });
@@ -319,6 +332,14 @@ export const UpdateStatus = ({ row }: any) => {
               />
             </div> */}
 
+            <div>
+              <p>Prepared Quantity</p>
+              <Input
+                value={payLoad.preparedQuantity}
+                onChange={(e) => (payLoad.preparedQuantity = e.target.value)}
+              />
+            </div>
+
             <div className="items-center gap-4">
               <div className="mb-1">Status</div>
               <Select
@@ -399,9 +420,9 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Description",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
+        {row.original.description.substring(0, 15)}{" "}
+        {row.original.description.length > 15 && "..."}
+        {row.original.description.length > 15 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
@@ -452,33 +473,60 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     },
   },
   {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.preparedQuantity?.length === 0 ||
+          row.original.preparedQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.preparedQuantity}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Planner Remarks",
+    header: "Planner Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <>
+            {row.original.planner_remark.substring(0, 15)}{" "}
+            {row.original.planner_remark.length > 15 && "..."}
+            {row.original.planner_remark.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
         )}
       </div>
     ),

@@ -117,9 +117,9 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Description",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
+        {row.original.description.substring(0, 15)}{" "}
+        {row.original.description.length > 15 && "..."}
+        {row.original.description.length > 15 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
@@ -172,31 +172,43 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
   {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Remarks",
+    header: "Planner Remarks",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <div>
+            {row.original.planner_remark.substring(0, 30)}{" "}
+            {row.original.planner_remark.length > 30 && "..."}
+            {row.original.planner_remark.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
         )}
       </div>
     ),

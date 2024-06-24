@@ -317,12 +317,6 @@ const WorkOrderResourceFormContainer = () => {
     form.setValue("work_order_id", value.work_order_id);
     setWorkOrder(value);
   };
-  // const checkValue = (value: any) => {
-  //   var newData = fields.filter((info) => info.resourceId === value);
-  //   return newData.length > 0 ? true : false;
-  // };
-
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [benchUnitIsOpen, setBenchUnitIsOpen] = useState<boolean>(false);
   const [quantityUnitIsOpen, setQuantityUnitIsOpen] = useState<boolean>(false);

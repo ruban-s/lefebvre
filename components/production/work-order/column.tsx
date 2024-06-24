@@ -149,9 +149,9 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
       <>
         {row.original.description && (
           <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
+            {row.original.description.substring(0, 15)}{" "}
+            {row.original.description.length > 15 && "..."}
+            {row.original.description.length > 15 && (
               <Popover>
                 <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
                   <RxCaretSort className="text-theme" size={20} />
@@ -204,66 +204,109 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     },
   },
   {
+    accessorKey: "requiredQuantity",
+    header: "Required Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.requiredQuantity?.length === 0 ||
+          row.original.requiredQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.requiredQuantity}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "preparedQuantity",
     header: "Prepared Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.preparedQuantity?.length === 0 ||
+          row.original.preparedQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.preparedQuantity}</div>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Planer Remarks",
-    cell: ({ row }) =>
-      row.original.planner_remark && (
-        <div className="flex justify-start items-center">
-          {row.original.planner_remark.substring(0, 30)}{" "}
-          {row.original.planner_remark.length > 30 && "..."}
-          {row.original.planner_remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.planner_remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
+    header: "Planner Remark",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <>
+            {row.original.planner_remark.substring(0, 15)}{" "}
+            {row.original.planner_remark.length > 15 && "..."}
+            {row.original.planner_remark.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "production_remark",
-    header: "Production Remarks",
-    cell: ({ row }) =>
-      row.original.production_remark && (
-        <div className="flex justify-start items-center">
-          {row.original.production_remark.substring(0, 30)}{" "}
-          {row.original.production_remark.length > 30 && "..."}
-          {row.original.production_remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Production Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.production_remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
+    header: "Production Remark",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.production_remark?.length === 0 ||
+        row.original.production_remark === null ? (
+          "--"
+        ) : (
+          <>
+            {row.original.production_remark?.substring(0, 15)}{" "}
+            {row.original.production_remark?.length > 15 && "..."}
+            {row.original.production_remark?.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.production_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "images",
@@ -403,14 +446,12 @@ export const UpdateStatus = ({ row }: any) => {
               val.project_id === value.project_id &&
               val.work_order_id === value.work_order_id
           );
-          console.log(filterLabourCards);
-          if (filterLabourCards.length > 0) {
-            if (value.status === "Unreleased")
-              reject(
-                new Error(
-                  "WorkOrderId existing in Labour card,Unable to edit status"
-                )
-              );
+          if (filterLabourCards.length > 0 && value.status === "Unreleased") {
+            reject(
+              new Error(
+                "WorkOrderId existing in Labour card,Unable to edit status"
+              )
+            );
           } else {
             const deleteCode: any = await updateWorkOrder({
               id: data.id,

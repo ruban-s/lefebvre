@@ -19,25 +19,22 @@ import { projectColumns } from "./projectColumn";
 import { workOrderListcolumns } from "./resourceWorkOrderColumn";
 
 const ReleasedProject = () => {
-  const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
-  const [projectList, setProjects] = useState<ProjectData[]>([]);
-  const [resourceWorkOrderList, setResourceWorkOrders] = useState<
-    ResourceWorkOdderData[]
-  >([]);
+  // const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
+  // const [projectList, setProjects] = useState<ProjectData[]>([]);
+  // const [resourceWorkOrderList, setResourceWorkOrders] = useState<
+  //   ResourceWorkOdderData[]
+  // >([]);
 
   const {
     data: workOrders,
     error: workOrderError,
     isLoading: workOrderLoading,
   } = useQuery({
-    queryKey: ["work-orders"],
+    queryKey: ["released-work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
-      setWorkOrders(
-        newWorkOrderData.filter((info) => info.status === "Released")
-      );
-      return newWorkOrderData;
+      return newWorkOrderData.filter((info) => info.status === "Released");
     },
   });
 
@@ -46,12 +43,11 @@ const ReleasedProject = () => {
     error: projectError,
     isLoading: projectLoading,
   } = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["released-projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
-      setProjects(newProject.filter((info) => info.status === "Released"));
-      return newProject;
+      return newProject.filter((info) => info.status === "Released");
     },
   });
 
@@ -60,14 +56,11 @@ const ReleasedProject = () => {
     error: resourceError,
     isLoading: resourceLoading,
   } = useQuery({
-    queryKey: ["resource-work-orders"],
+    queryKey: ["released-resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];
-      setResourceWorkOrders(
-        newResourceData.filter((info) => info.status === "Released")
-      );
-      return newResourceData;
+      return newResourceData.filter((info) => info.status === "Released");
     },
   });
 
@@ -88,7 +81,7 @@ const ReleasedProject = () => {
             <div className="w-full">
               <DataTable
                 columns={projectColumns}
-                data={projectList!}
+                data={projects!}
                 searchName="project_id"
                 fileName="Project"
                 exportDataFields={projectController}
@@ -107,7 +100,7 @@ const ReleasedProject = () => {
             <div className="w-full">
               <DataTable
                 columns={workOrderColumns}
-                data={workOrderList!}
+                data={workOrders!}
                 searchName="work_order_id"
                 fileName="WorkOrder"
                 exportDataFields={workOrderController}
@@ -126,7 +119,7 @@ const ReleasedProject = () => {
             <div className="w-full">
               <DataTable
                 columns={workOrderListcolumns}
-                data={resourceWorkOrderList!}
+                data={resourceWorkOrder!}
                 searchName="resourceId"
                 fileName="ResourceWorkOrder"
                 exportDataFields={resourceController}

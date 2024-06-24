@@ -122,10 +122,32 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
@@ -189,22 +211,30 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
 
   {
     accessorKey: "remark",
-    header: "Remark",
+    header: "Remarks",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.remark.substring(0, 30)}{" "}
-        {row.original.remark.length > 30 && "..."}
-        {row.original.remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+        {row.original.remark?.length === 0 ? (
+          "--"
+        ) : (
+          <div>
+            {row.original.remark.substring(0, 30)}{" "}
+            {row.original.remark.length > 30 && "..."}
+            {row.original.remark.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Remark:</p>
-              <p className="text-sm text-neutral-500">{row.original.remark}</p>
-            </PopoverContent>
-          </Popover>
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
         )}
       </div>
     ),
