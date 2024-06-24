@@ -99,6 +99,7 @@ const ProjectFormContainer = () => {
       customer_name: "",
       description: "",
       production_remark: "",
+      requiredQuantity: "",
       images: [],
     },
   });
@@ -132,6 +133,7 @@ const ProjectFormContainer = () => {
           form.setValue("description", project?.description!);
           form.setValue("images", project?.images!);
           form.setValue("production_remark", project?.production_remark!);
+          form.setValue("requiredQuantity", project?.requiredQuantity!);
         } catch (error) {
           console.log(error);
           toast.error(`Something went wrong`, {
@@ -292,6 +294,25 @@ const ProjectFormContainer = () => {
                 />
                 <FormField
                   control={form.control}
+                  name="requiredQuantity"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Required Quantity</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            placeholder="Required Quantity"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
                   name="start_date"
                   render={({ field }) => {
                     return (
@@ -353,6 +374,7 @@ const ProjectFormContainer = () => {
                             <MultiFileSelect
                               files={file}
                               onChange={(e: any) => {
+                                console.log(e);
                                 selectedFile(e);
                                 form.setValue("images", [
                                   // ...form.watch("images")!,

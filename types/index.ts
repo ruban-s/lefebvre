@@ -103,6 +103,8 @@ export interface ProjectData {
   description: string;
   end_date: string;
   estimateHour: string;
+  requiredQuantity: string;
+  preparedQuantity: string;
   id: string;
   images: string[];
   planner_remark: string;
@@ -122,6 +124,8 @@ export interface WorkOrderData {
   images: string[];
   planner_remark: string;
   production_remark: string;
+  requiredQuantity: string;
+  preparedQuantity: string;
   project_id: string;
   role_id: string;
   start_date: string;

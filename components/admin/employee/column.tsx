@@ -124,14 +124,47 @@ export const columns: ColumnDef<EmployeeData>[] = [
   {
     accessorKey: "email",
     header: "Email",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.email === null || row.original.email.length === 0 ? (
+            "--"
+          ) : (
+            <p>{row.original.email}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "mobile",
     header: "Mobile",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.mobile === null || row.original.mobile.length === 0 ? (
+            "--"
+          ) : (
+            <p>{row.original.mobile}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "gender",
     header: "Gender",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.gender === null || row.original.gender.length === 0 ? (
+            "--"
+          ) : (
+            <p>{row.original.gender}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",

@@ -137,21 +137,27 @@ export const columns: ColumnDef<ResourceData>[] = [
     header: "Note",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.res_note.substring(0, 30)}{" "}
-        {row.original.res_note.length > 30 && "..."}
-        {row.original.res_note.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+        {row.original.res_note === null || row.original.res_note === "" ? (
+          "--"
+        ) : (
+          <div>
+            {row.original.res_note.substring(0, 30)}{" "}
+            {row.original.res_note.length > 30 && "..."}
+            {row.original.res_note.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.res_note}
-              </p>
-            </PopoverContent>
-          </Popover>
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.res_note}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
         )}
       </div>
     ),

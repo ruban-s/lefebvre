@@ -23,25 +23,43 @@ import {
   getAllResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { deleteWorkOrder, getAllWorkOrder } from "@/data/work-order";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const rowData = row.original;
 
+  const balanceValue = () => {
+    const estimate = calculateMinutes(rowData.estimateHour);
+    const actual = calculateMinutes(rowData.actualHour);
+    const balance = calculateBalanceHours(estimate, actual);
+    return balance.hours;
+  };
+
   const project = [
     { name: "Id", value: rowData.id, cover: "half" },
-    { name: "ProjectId", value: rowData.project, cover: "half" },
+    { name: "Project Id", value: rowData.project, cover: "half" },
     { name: "Customer Name", value: rowData.customer_name, cover: "full" },
     { name: "Description", value: rowData.description, cover: "full" },
     { name: "Start Date", value: rowData.start_date, cover: "half" },
     { name: "End Date", value: rowData.end_date, cover: "half" },
-    { name: "EstimateHour", value: rowData.estimateHour, cover: "half" },
-    { name: "ActualHour", value: rowData.actualHour, cover: "half" },
     {
-      name: "Balance Hour",
-      value: (
-        parseFloat(rowData.estimateHour) - parseFloat(rowData.actualHour)
-      ).toFixed(2),
+      name: "Estimate Hrs",
+      value: formatHours(rowData.estimateHour),
+      cover: "half",
+    },
+    {
+      name: "Actual Hrs",
+      value: formatHours(rowData.actualHour),
+      cover: "half",
+    },
+    {
+      name: "Balance Hrs",
+      value: balanceValue(),
       cover: "full",
     },
     { name: "Planner Remark", value: rowData.planner_remark, cover: "full" },
@@ -197,33 +215,60 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     ),
   },
   {
+    accessorKey: "requiredQuantity",
+    header: "Required Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.requiredQuantity?.length === 0 ||
+          row.original.requiredQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.requiredQuantity}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Remarks",
+    header: "Planner Remark",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.planner_remark.substring(0, 30)}{" "}
-        {row.original.planner_remark.length > 30 && "..."}
-        {row.original.planner_remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Description:</p>
-              <p className="text-sm text-neutral-500">
-                {row.original.description}
-              </p>
-            </PopoverContent>
-          </Popover>
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <>
+            {row.original.planner_remark.substring(0, 30)}{" "}
+            {row.original.planner_remark.length > 30 && "..."}
+            {row.original.planner_remark.length > 30 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
         )}
       </div>
     ),
@@ -233,7 +278,6 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     header: "Attachments",
     cell: ({ row }) => {
       var files = row.original.images;
-
       if (files.length < 1) return <p>--</p>;
       return (
         <Popover>
@@ -241,19 +285,19 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
             Attachment
           </PopoverTrigger>
 
-          <PopoverContent className="w-[200px] ">
+          <PopoverContent className="w-full flex flex-col gap-2 max-w-sm">
             {row.original.images.map((info, index) => {
               return (
                 <Link
                   target="_blank"
                   key={index}
                   href={info}
-                  className="flex justify-center items-center m-1">
+                  className="flex flex-row gap-2 w-full">
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
                   {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-                  {/* {info.split("/")[4]} */}
-                  {info}
+                  <span>{index + 1}</span>
+                  {info.split("/")[4]}
                 </Link>
               );
             })}

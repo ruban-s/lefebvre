@@ -17,6 +17,11 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 import StatusBadge from "@/components/common/status-badge";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -107,7 +112,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "work_order_id",
-    header: "Work Order Id",
+    header: "Work Order ID",
   },
   {
     accessorKey: "resourceId",
@@ -117,77 +122,112 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced Hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
   },
   {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
   {
     accessorKey: "remark",
     header: "Remark",
-    cell: ({ row }) => (
-      <div className="flex justify-start items-center">
-        {row.original.remark.substring(0, 30)}{" "}
-        {row.original.remark.length > 30 && "..."}
-        {row.original.remark.length > 30 && (
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Remark:</p>
-              <p className="text-sm text-neutral-500">{row.original.remark}</p>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-start items-center">
+          {row.original.remark.length === 0 ? (
+            "--"
+          ) : (
+            <div>
+              {row.original.remark && row.original.remark.substring(0, 30)}{" "}
+              {row.original.remark && row.original.remark.length > 30 && "..."}
+              {row.original.remark && row.original.remark.length > 30 && (
+                <Popover>
+                  <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                    <RxCaretSort className="text-theme" size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] ">
+                    <p className="mb-2 text-bold">Remark:</p>
+                    <p className="text-sm text-neutral-500">
+                      {row.original.remark}
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    },
   },
-
   {
     accessorKey: "status",
     header: "Status",

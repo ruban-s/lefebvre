@@ -21,11 +21,17 @@ import { getAllLabourCard } from "@/data/labour-card";
 import { parse } from "date-fns";
 import { getAllUser } from "@/data/user";
 import { useEffect, useState } from "react";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const workOrders = row.original;
   const [foreman, setForeman] = useState();
+  console.log(workOrders);
 
   const fetchFormans = async () => {
     const formans = await getAllUser();
@@ -37,6 +43,13 @@ export const CellFunction = ({ row }: any) => {
       return forman ? forman.name : "";
     });
     setForeman(names);
+  };
+
+  const balanceValue = () => {
+    const estimate = calculateMinutes(workOrders.estimated_hour);
+    const actual = calculateMinutes(workOrders.actual_hour);
+    const balance = calculateBalanceHours(estimate, actual);
+    return balance.hours;
   };
 
   useEffect(() => {
@@ -64,13 +77,19 @@ export const CellFunction = ({ row }: any) => {
       value: workOrders.bench_mark_unit,
       cover: "half",
     },
-    { name: "EstimateHour", value: workOrders.estimateHour, cover: "half" },
-    { name: "ActualHour", value: workOrders.actualHour, cover: "half" },
     {
-      name: "Balance Hour",
-      value: (
-        parseFloat(workOrders.estimateHour) - parseFloat(workOrders.actualHour)
-      ).toFixed(2),
+      name: "Estimate Hrs",
+      value: formatHours(workOrders.estimated_hour),
+      cover: "half",
+    },
+    {
+      name: "Actual Hrs",
+      value: formatHours(workOrders.actual_hour),
+      cover: "half",
+    },
+    {
+      name: "Balance Hrs",
+      value: balanceValue(),
       cover: "full",
     },
     {
@@ -121,12 +140,11 @@ export const CellFunction = ({ row }: any) => {
           const labourCards = JSON.parse(data.data);
 
           const filterLabourCards = labourCards.filter((val: any) => {
-            console.log(resourceId, val.resource_id);
             return (
               val.project_id === projectId &&
               val.work_order_id === workOrderId &&
               val.resource_id === resourceId &&
-              val.sq_no === workOrders.sq_no
+              val.sq_no === workOrders.sqNumber
             );
           });
           if (filterLabourCards.length > 0) {
@@ -229,81 +247,126 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
-    header: "Estimated Hours",
+    header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
-    header: "Actual Hours",
+    header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
   },
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
+  },
+  {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
   {
     accessorKey: "remark",
     header: "Remark",
     cell: ({ row }) => {
       return (
         <div className="flex justify-start items-center">
-          {row.original.remark && row.original.remark.substring(0, 30)}{" "}
-          {row.original.remark && row.original.remark.length > 30 && "..."}
-          {row.original.remark && row.original.remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.remark}
-                </p>
-              </PopoverContent>
-            </Popover>
+          {row.original.remark.length === 0 ? (
+            "--"
+          ) : (
+            <div>
+              {row.original.remark && row.original.remark.substring(0, 30)}{" "}
+              {row.original.remark && row.original.remark.length > 30 && "..."}
+              {row.original.remark && row.original.remark.length > 30 && (
+                <Popover>
+                  <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                    <RxCaretSort className="text-theme" size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] ">
+                    <p className="mb-2 text-bold">Remark:</p>
+                    <p className="text-sm text-neutral-500">
+                      {row.original.remark}
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           )}
         </div>
       );
     },
   },
-
   {
     accessorKey: "status",
     header: "Status",

@@ -139,7 +139,6 @@ const WorkOrderFormContainer = () => {
             });
           }
         }
-        console.log(workOrder);
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });
       } else if (workOrder) {
         breake = await updateWorkOrder({ id: workOrder?.id, ...value });
@@ -199,6 +198,7 @@ const WorkOrderFormContainer = () => {
       description: "",
       production_remark: "",
       images: [],
+      requiredQuantity: "",
     },
   });
   useEffect(() => {
@@ -228,6 +228,7 @@ const WorkOrderFormContainer = () => {
         form.setValue("images", workOrder?.images!);
         form.setValue("production_remark", workOrder?.production_remark!);
         form.setValue("description", workOrder?.description!);
+        form.setValue("requiredQuantity", workOrder?.requiredQuantity!);
         var startDate = workOrder?.start_date!.toString().split("-");
         var endDate = workOrder?.end_date!.toString().split("-");
 
@@ -254,7 +255,6 @@ const WorkOrderFormContainer = () => {
   }, [workOrder]);
 
   const onSubmit = async (values: z.infer<typeof WorkOrderSchema>) => {
-    console.log(values);
     creatWorkOrder.mutate(values);
   };
   const newData = async (value: FormData, name: string) => {
@@ -438,6 +438,25 @@ const WorkOrderFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Planner Remark"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="requiredQuantity"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Required Quantity</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            {...field}
+                            placeholder="Required Quantity"
                           />
                         </FormControl>
                         <FormMessage />

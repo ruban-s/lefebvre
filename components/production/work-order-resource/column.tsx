@@ -37,7 +37,7 @@ import { MoreHorizontal } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { DateRange } from "react-day-picker";
 import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
@@ -63,6 +63,12 @@ import {
 } from "@/components/ui/command";
 import { getAllLabourCard } from "@/data/labour-card";
 import { getAllEmployee } from "@/data/employee";
+import MultiFileSelect from "@/components/common/multiFileSelect";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -142,37 +148,62 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced Hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
@@ -186,65 +217,57 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     header: "Prepared Qty",
   },
   {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
   {
     accessorKey: "remark",
-    header: "Planner Remark",
-    cell: ({ row }) =>
-      row.original.remark && (
+    header: "Remark",
+    cell: ({ row }) => {
+      return (
         <div className="flex justify-start items-center">
-          {row.original.remark.substring(0, 30)}{" "}
-          {row.original.remark.length > 30 && "..."}
-          {row.original.remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.remark}
-                </p>
-              </PopoverContent>
-            </Popover>
+          {row.original.remark.length === 0 ? (
+            "--"
+          ) : (
+            <div>
+              {row.original.remark && row.original.remark.substring(0, 30)}{" "}
+              {row.original.remark && row.original.remark.length > 30 && "..."}
+              {row.original.remark && row.original.remark.length > 30 && (
+                <Popover>
+                  <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                    <RxCaretSort className="text-theme" size={20} />
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[400px] ">
+                    <p className="mb-2 text-bold">Remark:</p>
+                    <p className="text-sm text-neutral-500">
+                      {row.original.remark}
+                    </p>
+                  </PopoverContent>
+                </Popover>
+              )}
+            </div>
           )}
         </div>
-      ),
+      );
+    },
   },
   {
     accessorKey: "forman",
     header: "Forman",
-    //   const fetchFormans = async () => {
-    //     const formans = await getAllEmployee();
-    //     const data = JSON.parse(formans?.data);
-    //     const formanName = data
-    //       ?.filter((val: any) => {
-    //         return val.id === row.original.forman;
-    //       })
-    //       .map((val: any) => {
-    //         return val.name;
-    //       });
-    //   };
-    //   const formanNames = useMemo(() => {
-    //     return fetchFormans();
-    //   }, [row.original.forman]);
-
-    //   return (
-    //     <div>
-    //       {formanNames &&
-    //         formanNames.map((name: string, index: number) => (
-    //           <p key={index}>{name}</p>
-    //         ))}
-    //     </div>
-    //   );
-    // return (
-    // <FormanNames row={row} />>
-    // )
-    // },
     cell: ({ row }) => <FormanNames row={row} />,
   },
   {
@@ -281,31 +304,31 @@ const FormanNames = ({ row }: { row: any }) => {
 
   return (
     <div className="flex flex-row gap-1">
-      {formanNames.length > 1 && (
-        <>
-          {formanNames[0]}
-          <Popover>
-            <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-              <RxCaretSort className="text-theme" size={20} />
-            </PopoverTrigger>
+      <>
+        {formanNames.length > 1 && (
+          <>
+            {formanNames[0]}
+            <Popover>
+              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                <RxCaretSort className="text-theme" size={20} />
+              </PopoverTrigger>
 
-            <PopoverContent className="w-[400px] ">
-              <p className="mb-2 text-bold">Forman:</p>
-              <p className="text-sm text-neutral-500">
-                {formanNames.map((data, index) => {
-                  return (
+              <PopoverContent className="w-[400px] ">
+                <p className="mb-2 text-bold">Forman:</p>
+                <div className="text-sm text-neutral-500">
+                  {formanNames.map((data, index) => (
                     <p key={index}>
                       {index + 1}. {data}
                     </p>
-                  );
-                })}
-              </p>
-            </PopoverContent>
-          </Popover>
-        </>
-      )}
-      {formanNames.length <= 1 &&
-        formanNames.map((name, index) => <p key={index}>{name}</p>)}
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </>
+        )}
+        {formanNames.length <= 1 &&
+          formanNames.map((name, index) => <p key={index}>{name}</p>)}
+      </>
     </div>
   );
 };
@@ -353,7 +376,9 @@ const StatusBar = ({ row }: { row: any }) => {
 export const UpdateStatus = ({ row }: any) => {
   const data: ResourceWorkOdderData = row.original as ResourceWorkOdderData;
   const [foremans, setFormans] = useState<UserData[]>([]);
+  const [updatedImages, setUpdatedImages] = useState<any[]>([]);
   const ref = useRef<HTMLButtonElement>(null);
+  const [isPending, startTransition] = useTransition();
 
   const fetchData = async () => {
     const data = await getAllUser();
@@ -365,8 +390,14 @@ export const UpdateStatus = ({ row }: any) => {
   };
 
   useEffect(() => {
-    fetchData();
+    startTransition(() => {
+      fetchData();
+    });
   }, [row.original.forman]);
+
+  useEffect(() => {
+    setUpdatedImages(data.attachment);
+  }, [data.attachment]);
 
   const payLoad = {
     estimated_hour: data.estimated_hour,
@@ -416,18 +447,17 @@ export const UpdateStatus = ({ row }: any) => {
               val.sq_no === value.sq_no
             );
           });
-          if (filterLabourCards.length > 0) {
-            if (value.status === "Unreleased") {
-              reject(
-                new Error(
-                  "WorkOrderId existing in Labour card,Unable to edit status"
-                )
-              );
-            }
+          if (filterLabourCards.length > 0 && value.status === "Unreleased") {
+            reject(
+              new Error(
+                "WorkOrderId existing in Labour card,Unable to edit status"
+              )
+            );
           } else {
             const deleteCode: any = await updateResourceWorkOrder({
               id: data.id,
               ...value,
+              attachment: updatedImages,
             });
             queryClient.invalidateQueries({
               queryKey: ["resource-work-orders"],
@@ -561,7 +591,6 @@ export const UpdateStatus = ({ row }: any) => {
             </div>
             <div className="items-center gap-4">
               <div className="mb-1">Work Order Id</div>
-
               <Input disabled value={data.work_order_id} />
             </div>
 
@@ -595,92 +624,111 @@ export const UpdateStatus = ({ row }: any) => {
               <Input disabled value={data.quantity_unit} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Remark</div>
+              <div className="mb-1">Planner Remark</div>
               <Input disabled value={data.remark} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Foremans</div>
+              <div className="mb-1">Foreman</div>
               <Popover>
-                {foremans.length < 1 && (
-                  <PopoverTrigger asChild className="w-full col-span-2">
-                    <div className="w-full border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
-                      Select Foremans
-                    </div>
-                  </PopoverTrigger>
-                )}
-                {foremans.length > 0 && (
-                  <PopoverTrigger asChild className="w-full col-span-2">
-                    <div className="w-full flex flex-row flex-wrap mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
-                      {foremans.map((info, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="bg-neutral-400 flex flex-row justify-center items-center  rounded-sm shadow-sm">
-                            <div className="rounded-sm w-auto px-2 text-white ml-1 flex justify-between ">
-                              {info.username}
-                            </div>
-                            <IoMdClose
-                              className="ml-1 cursor-pointer text-white "
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setFormans((formans) =>
-                                  formans.filter(
-                                    (data) => data.username !== info.username
-                                  )
-                                );
-                              }}
-                            />
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </PopoverTrigger>
-                )}
-                <PopoverContent>
-                  <Command>
-                    <CommandInput
-                      placeholder="Search Foreman..."
-                      className="h-9"
-                    />
-                    <CommandEmpty>No Foreman found.</CommandEmpty>
-                    <CommandList onSelect={() => alert("hi")}>
-                      {user?.map((info, index) => {
-                        if (info.role_name === "Foreman")
-                          return (
-                            <CommandItem
-                              className="cursor-pointer"
+                {isPending ? (
+                  <div role="status">
+                    <svg
+                      aria-hidden="true"
+                      className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                      viewBox="0 0 100 101"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                        fill="currentColor"
+                      />
+                      <path
+                        d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                        fill="currentFill"
+                      />
+                    </svg>
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                ) : (
+                  <>
+                    {foremans.length < 1 ? (
+                      <PopoverTrigger asChild className="w-full col-span-2">
+                        <div className="w-full border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
+                          Select Foremans
+                        </div>
+                      </PopoverTrigger>
+                    ) : (
+                      <PopoverTrigger asChild className="w-full col-span-2">
+                        <div className="w-full flex flex-row flex-wrap mt-1 h-auto border border-1 p-2 py-3 rounded-md border-neutral-100 text-sm">
+                          {foremans.map((info, index) => (
+                            <div
                               key={index}
-                              onSelect={(value) => {
-                                var isSelectedForman = foremans.filter(
-                                  (formans) =>
-                                    formans.username === info.username
-                                );
+                              className="bg-neutral-400 flex flex-row justify-center items-center  rounded-sm shadow-sm">
+                              <div className="rounded-sm w-auto px-2 text-white ml-1 flex justify-between ">
+                                {info.username}
+                              </div>
+                              <IoMdClose
+                                className="ml-1 cursor-pointer text-white "
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setFormans((formans) =>
+                                    formans.filter(
+                                      (data) => data.username !== info.username
+                                    )
+                                  );
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </PopoverTrigger>
+                    )}
+                    <PopoverContent>
+                      <Command>
+                        <CommandInput
+                          placeholder="Search Foreman..."
+                          className="h-9"
+                        />
+                        <CommandEmpty>No Foreman found.</CommandEmpty>
+                        <CommandList onSelect={() => alert("hi")}>
+                          {user?.map((info, index) => {
+                            if (info.role_name === "Foreman")
+                              return (
+                                <CommandItem
+                                  className="cursor-pointer"
+                                  key={index}
+                                  onSelect={(value) => {
+                                    var isSelectedForman = foremans.filter(
+                                      (formans) =>
+                                        formans.username === info.username
+                                    );
 
-                                if (isSelectedForman.length > 0) {
-                                  return;
-                                }
-                                var filterForeman: UserData[] = user.filter(
-                                  (data) => data.username === info.username
-                                );
-                                if (filterForeman.length > 0) {
-                                  setFormans((formans) => [
-                                    ...formans,
-                                    filterForeman[0],
-                                  ]);
-                                }
-                              }}>
-                              <PopoverClose>
-                                <p className="text-sm">{info.username}</p>
-                              </PopoverClose>
-                            </CommandItem>
-                          );
-                      })}
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
+                                    if (isSelectedForman.length > 0) {
+                                      return;
+                                    }
+                                    var filterForeman = user.filter(
+                                      (data) => data.username === info.username
+                                    );
+                                    if (filterForeman.length > 0) {
+                                      setFormans((formans) => [
+                                        ...formans,
+                                        filterForeman[0],
+                                      ]);
+                                    }
+                                  }}>
+                                  <PopoverClose>
+                                    <p className="text-sm">{info.username}</p>
+                                  </PopoverClose>
+                                </CommandItem>
+                              );
+                          })}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </>
+                )}
               </Popover>
             </div>
-
             <div className="col-span-2">
               <p> Production Remarks:</p>
               <Textarea
@@ -691,7 +739,15 @@ export const UpdateStatus = ({ row }: any) => {
                 }}
               />
             </div>
-
+            <div className="col-span-2">
+              <div>Attachment</div>
+              <MultiFileSelect
+                files={updatedImages}
+                onChange={(e: any) => {
+                  setUpdatedImages([...e]);
+                }}
+              />
+            </div>
             <div className="items-center gap-4">
               <div className="mb-1">Status</div>
               <Select

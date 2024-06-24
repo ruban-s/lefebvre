@@ -46,6 +46,11 @@ import {
 import { getAllWorkOrder } from "@/data/work-order";
 import { getAllProject } from "@/data/projects";
 import StatusBadge from "@/components/common/status-badge";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -116,7 +121,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
   {
     accessorKey: "work_order_id",
-    header: "Work Order Id",
+    header: "Work Order ID",
   },
 
   {
@@ -127,81 +132,95 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "sqNumber",
     header: "Seq No",
   },
-
   {
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_measure.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_measure}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "bench_mark_unit",
     header: "Bench Mark Unit",
+    cell: ({ row }: { row: any }) => {
+      return (
+        <p>
+          {row.original.bench_mark_unit.length === 0 ? (
+            "--"
+          ) : (
+            <div>{row.original.bench_mark_unit}</div>
+          )}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimated_hour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimated_hour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = parseFloat(row.original.actual_hour);
-      return <p>{actual_hour.toFixed(2)}</p>;
+      const actual_hour = formatHours(row.original.actual_hour);
+      return <p>{actual_hour}</p>;
     },
   },
   {
-    accessorKey: "ballance_hour",
-    header: "Balanced Hrs",
-    cell: ({ row }: { row: any }) => {
-      const actual = parseFloat(row.original.actual_hour);
-      const estimated = parseFloat(row.original.estimated_hour);
-      const balanceHour = estimated - actual;
+    accessorKey: "ballanceHour",
+    header: "Balance Hrs",
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimated_hour);
+      const actual = calculateMinutes(row.original.actual_hour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balanceHour > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balanceHour.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
       );
     },
   },
-
   {
     accessorKey: "required_quantity",
-    header: "Required Quantity",
+    header: "Required Qty",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Qty",
+  },
+  {
+    accessorKey: "balance_quantity",
+    header: "Balance Qty",
+    cell: ({ row }: { row: any }) => {
+      const balance =
+        parseInt(row.original.required_quantity) -
+        parseInt(row.original.prepared_quantity);
+      return (
+        <div className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
+          {balance}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "quantity_unit",
     header: "Quantity Unit",
   },
-
-  {
-    accessorKey: "remark",
-    header: "Remark",
-    cell: ({ row }) =>
-      row.original.remark && (
-        <div className="flex justify-start items-center">
-          {row.original.remark.substring(0, 30)}{" "}
-          {row.original.remark.length > 30 && "..."}
-          {row.original.remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
-  },
-
   {
     accessorKey: "status",
     header: "Status",
@@ -314,7 +333,11 @@ export const UpdateStatus = ({ row }: any) => {
         });
       }
       queryClient.invalidateQueries({
-        queryKey: ["resource-work-orders"],
+        queryKey: [
+          "resource-work-orders",
+          "cancelled-resource-work-orders",
+          "closed-resource-work-orders",
+        ],
       });
     },
     onError: (value) => {
@@ -425,8 +448,8 @@ export const UpdateStatus = ({ row }: any) => {
               <Input disabled value={data.quantity_unit} />
             </div>
             <div className="items-center gap-4">
-              <div className="mb-1">Remark</div>
-              <Input disabled value={data.remark} />
+              <div className="mb-1">Planner Remark</div>
+              <Input disabled value={data.remark ? data.remark : "--"} />
             </div>
             <div className="items-center gap-4">
               <div className="mb-1">Start Date</div>
@@ -447,6 +470,7 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
+                  <SelectItem value="Released">Released</SelectItem>
                   <SelectItem value="Closed">Closed</SelectItem>
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
@@ -466,7 +490,6 @@ export const UpdateStatus = ({ row }: any) => {
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
-                  console.log(payLoad);
                   updateItem.mutate(payLoad);
                 }}>
                 Save

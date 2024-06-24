@@ -244,26 +244,50 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "designation_id",
     header: "Designation",
   },
-
   {
     accessorKey: "gl_code",
     header: "GL Code",
-    cell: ({ row }) => {
-      const glCode = row.original.gl_code.split("&")[0];
-      return <p>{glCode}</p>;
-    },
+  },
+  {
+    accessorKey: "gl_description",
+    header: "GL Description",
   },
   {
     accessorKey: "project_id",
     header: "Project Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.project_id ? "--" : <p>{row.original.project_id}</p>}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "work_order_id",
     header: "Work Order Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.work_order_id ? (
+            "--"
+          ) : (
+            <p>{row.original.work_order_id}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "resource_id",
     header: "Resource Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.resource_id ? "--" : <p>{row.original.resource_id}</p>}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "punch_in_time",
@@ -272,6 +296,17 @@ export const projectColumns: ColumnDef<LabourData>[] = [
   {
     accessorKey: "punch_out_time",
     header: "Out Time",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.punch_out_time ? (
+            "--"
+          ) : (
+            <p>{row.original.punch_out_time}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "forman_id",
@@ -325,12 +360,12 @@ const UpdateStatus = ({ row }: any) => {
           })}
           <ViewTabField
             heading={"gl_code"}
-            value={data.gl_code !== "" ? data.gl_code.split("&")[0] : "--"}
+            value={data.gl_code !== "" ? data.gl_code : "--"}
             isInput
           />
           <ViewTabField
             heading={"gl_description"}
-            value={data.gl_code !== "" ? data.gl_code.split("&")[1] : "--"}
+            value={data.gl_description !== "" ? data.gl_description : "--"}
             isInput
           />
         </div>

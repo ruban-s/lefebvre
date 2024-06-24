@@ -148,8 +148,8 @@ const TableActionButtonComponents = ({
                       key={index}
                       className={`${
                         data.cover === "half" ? "col-span-1" : "col-span-2"
-                      } space-y-1`}>
-                      <h1>{data.name}</h1>
+                      } space-y-1 `}>
+                      <p className="text-black font-bold">{data.name}</p>
                       <Input
                         disabled
                         value={data.value ? data.value : "--"}

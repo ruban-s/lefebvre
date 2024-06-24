@@ -43,3 +43,43 @@ export async function fetchFormanList() {
     .map((data) => ({ id: data.id.toString(), name: data.name }));
   return filteredData;
 }
+
+export const calculateMinutes = (time: string) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  const totalMinutes = hours * 60 + minutes;
+  return totalMinutes;
+};
+
+export const formatTime = (totalMinutes: number) => {
+  const hours = Math.floor(Math.abs(totalMinutes) / 60)
+    .toString()
+    .padStart(2, "0");
+  const minutes = Math.abs(totalMinutes % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${hours}:${minutes}`;
+};
+
+export const calculateBalanceHours = (estimated: number, actual: number) => {
+  const balanceMinutes = estimated - actual;
+  const formattedTime = formatTime(balanceMinutes);
+  let color;
+  if (balanceMinutes < 0) {
+    color = "red";
+  } else if (balanceMinutes === 0) {
+    color = "red";
+  } else {
+    color = "none";
+  }
+
+  const result = balanceMinutes < 0 ? `-${formattedTime}` : formattedTime;
+
+  return { hours: result, color };
+};
+
+export const formatHours = (hours: string) => {
+  const [hour, minutes] = hours.split(":");
+  const formatHours = hour.padStart(2, "0");
+  const formatMinutes = minutes.padStart(2, "0");
+  return `${formatHours}:${formatMinutes}`;
+};

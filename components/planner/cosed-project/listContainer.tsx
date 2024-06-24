@@ -4,18 +4,13 @@ import Loading from "@/loading";
 import { WorkOrderData, ProjectData, ResourceWorkOdderData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { DataTable } from "../../common/data-table";
-import { getAllWorkOrder, getAllWorkOrderByStatus } from "@/data/work-order";
-import ProjectListCombo from "../../common/projectListCombo";
+import { getAllWorkOrder } from "@/data/work-order";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getAllProject, getAllProjectByStatus } from "@/data/projects";
+import { getAllProject } from "@/data/projects";
 import { workOrderColumns } from "./workOrderColumn";
 import { projectColumns } from "./projectColumn";
 import { workOrderListcolumns } from "./resourceWorkOrderColumn";
-import {
-  getAllResourceWorkOrder,
-  getAllResourceWorkOrderByStatus,
-} from "@/data/resource-work-order";
-import { useState, useEffect } from "react";
+import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 import {
   projectController,
   resourceController,
@@ -23,129 +18,113 @@ import {
 } from "@/config/const";
 
 const ClosedProject = () => {
-  const [workOrderList, setWorkOrders] = useState<WorkOrderData[]>([]);
-  const [projectList, setProjects] = useState<ProjectData[]>([]);
-  const [resourceWorkOrderList, setResourceWorkOrders] = useState<
-    ResourceWorkOdderData[]
-  >([]);
-
-  const { data: workOrders, error: workOrderError } = useQuery({
-    queryKey: ["work-orders"],
+  const {
+    data: workOrders,
+    error: workOrderError,
+    isLoading: workOrderLoading,
+  } = useQuery({
+    queryKey: ["closed-work-orders"],
     queryFn: async () => {
-      const data: any = await getAllWorkOrder();
+      const data = await getAllWorkOrder();
       const newWorkOrderData = JSON.parse(data.data) as WorkOrderData[];
-      setWorkOrders(
-        newWorkOrderData.filter((info, index) => info.status === "Closed")
-      );
-      return JSON.parse(data.data) as WorkOrderData[];
+      return newWorkOrderData.filter((info) => info.status === "Closed");
     },
   });
-  const { data: projects, error: projectError } = useQuery({
-    queryKey: ["projects"],
+
+  const {
+    data: projects,
+    error: projectError,
+    isLoading: projectLoading,
+  } = useQuery({
+    queryKey: ["closed-projects"],
     queryFn: async () => {
       const data = await getAllProject();
       const newProject = JSON.parse(data.data) as ProjectData[];
-      console.log(newProject);
-      setProjects(newProject.filter((info, index) => info.status === "Closed"));
-      return JSON.parse(data.data) as ProjectData[];
+      return newProject.filter((info) => info.status === "Closed");
     },
   });
-  const { data: resourceWorkOrder, isError: resourceError } = useQuery({
-    queryKey: ["resource-work-orders"],
+
+  const {
+    data: resourceWorkOrder,
+    error: resourceError,
+    isLoading: resourceLoading,
+  } = useQuery({
+    queryKey: ["closed-resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];
-      setResourceWorkOrders(
-        newResourceData.filter((info, index) => info.status === "Closed")
-      );
-      return JSON.parse(data.data) as ResourceWorkOdderData[];
+      return newResourceData.filter((info) => info.status === "Closed");
     },
   });
-  console.log(projects);
-  useEffect(() => {
-    console.log(projects);
-    projects &&
-      setProjects(projects.filter((info, index) => info.status === "Closed"));
-    workOrders &&
-      setWorkOrders(
-        workOrders.filter((info, index) => info.status === "Closed")
-      );
-    resourceWorkOrder &&
-      setResourceWorkOrders(
-        resourceWorkOrder.filter((info, index) => info.status === "Closed")
-      );
-  }, [projects, workOrders, resourceWorkOrder]);
+
+  // console.log(projects!);
+
   return (
     <Tabs defaultValue="project" className="w-full">
       <TabsList className="bg-theme text-white">
         <TabsTrigger value="project">Closed Project</TabsTrigger>
         <TabsTrigger value="workOrder">Closed Work Order</TabsTrigger>
-        <TabsTrigger value="resource">Closed Resource</TabsTrigger>
+        <TabsTrigger value="resource">Closed Work Order Resource</TabsTrigger>
       </TabsList>
       <TabsContent value="project">
-        <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {projectError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
+        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
+          {projectError || projectLoading ? (
+            <div className="w-full min-h-[500px] flex justify-center items-center">
               <Loading />
             </div>
           ) : (
-            <>
-              <div className="w-full  ">
-                <DataTable
-                  columns={projectColumns}
-                  data={projectList!}
-                  searchName="project_id"
-                  fileName="Project"
-                  exportDataFields={projectController}
-                />
-              </div>
-            </>
+            <div className="w-full">
+              <DataTable
+                columns={projectColumns}
+                data={projects!}
+                searchName="project_id"
+                fileName="Project"
+                exportDataFields={projectController}
+              />
+            </div>
           )}
         </div>
       </TabsContent>
       <TabsContent value="workOrder">
-        <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {workOrderError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
+        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
+          {workOrderError || workOrderLoading ? (
+            <div className="w-full min-h-[500px] flex justify-center items-center">
               <Loading />
             </div>
           ) : (
-            <>
-              <div className="w-full  ">
-                <DataTable
-                  columns={workOrderColumns}
-                  data={workOrderList!}
-                  searchName="work_order_id"
-                  fileName="WorkOrder"
-                  exportDataFields={workOrderController}
-                />
-              </div>
-            </>
+            <div className="w-full">
+              <DataTable
+                columns={workOrderColumns}
+                data={workOrders!}
+                searchName="work_order_id"
+                fileName="WorkOrder"
+                exportDataFields={workOrderController}
+              />
+            </div>
           )}
         </div>
       </TabsContent>
       <TabsContent value="resource">
-        <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {resourceError ? (
-            <div className="w-full min-h-[500px] justify-center items-center flex">
+        <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
+          {resourceError || resourceLoading ? (
+            <div className="w-full min-h-[500px] flex justify-center items-center">
               <Loading />
             </div>
           ) : (
-            <>
-              <div className="w-full  ">
-                <DataTable
-                  columns={workOrderListcolumns}
-                  data={resourceWorkOrderList!}
-                  searchName="resourceId"
-                  fileName="ResourceWorkOrder"
-                  exportDataFields={resourceController}
-                />
-              </div>
-            </>
+            <div className="w-full">
+              <DataTable
+                columns={workOrderListcolumns}
+                data={resourceWorkOrder!}
+                searchName="resourceId"
+                fileName="ResourceWorkOrder"
+                exportDataFields={resourceController}
+              />
+            </div>
           )}
         </div>
       </TabsContent>
     </Tabs>
   );
 };
+
 export default ClosedProject;

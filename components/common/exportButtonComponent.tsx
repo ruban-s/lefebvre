@@ -41,6 +41,7 @@ const ExportButtonComponent = ({
   labourCardFields,
   fullexport = false,
 }: ExportButtonComponentProps) => {
+  console.log(data);
   const [selectedFields, setSelectedFields] = useState<string[] | undefined>(
     exportDataFields!
   );

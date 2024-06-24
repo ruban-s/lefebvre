@@ -48,6 +48,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
+import {
+  calculateBalanceHours,
+  calculateMinutes,
+  formatHours,
+} from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -143,9 +148,9 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
       <>
         {row.original.description && (
           <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
+            {row.original.description.substring(0, 15)}{" "}
+            {row.original.description.length > 15 && "..."}
+            {row.original.description.length > 15 && (
               <Popover>
                 <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
                   <RxCaretSort className="text-theme" size={20} />
@@ -168,89 +173,139 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     accessorKey: "estimateHour",
     header: "Estimated Hrs",
     cell: ({ row }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      return <p>{estimated.toFixed(2)}</p>;
+      const estimated = formatHours(row.original.estimateHour);
+      return <p>{estimated}</p>;
     },
   },
   {
     accessorKey: "actualHour",
     header: "Actual Hrs",
     cell: ({ row }) => {
-      const actual = parseFloat(row.original.actualHour);
-      return <p>{actual.toFixed(2)}</p>;
+      const actual = formatHours(row.original.actualHour);
+      return <p>{actual}</p>;
     },
   },
   {
-    accessorKey: "balanceHour",
+    accessorKey: "ballanceHour",
     header: "Balance Hrs",
-    cell: ({ row }: { row: any }) => {
-      const estimated = parseFloat(row.original.estimateHour);
-      const actual = parseFloat(row.original.actualHour);
-      const balance = estimated - actual;
+    cell: ({ row }) => {
+      const estimate = calculateMinutes(row.original.estimateHour);
+      const actual = calculateMinutes(row.original.actualHour);
+      const balance = calculateBalanceHours(estimate, actual);
       return (
-        <p className={`${balance > 0 ? "text-inherit" : "text-red-500"}`}>
-          {balance.toFixed(2)}
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
         </p>
+      );
+    },
+  },
+  {
+    accessorKey: "requiredQuantity",
+    header: "Required Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.requiredQuantity?.length === 0 ||
+          row.original.requiredQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.requiredQuantity}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "preparedQuantity",
+    header: "Prepared Qty",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.preparedQuantity?.length === 0 ||
+          row.original.preparedQuantity === null ? (
+            "--"
+          ) : (
+            <div>{row.original.preparedQuantity}</div>
+          )}
+        </div>
       );
     },
   },
   {
     accessorKey: "start_date",
     header: "Start Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "end_date",
     header: "End Date",
+    cell: (status) => (
+      <div className="w-[90px]">{status.getValue() as React.ReactNode}</div>
+    ),
   },
   {
     accessorKey: "planner_remark",
-    header: "Planer Remarks",
-    cell: ({ row }) =>
-      row.original.planner_remark && (
-        <div className="flex justify-start items-center">
-          {row.original.planner_remark.substring(0, 30)}{" "}
-          {row.original.planner_remark.length > 30 && "..."}
-          {row.original.planner_remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Planner Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.planner_remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
+    header: "Planner Remark",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.planner_remark.length === 0 ? (
+          "--"
+        ) : (
+          <>
+            {row.original.planner_remark.substring(0, 15)}{" "}
+            {row.original.planner_remark.length > 15 && "..."}
+            {row.original.planner_remark.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.planner_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "production_remark",
-    header: "Production Remarks",
-    cell: ({ row }) =>
-      row.original.production_remark && (
-        <div className="flex justify-start items-center">
-          {row.original.production_remark.substring(0, 30)}{" "}
-          {row.original.production_remark.length > 30 && "..."}
-          {row.original.production_remark.length > 30 && (
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Production Remark:</p>
-                <p className="text-sm text-neutral-500">
-                  {row.original.production_remark}
-                </p>
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
-      ),
+    header: "Production Remark",
+    cell: ({ row }) => (
+      <div className="flex justify-start items-center">
+        {row.original.production_remark?.length === 0 ||
+        row.original.production_remark === null ? (
+          "--"
+        ) : (
+          <>
+            {row.original.production_remark?.substring(0, 15)}{" "}
+            {row.original.production_remark?.length > 15 && "..."}
+            {row.original.production_remark?.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+                <PopoverContent className="w-[400px]">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.production_remark}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </>
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "images",
@@ -349,7 +404,6 @@ export const UpdateStatus = ({ row }: any) => {
     from: new Date(data.start_date),
     to: new Date(data.end_date),
   });
-  const [file, selectedFile] = useState<string[]>([]);
   const [updatedImages, setUpdatedImages] = useState<string[]>([]);
   useEffect(() => {
     var startDate = data?.start_date!.toString().split("-");
@@ -392,13 +446,12 @@ export const UpdateStatus = ({ row }: any) => {
               val.project_id === value.project_id &&
               val.work_order_id === value.work_order_id
           );
-          if (filterLabourCards.length > 0) {
-            if (value.status === "Unreleased")
-              reject(
-                new Error(
-                  "WorkOrderId existing in Labour card,Unable to edit status"
-                )
-              );
+          if (filterLabourCards.length > 0 && value.status === "Unreleased") {
+            reject(
+              new Error(
+                "WorkOrderId existing in Labour card,Unable to edit status"
+              )
+            );
           } else {
             const deleteCode: any = await updateWorkOrder({
               id: data.id,
@@ -600,10 +653,8 @@ export const UpdateStatus = ({ row }: any) => {
             <div className="col-span-2">
               <div>Attachment</div>
               <MultiFileSelect
-                files={file}
+                files={updatedImages}
                 onChange={(e: any) => {
-                  selectedFile(e);
-                  // form.setValue("images", [...form.watch("images")!, ...e]);
                   setUpdatedImages([...e]);
                 }}
               />
