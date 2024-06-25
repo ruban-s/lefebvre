@@ -88,6 +88,7 @@ const UserFormContainer = () => {
       role_name: "",
       status: "",
       username: "",
+      access: "",
     },
   });
   useEffect(() => {
@@ -100,7 +101,7 @@ const UserFormContainer = () => {
       form.setValue("role_name", user?.role_name!);
       form.setValue("status", user?.status!);
       form.setValue("username", user?.username!);
-
+      form.setValue("access", user?.access!);
       // setEdit(true);
     }
   }, [user]);
@@ -283,6 +284,34 @@ const UserFormContainer = () => {
                           <SelectContent>
                             <SelectItem value="Active">Active</SelectItem>
                             <SelectItem value="Inactive">Inactive</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <FormField
+                  control={form.control}
+                  name="access"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Access</FormLabel>
+                        <Select
+                          value={form.watch("access")}
+                          onValueChange={(value) => {
+                            form.setValue("access", value);
+                          }}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Access" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="ReadOnly">Read-Only</SelectItem>
+                            <SelectItem value="ReadDownload">
+                              Read-Download
+                            </SelectItem>
+                            <SelectItem value="Editable">Editable</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

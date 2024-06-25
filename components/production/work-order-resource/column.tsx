@@ -426,15 +426,6 @@ export const UpdateStatus = ({ row }: any) => {
   const queryClient = useQueryClient();
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
-      // console.log({
-      //   id: data.id,
-      //   ...value,
-      // });
-      // const deleteCode: any = await updateResourceWorkOrder({
-      //   id: data.id,
-      //   ...value,
-      // });
-      // return deleteCode;
       return new Promise(async (resolve, reject) => {
         try {
           const labourCardData = await getAllLabourCard();

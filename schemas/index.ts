@@ -23,6 +23,7 @@ export const UserSchema = z.object({
   role_name: z.string().min(1, { message: "Choose a role. " }),
   status: z.string().min(1, { message: "Status is required" }),
   token: z.string().default(" "),
+  access: z.string(),
 });
 export const IndirectCodeSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -97,7 +98,7 @@ export const WorkOrderSchema = z.object({
 export const ResourceWorkOrderSchema = z.object({
   estimated_hour: z.string().refine((arg) => {
     console.log(arg);
-    const regex = /^\d{1,4}[:.][0-5]?[0-9]$/;
+    const regex = /^\d{1,4}:[0-5]?[0-9]$/;
     return regex.test(arg);
   }),
   bench_mark_measure: z.string().optional().default("--"),

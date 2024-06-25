@@ -38,6 +38,7 @@ export interface UserData {
   updatedDate: string;
   username: string;
   edit: Function;
+  access: string;
 }
 export interface IndirectCodeData {
   createdDate: string;
