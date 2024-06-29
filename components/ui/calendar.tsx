@@ -47,10 +47,10 @@ function Calendar({
         day_today: "bg-green-100 font-bold text-green-500",
         day_outside:
           "day-outside text-muted-foreground  opacity-10 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-20 text-black ",
-        day_disabled:
-          "text-red-500 border-t-1 border-red-500 font-bold  opacity-20",
         day_range_middle:
           "aria-selected:bg-blue-50 bg-white aria-selected:text-accent-foreground",
+        day_disabled:
+          "text-red-500 border-t-1 border-red-500 font-bold  opacity-20",
         day_hidden: "invisible bg-green-500 ",
         ...classNames,
       }}

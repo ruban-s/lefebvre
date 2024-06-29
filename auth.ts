@@ -17,7 +17,6 @@ export const {
   },
   callbacks: {
     async session({ token, session, user }) {
-      console.log("In session");
       if (session.user && token?.sub) {
         session.user.id = token.sub;
       }
@@ -30,11 +29,7 @@ export const {
       return session;
     },
     async jwt({ token, user, profile }) {
-      console.log("In jwt");
-      console.log(token);
-      console.log(user);
       const newUser = user as any;
-      console.log(newUser);
       if (!token.sub) return token;
       if (!newUser) return token;
       token.role = newUser?.role_name;

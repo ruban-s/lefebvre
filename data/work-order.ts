@@ -90,3 +90,20 @@ export const deleteWorkOrder = async (value: any) => {
     return errorResponse;
   }
 };
+
+export const getAllWorkOrderByProjectId = async (projectId: any) => {
+  try {
+    const axiosResponse = await Axios.get(
+      `/workorder/getWorkOrderByProjectId?project_id=${projectId}`
+    );
+    const data = axiosResponse.data;
+    return data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
