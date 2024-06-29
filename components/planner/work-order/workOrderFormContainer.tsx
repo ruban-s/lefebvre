@@ -42,7 +42,7 @@ import { useWorkOrderStore } from "@/state";
 import { useRouter } from "next/navigation";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
-import { format, differenceInDays, addDays } from "date-fns";
+import { format, differenceInDays, addDays, parse } from "date-fns";
 import ProjectListCombo from "../../common/projectListCombo";
 import { ProjectData, WorkOrderData } from "@/types";
 import { uploadImage } from "@/data/common";
@@ -52,6 +52,7 @@ import {
   updateResourceWorkOrder,
 } from "@/data/resource-work-order";
 import { getAllLabourCard } from "@/data/labour-card";
+import { getAllProject } from "@/data/projects";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -59,7 +60,7 @@ const WorkOrderFormContainer = () => {
     (state: any) => state.removeWorkOrder
   );
   const queryClient = useQueryClient();
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  // const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [selectedProject, setProject] = useState<ProjectData | undefined>();
   const [disabledDates, setDisbleDates] = useState<Date[]>([]);
   const [fromDate, setFromDate] = useState<string>("");
@@ -67,7 +68,17 @@ const WorkOrderFormContainer = () => {
   const [file, selectedFile] = useState<string[]>([]);
   const [makeEmpty, setMakeEmpty] = useState<boolean>(false);
   const [disableTrue, setDisableTrue] = useState<boolean>(false);
-
+  const [hideDate, setHideDate] = useState<boolean>(true);
+  const [disableDateRange, setDisableDateRange] = useState<any>({
+    fromDate: "",
+    toDate: "",
+  });
+  const [previousDateRange, setPreviousDateRange] = useState<
+    DateRange | undefined
+  >({
+    from: undefined,
+    to: undefined,
+  });
   const { data, isLoading, isError } = useQuery({
     queryKey: ["work-orders"],
     queryFn: async () => {
@@ -149,7 +160,7 @@ const WorkOrderFormContainer = () => {
       //   ? await updateWorkOrder({ id: workOrder?.id, ...value })
       //   : await createWorkOrder(value);
 
-      setDateRange(undefined);
+      setPreviousDateRange(undefined);
       setMakeEmpty(true);
       removeWorkOrder();
       return breake;
@@ -166,6 +177,7 @@ const WorkOrderFormContainer = () => {
         setRange(undefined);
         selectedFile([]);
         setDisableTrue(false);
+        setHideDate(true);
       } else {
         toast.error(`Something went wrong`, {
           description: `${value.message}`,
@@ -201,9 +213,11 @@ const WorkOrderFormContainer = () => {
       requiredQuantity: "",
     },
   });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setHideDate(true);
         const data = await getAllLabourCard();
         const labourCards = JSON.parse(data.data);
 
@@ -232,11 +246,44 @@ const WorkOrderFormContainer = () => {
         var startDate = workOrder?.start_date!.toString().split("-");
         var endDate = workOrder?.end_date!.toString().split("-");
 
-        setDateRange({
-          from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-          to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+        // setDateRange({
+        //   from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+        //   to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+        // });
+
+        //       const [dateRange, setDateRange] = useState<DateRange | undefined>({
+        //   from: new Date(data.start_date),
+        //   to: new Date(data.end_date),
+        // });
+        setPreviousDateRange((prevValue: any) => {
+          const startDate = workOrder?.start_date
+            ? parse(workOrder.start_date, "dd-MM-yyyy", new Date())
+            : undefined;
+
+          const endDate = workOrder?.end_date
+            ? parse(workOrder.end_date, "dd-MM-yyyy", new Date())
+            : undefined;
+          return {
+            ...prevValue,
+            from: startDate,
+            to: endDate,
+          };
         });
+
+        const getProject = await getAllProject();
+        const parsedData = JSON.parse(getProject.data);
+        const filteredProject = parsedData.filter((data: any) => {
+          return data.project_id === workOrder?.project_id;
+        });
+
+        setDisableDateRange((prevRange: any) => ({
+          ...prevRange,
+          fromDate: filteredProject[0]?.start_date,
+          toDate: filteredProject[0]?.end_date,
+        }));
+        setHideDate(false);
       } catch (err) {
+        console.log(err);
         toast.error(`Something went wrong`, {
           position: "top-right",
           dismissible: true,
@@ -269,9 +316,10 @@ const WorkOrderFormContainer = () => {
       form.setValue("project_id", "");
       setProject(value);
       setDisbleDates([]);
-
+      setHideDate(true);
       return;
     }
+    setHideDate(false);
     if (!workOrder?.work_order_id) {
       form.setValue("work_order_id", value.project_id + "-");
     }
@@ -281,13 +329,18 @@ const WorkOrderFormContainer = () => {
     var endDate = value?.end_date!.toString().split("-");
     form.setValue("start_date", value?.start_date!);
     form.setValue("end_date", value?.end_date!);
+    setDisableDateRange((prevRange: any) => ({
+      ...prevRange,
+      fromDate: value?.start_date,
+      toDate: value?.end_date,
+    }));
     if (!workOrder) {
-      setFromDate(`${startDate[1]}-${startDate[0]}-${startDate[2]}`);
-      setToDate(`${endDate[1]}-${endDate[0]}-${endDate[2]}`);
-      setDateRange({
-        from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
-        to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
-      });
+      // setFromDate(`${startDate[1]}-${startDate[0]}-${startDate[2]}`);
+      // setToDate(`${endDate[1]}-${endDate[0]}-${endDate[2]}`);
+      // setDateRange({
+      //   from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
+      //   to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
+      // });
       const projectWiseWorkOrders: WorkOrderData[] | undefined = data?.filter(
         (info) => info.project_id === value?.project_id
       );
@@ -322,7 +375,7 @@ const WorkOrderFormContainer = () => {
 
   const setRange = (data: DateRange | undefined) => {
     form.clearErrors("start_date");
-    setDateRange(data);
+    setPreviousDateRange(data);
     if (!data) {
       form.setValue("start_date", "");
       form.setValue("end_date", "");
@@ -353,6 +406,7 @@ const WorkOrderFormContainer = () => {
     setProject(undefined);
     setRange(undefined);
     setDisableTrue(false);
+    setHideDate(true);
   };
 
   return (
@@ -473,11 +527,29 @@ const WorkOrderFormContainer = () => {
                         <FormLabel>Start Date - End Date</FormLabel>
                         <FormControl>
                           <DatePickerWithRange
-                            onselect={setRange}
-                            selectedData={dateRange!}
-                            fromDate={fromDate}
-                            toDate={toDate}
-                            disabled={disabledDates}
+                            onselect={(value: DateRange) => {
+                              if (value?.from) {
+                                form.setValue(
+                                  "start_date",
+                                  format(value.from, "dd-MM-yyyy")
+                                );
+                              }
+                              if (value?.to) {
+                                form.setValue(
+                                  "end_date",
+                                  format(value.to, "dd-MM-yyyy")
+                                );
+                              }
+                            }}
+                            selectedData={previousDateRange!}
+                            disabled={[]}
+                            tab="planner"
+                            file="workOrder"
+                            matcher={{
+                              from: disableDateRange.fromDate!,
+                              to: disableDateRange.toDate!,
+                            }}
+                            hide={hideDate}
                           />
                         </FormControl>
                         <FormMessage />

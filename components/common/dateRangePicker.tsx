@@ -27,6 +27,9 @@ interface DatePickerWithRangeProps {
   tab?: string;
   file?: string;
   matcher?: any;
+  hide?: boolean;
+  disableFrom?: DateRange | undefined;
+  disableTo?: DateRange | undefined;
 }
 
 export function DatePickerWithRange({
@@ -39,12 +42,12 @@ export function DatePickerWithRange({
   tab,
   file,
   matcher,
+  hide,
 }: DatePickerWithRangeProps) {
   const [date, setDate] = React.useState<DateRange | undefined>();
   React.useEffect(() => {
     setDate(selectedData);
   }, [selectedData]);
-
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -52,6 +55,7 @@ export function DatePickerWithRange({
           <Button
             id="date"
             variant={"outline"}
+            disabled={hide}
             className={cn(
               "w-full justify-start text-left font-normal",
               !date && "text-muted-foreground"

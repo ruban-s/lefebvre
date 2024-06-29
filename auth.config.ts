@@ -24,11 +24,9 @@ export default {
             return null;
           }
           const response = await authResponse.json();
-          console.log(response);
           if (response.status) {
             const user = JSON.parse(response.data);
             user["token"] = response.authToken;
-            console.log(user);
             return Promise.resolve(user);
           }
           return null;

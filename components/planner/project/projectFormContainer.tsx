@@ -36,10 +36,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useProjectStore } from "@/state";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DateRange } from "react-day-picker";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { uploadImage } from "@/data/common";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
+import { getAllWorkOrder, getAllWorkOrderByProjectId } from "@/data/work-order";
 
 const ProjectFormContainer = () => {
   const project = useProjectStore((state: any) => state.project); // Accessing the project object
@@ -156,10 +157,85 @@ const ProjectFormContainer = () => {
   }, [project]);
 
   const onSubmit = async (values: z.infer<typeof ProjectSchema>) => {
-    // console.log(values);
-    const { project_id, ...data } = values;
-    const payload = { project_id: `${project_id}`.toUpperCase(), ...data };
-    creatProject.mutate(payload);
+    if (project) {
+      toast.promise(
+        new Promise(async (resolve, reject) => {
+          try {
+            const getAllworkOrderByProject = await getAllWorkOrderByProjectId(
+              project.project_id
+            );
+            const workorderData = JSON.parse(getAllworkOrderByProject.data);
+            const updatedFromDate = parse(
+              values.start_date,
+              "dd-MM-yyyy",
+              new Date()
+            );
+            const updatedToDate = values.end_date
+              ? parse(values.end_date, "dd-MM-yyyy", new Date())
+              : parse(values.start_date, "dd-MM-yyyy", new Date());
+            updatedFromDate.setHours(0, 0, 0, 0);
+            updatedToDate.setHours(0, 0, 0, 0);
+            const filteredWorkOrder = workorderData
+              .filter((data: any) => {
+                const workorderFromDate = parse(
+                  data.start_date,
+                  "dd-MM-yyyy",
+                  new Date()
+                );
+                const workorderToDate = parse(
+                  data.end_date,
+                  "dd-MM-yyyy",
+                  new Date()
+                );
+                workorderFromDate.setHours(0, 0, 0, 0);
+                workorderToDate.setHours(0, 0, 0, 0);
+                return (
+                  workorderFromDate < updatedFromDate ||
+                  workorderToDate > updatedToDate
+                );
+              })
+              .map((data: any) => {
+                return data.work_order_id;
+              });
+            if (filteredWorkOrder.length > 0) {
+              reject(
+                `${filteredWorkOrder.join(
+                  ","
+                )} Workorder date range is outside the project range`
+              );
+              return;
+            }
+            resolve("Workorder date range is inside the project range");
+          } catch (err: any) {
+            reject(`Error: ${err.message}`);
+            return;
+          }
+        }),
+        {
+          loading: "Loading...",
+          success: (val: any) => {
+            const { project_id, ...data } = values;
+            const payload = {
+              project_id: `${project_id}`.toUpperCase(),
+              ...data,
+            };
+            creatProject.mutate(payload);
+            return `${val}`;
+          },
+          error: (data: any) => {
+            return `Error: ${
+              data ? `${data}` : "Something went wrong contact the admin"
+            }`;
+          },
+          position: "top-right",
+          dismissible: true,
+        }
+      );
+    } else {
+      const { project_id, ...data } = values;
+      const payload = { project_id: `${project_id}`.toUpperCase(), ...data };
+      creatProject.mutate(payload);
+    }
   };
   const newData = async (value: FormData, name: string) => {
     var data = await uploadImage(value, name);
