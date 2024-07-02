@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const paginationArray: number[] = [10, 20, 30, 40, 50];
+  const paginationArray: number[] = [10, 20, 30, 40, 50, 100];
 
   React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
@@ -93,6 +93,7 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    autoResetPageIndex: false,
     state: {
       sorting,
       columnFilters,
@@ -100,6 +101,7 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
   //CSV Export
   const exportCSV = (value: any) => {
     var newData: any = [];

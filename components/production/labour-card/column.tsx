@@ -33,7 +33,6 @@ import { labourCardMaintanceField } from "@/config/const";
 import { MdDelete } from "react-icons/md";
 
 const DeleteCard = ({ row }: { row: any }) => {
-  console.log(row.original);
   const queryClient = useQueryClient();
   const deleteItem = useMutation({
     mutationFn: async (value: any) => {
@@ -662,7 +661,7 @@ export const projectColumns: ColumnDef<LabourData>[] = [
   // {
   //   id: "delete",
   //   cell: ({ row }) => {
-  //     return <DeleteCard row={row} />;
+  // return <DeleteCard row={row} />;
   //   },
   // },
 ];

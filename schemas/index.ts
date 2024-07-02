@@ -97,7 +97,6 @@ export const WorkOrderSchema = z.object({
 });
 export const ResourceWorkOrderSchema = z.object({
   estimated_hour: z.string().refine((arg) => {
-    console.log(arg);
     const regex = /^\d{1,4}:[0-5]?[0-9]$/;
     return regex.test(arg);
   }),
@@ -105,7 +104,18 @@ export const ResourceWorkOrderSchema = z.object({
   bench_mark_unit: z.string().optional().default("--"),
   quantity_unit: z.string().min(1, { message: "required!" }),
   remark: z.string().optional().default("--"),
-  required_quantity: z.string().min(1, { message: "required!" }),
+  required_quantity: z
+    .string()
+    .min(1, { message: "required!" })
+    .refine(
+      (val) => {
+        const qty = parseInt(val);
+        return qty > 0;
+      },
+      {
+        message: "Values: Positive(+ve) numbers only",
+      }
+    ),
   sqNumber: z
     .string()
     .min(1, { message: "required!" })

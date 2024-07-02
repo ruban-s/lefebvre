@@ -68,6 +68,7 @@ import {
   calculateBalanceHours,
   calculateMinutes,
   formatHours,
+  RefetchWorkOrderResources,
 } from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
@@ -450,9 +451,10 @@ export const UpdateStatus = ({ row }: any) => {
               ...value,
               attachment: updatedImages,
             });
-            queryClient.invalidateQueries({
-              queryKey: ["resource-work-orders"],
-            });
+            // queryClient.invalidateQueries({
+            //   queryKey: ["resource-work-orders"],
+            // });
+            RefetchWorkOrderResources();
             resolve(deleteCode);
           }
         } catch (err) {

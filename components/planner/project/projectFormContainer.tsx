@@ -41,6 +41,7 @@ import { uploadImage } from "@/data/common";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
 import { getAllWorkOrder, getAllWorkOrderByProjectId } from "@/data/work-order";
+import { RefetchProject } from "@/commonfunction";
 
 const ProjectFormContainer = () => {
   const project = useProjectStore((state: any) => state.project); // Accessing the project object
@@ -79,9 +80,10 @@ const ProjectFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: ["projects"],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["projects"],
+      // });
+      RefetchProject();
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

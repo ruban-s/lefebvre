@@ -2,6 +2,7 @@ import { getAllProject } from "@/data/projects";
 import { getAllResourceWorkOrder } from "@/data/resource-work-order";
 import { getAllUser } from "@/data/user";
 import { getAllWorkOrder } from "@/data/work-order";
+import { useQueryClient } from "@tanstack/react-query";
 
 export async function fetchProjectId() {
   const data = await getAllProject();
@@ -82,4 +83,55 @@ export const formatHours = (hours: string) => {
   const formatHours = hour.padStart(2, "0");
   const formatMinutes = minutes.padStart(2, "0");
   return `${formatHours}:${formatMinutes}`;
+};
+
+/*
+refetch the project details
+ */
+export const RefetchProject = () => {
+  const queryClient = useQueryClient();
+  [
+    "all-projects",
+    "projects",
+    "projects-list",
+    "released-projects",
+    "unreleased-projects",
+    "closed-projects",
+    "cancelled-projects",
+  ].map((data: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [data],
+    });
+  });
+};
+
+export const RefetchWorkOrder = () => {
+  const queryClient = useQueryClient();
+  [
+    "work-orders",
+    "work-orders-list",
+    "released-work-orders",
+    "unreleased-work-orders",
+    "closed-work-orders",
+    "cancelled-work-orders",
+  ].map((data: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [data],
+    });
+  });
+};
+
+export const RefetchWorkOrderResources = () => {
+  const queryClient = useQueryClient();
+  [
+    "resource",
+    "released-resource-work-orders",
+    "unreleased-resource-work-orders",
+    "closed-resource-work-orders",
+    "cancelled-resource-work-orders",
+  ].map((data: string) => {
+    queryClient.invalidateQueries({
+      queryKey: [data],
+    });
+  });
 };

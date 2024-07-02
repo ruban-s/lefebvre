@@ -55,6 +55,9 @@ import {
   calculateBalanceHours,
   calculateMinutes,
   formatHours,
+  RefetchProject,
+  RefetchWorkOrder,
+  RefetchWorkOrderResources,
 } from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
@@ -294,13 +297,16 @@ export const UpdateStatus = ({ row }: any) => {
                   }));
               });
             }
-            ["projects", "work-orders", "resource-work-orders"].map(
-              (info, index) => {
-                queryClient.invalidateQueries({
-                  queryKey: [info],
-                });
-              }
-            );
+            // ["projects", "work-orders", "resource-work-orders"].map(
+            //   (info, index) => {
+            //     queryClient.invalidateQueries({
+            //       queryKey: [info],
+            //     });
+            //   }
+            // );
+            RefetchProject();
+            RefetchWorkOrder();
+            RefetchWorkOrderResources();
             const updatedValue = JSON.parse(value.data);
             var startDate = updatedValue?.start_date!.toString().split("-");
             var endDate = updatedValue?.end_date!.toString().split("-");

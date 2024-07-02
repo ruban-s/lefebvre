@@ -117,6 +117,7 @@ export const Columns: ColumnDef<ProjectData>[] = [
     accessorKey: "estimateHour",
     header: "Estimate Hrs",
     cell: ({ row }) => {
+      console.log(row.original);
       const estimate = formatHours(row.original.estimateHour);
       return <p>{estimate}</p>;
     },

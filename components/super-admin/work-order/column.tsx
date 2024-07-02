@@ -308,6 +308,7 @@ export const UpdateStatus = ({ row }: any) => {
   };
 
   const queryClient = useQueryClient();
+
   const { data: resourceWorkOrder } = useQuery({
     queryKey: ["resource-work-orders"],
     queryFn: async () => {
@@ -315,6 +316,7 @@ export const UpdateStatus = ({ row }: any) => {
       return JSON.parse(data.data) as ResourceWorkOdderData[];
     },
   });
+
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const deleteCode: any = await updateWorkOrder({
@@ -328,7 +330,9 @@ export const UpdateStatus = ({ row }: any) => {
         value.status === "Released"
       ) {
         var resourceWorkOrderList = resourceWorkOrder?.filter(
-          (info) => info.project_id === value.project_id
+          (info) =>
+            info.project_id === value.project_id &&
+            info.work_order_id === value.work_order_id
         );
         resourceWorkOrderList?.map(async (resourceWorkData, index) => {
           const payLoad = {
@@ -399,6 +403,7 @@ export const UpdateStatus = ({ row }: any) => {
       });
     },
   });
+
   const {
     data: projects,
     isLoading,

@@ -44,7 +44,6 @@ const FormanReport = () => {
       const formanList = await fetchFormanList();
       setFormanList(formanList);
       const id = await fetchProjectId();
-      console.log(id);
       const firstWorkOrder =
         id.length > 0 ? await WorkOrderId(id[0].project_id) : "";
       setDefaultData((prevDefault: any) => ({
