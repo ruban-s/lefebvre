@@ -38,7 +38,7 @@ const ProjectListCombo = ({
   const [values, setValues] = useState<any | undefined>(value);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["projects"],
+    queryKey: ["projects-list"],
     queryFn: async () => {
       const data = await getAllProject();
       const parsedData = JSON.parse(data.data) as any[];

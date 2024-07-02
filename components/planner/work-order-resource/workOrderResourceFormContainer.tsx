@@ -79,6 +79,7 @@ import { getAllMeasure } from "@/data/measure";
 import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
 import ResourceMultiFileSelect from "@/components/common/resourceMultiFileSelect";
+import { RefetchWorkOrderResources } from "@/commonfunction";
 
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
@@ -140,9 +141,10 @@ const WorkOrderResourceFormContainer = () => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: ["resource-work-orders"],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["resource-work-orders"],
+      // });
+      RefetchWorkOrderResources();
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

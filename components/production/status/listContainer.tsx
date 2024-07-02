@@ -72,7 +72,7 @@ const StatusListContainer = () => {
     queryFn: async () => {
       const data = await getAllProject();
       return (JSON.parse(data.data) as ProjectData[]).filter(
-        (info) => info.status === "Cancelled"
+        (info) => info.status === "Cancelled" || info.status === "Canceled"
       );
     },
   });

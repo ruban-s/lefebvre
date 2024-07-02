@@ -22,6 +22,7 @@ import {
   calculateMinutes,
   formatHours,
 } from "@/commonfunction";
+import { deleteWorkOrder } from "@/data/work-order";
 
 export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
@@ -233,4 +234,51 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     header: "Status",
     cell: ({ row }) => <StatusBadge row={row} />,
   },
+  // {
+  //   id: "delete",
+  //   cell: ({ row }) => {
+  //     return <DeleteCard row={row} />;
+  //   },
+  // },
 ];
+
+const DeleteCard = ({ row }: { row: any }) => {
+  const queryClient = useQueryClient();
+  const deleteItem = useMutation({
+    mutationFn: async (value: any) => {
+      const deleteCode: any = await deleteResourceWorkOrder(value);
+      return deleteCode;
+    },
+    onSuccess: (value) => {
+      if (value?.status) {
+        toast.success(`${value.message}`, {
+          description: `${value.message}`,
+          position: "top-right",
+          dismissible: true,
+        });
+      } else {
+        toast.error(`Something went wrong`, {
+          description: "Data not updated contact the admin",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["labour-card"],
+      });
+    },
+    onError: (value) => {
+      toast.error(`Something went wrong`, {
+        position: "top-right",
+        dismissible: true,
+      });
+    },
+  });
+  return (
+    <button
+      className="text-red-600"
+      onClick={() => deleteItem.mutate(row.original.id)}>
+      <MdDelete />
+    </button>
+  );
+};

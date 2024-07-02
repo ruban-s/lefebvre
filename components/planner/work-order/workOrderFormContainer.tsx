@@ -53,6 +53,7 @@ import {
 } from "@/data/resource-work-order";
 import { getAllLabourCard } from "@/data/labour-card";
 import { getAllProject } from "@/data/projects";
+import { RefetchWorkOrder, RefetchWorkOrderResources } from "@/commonfunction";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -185,11 +186,13 @@ const WorkOrderFormContainer = () => {
           dismissible: true,
         });
       }
-      ["work-orders", "resource-work-orders"].map((info, index) => {
-        queryClient.invalidateQueries({
-          queryKey: [info],
-        });
-      });
+      // ["work-orders", "resource-work-orders"].map((info, index) => {
+      //   queryClient.invalidateQueries({
+      //     queryKey: [info],
+      //   });
+      // });
+      RefetchWorkOrder();
+      RefetchWorkOrderResources();
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

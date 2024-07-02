@@ -48,7 +48,7 @@ const WorkOrderListCombo = ({
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["work-orders"],
+    queryKey: ["work-orders-list"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
       // console.log(JSON.parse(data.data) as WorkOrderData[]);
