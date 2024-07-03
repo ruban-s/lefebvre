@@ -28,7 +28,11 @@ const ReleasedProject = () => {
     ResourceWorkOdderData[]
   >([]);
 
-  const { data: workOrders, error: workOrderError } = useQuery({
+  const {
+    data: workOrders,
+    error: workOrderError,
+    isLoading: workOrderLoading,
+  } = useQuery({
     queryKey: ["cancelled-work-orders"],
     queryFn: async () => {
       const data = await getAllWorkOrder();
@@ -39,7 +43,11 @@ const ReleasedProject = () => {
       return JSON.parse(data.data) as WorkOrderData[];
     },
   });
-  const { data: projects, error: projectError } = useQuery({
+  const {
+    data: projects,
+    error: projectError,
+    isLoading: projectLoading,
+  } = useQuery({
     queryKey: ["cancelled-projects"],
     queryFn: async () => {
       const data = await getAllProject();
@@ -50,29 +58,24 @@ const ReleasedProject = () => {
       return JSON.parse(data.data) as ProjectData[];
     },
   });
-  const { data: resourceWorkOrder, isError: resourceError } = useQuery({
+  const {
+    data: resourceWorkOrder,
+    isError: resourceError,
+    isLoading: resourcesLoading,
+  } = useQuery({
     queryKey: ["cancelled-resource-work-orders"],
     queryFn: async () => {
       const data = await getAllResourceWorkOrder();
       const newResourceData = JSON.parse(data.data) as ResourceWorkOdderData[];
       setResourceWorkOrders(
-        newResourceData.filter((info, index) => info.status === "Canceled")
+        newResourceData.filter(
+          (info, index) =>
+            info.status === "Canceled" || info.status === "Cancelled"
+        )
       );
       return JSON.parse(data.data) as ResourceWorkOdderData[];
     },
   });
-  useEffect(() => {
-    projects &&
-      setProjects(projects.filter((info, index) => info.status === "Canceled"));
-    workOrders &&
-      setWorkOrders(
-        workOrders.filter((info, index) => info.status === "Canceled")
-      );
-    resourceWorkOrder &&
-      setResourceWorkOrders(
-        resourceWorkOrder.filter((info, index) => info.status === "Canceled")
-      );
-  }, []);
   return (
     <Tabs defaultValue="project" className="w-full">
       <TabsList className="bg-theme text-white">
@@ -82,7 +85,7 @@ const ReleasedProject = () => {
       </TabsList>
       <TabsContent value="project">
         <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {projectError ? (
+          {projectError || projectLoading ? (
             <div className="w-full min-h-[500px] justify-center items-center flex">
               <Loading />
             </div>
@@ -103,7 +106,7 @@ const ReleasedProject = () => {
       </TabsContent>
       <TabsContent value="workOrder">
         <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {workOrderError ? (
+          {workOrderError || workOrderLoading ? (
             <div className="w-full min-h-[500px] justify-center items-center flex">
               <Loading />
             </div>
@@ -124,7 +127,7 @@ const ReleasedProject = () => {
       </TabsContent>
       <TabsContent value="resource">
         <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
-          {resourceError ? (
+          {resourceError || resourcesLoading ? (
             <div className="w-full min-h-[500px] justify-center items-center flex">
               <Loading />
             </div>

@@ -46,14 +46,14 @@ export async function fetchFormanList() {
 }
 
 export const calculateMinutes = (time: string) => {
-  console.log(time);
   if (time === "" || time === undefined || time.length === 0) return 0;
   const [hours, minutes] = time.split(":").map(Number);
   const totalMinutes = hours * 60 + minutes;
   return totalMinutes;
 };
 
-export const formatTime = (totalMinutes: number) => {
+export const formatTime = (totalMinutes?: number) => {
+  if (totalMinutes === undefined) return `00:00`;
   const hours = Math.floor(Math.abs(totalMinutes) / 60)
     .toString()
     .padStart(2, "0");
@@ -63,10 +63,19 @@ export const formatTime = (totalMinutes: number) => {
   return `${hours}:${minutes}`;
 };
 
-export const calculateBalanceHours = (estimated: number, actual: number) => {
+export const calculateBalanceHours = (estimated?: number, actual?: number) => {
+  if (estimated === undefined) return { hours: "00:00", color: "red" };
+  let color;
+  if (actual === undefined) {
+    if (estimated > 0) {
+      color = "none";
+    } else {
+      color: "red";
+    }
+    return { hours: formatTime(estimated), color: "red" };
+  }
   const balanceMinutes = estimated - actual;
   const formattedTime = formatTime(balanceMinutes);
-  let color;
   if (balanceMinutes < 0) {
     color = "red";
   } else if (balanceMinutes === 0) {
@@ -80,8 +89,7 @@ export const calculateBalanceHours = (estimated: number, actual: number) => {
   return { hours: result, color };
 };
 
-export const formatHours = (hours: string) => {
-  console.log(hours);
+export const formatHours = (hours?: string) => {
   if (hours === "" || hours === undefined || hours.length === 0) return `00:00`;
   const [hour, minutes] = hours.split(":");
   const formatHours = hour.padStart(2, "0");
@@ -125,6 +133,7 @@ export const RefetchWorkOrder = (queryClient: any) => {
 
 export const RefetchWorkOrderResources = (queryClient: any) => {
   [
+    "resource-work-orders",
     "resource",
     "released-resource-work-orders",
     "unreleased-resource-work-orders",
