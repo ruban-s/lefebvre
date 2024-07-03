@@ -144,7 +144,7 @@ const WorkOrderResourceFormContainer = () => {
       // queryClient.invalidateQueries({
       //   queryKey: ["resource-work-orders"],
       // });
-      RefetchWorkOrderResources();
+      RefetchWorkOrderResources(queryClient);
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

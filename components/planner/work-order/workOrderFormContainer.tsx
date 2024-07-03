@@ -53,7 +53,11 @@ import {
 } from "@/data/resource-work-order";
 import { getAllLabourCard } from "@/data/labour-card";
 import { getAllProject } from "@/data/projects";
-import { RefetchWorkOrder, RefetchWorkOrderResources } from "@/commonfunction";
+import {
+  RefetchProject,
+  RefetchWorkOrder,
+  RefetchWorkOrderResources,
+} from "@/commonfunction";
 
 const WorkOrderFormContainer = () => {
   const workOrder = useWorkOrderStore((state: any) => state.workOrder); // Accessing the workOrder object
@@ -191,8 +195,8 @@ const WorkOrderFormContainer = () => {
       //     queryKey: [info],
       //   });
       // });
-      RefetchWorkOrder();
-      RefetchWorkOrderResources();
+      RefetchWorkOrder(queryClient);
+      RefetchWorkOrderResources(queryClient);
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

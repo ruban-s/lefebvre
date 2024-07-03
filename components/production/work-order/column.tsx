@@ -174,17 +174,27 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
   },
   {
     accessorKey: "estimateHour",
-    header: "Estimated Hrs",
+    header: "Estimate Hrs",
     cell: ({ row }) => {
-      const estimated = formatHours(row.original.estimateHour);
-      return <p>{estimated}</p>;
+      const estimate =
+        row.original.estimateHour === undefined ||
+        row.original.estimateHour === "" ||
+        row.original.estimateHour.length === 0
+          ? "00:00"
+          : formatHours(row.original.estimateHour);
+      return <p>{estimate}</p>;
     },
   },
   {
     accessorKey: "actualHour",
     header: "Actual Hrs",
     cell: ({ row }) => {
-      const actual = formatHours(row.original.actualHour);
+      const actual =
+        row.original.actualHour === undefined ||
+        row.original.actualHour === "" ||
+        row.original.actualHour.length === 0
+          ? "00:00"
+          : formatHours(row.original.actualHour);
       return <p>{actual}</p>;
     },
   },
@@ -192,8 +202,18 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
     accessorKey: "ballanceHour",
     header: "Balance Hrs",
     cell: ({ row }) => {
-      const estimate = calculateMinutes(row.original.estimateHour);
-      const actual = calculateMinutes(row.original.actualHour);
+      const estimate =
+        row.original.estimateHour === undefined ||
+        row.original.estimateHour === "" ||
+        row.original.estimateHour.length === 0
+          ? 0
+          : calculateMinutes(row.original.estimateHour);
+      const actual =
+        row.original.actualHour === undefined ||
+        row.original.actualHour === "" ||
+        row.original.actualHour.length === 0
+          ? 0
+          : calculateMinutes(row.original.actualHour);
       const balance = calculateBalanceHours(estimate, actual);
       return (
         <p
@@ -460,7 +480,6 @@ export const UpdateStatus = ({ row }: any) => {
               ...value,
               images: updatedImages,
             });
-            resolve(deleteCode);
             if (value.status !== "Released") {
               var resourceWorkOrderList = resourceWorkOrder?.filter(
                 (info) => info.project_id === value.project_id
@@ -496,13 +515,8 @@ export const UpdateStatus = ({ row }: any) => {
                   }));
               });
             }
-            // ["work-orders", "resource-work-orders"].map((info, index) => {
-            //   queryClient.invalidateQueries({
-            //     queryKey: [info],
-            //   });
-            // });
-            RefetchWorkOrder();
-            RefetchWorkOrderResources();
+            RefetchWorkOrder(queryClient);
+            RefetchWorkOrderResources(queryClient);
             const updatedValue = JSON.parse(deleteCode.data);
             var startDate = updatedValue?.start_date!.toString().split("-");
             var endDate = updatedValue?.end_date!.toString().split("-");
@@ -510,7 +524,8 @@ export const UpdateStatus = ({ row }: any) => {
               from: new Date(`${startDate[1]}-${startDate[0]}-${startDate[2]}`),
               to: new Date(`${endDate[1]}-${endDate[0]}-${endDate[2]}`),
             });
-            return deleteCode;
+            // return deleteCode;
+            resolve(deleteCode);
           }
         } catch (err) {
           reject(err);

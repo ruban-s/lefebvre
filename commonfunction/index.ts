@@ -46,6 +46,7 @@ export async function fetchFormanList() {
 }
 
 export const calculateMinutes = (time: string) => {
+  console.log(time);
   if (time === "" || time === undefined || time.length === 0) return 0;
   const [hours, minutes] = time.split(":").map(Number);
   const totalMinutes = hours * 60 + minutes;
@@ -91,8 +92,7 @@ export const formatHours = (hours: string) => {
 /*
 refetch the project details
  */
-export const RefetchProject = () => {
-  const queryClient = useQueryClient();
+export const RefetchProject = (queryClient: any) => {
   [
     "all-projects",
     "projects",
@@ -108,8 +108,7 @@ export const RefetchProject = () => {
   });
 };
 
-export const RefetchWorkOrder = () => {
-  const queryClient = useQueryClient();
+export const RefetchWorkOrder = (queryClient: any) => {
   [
     "work-orders",
     "work-orders-list",
@@ -117,15 +116,14 @@ export const RefetchWorkOrder = () => {
     "unreleased-work-orders",
     "closed-work-orders",
     "cancelled-work-orders",
-  ].map((data: string) => {
+  ].forEach((data: string) => {
     queryClient.invalidateQueries({
       queryKey: [data],
     });
   });
 };
 
-export const RefetchWorkOrderResources = () => {
-  const queryClient = useQueryClient();
+export const RefetchWorkOrderResources = (queryClient: any) => {
   [
     "resource",
     "released-resource-work-orders",

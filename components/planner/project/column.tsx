@@ -34,8 +34,18 @@ export const CellFunction = ({ row }: any) => {
   const rowData = row.original;
 
   const balanceValue = () => {
-    const estimate = calculateMinutes(rowData.estimateHour);
-    const actual = calculateMinutes(rowData.actualHour);
+    const estimate =
+      rowData.estimateHour === "undefined" ||
+      rowData.estimateHour === "" ||
+      rowData.estimateHour.length === 0
+        ? 0
+        : calculateMinutes(rowData.estimateHour);
+    const actual =
+      rowData.actualHour === "undefined" ||
+      rowData.actualHour === "" ||
+      rowData.actualHour.length === 0
+        ? 0
+        : calculateMinutes(rowData.actualHour);
     const balance = calculateBalanceHours(estimate, actual);
     return balance.hours;
   };
@@ -49,12 +59,22 @@ export const CellFunction = ({ row }: any) => {
     { name: "End Date", value: rowData.end_date, cover: "half" },
     {
       name: "Estimate Hrs",
-      value: formatHours(rowData.estimateHour),
+      value:
+        rowData.estimateHour === "undefined" ||
+        rowData.estimateHour === "" ||
+        rowData.estimateHour.length === 0
+          ? "00:00"
+          : formatHours(rowData.estimateHour),
       cover: "half",
     },
     {
       name: "Actual Hrs",
-      value: formatHours(rowData.actualHour),
+      value:
+        rowData.actualHour === "undefined" ||
+        rowData.actualHour === "" ||
+        rowData.actualHour.length === 0
+          ? "00:00"
+          : formatHours(rowData.actualHour),
       cover: "half",
     },
     {
