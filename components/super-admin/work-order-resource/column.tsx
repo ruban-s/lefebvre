@@ -50,6 +50,7 @@ import {
   calculateBalanceHours,
   calculateMinutes,
   formatHours,
+  RefetchWorkOrderResources,
 } from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
@@ -331,6 +332,7 @@ export const UpdateStatus = ({ row }: any) => {
       return deleteCode;
     },
     onSuccess: (value) => {
+      RefetchWorkOrderResources(queryClient);
       if (value?.status || value?.message === `For input string: ""`) {
         if (value?.message === `For input string: ""`) {
           toast.success(`Data updated successfully!`, {
@@ -352,13 +354,13 @@ export const UpdateStatus = ({ row }: any) => {
           dismissible: true,
         });
       }
-      queryClient.invalidateQueries({
-        queryKey: [
-          "resource-work-orders",
-          "cancelled-resource-work-orders",
-          "closed-resource-work-orders",
-        ],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: [
+      //     "resource-work-orders",
+      //     "cancelled-resource-work-orders",
+      //     "closed-resource-work-orders",
+      //   ],
+      // });
     },
     onError: (value) => {
       console.log(value);
