@@ -15,6 +15,7 @@ import CustomImageInput from "./customImageInput";
 import { Badge } from "../ui/badge";
 import ViewTabField from "./viewTabField";
 import { Input } from "../ui/input";
+import Image from "next/image";
 // import { convertToUAEFormat } from "@/action/common-action";
 
 interface TableActionButtonComponentsProps {

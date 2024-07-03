@@ -46,6 +46,7 @@ export async function fetchFormanList() {
 }
 
 export const calculateMinutes = (time: string) => {
+  if (time === "" || time === undefined || time.length === 0) return 0;
   const [hours, minutes] = time.split(":").map(Number);
   const totalMinutes = hours * 60 + minutes;
   return totalMinutes;
@@ -79,6 +80,8 @@ export const calculateBalanceHours = (estimated: number, actual: number) => {
 };
 
 export const formatHours = (hours: string) => {
+  console.log(hours);
+  if (hours === "" || hours === undefined || hours.length === 0) return `00:00`;
   const [hour, minutes] = hours.split(":");
   const formatHours = hour.padStart(2, "0");
   const formatMinutes = minutes.padStart(2, "0");
