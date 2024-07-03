@@ -110,7 +110,6 @@ export const columns: ColumnDef<EmployeeData>[] = [
     accessorKey: "last_name",
     header: "Last name",
   },
-
   {
     accessorKey: "designation_id",
     header: "Designation",
@@ -125,6 +124,7 @@ export const columns: ColumnDef<EmployeeData>[] = [
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => {
+      console.log(row.original);
       return (
         <div>
           {row.original.email === null || row.original.email.length === 0 ? (

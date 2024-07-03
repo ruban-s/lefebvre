@@ -47,6 +47,7 @@ const CustomImageInput = ({
   };
 
   useEffect(() => {
+    console.log(value);
     setImage(value);
   }, [value]);
 
