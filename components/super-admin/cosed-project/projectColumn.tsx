@@ -116,7 +116,12 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     accessorKey: "estimateHour",
     header: "Estimate Hrs",
     cell: ({ row }) => {
-      const estimate = formatHours(row.original.estimateHour);
+      const estimate =
+        row.original.estimateHour === undefined ||
+        row.original.estimateHour === "" ||
+        row.original.estimateHour.length === 0
+          ? "00:00"
+          : formatHours(row.original.estimateHour);
       return <p>{estimate}</p>;
     },
   },
@@ -124,7 +129,12 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     accessorKey: "actualHour",
     header: "Actual Hrs",
     cell: ({ row }) => {
-      const actual = formatHours(row.original.actualHour);
+      const actual =
+        row.original.actualHour === undefined ||
+        row.original.actualHour === "" ||
+        row.original.actualHour.length === 0
+          ? "00:00"
+          : formatHours(row.original.actualHour);
       return <p>{actual}</p>;
     },
   },
@@ -132,9 +142,18 @@ export const projectColumns: ColumnDef<ProjectData>[] = [
     accessorKey: "ballanceHour",
     header: "Balance Hrs",
     cell: ({ row }) => {
-      console.log(row.original);
-      const estimate = calculateMinutes(row.original.estimateHour);
-      const actual = calculateMinutes(row.original.actualHour);
+      const estimate =
+        row.original.estimateHour === undefined ||
+        row.original.estimateHour === "" ||
+        row.original.estimateHour.length === 0
+          ? 0
+          : calculateMinutes(row.original.estimateHour);
+      const actual =
+        row.original.actualHour === undefined ||
+        row.original.actualHour === "" ||
+        row.original.actualHour.length === 0
+          ? 0
+          : calculateMinutes(row.original.actualHour);
       const balance = calculateBalanceHours(estimate, actual);
       return (
         <p

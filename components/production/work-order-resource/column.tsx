@@ -68,7 +68,6 @@ import {
   calculateBalanceHours,
   calculateMinutes,
   formatHours,
-  RefetchWorkOrderResources,
 } from "@/commonfunction";
 
 export const CellFunction = ({ row }: any) => {
@@ -180,7 +179,12 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = formatHours(row.original.estimated_hour);
+      const estimated =
+        row.original.estimated_hour === "" ||
+        row.original.estimated_hour === undefined ||
+        row.original.estimated_hour.length === 0
+          ? "00.00"
+          : formatHours(row.original.estimated_hour);
       return <p>{estimated}</p>;
     },
   },
@@ -188,7 +192,12 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = formatHours(row.original.actual_hour);
+      const actual_hour =
+        row.original.actual_hour === "" ||
+        row.original.actual_hour === undefined ||
+        row.original.actual_hour.length === 0
+          ? "00.00"
+          : formatHours(row.original.actual_hour);
       return <p>{actual_hour}</p>;
     },
   },
@@ -196,8 +205,18 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "ballanceHour",
     header: "Balance Hrs",
     cell: ({ row }) => {
-      const estimate = calculateMinutes(row.original.estimated_hour);
-      const actual = calculateMinutes(row.original.actual_hour);
+      const estimate =
+        row.original.estimated_hour === "" ||
+        row.original.estimated_hour === undefined ||
+        row.original.estimated_hour.length === 0
+          ? 0
+          : calculateMinutes(row.original.estimated_hour);
+      const actual =
+        row.original.actual_hour === "" ||
+        row.original.actual_hour === undefined ||
+        row.original.actual_hour.length === 0
+          ? 0
+          : calculateMinutes(row.original.actual_hour);
       const balance = calculateBalanceHours(estimate, actual);
       return (
         <p
@@ -451,10 +470,9 @@ export const UpdateStatus = ({ row }: any) => {
               ...value,
               attachment: updatedImages,
             });
-            // queryClient.invalidateQueries({
-            //   queryKey: ["resource-work-orders"],
-            // });
-            RefetchWorkOrderResources();
+            queryClient.invalidateQueries({
+              queryKey: ["resource-work-orders"],
+            });
             resolve(deleteCode);
           }
         } catch (err) {

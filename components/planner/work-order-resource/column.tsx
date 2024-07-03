@@ -31,7 +31,6 @@ export const CellFunction = ({ row }: any) => {
   const queryClient = useQueryClient();
   const workOrders = row.original;
   const [foreman, setForeman] = useState();
-  console.log(workOrders);
 
   const fetchFormans = async () => {
     const formans = await getAllUser();
@@ -46,8 +45,18 @@ export const CellFunction = ({ row }: any) => {
   };
 
   const balanceValue = () => {
-    const estimate = calculateMinutes(workOrders.estimated_hour);
-    const actual = calculateMinutes(workOrders.actual_hour);
+    const estimate =
+      workOrders.estimated_hour === "" ||
+      workOrders.estimated_hour === undefined ||
+      workOrders.estimated_hour.length === 0
+        ? 0
+        : calculateMinutes(workOrders.estimated_hour);
+    const actual =
+      workOrders.actual_hour === "" ||
+      workOrders.actual_hour === undefined ||
+      workOrders.actual_hour.length === 0
+        ? 0
+        : calculateMinutes(workOrders.actual_hour);
     const balance = calculateBalanceHours(estimate, actual);
     return balance.hours;
   };
@@ -79,12 +88,22 @@ export const CellFunction = ({ row }: any) => {
     },
     {
       name: "Estimate Hrs",
-      value: formatHours(workOrders.estimated_hour),
+      value:
+        workOrders.estimated_hour === "" ||
+        workOrders.estimated_hour === undefined ||
+        workOrders.estimated_hour.length === 0
+          ? "00.00"
+          : formatHours(workOrders.estimated_hour),
       cover: "half",
     },
     {
       name: "Actual Hrs",
-      value: formatHours(workOrders.actual_hour),
+      value:
+        workOrders.actual_hour === "" ||
+        workOrders.actual_hour === undefined ||
+        workOrders.actual_hour.length === 0
+          ? "00.00"
+          : formatHours(workOrders.actual_hour),
       cover: "half",
     },
     {
@@ -281,7 +300,12 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "estimated_hour",
     header: "Estimated Hrs",
     cell: ({ row }: { row: any }) => {
-      const estimated = formatHours(row.original.estimated_hour);
+      const estimated =
+        row.original.estimated_hour === "" ||
+        row.original.estimated_hour === undefined ||
+        row.original.estimated_hour.length === 0
+          ? "00.00"
+          : formatHours(row.original.estimated_hour);
       return <p>{estimated}</p>;
     },
   },
@@ -289,7 +313,12 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "actual_hour",
     header: "Actual Hrs",
     cell: ({ row }: { row: any }) => {
-      const actual_hour = formatHours(row.original.actual_hour);
+      const actual_hour =
+        row.original.actual_hour === "" ||
+        row.original.actual_hour === undefined ||
+        row.original.actual_hour.length === 0
+          ? "00.00"
+          : formatHours(row.original.actual_hour);
       return <p>{actual_hour}</p>;
     },
   },
@@ -297,8 +326,18 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "ballanceHour",
     header: "Balance Hrs",
     cell: ({ row }) => {
-      const estimate = calculateMinutes(row.original.estimated_hour);
-      const actual = calculateMinutes(row.original.actual_hour);
+      const estimate =
+        row.original.estimated_hour === "" ||
+        row.original.estimated_hour === undefined ||
+        row.original.estimated_hour.length === 0
+          ? 0
+          : calculateMinutes(row.original.estimated_hour);
+      const actual =
+        row.original.actual_hour === "" ||
+        row.original.actual_hour === undefined ||
+        row.original.actual_hour.length === 0
+          ? 0
+          : calculateMinutes(row.original.actual_hour);
       const balance = calculateBalanceHours(estimate, actual);
       return (
         <p

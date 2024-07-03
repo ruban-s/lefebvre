@@ -80,10 +80,7 @@ const ProjectFormContainer = () => {
           dismissible: true,
         });
       }
-      // queryClient.invalidateQueries({
-      //   queryKey: ["projects"],
-      // });
-      RefetchProject();
+      RefetchProject(queryClient);
     },
     onError: (value) => {
       toast.error(`Something went wrong`, {

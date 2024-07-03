@@ -42,8 +42,18 @@ export const CellFunction = ({ row }: any) => {
   // };
   const workOrders = row.original;
   const balanceValue = () => {
-    const estimate = calculateMinutes(workOrders.estimateHour);
-    const actual = calculateMinutes(workOrders.actualHour);
+    const estimate =
+      workOrders.estimateHour === "" ||
+      workOrders.estimateHour === undefined ||
+      workOrders.estimateHour.length === 0
+        ? 0
+        : calculateMinutes(workOrders.estimateHour);
+    const actual =
+      workOrders.actualHour === "" ||
+      workOrders.actualHour === undefined ||
+      workOrders.actualHour.length === 0
+        ? 0
+        : calculateMinutes(workOrders.actualHour);
     const balance = calculateBalanceHours(estimate, actual);
     return balance.hours;
   };
@@ -56,12 +66,22 @@ export const CellFunction = ({ row }: any) => {
     { name: "End Date", value: workOrders.end_date, cover: "half" },
     {
       name: "Estimate Hrs",
-      value: formatHours(workOrders.estimateHour),
+      value:
+        workOrders.estimateHour === "" ||
+        workOrders.estimateHour === undefined ||
+        workOrders.estimateHour.length === 0
+          ? "00:00"
+          : formatHours(workOrders.estimateHour),
       cover: "half",
     },
     {
       name: "Actual Hrs",
-      value: formatHours(workOrders.actualHour),
+      value:
+        workOrders.actualHour === "" ||
+        workOrders.actualHour === undefined ||
+        workOrders.actualHour.length === 0
+          ? "00:00"
+          : formatHours(workOrders.actualHour),
       cover: "half",
     },
     {
