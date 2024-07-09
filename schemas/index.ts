@@ -159,3 +159,80 @@ export const ShiftSchema = z.object({
   status: z.string().optional(),
   updatedDate: z.string().optional(),
 });
+
+export const LabourCardSchema = z
+  .object({
+    id: z.number(),
+    name: z.string().min(1, { message: "Name is required" }),
+    punch_in_time: z.string().min(1, { message: "Punch in time is required" }),
+    punch_out_time: z
+      .string()
+      .min(1, { message: "Punch out time is required" }),
+    designation_id: z
+      .string()
+      .min(1, { message: "Designation ID is required" }),
+    employee_id: z.string().min(1, { message: "Employee ID is required" }),
+    forman_id: z.string().min(1, { message: "Foreman ID is required" }),
+    resource_id: z.string().optional(),
+    project_id: z.string().optional(),
+    work_order_id: z.string().optional(),
+    attendance_type: z
+      .string()
+      .min(1, { message: "Attendance type is required" }),
+    remark: z.string().optional(),
+    gl_code: z.string().optional(),
+    gl_description: z.string().optional(),
+    sq_no: z.string().optional(),
+    // system_in_time: z
+    //   .string()
+    //   .min(1, { message: "System in time is required" }),
+    // system_out_time: z
+    //   .string()
+    //   .min(1, { message: "System out time is required" }),
+    // work_hours: z.string().min(1, { message: "Work hours are required" }),
+    // break_duration: z.string().optional(),
+    // effective_work_hour: z
+    //   .string()
+    //   .min(1, { message: "Effective work hour is required" }),
+    // effective_work_hour_format: z
+    //   .string()
+    //   .min(1, { message: "Effective work hour format is required" })
+    //   .optional()
+    //   .default(""),
+    work_hours: z.string().optional(),
+    break_duration: z.string().optional(),
+    effective_work_hour: z.string().optional(),
+    effective_work_hour_format: z.string().optional(),
+    prepared_quantity: z
+      .string()
+      .min(1, { message: "Prepared quantity is required" }),
+    shift_date: z.string().min(1, { message: "Shift date is required" }),
+    shift_start_time: z
+      .string()
+      .min(1, { message: "Shift start time is required" })
+      .optional(),
+    shift_end_time: z
+      .string()
+      .min(1, { message: "Shift end time is required" })
+      .optional(),
+  })
+  .refine(
+    (data) =>
+      (!!data.project_id &&
+        !!data.work_order_id &&
+        !!data.resource_id &&
+        !!data.sq_no &&
+        !data.gl_code &&
+        !data.gl_description) ||
+      (!data.project_id &&
+        !data.work_order_id &&
+        !data.resource_id &&
+        !data.sq_no &&
+        !!data.gl_code &&
+        !!data.gl_description),
+    {
+      message:
+        "Either all of project_id, work_order_id, resource_id, and sq_no must be present, or gl_code and gl_description must be present",
+      path: ["project_id"],
+    }
+  );

@@ -30,6 +30,7 @@ const LabourListContainer = () => {
     queryKey: ["labour-card"],
     queryFn: async () => {
       const data = await getAllLabourCard();
+      console.log(JSON.parse(data.data) as LabourData[]);
       return JSON.parse(data.data) as LabourData[];
     },
   });
@@ -125,7 +126,7 @@ const LabourListContainer = () => {
   }
   return (
     // <div className="w-full h-[100%] bg-red-500 m-2 ">demo</div>
-    <Tabs defaultValue="labourCardDashboard" className="w-full">
+    <Tabs defaultValue="labourCardList" className="w-full">
       <TabsList className="bg-theme text-white">
         <TabsTrigger value="labourCardDashboard">
           Labour Card Dashboard

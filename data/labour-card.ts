@@ -26,13 +26,11 @@ export const getAllLabourCard = async () => {
 };
 export const updateLabourCard = async (value: any) => {
   try {
+    // console.log(value);
     const axiosResponse = await Axios.put("/labor/update", value);
-    console.log(value);
     const data = axiosResponse.data;
-
     return data;
   } catch (error) {
-    console.log(error);
     const errorResponse: ResponseData = {
       status: false,
       message: JSON.stringify(error),

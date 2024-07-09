@@ -145,3 +145,156 @@ export const RefetchWorkOrderResources = (queryClient: any) => {
     });
   });
 };
+
+// Online Javascript Editor for free
+// Write, Edit and Run your Javascript code using JS Online Compiler
+
+const convertHoursToMinutesForDayShift = (times: string) => {
+  const [hours, minutes] = times.split(":").map(Number);
+  return hours * 60 + minutes;
+};
+
+const convertMinutesToHours = (times: number) => {
+  const hours = Math.floor(times / 60);
+  const minutes = times % 60;
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+};
+
+const convertHoursToMinutesForNightShift = (times: string) => {
+  const [hours, minutes] = times.split(":").map(Number);
+  if (hours >= 0 && hours <= 11) {
+    const oneDayMinutes = 24 * 60;
+    return oneDayMinutes + hours * 60 + minutes;
+  }
+  return hours * 60 + minutes;
+};
+
+// const punchInTime = "20:00";
+// const punchOutTime = "02:30";
+// const breakDuration = '[{"startTime":"23:10","endTime":"23:40","name":"BREAKFAST","status":"Active","shiftName":"SHIFT-1","shiftId":"25"},{"startTime":"23:59","endTime":"00:10","name":"LUNCH","status":"Active","shiftName":"SHIFT-1","shiftId":"25"},{"startTime":"02:50","endTime":"02:55","name":"LUNCH","status":"Active","shiftName":"SHIFT-1","shiftId":"25"},{"startTime":"02:20","endTime":"02:40","name":"LUNCH","status":"Active","shiftName":"SHIFT-1","shiftId":"25"}]';
+// const shiftType = "Night";
+// const punchInTime = "06:00";
+// const punchOutTime = "10:41";
+// const breakDuration = '[{"startTime":"08:20","endTime":"08:40","name":"BREAKFAST","status":"Active","shiftName":"SHIFT-1","shiftId":"25"},{"startTime":"10:30","endTime":"10:50","name":"LUNCH","status":"Active","shiftName":"SHIFT-1","shiftId":"25"},{"startTime":"11:50","endTime":"11:55","name":"LUNCH","status":"Active","shiftName":"SHIFT-1","shiftId":"25"}]';
+// const shiftType = "Day";
+// const parsedBreakDuration = JSON.parse(breakDuration);
+interface calculateWorkAndBreakHourProps {
+  punchInTime: string;
+  punchOutTime: string;
+  shiftType: string;
+  breakType: any;
+}
+
+export const calculateWorkAndBreakHour = ({
+  punchInTime,
+  punchOutTime,
+  shiftType,
+  breakType,
+}: calculateWorkAndBreakHourProps) => {
+  // console.log(punchInTime, punchOutTime, shiftType, breakType);
+  let workHours = "";
+  let effectiveWorkHoursMinutes = 0;
+  let breakHoursMinutes = 0;
+
+  const parsedBreakDuration = JSON.parse(breakType);
+  // console.log(JSON.parse(breakType));
+
+  const calculateBreakAndEffectiveWorkhour = (
+    punchInMinutes: number,
+    punchOutMinutes: number,
+    totalMinutes: number,
+    type: string
+  ) => {
+    parsedBreakDuration.forEach((data: any) => {
+      const breakInHours = data.startTime;
+      const breakOutHours = data.endTime;
+      const breakInMinutes =
+        type === "day"
+          ? convertHoursToMinutesForDayShift(breakInHours)
+          : convertHoursToMinutesForNightShift(breakInHours);
+      const breakOutMinutes =
+        type === "day"
+          ? convertHoursToMinutesForDayShift(breakOutHours)
+          : convertHoursToMinutesForNightShift(breakOutHours);
+      let interval = 0;
+      if (type === "day") {
+        if (breakInMinutes < 24 * 60 && breakOutMinutes >= 24 * 60) {
+          return;
+        }
+      }
+      if (
+        breakInMinutes >= punchInMinutes &&
+        breakOutMinutes <= punchOutMinutes
+      ) {
+        interval = breakOutMinutes - breakInMinutes;
+      } else if (
+        breakInMinutes <= punchInMinutes &&
+        breakOutMinutes >= punchOutMinutes
+      ) {
+        interval = punchOutMinutes - punchInMinutes;
+      } else if (
+        breakInMinutes >= punchInMinutes &&
+        breakInMinutes <= punchOutMinutes
+      ) {
+        interval = punchOutMinutes - breakInMinutes;
+      } else if (
+        breakOutMinutes >= punchInMinutes &&
+        breakOutMinutes <= punchOutMinutes
+      ) {
+        interval = breakOutMinutes - punchInMinutes;
+      }
+      effectiveWorkHoursMinutes -= interval;
+      breakHoursMinutes += interval;
+    });
+  };
+
+  const calculateEffectiveWorkHourFormt = (
+    effectiveWorkHourMinutes: number
+  ) => {
+    const effectiveWorkHourFormat = ((5 / 3) * effectiveWorkHourMinutes) / 100;
+    return effectiveWorkHourFormat.toFixed(2);
+  };
+
+  if (shiftType.toLowerCase().trim() === "day") {
+    const punchInMinutes = convertHoursToMinutesForDayShift(punchInTime);
+    const punchOutMinutes = convertHoursToMinutesForDayShift(punchOutTime);
+    const totalMinutes = punchOutMinutes - punchInMinutes;
+    workHours = convertMinutesToHours(totalMinutes);
+    effectiveWorkHoursMinutes = totalMinutes;
+    calculateBreakAndEffectiveWorkhour(
+      punchInMinutes,
+      punchOutMinutes,
+      totalMinutes,
+      "day"
+    );
+  } else {
+    const punchInMinutes = convertHoursToMinutesForNightShift(punchInTime);
+    const punchOutMinutes = convertHoursToMinutesForNightShift(punchOutTime);
+    const totalMinutes = punchOutMinutes - punchInMinutes;
+    workHours = convertMinutesToHours(totalMinutes);
+    effectiveWorkHoursMinutes = totalMinutes;
+    calculateBreakAndEffectiveWorkhour(
+      punchInMinutes,
+      punchOutMinutes,
+      totalMinutes,
+      "Night"
+    );
+  }
+  console.log("workHours", workHours);
+  console.log(
+    "effectiveWorkHoursMinutes",
+    convertMinutesToHours(effectiveWorkHoursMinutes)
+  );
+  console.log("breakHoursMinutes", convertMinutesToHours(breakHoursMinutes));
+
+  return {
+    workHours,
+    effectiveWorkHours: convertMinutesToHours(effectiveWorkHoursMinutes),
+    breakHours: convertMinutesToHours(breakHoursMinutes),
+    effectiveWorkHourFormat: calculateEffectiveWorkHourFormt(
+      effectiveWorkHoursMinutes
+    ),
+  };
+};
