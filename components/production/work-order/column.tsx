@@ -20,7 +20,6 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -350,7 +349,8 @@ export const workOrderColumns: ColumnDef<WorkOrderData>[] = [
                   target="_blank"
                   key={index}
                   href={info}
-                  className="flex flex-row gap-2 w-full">
+                  className="flex flex-row gap-2 w-full"
+                >
                   {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
                   {file.split(".")[1] === "pdf" && <FaFilePdf />}
                   {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
@@ -612,7 +612,8 @@ export const UpdateStatus = ({ row }: any) => {
           className="sm:max-w-[425px]"
           onInteractOutside={(e) => {
             e.preventDefault();
-          }}>
+          }}
+        >
           <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
             <DialogTitle className="text-white">Change Status</DialogTitle>
           </DialogHeader>
@@ -683,7 +684,8 @@ export const UpdateStatus = ({ row }: any) => {
                 // value={payLoad.status}
                 onValueChange={(value) => {
                   payLoad.status = value;
-                }}>
+                }}
+              >
                 <SelectTrigger className="w-[200px]">
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
@@ -711,7 +713,8 @@ export const UpdateStatus = ({ row }: any) => {
                 onClick={() => {
                   handleUpdate(payLoad);
                   // updateItem.mutate(payLoad);
-                }}>
+                }}
+              >
                 Save
               </Button>
             </DialogClose>
