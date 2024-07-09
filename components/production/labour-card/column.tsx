@@ -661,7 +661,7 @@ export const projectColumns: ColumnDef<LabourData>[] = [
   // {
   //   id: "delete",
   //   cell: ({ row }) => {
-  // return <DeleteCard row={row} />;
+  //     return <DeleteCard row={row} />;
   //   },
   // },
 ];

@@ -331,7 +331,6 @@ const WorkOrderFormContainer = () => {
       form.setValue("work_order_id", value.project_id + "-");
     }
     form.setValue("project_id", value.project_id);
-    setProject(value);
     var startDate = value?.start_date!.toString().split("-");
     var endDate = value?.end_date!.toString().split("-");
     form.setValue("start_date", value?.start_date!);
