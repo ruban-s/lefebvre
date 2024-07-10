@@ -172,7 +172,7 @@ export const LabourCardSchema = z
       .string()
       .min(1, { message: "Designation ID is required" }),
     employee_id: z.string().min(1, { message: "Employee ID is required" }),
-    forman_id: z.string().min(1, { message: "Foreman ID is required" }),
+    forman_name: z.string().min(1, { message: "Foreman ID is required" }),
     resource_id: z.string().optional(),
     project_id: z.string().optional(),
     work_order_id: z.string().optional(),
@@ -203,9 +203,7 @@ export const LabourCardSchema = z
     break_duration: z.string().optional(),
     effective_work_hour: z.string().optional(),
     effective_work_hour_format: z.string().optional(),
-    prepared_quantity: z
-      .string()
-      .min(1, { message: "Prepared quantity is required" }),
+    prepared_quantity: z.string().optional(),
     shift_date: z.string().min(1, { message: "Shift date is required" }),
     shift_start_time: z
       .string()
@@ -234,5 +232,33 @@ export const LabourCardSchema = z
       message:
         "Either all of project_id, work_order_id, resource_id, and sq_no must be present, or gl_code and gl_description must be present",
       path: ["project_id"],
+    }
+  )
+  .refine(
+    (data) => {
+      const hasProjectId = !!data.project_id;
+      const hasPreparedQuantity = !!data.prepared_quantity;
+
+      // Both project_id and prepared_quantity should either be both present or both absent
+      return (
+        (hasProjectId && hasPreparedQuantity) ||
+        (!hasProjectId && !hasPreparedQuantity)
+      );
+    },
+    {
+      message:
+        "If project_id is present, prepared_quantity must also be present & viceversa",
+      path: ["prepared_quantity"],
+    }
+  )
+  .refine(
+    (data) => {
+      const hasPunchOut = !!data.punch_out_time;
+      const hasRemark = !!data.remark;
+      return (hasPunchOut && hasRemark) || (!hasPunchOut && !hasRemark);
+    },
+    {
+      message: "If punchout is present, Remark must be present and viceversa",
+      path: ["prepared_quantity"],
     }
   );

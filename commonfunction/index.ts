@@ -194,6 +194,18 @@ export const calculateWorkAndBreakHour = ({
   breakType,
 }: calculateWorkAndBreakHourProps) => {
   // console.log(punchInTime, punchOutTime, shiftType, breakType);
+  if (
+    punchOutTime === undefined ||
+    punchOutTime === null ||
+    punchOutTime.length === 0
+  ) {
+    return {
+      workHours: "",
+      effectiveWorkHours: "00:00",
+      breakHours: "00:00",
+      effectiveWorkHourFormat: 0,
+    };
+  }
   let workHours = "";
   let effectiveWorkHoursMinutes = 0;
   let breakHoursMinutes = 0;

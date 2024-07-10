@@ -186,6 +186,7 @@ export interface LabourData {
   employee_id: string;
   forman: string;
   gl_code: string;
+  gl_description: string;
   id: string;
   image_path: string;
   labor_id: string;
