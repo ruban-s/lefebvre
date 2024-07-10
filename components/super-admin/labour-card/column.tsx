@@ -452,7 +452,7 @@ const UpdateStatus = ({ row }: any) => {
       punch_out_time: "",
       designation_id: "",
       employee_id: "",
-      forman_id: "",
+      forman_name: "",
       attendance_type: "",
       remark: "",
       gl_code: "",
