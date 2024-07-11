@@ -30,7 +30,7 @@ const LabourListContainer = () => {
     queryKey: ["labour-card"],
     queryFn: async () => {
       const data = await getAllLabourCard();
-      console.log(JSON.parse(data.data) as LabourData[]);
+      // console.log(JSON.parse(data.data) as LabourData[]);
       return JSON.parse(data.data) as LabourData[];
     },
   });

@@ -380,7 +380,7 @@ const UpdateStatus = ({ row }: any) => {
     AttendanceTypeData | undefined
   >();
   // console.log("hi");
-  console.log(row.original);
+  // console.log(row.original);
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const {
