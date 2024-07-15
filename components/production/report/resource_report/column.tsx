@@ -85,6 +85,7 @@ export const Columns: ColumnDef<ResourceReport>[] = [
     header: "Balance qty",
     accessorKey: "balanced_quantity",
     cell: ({ row }: { row: any }) => {
+      // console.log(row.original);
       const balancedQuantity =
         row.original.required_quantity - row.original.prepared_quantity;
       return <span>{balancedQuantity}</span>;

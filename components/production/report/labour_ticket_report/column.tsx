@@ -60,6 +60,7 @@ export const Columns: ColumnDef<LabourTicketReport>[] = [
 ];
 
 const ViewStatus = ({ row }: any) => {
+  console.log(row.original);
   const viewData = row.original;
   return (
     <Dialog>

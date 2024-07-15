@@ -12,8 +12,18 @@ const ViewTabField = (props: ViewTabFieldProps) => {
   return (
     <div className="items-center gap-4">
       <div className="mb-1">{props.heading}</div>
-      {props.isInput && <Input disabled value={props.value} />}
-      {!props.isInput && <Textarea disabled>{props.value}</Textarea>}
+      {props.isInput && (
+        <Input
+          disabled
+          value={props.value}
+          className="border-2 border-gray-400"
+        />
+      )}
+      {!props.isInput && (
+        <Textarea disabled className="border-2 border-black">
+          {props.value}
+        </Textarea>
+      )}
     </div>
   );
 };

@@ -262,10 +262,43 @@ export const projectColumns: ColumnDef<LabourData>[] = [
   {
     accessorKey: "gl_code",
     header: "GL Code",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.gl_code ? "--" : <p>{row.original.gl_code}</p>}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "gl_description",
     header: "GL Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.gl_description.length > 0 ? (
+          <div className="flex justify-start items-center">
+            {row.original.gl_description.substring(0, 15)}{" "}
+            {row.original.gl_description.length > 15 && "..."}
+            {row.original.gl_description.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.gl_description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        ) : (
+          <div>--</div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "project_id",
@@ -324,7 +357,7 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     },
   },
   {
-    accessorKey: "forman_id",
+    accessorKey: "forman_name",
     header: "Forman",
   },
   {
@@ -346,6 +379,8 @@ const UpdateStatus = ({ row }: any) => {
   const [attendanceValue, setAttendanceValue] = useState<
     AttendanceTypeData | undefined
   >();
+  // console.log("hi");
+  // console.log(row.original);
   const updateItem = useMutation({
     mutationFn: async (value: any) => {
       const {
@@ -361,6 +396,7 @@ const UpdateStatus = ({ row }: any) => {
       });
       const updateCode: any = await updateLabourCard({
         ...value,
+        labor_type_id: value.gl_code ? "Indirect" : "Direct",
         current_shift_name: row.original.current_shift_name,
         current_shift_id: row.original.current_shift_id,
         labor_id: row.original.labor_id,
@@ -368,12 +404,11 @@ const UpdateStatus = ({ row }: any) => {
         forman_name: row.original.forman_name,
         status: row.original.status,
         image_path: row.original.image_path,
-        labor_type_id: row.original.labor_type_id,
         quantity: row.original.quantity,
         shift_type: row.original.shift_type,
-        gl_code: value.gl_description
-          ? `${value.gl_code}&${value.gl_description}`
-          : "",
+        gl_code: value.gl_code,
+        gl_description: value.gl_description,
+        forman_id: row.original.forman_id,
         work_hours: workHours,
         effective_work_hour: effectiveWorkHours,
         break_duration: breakHours,
@@ -417,7 +452,7 @@ const UpdateStatus = ({ row }: any) => {
       punch_out_time: "",
       designation_id: "",
       employee_id: "",
-      forman_id: "",
+      forman_name: "",
       attendance_type: "",
       remark: "",
       gl_code: "",
@@ -460,7 +495,7 @@ const UpdateStatus = ({ row }: any) => {
     "shift_start_time",
     "shift_end_time",
     "shift_date",
-    "forman_id",
+    "forman_name",
     "remark",
   ];
 
@@ -482,6 +517,7 @@ const UpdateStatus = ({ row }: any) => {
   const hiddenArray = [
     // "system_in_time",
     // "system_out_time",
+    "name",
     "effective_work_hour",
     "effective_work_hour_format",
     "shift_start_time",

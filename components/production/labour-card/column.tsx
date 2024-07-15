@@ -389,16 +389,17 @@ export const UpdateStatus = ({ row }: any) => {
           <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
             <DialogTitle className="text-white">Labour Card</DialogTitle>
           </DialogHeader>
-          <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3  gap-2">
+          <div className="grid  grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-3  gap-5">
             {labourCardMaintanceField.map((dataValue, index) => {
-              if (
-                dataValue === "is_production_editable" ||
-                dataValue === "is_super_admin_editable" ||
-                dataValue === "break_type" ||
-                dataValue === "gl_code"
-              ) {
-                return null;
-              }
+              // if (
+              //   dataValue === "is_production_editable" ||
+              //   dataValue === "is_super_admin_editable" ||
+              //   dataValue === "break_type" ||
+              //   dataValue === "gl_code" ||
+              //   dataValue === "gl_description"
+              // ) {
+              //   return null;
+              // }
               return (
                 <ViewTabField
                   key={index}
@@ -409,12 +410,14 @@ export const UpdateStatus = ({ row }: any) => {
                       .slice(1)
                       .replace(/([a-z])([A-Z])/g, "$1 $2")
                   }
-                  value={data[`${dataValue}`]}
+                  value={
+                    data[`${dataValue}`] !== "" ? data[`${dataValue}`] : "--"
+                  }
                   isInput
                 />
               );
             })}
-            <ViewTabField
+            {/* <ViewTabField
               heading={"gl_code"}
               value={data.gl_code !== "" ? data.gl_code : "--"}
               isInput
@@ -423,7 +426,7 @@ export const UpdateStatus = ({ row }: any) => {
               heading={"gl_description"}
               value={data.gl_description !== "" ? data.gl_description : "--"}
               isInput
-            />
+            /> */}
             {/* <ViewTabField
               heading={"Effective Work Hour"}
               value={"--"}
@@ -477,24 +480,24 @@ export const UpdateStatus = ({ row }: any) => {
               isInput={false}
             /> */}
           </div>
-          <DialogFooter>
+          <DialogFooter className="sticky bottom-0 left-0">
             <DialogClose>
-              <Button variant={"secondary"} onClick={() => {}}>
+              <Button variant={"secondary"} className="border-1">
                 Close
               </Button>
             </DialogClose>
             <DialogClose>
-              <Button
+              {/* <Button
                 variant={"default"}
                 className="bg-theme"
                 onClick={() => {
                   console.log(toogle);
                   payLoad.is_production_editable = toogle;
-                  console.log(payLoad);
+                  // console.log(payLoad);
                   updateItem.mutate(payLoad);
                 }}>
                 Save
-              </Button>
+              </Button> */}
             </DialogClose>
           </DialogFooter>
         </DialogContent>
