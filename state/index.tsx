@@ -9,6 +9,8 @@ import {
   WorkOrderData,
   ResourceWorkOdderData,
   ShiftData,
+  HoursConsumptionReport,
+  HoursConsumptionReportForm,
 } from "@/types";
 import { create } from "zustand";
 
@@ -77,4 +79,13 @@ export const useShiftStore = create((set) => ({
   shift: shift, // Object value with initial properties
   setShift: (shift: any) => set({ shift }),
   removeShift: (shift: any) => set({ shift: null }), // Action to update user object
+}));
+
+var hoursConsumptionReport: HoursConsumptionReportForm | null = null;
+export const useHoursConsumptionReportStore = create((set) => ({
+  hoursConsumptionReport: hoursConsumptionReport,
+  setHoursConsumptionReport: (hoursConsumptionReport: any) =>
+    set({ hoursConsumptionReport }),
+  removeHoursConsumptionReport: (hoursConsumptionReport: any) =>
+    set({ hoursConsumptionReport: null }),
 }));

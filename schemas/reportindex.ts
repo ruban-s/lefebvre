@@ -31,3 +31,11 @@ export const LabourTicketReportSchema = z.object({
     .min(1, { message: "Start Date and End Date is required" }),
   end_date: z.string().optional(),
 });
+
+export const HoursConsumptionReportSchema = z.object({
+  consumption: z
+    .string()
+    .min(1, { message: "Consumption percentage is required" }),
+  start_date: z.string().min(1, { message: "Start Date is required" }),
+  end_date: z.string().optional(),
+});
