@@ -25,7 +25,7 @@ import { RxCaretSort } from "react-icons/rx";
 
 export const Columns: ColumnDef<IndirectReport>[] = [
   {
-    accessorKey: "employee_id:",
+    accessorKey: "employee_id",
     header: "EmployeeId",
   },
   {
@@ -42,14 +42,16 @@ export const Columns: ColumnDef<IndirectReport>[] = [
   },
   {
     accessorKey: "gl_description",
-    header: "GlDescription",
+    header: "GL Description",
     cell: ({ row }) => (
       <>
-        {row.original.gl_description && (
+        {row.original.gl_description === null && <p>--</p>}
+        {row.original.gl_description &&
+        row.original.gl_description.length > 0 ? (
           <div className="flex justify-start items-center">
-            {row.original.gl_description.substring(0, 30)}{" "}
-            {row.original.gl_description.length > 30 && "..."}
-            {row.original.gl_description.length > 30 && (
+            {row.original.gl_description.substring(0, 15)}{" "}
+            {row.original.gl_description.length > 15 && "..."}
+            {row.original.gl_description.length > 15 && (
               <Popover>
                 <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
                   <RxCaretSort className="text-theme" size={20} />
@@ -64,6 +66,8 @@ export const Columns: ColumnDef<IndirectReport>[] = [
               </Popover>
             )}
           </div>
+        ) : (
+          <div>--</div>
         )}
       </>
     ),
@@ -83,6 +87,7 @@ export const Columns: ColumnDef<IndirectReport>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      // console.log(row.original);
       return <ViewStatus row={row} />;
     },
   },
@@ -104,14 +109,20 @@ const ViewStatus = ({ row }: any) => {
             return (
               <div className="items-center gap-4" key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input disabled value={value as string} />
+                <Input
+                  className="border-2 border-gray-400"
+                  disabled
+                  value={value as string}
+                />
               </div>
             );
           })}
         </div>
         <DialogFooter>
           <DialogClose>
-            <Button variant={"secondary"}>Close</Button>
+            <Button variant={"secondary"} className="border-2 border-black">
+              Close
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

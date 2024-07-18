@@ -36,10 +36,10 @@ const HoursConsumptionListContainer = () => {
         hoursConsumption === null || hoursConsumption.consumption === null
           ? { ...defaultData }
           : { ...hoursConsumption }
-        // { ...defaultData }
       );
-      // console.log(JSON.parse(responseData.data) as HoursConsumptionReport[]);
-      return JSON.parse(responseData.data) as HoursConsumptionReport[];
+      const newData = JSON.parse(responseData.data) as HoursConsumptionReport[];
+      console.log(newData);
+      return newData;
     },
     enabled: hoursConsumption !== null && hoursConsumption.consumption !== null, // to prevent automaticalyy running
   });

@@ -13,6 +13,12 @@ import {
 import { GrFormView } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { RxCaretSort } from "react-icons/rx";
 
 export const Columns: ColumnDef<LabourTicketReport>[] = [
   {
@@ -28,25 +34,128 @@ export const Columns: ColumnDef<LabourTicketReport>[] = [
     header: "Employee Name",
   },
   {
-    accessorKey: "attendance_type",
-    header: "Attendance Type",
+    accessorKey: "designation",
+    header: "Designation",
+  },
+  {
+    accessorKey: "gl_code",
+    header: "GL Code",
+    cell: ({ row }) => {
+      console.log(row.original);
+      return (
+        <div>
+          {!row.original.gl_code ? "--" : <p>{row.original.gl_code}</p>}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "gl_description",
+    header: "GL Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.gl_description === null && <p>--</p>}
+        {row.original.gl_description &&
+        row.original.gl_description.length > 0 ? (
+          <div className="flex justify-start items-center">
+            {row.original.gl_description.substring(0, 15)}{" "}
+            {row.original.gl_description.length > 15 && "..."}
+            {row.original.gl_description.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.gl_description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        ) : (
+          <div>--</div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "project_id",
     header: "Project Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.project_id ? "--" : <p>{row.original.project_id}</p>}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "work_order_id",
-    header: "Work Order ID",
-  },
-  {
-    accessorKey: "sq_no",
-    header: "Sequence No",
+    header: "Work Order Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.work_order_id ? (
+            "--"
+          ) : (
+            <p>{row.original.work_order_id}</p>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "resource_id",
-    header: "Resource ID",
+    header: "Resource Id",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.resource_id ? "--" : <p>{row.original.resource_id}</p>}
+        </div>
+      );
+    },
   },
+  {
+    accessorKey: "in_time",
+    header: "In Time",
+  },
+  {
+    accessorKey: "out_time",
+    header: "Out Time",
+  },
+  {
+    accessorKey: "prepared_quantity",
+    header: "Prepared Quantity",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.prepared_quantity ? (
+            "--"
+          ) : (
+            <p>{row.original.prepared_quantity}</p>
+          )}
+        </div>
+      );
+    },
+  },
+  // {
+  //   accessorKey: "punch_out_time",
+  //   header: "Out Time",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div>
+  //         {!row.original.punch_out_time ? (
+  //           "--"
+  //         ) : (
+  //           <p>{row.original.punch_out_time}</p>
+  //         )}
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: "forman_name",
     header: "Forman",
@@ -60,7 +169,7 @@ export const Columns: ColumnDef<LabourTicketReport>[] = [
 ];
 
 const ViewStatus = ({ row }: any) => {
-  console.log(row.original);
+  // console.log(row.original);
   const viewData = row.original;
   return (
     <Dialog>
@@ -78,14 +187,20 @@ const ViewStatus = ({ row }: any) => {
             return (
               <div className="items-center gap-4" key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input disabled value={value as string} />
+                <Input
+                  className="border-2 border-gray-400"
+                  disabled
+                  value={value as string}
+                />
               </div>
             );
           })}
         </div>
-        <DialogFooter>
+        <DialogFooter className="sticky bottom-0 left-0 ">
           <DialogClose>
-            <Button variant={"secondary"}>Close</Button>
+            <Button variant={"secondary"} className="border-2 border-black">
+              Close
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

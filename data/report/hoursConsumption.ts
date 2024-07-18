@@ -15,10 +15,12 @@ export const getHoursConsumptionReport = async ({
 }: getHoursConsumptionReportProps) => {
   try {
     const [start_percentage, end_percentage] = consumption.split("-");
-    const status = "All";
+    const status = "Released";
     var start = start_date.split("-");
-    var end = start_date.split("-");
-    // console.log(start_percentage, end_percentage, start_date, end_date, status);
+    var end = end_date.split("-");
+    console.log(start_percentage, end_percentage, start_date, end_date, status);
+    console.log(`${start[2]}-${start[1]}-${start[0]}`);
+    console.log(`${end[2]}-${end[1]}-${end[0]}`);
     const AxiosResponse = await Axios.get(`/report/hoursConsumptionReport`, {
       params: {
         end_percentage: end_percentage,
@@ -28,6 +30,7 @@ export const getHoursConsumptionReport = async ({
         status: status,
       },
     });
+    console.log(AxiosResponse.data);
     return AxiosResponse!.data;
   } catch (error) {
     const errorResponse: ResponseData = {
