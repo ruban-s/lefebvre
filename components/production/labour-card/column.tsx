@@ -31,6 +31,12 @@ import { deleteLabourCard, updateLabourCard } from "@/data/labour-card";
 import { getAllShift } from "@/data/shift";
 import { labourCardMaintanceField } from "@/config/const";
 import { MdDelete } from "react-icons/md";
+import { RxCaretSort } from "react-icons/rx";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const DeleteCard = ({ row }: { row: any }) => {
   const queryClient = useQueryClient();
@@ -519,14 +525,46 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "designation_id",
     header: "Designation",
   },
-
   {
     accessorKey: "gl_code",
     header: "GL Code",
+    cell: ({ row }) => {
+      return (
+        <div>
+          {!row.original.gl_code ? "--" : <p>{row.original.gl_code}</p>}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "gl_description",
     header: "GL Description",
+    cell: ({ row }) => (
+      <>
+        {row.original.gl_description.length > 0 ? (
+          <div className="flex justify-start items-center">
+            {row.original.gl_description.substring(0, 15)}{" "}
+            {row.original.gl_description.length > 15 && "..."}
+            {row.original.gl_description.length > 15 && (
+              <Popover>
+                <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                  <RxCaretSort className="text-theme" size={20} />
+                </PopoverTrigger>
+
+                <PopoverContent className="w-[400px] ">
+                  <p className="mb-2 text-bold">Description:</p>
+                  <p className="text-sm text-neutral-500">
+                    {row.original.gl_description}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            )}
+          </div>
+        ) : (
+          <div>--</div>
+        )}
+      </>
+    ),
   },
   {
     accessorKey: "project_id",
@@ -585,71 +623,9 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     },
   },
   {
-    accessorKey: "forman_id",
+    accessorKey: "forman_name",
     header: "Forman",
   },
-
-  // {
-  //   accessorKey: "planner_remark",
-  //   header: "Remarks",
-  //   cell: ({ row }) => (
-  //     <div className="flex justify-start items-center">
-  //       {row.original.planner_remark.substring(0, 30)}{" "}
-  //       {row.original.planner_remark.length > 30 && "..."}
-  //       {row.original.planner_remark.length > 30 && (
-  //         <Popover>
-  //           <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-  //             <RxCaretSort className="text-theme" size={20} />
-  //           </PopoverTrigger>
-
-  //           <PopoverContent className="w-[400px] ">
-  //             <p className="mb-2 text-bold">Description:</p>
-  //             <p className="text-sm text-neutral-500">
-  //               {row.original.description}
-  //             </p>
-  //           </PopoverContent>
-  //         </Popover>
-  //       )}
-  //     </div>
-  //   ),
-  // },
-  // {
-  //   accessorKey: "images",
-  //   header: "Attachments",
-  //   cell: ({ row }) => {
-  //     var files = row.original.images;
-
-  //     if (files.length < 1) return <p>--</p>;
-  //     return (
-  //       <Popover>
-  //         <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-  //           Attachment
-  //         </PopoverTrigger>
-
-  //         <PopoverContent className="w-[200px] ">
-  //           {row.original.images.map((info, index) => {
-  //             var file = info.split("/")[info.split("/").length - 1];
-  //             return (
-  //               <Link
-  //                 href={info}
-  //                 className="flex justify-center items-center m-1">
-  //                 {/* {file.split(".")[1] === "csv" && <FaFileCsv />}
-  //                 {file.split(".")[1] === "pdf" && <FaFilePdf />}
-  //                 {file.split(".")[1] === "xlsx" && <BsFiletypeXlsx />} */}
-  //                 {info.split("/")[4]}
-  //               </Link>
-  //             );
-  //           })}
-  //         </PopoverContent>
-  //       </Popover>
-  //     );
-  //   },
-  // },
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   cell: ({ row }) => <UpdateStatus row={row} />,
-  // },
   {
     accessorKey: "status",
     header: "Status",
@@ -661,10 +637,4 @@ export const projectColumns: ColumnDef<LabourData>[] = [
       return <UpdateStatus row={row} />;
     },
   },
-  // {
-  //   id: "delete",
-  //   cell: ({ row }) => {
-  //     return <DeleteCard row={row} />;
-  //   },
-  // },
 ];
