@@ -529,6 +529,7 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "gl_code",
     header: "GL Code",
     cell: ({ row }) => {
+      console.log(row.original);
       return (
         <div>
           {!row.original.gl_code ? "--" : <p>{row.original.gl_code}</p>}

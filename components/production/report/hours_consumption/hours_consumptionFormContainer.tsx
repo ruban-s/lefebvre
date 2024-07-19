@@ -133,7 +133,8 @@ const HoursConsumptionReportFormContainer = () => {
                             <SelectValue placeholder="Select Consumption" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="0-0">Null</SelectItem>
+                            <SelectItem value="0-1">Estimation 0</SelectItem>
+                            <SelectItem value="1-0">Actual 0</SelectItem>
                             <SelectItem value="1-10">1-10 %</SelectItem>
                             <SelectItem value="11-20">11-20%</SelectItem>
                             <SelectItem value="21-30">21-30%</SelectItem>
@@ -144,10 +145,7 @@ const HoursConsumptionReportFormContainer = () => {
                             <SelectItem value="71-80">71-80%</SelectItem>
                             <SelectItem value="81-90">81-90%</SelectItem>
                             <SelectItem value="91-100">91-100%</SelectItem>
-                            <SelectItem value="100-100">
-                              {" "}
-                              {"> 100 %"}
-                            </SelectItem>
+                            <SelectItem value="100-100">{"> 100 %"}</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

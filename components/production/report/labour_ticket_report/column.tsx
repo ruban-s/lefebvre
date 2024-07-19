@@ -124,7 +124,16 @@ export const Columns: ColumnDef<LabourTicketReport>[] = [
   },
   {
     accessorKey: "out_time",
-    header: "Out Time",
+    header: "OutTime",
+    cell: ({ row }) => {
+      return (
+        <p>
+          {row.original.out_time === null || row.original.out_time.length === 0
+            ? "--"
+            : row.original.out_time}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "prepared_quantity",
