@@ -28,6 +28,7 @@ import { FaTicket } from "react-icons/fa6";
 import { HiOutlineDocumentReport } from "react-icons/hi";
 import { BsLightningChargeFill } from "react-icons/bs";
 import { GrDocumentVerified } from "react-icons/gr";
+import { Ri24HoursFill } from "react-icons/ri";
 
 export const BASE_URL = "http://194.62.96.140:8082";
 export const adminTabs: TabData[] = [
@@ -204,6 +205,12 @@ export const ReportTabs: TabData[] = [
     label: "Hours To Complete",
     icon: CgSandClock,
     link: "/production/report/hours_to_complete",
+  },
+  {
+    id: 2,
+    label: "Hours Consumption",
+    icon: Ri24HoursFill,
+    link: "/production/report/hours_consumption",
   },
   {
     id: 8,
@@ -571,4 +578,21 @@ export const LabourTicketController = [
   "forman",
   "forman_name",
   "remark_by_forman",
+];
+
+export const HoursConsumptionReportController = [
+  "resource_id",
+  "seq_no",
+  "work_order_id",
+  "work_order_description",
+  "estimated_hour",
+  "actual_hour",
+  "balanced_hour",
+  "consumption",
+  "variance",
+  "required_qty",
+  "prepared_qty",
+  "balance_quantity",
+  "unit_measure",
+  "forman",
 ];

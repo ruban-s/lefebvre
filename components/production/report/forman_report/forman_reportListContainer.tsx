@@ -102,7 +102,6 @@ const FormanReportListContainer = ({
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
@@ -110,7 +109,6 @@ const FormanReportListContainer = ({
     };
     loadData();
   }, [filterData, defaultData]);
-
   return (
     <div className="w-[100%]  h-auto bg-white  ring-1 ring-theme shadow-sm rounded-sm">
       {isLoading ? (

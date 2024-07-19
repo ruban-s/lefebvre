@@ -8,9 +8,14 @@ export const getLabourTicketReport = async (
   toDate: string
 ) => {
   try {
-    const AxiosResponse = await Axios.get(
-      `/report/labourTicketReport?from_date=${fromDate}&to_date=${toDate}`
-    );
+    var start = fromDate.split("-");
+    var end = toDate.split("-");
+    const AxiosResponse = await Axios.get("/report/labourTicketReport", {
+      params: {
+        from_date: `${start[2]}-${start[1]}-${start[0]}`,
+        to_date: `${end[2]}-${end[1]}-${end[0]}`,
+      },
+    });
     return AxiosResponse.data;
   } catch (error) {
     const errorResponse: ResponseData = {

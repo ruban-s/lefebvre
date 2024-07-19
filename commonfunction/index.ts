@@ -310,3 +310,14 @@ export const calculateWorkAndBreakHour = ({
     ),
   };
 };
+
+export const currentDate = () => {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  // This arrangement can be altered based on how we want the date's format to appear.
+  const currentDate = `${day}-${month}-${year}`;
+  return currentDate;
+};

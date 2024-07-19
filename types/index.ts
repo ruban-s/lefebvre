@@ -372,3 +372,26 @@ export interface LabourTicketReport {
   forman_name: string;
   remark_by_forman: string | null;
 }
+
+export interface HoursConsumptionReport {
+  resource_id: string;
+  seq_no: string;
+  work_order_id: string;
+  work_order_description: string | null;
+  estimated_hour: string;
+  actual_hour: string;
+  balanced_hour: string;
+  consumption: string;
+  variance: string | null;
+  required_qty: string;
+  prepared_qty: string;
+  balance_quantity: string;
+  unit_measure: string;
+  forman: string;
+}
+
+export interface HoursConsumptionReportForm {
+  consumption: string;
+  start_date: string;
+  end_date: string;
+}
