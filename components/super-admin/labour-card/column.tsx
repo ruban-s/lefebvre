@@ -275,7 +275,8 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     header: "GL Description",
     cell: ({ row }) => (
       <>
-        {row.original.gl_description.length > 0 ? (
+        {row.original.gl_description !== null &&
+        row.original.gl_description.length > 0 ? (
           <div className="flex justify-start items-center">
             {row.original.gl_description.substring(0, 15)}{" "}
             {row.original.gl_description.length > 15 && "..."}
