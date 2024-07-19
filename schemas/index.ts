@@ -213,6 +213,7 @@ export const LabourCardSchema = z
       .string()
       .min(1, { message: "Shift end time is required" })
       .optional(),
+    labor_type_id: z.string().optional(),
   })
   .refine(
     (data) =>

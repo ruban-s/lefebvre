@@ -97,6 +97,40 @@ export const formatHours = (hours?: string) => {
   return `${formatHours}:${formatMinutes}`;
 };
 
+export const calculateBalanceHoursForFormattedTime = (
+  estimated?: string,
+  actual?: string
+) => {
+  if (estimated === undefined) return { hours: 0, color: "red" };
+  let color;
+  if (actual === undefined) {
+    if (parseFloat(estimated) > 0) {
+      color = "none";
+    } else {
+      color: "red";
+    }
+    return { hours: formatHours(estimated), color: "red" };
+  }
+  const balanceMinutes = parseFloat(estimated) - parseFloat(actual);
+  const formattedTime = balanceMinutes.toFixed(2);
+  if (balanceMinutes < 0) {
+    color = "red";
+  } else if (balanceMinutes === 0) {
+    color = "red";
+  } else {
+    color = "none";
+  }
+
+  const result = balanceMinutes < 0 ? `-${formattedTime}` : formattedTime;
+
+  return { hours: result, color };
+};
+export const formatHoursForFormattedTime = (hours?: string) => {
+  if (hours === "" || hours === undefined || hours.length === 0) return `0`;
+  const time = parseFloat(hours).toFixed(2);
+  return time;
+};
+
 /*
 refetch the project details
  */

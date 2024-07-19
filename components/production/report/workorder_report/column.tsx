@@ -24,6 +24,10 @@ import {
 } from "@/components/ui/popover";
 import { RxCaretSort } from "react-icons/rx";
 import { useSearchParams } from "next/navigation";
+import {
+  calculateBalanceHoursForFormattedTime,
+  formatHoursForFormattedTime,
+} from "@/commonfunction";
 
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
@@ -71,14 +75,24 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
     header: ({ table }) => {
       var Sum = 0;
       table.getRowModel().rows.map((row: any) => {
-        Sum += parseInt(row.original.estimated_hour);
+        Sum += parseFloat(row.original.estimated_hour);
       });
+      const result = Sum.toFixed(2);
       return (
         <span>
-          Estimated Hour
-          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+          Estimated Hrs
+          <h1 className="text-black">{`( Total : ${result} )`}</h1>
         </span>
       );
+    },
+    cell: ({ row }) => {
+      const estimate =
+        row.original.estimated_hour === undefined ||
+        row.original.estimated_hour === "" ||
+        row.original.estimated_hour.length === 0
+          ? "0"
+          : formatHoursForFormattedTime(row.original.estimated_hour);
+      return <p>{estimate}</p>;
     },
   },
   {
@@ -86,23 +100,56 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
     header: ({ table }) => {
       var Sum = 0;
       table.getRowModel().rows.map((row: any) => {
-        Sum += parseInt(row.original.actual_hour);
+        Sum += parseFloat(row.original.actual_hour);
       });
+      const result = Sum.toFixed(2);
       return (
         <span>
-          Actual Hour
-          <h1 className="text-black">{`( Total : ${Sum} )`}</h1>
+          Actual Hrs
+          <h1 className="text-black">{`( Total : ${result} )`}</h1>
         </span>
       );
     },
+    cell: ({ row }) => {
+      const actual =
+        row.original.actual_hour === undefined ||
+        row.original.actual_hour === "" ||
+        row.original.actual_hour.length === 0
+          ? "0"
+          : formatHoursForFormattedTime(row.original.actual_hour);
+      return <p>{actual}</p>;
+    },
   },
   {
-    header: "Balance Hour",
-    accessorKey: "balanced_hour",
-    cell: ({ row }: { row: any }) => {
-      const balancedHour =
-        row.original.estimated_hour - row.original.actual_hour;
-      return <span>{balancedHour}</span>;
+    accessorKey: "balanceHour",
+    header: ({ table }) => {
+      var Sum = 0;
+      table.getRowModel().rows.map((row: any) => {
+        Sum +=
+          parseFloat(row.original.estimated_hour) -
+          parseFloat(row.original.actual_hour);
+      });
+      const result = Sum.toFixed(2);
+      return (
+        <span>
+          Balance Hrs
+          <h1 className="text-black">{`( Total : ${result} )`}</h1>
+        </span>
+      );
+    },
+    cell: ({ row }) => {
+      const balance = calculateBalanceHoursForFormattedTime(
+        row.original.estimated_hour,
+        row.original.actual_hour
+      );
+      return (
+        <p
+          className={`${
+            balance.color === "red" ? "text-red-500" : "text-inherit"
+          }`}>
+          {balance.hours}
+        </p>
+      );
     },
   },
   {
@@ -181,14 +228,20 @@ const ViewStatus = ({ row }: any) => {
                 }`}
                 key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input disabled value={value as string} />
+                <Input
+                  className="border-2 border-gray-400"
+                  disabled
+                  value={value as string}
+                />
               </div>
             );
           })}
         </div>
         <DialogFooter>
           <DialogClose>
-            <Button variant={"secondary"}>Close</Button>
+            <Button variant={"secondary"} className="border-2 border-black">
+              Close
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

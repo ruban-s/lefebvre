@@ -361,6 +361,10 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     header: "Forman",
   },
   {
+    accessorKey: "labor_type_id",
+    header: "Labour Type",
+  },
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => <StatusBadge row={row} />,
@@ -469,6 +473,8 @@ const UpdateStatus = ({ row }: any) => {
   });
   const data = row.original;
 
+  // console.log(data);
+
   type LabourCardSchemaType = z.infer<typeof LabourCardSchema>;
 
   const labourCardMaintainField: (keyof LabourCardSchemaType)[] = [
@@ -497,6 +503,7 @@ const UpdateStatus = ({ row }: any) => {
     "shift_date",
     "forman_name",
     "remark",
+    "labor_type_id",
   ];
 
   const handleSubmit = (values: z.infer<typeof LabourCardSchema>) => {
@@ -528,6 +535,7 @@ const UpdateStatus = ({ row }: any) => {
     "id",
     "employee_id",
     "work_hours",
+    "labor_type_id",
   ];
 
   const chooseAttendanceType = (value: AttendanceTypeData) => {

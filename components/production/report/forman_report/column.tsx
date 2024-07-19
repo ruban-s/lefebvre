@@ -75,7 +75,7 @@ const ViewStatus = ({ row }: any) => {
       <DialogTrigger asChild>
         <GrFormView className="text-2xl" />
       </DialogTrigger>
-      <DialogContent className="w-[600px]">
+      <DialogContent className="sm:max-w-[600px] h-full max-h-[900px] overflow-auto">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
           <DialogTitle className="text-white">View FormanReport</DialogTitle>
         </DialogHeader>
@@ -84,14 +84,20 @@ const ViewStatus = ({ row }: any) => {
             return (
               <div className="items-center gap-4" key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input disabled value={value as string} />
+                <Input
+                  className="border-2 border-gray-400"
+                  disabled
+                  value={value as string}
+                />
               </div>
             );
           })}
         </div>
         <DialogFooter>
           <DialogClose>
-            <Button variant={"secondary"}>Close</Button>
+            <Button variant={"secondary"} className="border-2 border-black">
+              Close
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

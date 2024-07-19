@@ -29,16 +29,15 @@ const HoursConsumptionListContainer = () => {
   };
 
   // Fetch data using react-query
-  const { data, isLoading, isError } = useQuery<HoursConsumptionReport[]>({
+  let { data, isLoading, isError } = useQuery<HoursConsumptionReport[]>({
     queryKey: ["hoursConsumptionReport"],
     queryFn: async () => {
-      const responseData = await getHoursConsumptionReport(
-        hoursConsumption === null || hoursConsumption.consumption === null
-          ? { ...defaultData }
-          : { ...hoursConsumption }
-      );
+      console.log(isLoading);
+      const responseData = await getHoursConsumptionReport({
+        ...hoursConsumption,
+      });
       const newData = JSON.parse(responseData.data) as HoursConsumptionReport[];
-      console.log(newData);
+      // console.log(newData);
       return newData;
     },
     enabled: hoursConsumption !== null && hoursConsumption.consumption !== null, // to prevent automaticalyy running
@@ -70,7 +69,9 @@ const HoursConsumptionListContainer = () => {
       ) : (
         <>
           <div className="bg-theme w-full pl-2 py-2">
-            <p className="text-lg font-bold text-white">Indirect Report</p>
+            <p className="text-lg font-bold text-white">
+              HoursConsumption Report
+            </p>
           </div>
           <div className="w-full">
             <ReportDataTable

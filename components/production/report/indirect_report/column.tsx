@@ -79,6 +79,15 @@ export const Columns: ColumnDef<IndirectReport>[] = [
   {
     accessorKey: "out_time",
     header: "OutTime",
+    cell: ({ row }) => {
+      return (
+        <p>
+          {row.original.out_time === null || row.original.out_time.length === 0
+            ? "--"
+            : row.original.out_time}
+        </p>
+      );
+    },
   },
   {
     accessorKey: "date",
