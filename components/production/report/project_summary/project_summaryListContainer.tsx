@@ -177,7 +177,7 @@ const ProjectSummaryListContainer = () => {
                   <DataTable
                     columns={columns}
                     data={allProjectList}
-                    searchName="project_id"
+                    searchName="projectId"
                     fileName="AllProject"
                     exportDataFields={ProjectSummaryController}
                   />
@@ -203,7 +203,7 @@ const ProjectSummaryListContainer = () => {
                   <DataTable
                     columns={columns}
                     data={releasedProjectList}
-                    searchName="project_id"
+                    searchName="projectId"
                     fileName="ReleasedProject"
                     exportDataFields={ProjectSummaryController}
                   />
@@ -229,7 +229,7 @@ const ProjectSummaryListContainer = () => {
                   <DataTable
                     columns={columns}
                     data={unReleasedProjectList}
-                    searchName="project_id"
+                    searchName="projectId"
                     fileName="UnReleasedProject"
                     exportDataFields={ProjectSummaryController}
                   />
@@ -255,7 +255,7 @@ const ProjectSummaryListContainer = () => {
                   <DataTable
                     columns={columns}
                     data={closedProjectList}
-                    searchName="project_id"
+                    searchName="projectId"
                     fileName="ClosedProject"
                     exportDataFields={ProjectSummaryController}
                   />
@@ -281,7 +281,7 @@ const ProjectSummaryListContainer = () => {
                   <DataTable
                     columns={columns}
                     data={cancelledProjectList}
-                    searchName="project_id"
+                    searchName="projectId"
                     fileName="CancelledProject"
                     exportDataFields={ProjectSummaryController}
                   />

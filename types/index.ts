@@ -205,13 +205,14 @@ export interface LabourData {
   status: string;
   updatedDate: string;
   work_order_id: string;
+  effective_work_hour: string;
+  effective_work_hour_format: string;
 }
 
 // Reports
 export interface ProjectSummary {
   projectId: string;
   description: string;
-  customer_name: string;
   status: string;
   start_date: string;
   end_date: string;
@@ -226,8 +227,8 @@ export interface ProjectSummary {
 
 export interface WorkOrderDataReport {
   project_id: string;
-  description: string;
   customer_name: string;
+  description: string;
   work_order_Id: string;
   work_order_description: string;
   start_date: string;
@@ -394,4 +395,36 @@ export interface HoursConsumptionReportForm {
   consumption: string;
   start_date: string;
   end_date: string;
+}
+
+export interface DashboardState {
+  date: string;
+  forman: any;
+  shift_type: string;
+  attendance_type: string;
+  labor_type: string;
+}
+
+export interface DashbaordProjectData {
+  id: number;
+  project_id: string;
+  description: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  customer_name: string;
+  production_remark: string;
+  planner_remark: string;
+  createdDate: string;
+  updatedDate: string;
+  images: string[];
+  estimateHour: string;
+  actualHour: string;
+  attachment: string | null;
+  preparedQuantity: number | null;
+  requiredQuantity: string | null;
+  released_work_order: string;
+  unreleased_work_order: string;
+  offline_count: string;
+  online_count: string;
 }

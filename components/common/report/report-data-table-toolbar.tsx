@@ -25,7 +25,6 @@ export function DataTableToolBar<TData>({
   placeholder,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-
   return (
     <div className="flex flex-1 items-center space-x-2">
       <Input
@@ -34,8 +33,7 @@ export function DataTableToolBar<TData>({
         onChange={(event) =>
           table.getColumn(searchField)?.setFilterValue(event.target.value)
         }
-        // className="h-8 w-[150px] lg:w-[250px]"
-        className="max-w-sm ml-2 placeholder:capitalize"
+        className="max-w-sm ml-2 placeholder:capitalize border-2 border-gray-300"
       />
       {options && filterColumn && table.getColumn(filterColumn) && (
         <DataTableFacetedFilter

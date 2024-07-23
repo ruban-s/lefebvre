@@ -433,11 +433,10 @@ export const ProjectSummaryController = [
 
 export const workOrderDataReportController = [
   "project_id",
-  "description",
   "customer_name",
+  "description",
   "work_order_Id",
   "work_order_description",
-  "status",
   "start_date",
   "end_date",
   "estimated_hour",
@@ -445,6 +444,7 @@ export const workOrderDataReportController = [
   "variance",
   "required_quantity",
   "prepared_quantity",
+  "status",
 ];
 
 export const ResourceReportController = [

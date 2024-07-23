@@ -20,7 +20,9 @@ const ProjectListContainer = () => {
       return newData;
     },
   });
+
   const projects = data;
+
   useEffect(() => {
     var filterClosedData = data?.filter((info) => info.status !== "Closed");
     var filterData = filterClosedData?.filter(

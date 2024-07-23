@@ -1,3 +1,4 @@
+import Dashboard from "@/app/(admin)/dashboard/page";
 import {
   UserData,
   IndirectCodeData,
@@ -11,6 +12,7 @@ import {
   ShiftData,
   HoursConsumptionReport,
   HoursConsumptionReportForm,
+  DashboardState,
 } from "@/types";
 import { create } from "zustand";
 
@@ -88,4 +90,11 @@ export const useHoursConsumptionReportStore = create((set) => ({
     set({ hoursConsumptionReport }),
   removeHoursConsumptionReport: (hoursConsumptionReport: any) =>
     set({ hoursConsumptionReport: null }),
+}));
+
+var dashBoardState: DashboardState | null = null;
+export const useDashboardStore = create((set) => ({
+  dashboard: dashBoardState,
+  setDashboard: (dashboard: any) => set({ dashboard }),
+  removeDashboard: (dashboard: any) => set({ dashboard: null }),
 }));

@@ -109,10 +109,10 @@ export function DataTable<TData, TValue>({
       return newData.push({
         ...info,
         createdDate:
-          createdDate !== null
+          createdDate && createdDate !== null
             ? createdDate.toString().replaceAll(",", "/")
             : "null",
-        updatedDate: updatedDate.toString().replaceAll(",", "/"),
+        updatedDate: updatedDate && updatedDate.toString().replaceAll(",", "/"),
       });
     });
     const csvContent =
