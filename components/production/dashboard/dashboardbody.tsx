@@ -125,14 +125,14 @@ const DashBoardBody = () => {
 
   useEffect(() => {
     // console.log(dashboard);
-    if (filterData.forman === "" || filterData.labor_type === "") {
-      setFilterData({
-        ...filterData,
-        ["labor_type"]: dashboard.labor_type,
-        ["forman"]: dashboard.forman,
-      });
-    }
     if (dashboard !== null) {
+      if (filterData.forman === "" || filterData.labor_type === "") {
+        setFilterData({
+          ...filterData,
+          ["labor_type"]: dashboard.labor_type,
+          ["forman"]: dashboard.forman,
+        });
+      }
       refetch(); //refetch the query
     } else {
       const fetchDefaultData = async () => {
