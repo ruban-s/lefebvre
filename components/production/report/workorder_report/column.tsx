@@ -28,6 +28,7 @@ import {
   calculateBalanceHoursForFormattedTime,
   formatHoursForFormattedTime,
 } from "@/commonfunction";
+import { workOrderDataReportController } from "@/config/const";
 
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
@@ -185,6 +186,7 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
 const SearchResourceId = ({ row }: any) => {
   const searchParams = useSearchParams();
   const work_order_id = searchParams.get("work_order_id");
+  console.log(row.original);
   return (
     <div
       className={`border-2 rounded-sm capitalize p-2  ${
@@ -218,20 +220,20 @@ const ViewStatus = ({ row }: any) => {
           <DialogTitle className="text-white">View WorkOrder</DialogTitle>
         </DialogHeader>
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
-          {Object.entries(viewData).map(([key, value], index) => {
+          {workOrderDataReportController.map((value, index) => {
             return (
               <div
                 className={`items-center gap-4 ${
-                  key === "variance"
+                  value === "variance" || value === "description"
                     ? "sm:col-span-2 md:col-span-2 lg:col-span-2"
                     : ""
                 }`}
                 key={index}>
-                <div className="mb-1 capitalize">{key}</div>
+                <div className="mb-1 capitalize">{value}</div>
                 <Input
                   className="border-2 border-gray-400"
                   disabled
-                  value={value as string}
+                  value={viewData[value] as string}
                 />
               </div>
             );

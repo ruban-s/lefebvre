@@ -294,7 +294,7 @@ export function ReportDataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-2  flex flex-row space-x-1 text-bold"
+                  className="ml-2  flex flex-row space-x-1 text-bold border-2 border-gray-300"
                   disabled={filteredDataArr.length === 0}>
                   <BiSolidFileExport className="mr-1" /> Export
                 </Button>
@@ -346,7 +346,7 @@ export function ReportDataTable<TData, TValue>({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="ml-2  flex flex-row space-x-1 text-bold">
+                  className="ml-2  flex flex-row space-x-1 text-bold border-2 border-gray-300">
                   <RxMixerHorizontal className="mr-1" /> View
                 </Button>
               </DropdownMenuTrigger>

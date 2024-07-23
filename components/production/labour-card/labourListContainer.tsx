@@ -40,16 +40,6 @@ const LabourListContainer = () => {
     setToDate(formattedToDate);
   };
 
-  // const ReturnData = ({ data }: { data: any }) => {
-  //   const glCodeParts = data.gl_code ? data.gl_code.split("&")[0] : "--";
-  //   const glDescriptionParts = data.gl_code ? data.gl_code.split("&")[1] : "--";
-  //   return {
-  //     ...data,
-  //     gl_code: glCodeParts || "--",
-  //     gl_description: glDescriptionParts || "--",
-  //   };
-  // };
-
   const fetchData = (tempData: any) => {
     let filteredData;
     if (fromDate && toDate) {

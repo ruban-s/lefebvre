@@ -351,7 +351,19 @@ export const currentDate = () => {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
-  // This arrangement can be altered based on how we want the date's format to appear.
-  const currentDate = `${day}-${month}-${year}`;
+  const formattedDay = day < 10 ? `0${day}` : `${day}`;
+  const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+
+  const currentDate = `${formattedDay}-${formattedMonth}-${year}`;
   return currentDate;
+};
+
+export const fetchDefaultForDashboard = async () => {
+  const date = currentDate();
+  const forman = await fetchFormanList();
+  const shift_type = "day";
+  const attendance_type = "present";
+  const labor_type = "All";
+  // console.log(forman);
+  return { date, forman, shift_type, attendance_type, labor_type };
 };

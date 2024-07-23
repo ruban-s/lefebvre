@@ -17,6 +17,10 @@ export const Columns: ColumnDef<HoursConsumptionReport>[] = [
   {
     accessorKey: "consumption",
     header: "Consumption",
+    cell: ({ row }) => {
+      console.log(row.original);
+      return <div>{row.original.consumption}</div>;
+    },
   },
   {
     accessorKey: "unit_measure",
@@ -47,7 +51,7 @@ export const Columns: ColumnDef<HoursConsumptionReport>[] = [
     header: "Variance",
   },
   {
-    accessorKey: "foreman",
+    accessorKey: "forman",
     header: "Foreman",
   },
 ];

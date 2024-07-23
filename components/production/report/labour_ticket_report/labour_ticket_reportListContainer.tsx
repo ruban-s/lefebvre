@@ -41,12 +41,15 @@ const LabourTicketReportListContainer = ({
         filterData.from_date,
         filterData.to_date
       );
+      // console.log(filterData.from_date, filterData.to_date);
       setFromDate(filterData.from_date);
       setToDate(filterData.to_date);
       setTableDate(JSON.parse(data.data) as LabourTicketReport[]);
       setIsLoading(false);
       return;
     } else if (defaultData.from_date && defaultData.to_date) {
+      console.log(defaultData.from_date);
+      // console.log(defaultData.to_date);
       const formattedFromDate = format(
         new Date(defaultData.from_date),
         "yyyy-MM-dd"
@@ -57,7 +60,10 @@ const LabourTicketReportListContainer = ({
       );
       setFromDate(filterData.from_date);
       setToDate(filterData.to_date);
-      const data = await getIndirectReport(formattedFromDate, formattedToDate);
+      const data = await getLabourTicketReport(
+        formattedFromDate,
+        formattedToDate
+      );
       setTableDate(JSON.parse(data.data) as LabourTicketReport[]);
       setIsLoading(false);
     }
