@@ -146,6 +146,7 @@ export interface ResourceWorkOdderData {
   endDate: string;
   estimated_hour: string;
   forman: string[];
+  formanName: string[];
   attachment: attachment[];
   id: string;
   prepared_quantity: string;

@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   DashboardCardDataProps,
   DashboardCardsProps,
@@ -8,23 +9,33 @@ import { FaEye } from "react-icons/fa";
 export const DashboardCards = ({
   heading,
   data,
-  color,
+  barColor,
+  value,
+  total,
+  emptyColor,
 }: DashboardCardsProps) => {
   const progressBarProps = {
-    value: 100,
-    text: "66",
-    pathColor: color,
-    textColor: color,
+    value: value,
+    text: total,
+    pathColor: barColor,
+    textColor: barColor,
+    emptyColor: emptyColor,
   };
 
   //data in each row
-  const Row = ({ keyProps, count }: DashboardCardDataProps) => {
+  const Row = ({
+    keyProps,
+    count,
+    onClickFunction,
+  }: DashboardCardDataProps) => {
     return (
       <div className="flex flex-row gap-2 items-center justify-between text-sm">
         <span>{keyProps}</span>
         <div className="flex flex-row gap-2 items-center text-sm">
           <span>:{count}</span>
-          <FaEye className="text-gray-500 cursor-pointer" />
+          <button onClick={onClickFunction}>
+            <FaEye className="text-gray-500 cursor-pointer" />
+          </button>
         </div>
       </div>
     );
@@ -39,12 +50,12 @@ export const DashboardCards = ({
       </div>
       {/* Project data */}
       <div className="flex flex-col gap-2">
-        <h1 style={{ color }} className="font-extrabold text-xl">
+        <h1 style={{ color: barColor }} className="font-extrabold text-xl">
           {heading}
         </h1>
         <div className="space-y-2">
           {data.map((item: DashboardCardDataProps, index: any) => {
-            console.log(item);
+            // console.log(item);
             return (
               <div key={index}>
                 <Row {...item} />

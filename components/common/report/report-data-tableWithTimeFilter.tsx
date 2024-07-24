@@ -118,22 +118,62 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
     },
   });
   //CSV Export
-  const exportCSV = (value: any) => {
-    var newData: any = [];
-    value.map(({ ...info }: any, index: any) => {
-      return newData.push({
-        ...info,
-      });
-    });
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      newData.map((row: any) => Object.values(row).join(",")).join("\n");
+  // const exportCSV = (value: any) => {
+  //   var newData: any = [];
+  //   value.map(({ ...info }: any, index: any) => {
+  //     return newData.push({
+  //       ...info,
+  //     });
+  //   });
+  //   const csvContent =
+  //     "data:text/csv;charset=utf-8," +
+  //     newData.map((row: any) => Object.values(row).join(",")).join("\n");
+  //   const encodedUri = encodeURI(csvContent);
+  //   const link = document.createElement("a");
+  //   link.setAttribute("href", encodedUri);
+  //   link.setAttribute("download", `${exportFileName}.csv`);
+  //   document.body.appendChild(link);
+  //   link.click();
+  // };
+  const exportCSV = (value: any[]) => {
+    const processValue = (val: any): string => {
+      if (Array.isArray(val)) {
+        return `"${val.join(" - ")}"`;
+      }
+      if (typeof val === "string") {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val !== null && val !== undefined ? String(val) : "";
+    };
+
+    const newData = value.map(({ createdDate, updatedDate, ...info }: any) => ({
+      ...info,
+      createdDate:
+        createdDate && createdDate !== null
+          ? createdDate.toString().replace(/,/g, "/")
+          : "null",
+      updatedDate: updatedDate
+        ? updatedDate.toString().replace(/,/g, "/")
+        : "null",
+    }));
+
+    const headers = Object.keys(newData[0]);
+    const csvRows = [
+      headers.join(","),
+      ...newData.map((row) =>
+        headers.map((header) => processValue(row[header])).join(",")
+      ),
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
     const encodedUri = encodeURI(csvContent);
+
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", `${exportFileName}.csv`);
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
   const exportXLSX = (data: any) => {
     const workbook = XLSX.utils.book_new();
