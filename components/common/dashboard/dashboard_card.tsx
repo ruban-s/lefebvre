@@ -1,10 +1,10 @@
-import { Button } from "@/components/ui/button";
 import {
   DashboardCardDataProps,
   DashboardCardsProps,
 } from "./dashboard_interfac";
 import ProgressBar from "./progressive_bar";
 import { FaEye } from "react-icons/fa";
+import Link from "next/link";
 
 export const DashboardCards = ({
   heading,
@@ -22,20 +22,22 @@ export const DashboardCards = ({
     emptyColor: emptyColor,
   };
 
+  console.log(data);
+
   //data in each row
-  const Row = ({
-    keyProps,
-    count,
-    onClickFunction,
-  }: DashboardCardDataProps) => {
+  const Row = ({ keyProps, count, queryType }: DashboardCardDataProps) => {
     return (
       <div className="flex flex-row gap-2 items-center justify-between text-sm">
         <span>{keyProps}</span>
         <div className="flex flex-row gap-2 items-center text-sm">
           <span>:{count}</span>
-          <button onClick={onClickFunction}>
+          <Link
+            href={{
+              pathname: `/production/dashboard/project/${queryType}`,
+            }}
+            className={`flex flex-row justify-center items-center`}>
             <FaEye className="text-gray-500 cursor-pointer" />
-          </button>
+          </Link>
         </div>
       </div>
     );

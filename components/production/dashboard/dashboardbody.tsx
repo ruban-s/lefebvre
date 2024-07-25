@@ -2,8 +2,8 @@
 import { fetchDefaultForDashboard, fetchFormanList } from "@/commonfunction";
 import { getDashBoardData } from "@/data/dashboard";
 import { useDashboardStore } from "@/state";
-import { DashboardState, LabourData } from "@/types";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { LabourData } from "@/types";
+import { useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Loading from "@/loading";
@@ -13,9 +13,7 @@ import { jobPositions } from "@/types/filter";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -162,8 +160,8 @@ const DashBoardBody = () => {
   }, [dashboard]);
 
   return (
-    <div className="w-full w-sm bg-white p-2 rounded-md">
-      <Tabs defaultValue="day">
+    <div className="w-full h-full w-sm bg-white p-2 rounded-md min-h-[400px]">
+      <Tabs defaultValue="day" className="h-auto">
         <div className="flex flex-row justify-between items-center">
           <TabsList className="bg-theme text-white">
             <TabsTrigger

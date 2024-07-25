@@ -226,9 +226,9 @@ export function LabourCardDataTable<TData, TValue>({
       body: body,
       theme: "grid",
       styles: { minCellWidth: 15 },
-      horizontalPageBreak: true,
+      // horizontalPageBreak: true,
       // horizontalPageBreakRepeat: header[0][0],
-      horizontalPageBreakBehaviour: "immediately",
+      // horizontalPageBreakBehaviour: "immediately",
       didDrawPage: function (data: any) {
         const docAny: any = doc;
         const pageCount = docAny.internal.getNumberOfPages();

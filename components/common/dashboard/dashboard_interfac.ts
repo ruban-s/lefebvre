@@ -2,7 +2,7 @@
 export interface DashboardCardDataProps {
   keyProps: string;
   count: number;
-  onClickFunction: () => void;
+  queryType: string;
 }
 
 //cards

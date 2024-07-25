@@ -31,9 +31,6 @@ const DashboardStatus = () => {
       ) as ProjectData[];
       const releasedCount = parsedReleasedProject.length;
       const unReleasedCount = parsedUnreleasedProject.length;
-      // return parsedReleasedProject.concat(
-      //   parsedUnreleasedProject
-      // ) as ProjectData[];
       return {
         all: releasedCount + unReleasedCount,
         released: releasedCount,
@@ -68,17 +65,17 @@ const DashboardStatus = () => {
       {
         keyProps: "Project",
         count: totalProjects,
-        onClickFunction: setProjects,
+        queryType: "allProject",
       },
       {
         keyProps: "Released",
         count: releasedProjectsCount,
-        onClickFunction: setReleasedProjects,
+        queryType: "releasedProject",
       },
       {
         keyProps: "UnReleased",
         count: unreleasedProjects,
-        onClickFunction: setUnReleasedProjects,
+        queryType: "unReleasedProject",
       },
     ],
     barColor: "#0e7490",

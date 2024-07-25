@@ -391,6 +391,7 @@ export const labourCardMaintanceField = [
   "name",
   "designation_id",
   "attendance_type",
+  "labor_type_id",
   "gl_code",
   "gl_description",
   "project_id",
@@ -412,8 +413,6 @@ export const labourCardMaintanceField = [
   "forman_name",
   "changed_resource",
   "remark",
-  "createdDate",
-  "updatedDate",
 ];
 
 export const ProjectSummaryController = [
@@ -548,6 +547,8 @@ export const IndirectReportController = [
   "break_hours",
   "effective_work_hours",
   "effective_work_hour_forman",
+  "forman",
+  "remark",
 ];
 
 export const LabourTicketController = [
