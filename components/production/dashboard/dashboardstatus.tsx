@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllProjectByStatus } from "@/data/projects";
 import { ProjectData } from "@/types";
 import { useDashboardStore } from "@/state";
-import { getReleasedProjectBydate } from "@/data/dashboard";
 import { currentDate } from "@/commonfunction";
 import { FaEye } from "react-icons/fa";
 import Loading from "@/loading";
