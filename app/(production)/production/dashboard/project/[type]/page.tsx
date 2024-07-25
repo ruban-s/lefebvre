@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 // import WorkOrderReportListContainer from "@/components/production/report/workorder_report/workorder_reportListContainer";
 // import LayoutContainer from "@/components/common/layout-container";
 // import BackButton from "@/components/common/back-button";
@@ -7,6 +7,7 @@
 
 import BackButton from "@/components/common/back-button";
 import LayoutContainer from "@/components/common/layout-container";
+import { DashboardProjectContainer } from "@/components/production/dashboard/projectStatus/dashboard_projectContainer";
 import { useSearchParams } from "next/navigation";
 
 // export default function WorkOrderId({ params }: { params: any }) {
@@ -29,12 +30,14 @@ import { useSearchParams } from "next/navigation";
 // }
 
 export default function DashboardData({ params }: { params: any }) {
-  const searchParams = useSearchParams();
-  const project_type = searchParams.get("project_type");
+  const type = params.type;
   return (
     <LayoutContainer>
       <BackButton />
-      <div className="w-full min-h-[400px] p-2"></div>
+      <div className="w-full min-h-[400px] p-2">
+        {/* {params.type} */}
+        <DashboardProjectContainer project_type={type} />
+      </div>
     </LayoutContainer>
   );
 }

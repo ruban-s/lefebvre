@@ -29,6 +29,7 @@ import {
   formatHoursForFormattedTime,
 } from "@/commonfunction";
 import { workOrderDataReportController } from "@/config/const";
+import { Textarea } from "@/components/ui/textarea";
 
 export const columns: ColumnDef<WorkOrderDataReport>[] = [
   {
@@ -50,9 +51,9 @@ export const columns: ColumnDef<WorkOrderDataReport>[] = [
       <>
         {row.original.description && (
           <div className="flex justify-start items-center">
-            {row.original.description.substring(0, 30)}{" "}
-            {row.original.description.length > 30 && "..."}
-            {row.original.description.length > 30 && (
+            {row.original.description.substring(0, 15)}{" "}
+            {row.original.description.length > 15 && "..."}
+            {row.original.description.length > 15 && (
               <Popover>
                 <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
                   <RxCaretSort className="text-theme" size={20} />
@@ -230,11 +231,19 @@ const ViewStatus = ({ row }: any) => {
                 }`}
                 key={index}>
                 <div className="mb-1 capitalize">{value}</div>
-                <Input
-                  className="border-2 border-gray-400"
-                  disabled
-                  value={viewData[value] as string}
-                />
+                {value === "description" ? (
+                  <Textarea
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={viewData[value] as string}
+                  />
+                ) : (
+                  <Input
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={viewData[value] as string}
+                  />
+                )}
               </div>
             );
           })}

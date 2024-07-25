@@ -38,7 +38,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
-import { DateRange } from "react-day-picker";
+import { DateRange, Row } from "react-day-picker";
 import { format, parse } from "date-fns";
 import { DatePickerWithRange } from "@/components/common/dateRangePicker";
 import { DialogClose } from "@radix-ui/react-dialog";
@@ -149,6 +149,7 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
     accessorKey: "bench_mark_measure",
     header: "Bench Mark Measure",
     cell: ({ row }: { row: any }) => {
+      console.log(row.original);
       return (
         <p>
           {row.original.bench_mark_measure.length === 0 ? (
@@ -285,10 +286,62 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
       );
     },
   },
+  // {
+  //   accessorKey: "forman",
+  //   header: "Forman",
+  //   cell: ({ row }) => <FormanNames row={row} />,
+  // },
   {
-    accessorKey: "forman",
+    accessorKey: "formanName",
     header: "Forman",
-    cell: ({ row }) => <FormanNames row={row} />,
+    cell: ({ row }) => {
+      // console.log(row.original.formanName);
+      const formanArray = row.original.formanName;
+
+      return (
+        // <div>
+        //   {formanArray.map((data, index) => {
+        //     return (
+        //       <div key={index}>
+        //         {index + 1}. {data}
+        //       </div>
+        //     );
+        //   })}
+        // </div>
+        <div className="flex justify-start items-center">
+          {formanArray.length === 0 ? (
+            "--"
+          ) : (
+            <div style={{ width: "150px" }}>
+              {formanArray && formanArray[0].substring(0, 10)}{" "}
+              {formanArray && formanArray[0].substring(0, 10) && "..."}
+              {formanArray &&
+                (formanArray.length > 1 || formanArray[0].length > 10) && (
+                  <Popover>
+                    <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
+                      <RxCaretSort className="text-theme" size={20} />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[400px] ">
+                      <p className="mb-2 text-bold">Forman:</p>
+                      <p className="text-sm text-neutral-500">
+                        <div>
+                          {formanArray.map((data, index) => {
+                            return (
+                              <div key={index}>
+                                {index + 1}. {data}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </p>
+                    </PopoverContent>
+                  </Popover>
+                )}
+            </div>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "status",
@@ -303,55 +356,20 @@ export const workOrderListcolumns: ColumnDef<ResourceWorkOdderData>[] = [
   },
 ];
 
-const FormanNames = ({ row }: { row: any }) => {
-  const [formanNames, setFormanNames] = useState<string[]>([]);
+// const FormanNames = ({ row }: { row: any }) => {
+//   const [formanNames, setFormanNames] = useState<string[]>([]);
 
-  const fetchFormans = async () => {
-    const formans = await getAllUser();
-    const data = JSON.parse(formans?.data);
-    const names = row.original.forman?.map((formanId: string) => {
-      const forman = data.find((employee: any) => {
-        return employee.id === parseInt(formanId);
-      });
-      return forman ? forman.name : "";
-    });
-    setFormanNames(names);
-  };
-
-  useEffect(() => {
-    fetchFormans();
-  }, [row.original.forman]);
-
-  return (
-    <div className="flex flex-row gap-1">
-      <>
-        {formanNames.length > 1 && (
-          <>
-            {formanNames[0]}
-            <Popover>
-              <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
-                <RxCaretSort className="text-theme" size={20} />
-              </PopoverTrigger>
-
-              <PopoverContent className="w-[400px] ">
-                <p className="mb-2 text-bold">Forman:</p>
-                <div className="text-sm text-neutral-500">
-                  {formanNames.map((data, index) => (
-                    <p key={index}>
-                      {index + 1}. {data}
-                    </p>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
-          </>
-        )}
-        {formanNames.length <= 1 &&
-          formanNames.map((name, index) => <p key={index}>{name}</p>)}
-      </>
-    </div>
-  );
-};
+//   const fetchFormans = async () => {
+//     const formans = await getAllUser();
+//     const data = JSON.parse(formans?.data);
+//     const names = row.original.forman?.map((formanId: string) => {
+//       const forman = data.find((employee: any) => {
+//         return employee.id === parseInt(formanId);
+//       });
+//       return forman ? forman.name : "";
+//     });
+//     setFormanNames(names);
+//   };
 
 const StatusBar = ({ row }: { row: any }) => {
   const today = new Date();

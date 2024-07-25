@@ -19,6 +19,7 @@ import {
   calculateBalanceHoursForFormattedTime,
   formatHoursForFormattedTime,
 } from "@/commonfunction";
+import { Textarea } from "@/components/ui/textarea";
 
 export const Columns: ColumnDef<ResourceReport>[] = [
   {
@@ -171,6 +172,9 @@ const ViewStatus = ({ row }: any) => {
         </DialogHeader>
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {
+            if (key === "percentage") {
+              return;
+            }
             return (
               <div
                 className={`items-center gap-4 ${
@@ -180,17 +184,27 @@ const ViewStatus = ({ row }: any) => {
                 }`}
                 key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input
-                  className="border-2 border-gray-400"
-                  disabled
-                  value={value as string}
-                />
+                {key === "description" ||
+                key === "work_order_description" ||
+                key === "forman" ? (
+                  <Textarea
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                ) : (
+                  <Input
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                )}
               </div>
             );
           })}
         </div>
-        <DialogFooter>
-          <DialogClose>
+        <DialogFooter className="sticky bottom-0 w-full bg-white">
+          <DialogClose className="flex justify-end">
             <Button variant={"secondary"} className="border-2 border-black">
               Close
             </Button>

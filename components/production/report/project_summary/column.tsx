@@ -32,6 +32,7 @@ import {
   formatHours,
   formatHoursForFormattedTime,
 } from "@/commonfunction";
+import { Textarea } from "@/components/ui/textarea";
 export const columns: ColumnDef<ProjectSummary>[] = [
   {
     accessorKey: "projectId",
@@ -177,11 +178,19 @@ const ViewStatus = ({ row }: any) => {
                 }`}
                 key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input
-                  className="border-2 border-gray-400"
-                  disabled
-                  value={value as string}
-                />
+                {key === "description" ? (
+                  <Textarea
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                ) : (
+                  <Input
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                )}
               </div>
             );
           })}

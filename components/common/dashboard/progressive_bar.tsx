@@ -8,6 +8,7 @@ interface ProgressBarProps {
   text: string;
   pathColor: string;
   textColor: string;
+  emptyColor: string;
 }
 
 const ProgressBar = ({
@@ -15,6 +16,7 @@ const ProgressBar = ({
   text,
   pathColor,
   textColor,
+  emptyColor,
 }: ProgressBarProps) => {
   return (
     <div className="w-full h-full">
@@ -28,7 +30,7 @@ const ProgressBar = ({
           //   trailColor: "#cac8f0",
           //   pathColor: "#4a42e2",
           //   textColor: "#4a42e2",
-          // trailColor: trailColor,
+          trailColor: emptyColor,
           pathColor: pathColor,
           textColor: textColor,
         })}

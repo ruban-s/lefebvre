@@ -48,7 +48,7 @@ const LabourTicketReportListContainer = ({
       setIsLoading(false);
       return;
     } else if (defaultData.from_date && defaultData.to_date) {
-      console.log(defaultData.from_date);
+      // console.log(defaultData.from_date);
       // console.log(defaultData.to_date);
       const formattedFromDate = format(
         new Date(defaultData.from_date),

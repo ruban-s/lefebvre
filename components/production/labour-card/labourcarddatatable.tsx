@@ -118,27 +118,69 @@ export function LabourCardDataTable<TData, TValue>({
     },
   });
   //CSV Export
-  const exportCSV = (value: any) => {
-    var newData: any = [];
-    value.map(({ createdDate, updatedDate, ...info }: any, index: any) => {
-      return newData.push({
-        ...info,
-        createdDate:
-          createdDate !== null
-            ? createdDate.toString().replaceAll(",", "/")
-            : "null",
-        updatedDate: updatedDate.toString().replaceAll(",", "/"),
-      });
-    });
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      newData.map((row: any) => Object.values(row).join(",")).join("\n");
+  // const exportCSV = (value: any) => {
+  //   var newData: any = [];
+  //   value.map(({ createdDate, updatedDate, ...info }: any, index: any) => {
+  //     return newData.push({
+  //       ...info,
+  //       createdDate:
+  //         createdDate !== null
+  //           ? createdDate.toString().replaceAll(",", "/")
+  //           : "null",
+  //       updatedDate: updatedDate.toString().replaceAll(",", "/"),
+  //     });
+  //   });
+  //   const csvContent =
+  //     "data:text/csv;charset=utf-8," +
+  //     newData.map((row: any) => Object.values(row).join(",")).join("\n");
+  //   const encodedUri = encodeURI(csvContent);
+  //   const link = document.createElement("a");
+  //   link.setAttribute("href", encodedUri);
+  //   link.setAttribute("download", `${exportFileName}.csv`);
+  //   document.body.appendChild(link);
+  //   link.click();
+  // };
+  const exportCSV = (value: any[]) => {
+    const processValue = (val: any): string => {
+      if (Array.isArray(val)) {
+        return `"${val.join(" - ")}"`;
+      }
+      if (typeof val === "string") {
+        return `"${val.replace(/"/g, '""')}"`;
+      }
+      return val !== null && val !== undefined ? String(val) : "";
+    };
+
+    const newData = value.map(({ createdDate, updatedDate, ...info }: any) => ({
+      ...info,
+      createdDate:
+        createdDate && createdDate !== null
+          ? createdDate.toString().replace(/,/g, "/")
+          : "null",
+      updatedDate: updatedDate
+        ? updatedDate.toString().replace(/,/g, "/")
+        : "null",
+    }));
+
+    const headers = Object.keys(newData[0]);
+    const csvRows = [
+      headers.join(","),
+      ...newData
+        .splice(1)
+        .map((row) =>
+          headers.map((header) => processValue(row[header])).join(",")
+        ),
+    ];
+
+    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
     const encodedUri = encodeURI(csvContent);
+
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", `${exportFileName}.csv`);
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
   const exportXLSX = (data: any) => {
     const workbook = XLSX.utils.book_new();
@@ -184,9 +226,9 @@ export function LabourCardDataTable<TData, TValue>({
       body: body,
       theme: "grid",
       styles: { minCellWidth: 15 },
-      horizontalPageBreak: true,
+      // horizontalPageBreak: true,
       // horizontalPageBreakRepeat: header[0][0],
-      horizontalPageBreakBehaviour: "immediately",
+      // horizontalPageBreakBehaviour: "immediately",
       didDrawPage: function (data: any) {
         const docAny: any = doc;
         const pageCount = docAny.internal.getNumberOfPages();

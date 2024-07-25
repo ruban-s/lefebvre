@@ -2,13 +2,17 @@
 export interface DashboardCardDataProps {
   keyProps: string;
   count: number;
+  queryType: string;
 }
 
 //cards
 export interface DashboardCardsProps {
   heading: string;
   data: DashboardCardDataProps[];
-  color: string;
+  barColor: string;
+  value: number;
+  total: string;
+  emptyColor: string;
 }
 
 //project table container props

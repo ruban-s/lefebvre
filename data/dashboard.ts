@@ -46,13 +46,20 @@ export const getDashBoardData = async ({
 };
 
 //projectCard
-export const getReleasedProjectBydate = async (date: string) => {
+export const getReleasedProjectBydateAndStatus = async (
+  date: string,
+  status: string
+) => {
   try {
-    const AxiosResponse = await Axios.get(`/project/getAllProjectByShiftDate`, {
-      params: {
-        shift_date: date,
-      },
-    });
+    const AxiosResponse = await Axios.get(
+      `/project/getAllProjectByShiftDateAnsStatus`,
+      {
+        params: {
+          shift_date: date,
+          status: status,
+        },
+      }
+    );
     return AxiosResponse!.data;
   } catch (error) {
     const errorResponse: ResponseData = {

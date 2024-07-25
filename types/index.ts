@@ -146,6 +146,7 @@ export interface ResourceWorkOdderData {
   endDate: string;
   estimated_hour: string;
   forman: string[];
+  formanName: string[];
   attachment: attachment[];
   id: string;
   prepared_quantity: string;
@@ -342,6 +343,8 @@ export interface IndirectReport {
   break_hours: string;
   effective_work_hours: string;
   effective_work_hour_forman: string | null;
+  forman: string | null;
+  remark: string | null;
 }
 
 export interface LabourTicketReport {
@@ -425,6 +428,8 @@ export interface DashbaordProjectData {
   requiredQuantity: string | null;
   released_work_order: string;
   unreleased_work_order: string;
-  offline_count: string;
-  online_count: string;
+  offline_count: string[];
+  online_count: string[];
+  offline_workorder_description: string[];
+  online_workorder_description: string[];
 }

@@ -483,6 +483,7 @@ const UpdateStatus = ({ row }: any) => {
     "employee_id",
     "name",
     "designation_id",
+    "labor_type_id",
     "attendance_type",
     "gl_code",
     "gl_description",
@@ -504,7 +505,6 @@ const UpdateStatus = ({ row }: any) => {
     "shift_date",
     "forman_name",
     "remark",
-    "labor_type_id",
   ];
 
   const handleSubmit = (values: z.infer<typeof LabourCardSchema>) => {

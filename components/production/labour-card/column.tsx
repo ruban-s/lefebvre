@@ -406,22 +406,23 @@ export const UpdateStatus = ({ row }: any) => {
               // ) {
               //   return null;
               // }
-              return (
-                <ViewTabField
-                  key={index}
-                  heading={
-                    dataValue.replaceAll("_", " ").charAt(0).toUpperCase() +
-                    dataValue
-                      .replaceAll("_", " ")
-                      .slice(1)
-                      .replace(/([a-z])([A-Z])/g, "$1 $2")
-                  }
-                  value={
-                    data[`${dataValue}`] !== "" ? data[`${dataValue}`] : "--"
-                  }
-                  isInput
-                />
-              );
+              if (dataValue)
+                return (
+                  <ViewTabField
+                    key={index}
+                    heading={
+                      dataValue.replaceAll("_", " ").charAt(0).toUpperCase() +
+                      dataValue
+                        .replaceAll("_", " ")
+                        .slice(1)
+                        .replace(/([a-z])([A-Z])/g, "$1 $2")
+                    }
+                    value={
+                      data[`${dataValue}`] !== "" ? data[`${dataValue}`] : "--"
+                    }
+                    isInput
+                  />
+                );
             })}
             {/* <ViewTabField
               heading={"gl_code"}
@@ -529,6 +530,7 @@ export const projectColumns: ColumnDef<LabourData>[] = [
     accessorKey: "gl_code",
     header: "GL Code",
     cell: ({ row }) => {
+      console.log(row.original);
       return (
         <div>
           {!row.original.gl_code ? "--" : <p>{row.original.gl_code}</p>}

@@ -310,6 +310,7 @@ export const resourceController = [
   "ballanced_quantity",
   "bench_mark_measure",
   "bench_mark_unit",
+  "formanName",
   "startDate",
   "endDate",
   "actual_hour",
@@ -319,7 +320,7 @@ export const resourceController = [
   "employee_id",
   "employee_id",
   "remark",
-  "forman",
+  "formanName",
   "status",
   "createdDate",
   "updatedDate",
@@ -390,6 +391,7 @@ export const labourCardMaintanceField = [
   "name",
   "designation_id",
   "attendance_type",
+  "labor_type_id",
   "gl_code",
   "gl_description",
   "project_id",
@@ -408,11 +410,9 @@ export const labourCardMaintanceField = [
   "shift_start_time",
   "shift_end_time",
   "shift_date",
-  "forman_id",
+  "forman_name",
   "changed_resource",
   "remark",
-  "createdDate",
-  "updatedDate",
 ];
 
 export const ProjectSummaryController = [
@@ -468,7 +468,6 @@ export const ResourceReportController = [
 ];
 
 export const FormanReportController = [
-  "forman_id",
   "forman_name",
   "project_id",
   "description",
@@ -548,6 +547,8 @@ export const IndirectReportController = [
   "break_hours",
   "effective_work_hours",
   "effective_work_hour_forman",
+  "forman",
+  "remark",
 ];
 
 export const LabourTicketController = [
@@ -575,7 +576,6 @@ export const LabourTicketController = [
   "shift_start_time",
   "shift_end_time",
   "shift_date",
-  "forman",
   "forman_name",
   "remark_by_forman",
 ];

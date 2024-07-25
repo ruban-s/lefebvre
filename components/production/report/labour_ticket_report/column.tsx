@@ -185,13 +185,13 @@ const ViewStatus = ({ row }: any) => {
       <DialogTrigger asChild>
         <GrFormView className="text-2xl" />
       </DialogTrigger>
-      <DialogContent className="w-[600px] max-h-[90%] overflow-y-auto">
+      <DialogContent className="w-full max-w-4xl max-h-[90%] overflow-y-auto">
         <DialogHeader className="py-2 w-full bg-theme flex justify-center items-center rounded-lg">
           <DialogTitle className="text-white">
             View LabourTicketReport
           </DialogTitle>
         </DialogHeader>
-        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-2">
+        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3  gap-2">
           {Object.entries(viewData).map(([key, value], index) => {
             return (
               <div className="items-center gap-4" key={index}>

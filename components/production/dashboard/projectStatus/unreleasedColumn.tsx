@@ -1,10 +1,10 @@
-import { ProjectData } from "@/types";
+import { DashbaordProjectData } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { RxCaretSort } from "react-icons/rx";
 
-export const ReleasedProjectColumn: ColumnDef<ProjectData>[] = [
+export const UnReleasedProjectColumn: ColumnDef<DashbaordProjectData>[] = [
   {
     accessorKey: "project_id",
     header: "Project ID",
@@ -18,9 +18,9 @@ export const ReleasedProjectColumn: ColumnDef<ProjectData>[] = [
     header: "Description",
     cell: ({ row }) => (
       <div className="flex justify-start items-center">
-        {row.original.description.substring(0, 30)}{" "}
-        {row.original.description.length > 30 && "..."}
-        {row.original.description.length > 30 && (
+        {row.original.description.substring(0, 15)}{" "}
+        {row.original.description.length > 15 && "..."}
+        {row.original.description.length > 15 && (
           <Popover>
             <PopoverTrigger className="bg-neutral-200 p-1 rounded-sm ">
               <RxCaretSort className="text-theme" size={20} />
