@@ -19,6 +19,7 @@ import {
   calculateBalanceHoursForFormattedTime,
   formatHoursForFormattedTime,
 } from "@/commonfunction";
+import { Textarea } from "@/components/ui/textarea";
 
 export const Columns: ColumnDef<ResourceReport>[] = [
   {
@@ -180,17 +181,27 @@ const ViewStatus = ({ row }: any) => {
                 }`}
                 key={index}>
                 <div className="mb-1 capitalize">{key}</div>
-                <Input
-                  className="border-2 border-gray-400"
-                  disabled
-                  value={value as string}
-                />
+                {key === "description" ||
+                key === "work_order_description" ||
+                key === "forman" ? (
+                  <Textarea
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                ) : (
+                  <Input
+                    className="border-2 border-gray-400"
+                    disabled
+                    value={value as string}
+                  />
+                )}
               </div>
             );
           })}
         </div>
-        <DialogFooter>
-          <DialogClose>
+        <DialogFooter className="sticky bottom-0 w-full bg-white">
+          <DialogClose className="flex justify-end">
             <Button variant={"secondary"} className="border-2 border-black">
               Close
             </Button>

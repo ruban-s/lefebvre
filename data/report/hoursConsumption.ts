@@ -14,6 +14,7 @@ export const getHoursConsumptionReport = async ({
   end_date,
 }: getHoursConsumptionReportProps) => {
   try {
+    console.log(consumption, start_date, end_date);
     const [start_percentage, end_percentage] = consumption.split("-");
     const status = "Released";
     var start = start_date.split("-");

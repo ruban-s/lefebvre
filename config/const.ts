@@ -469,7 +469,6 @@ export const ResourceReportController = [
 ];
 
 export const FormanReportController = [
-  "forman_id",
   "forman_name",
   "project_id",
   "description",
@@ -576,7 +575,6 @@ export const LabourTicketController = [
   "shift_start_time",
   "shift_end_time",
   "shift_date",
-  "forman",
   "forman_name",
   "remark_by_forman",
 ];

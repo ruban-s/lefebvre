@@ -80,6 +80,7 @@ export const Columns: ColumnDef<IndirectReport>[] = [
     accessorKey: "out_time",
     header: "OutTime",
     cell: ({ row }) => {
+      console.log(row.original);
       return (
         <p>
           {row.original.out_time === null || row.original.out_time.length === 0
