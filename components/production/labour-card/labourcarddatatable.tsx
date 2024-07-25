@@ -165,9 +165,11 @@ export function LabourCardDataTable<TData, TValue>({
     const headers = Object.keys(newData[0]);
     const csvRows = [
       headers.join(","),
-      ...newData.map((row) =>
-        headers.map((header) => processValue(row[header])).join(",")
-      ),
+      ...newData
+        .splice(1)
+        .map((row) =>
+          headers.map((header) => processValue(row[header])).join(",")
+        ),
     ];
 
     const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
