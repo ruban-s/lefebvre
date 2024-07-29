@@ -148,13 +148,13 @@ export function ReportDataTableWithTimeRange<TData, TValue>({
 
     const newData = value.map(({ createdDate, updatedDate, ...info }: any) => ({
       ...info,
-      createdDate:
-        createdDate && createdDate !== null
-          ? createdDate.toString().replace(/,/g, "/")
-          : "null",
-      updatedDate: updatedDate
-        ? updatedDate.toString().replace(/,/g, "/")
-        : "null",
+      // createdDate:
+      //   createdDate && createdDate !== null
+      //     ? createdDate.toString().replace(/,/g, "/")
+      //     : "null",
+      // updatedDate: updatedDate
+      //   ? updatedDate.toString().replace(/,/g, "/")
+      //   : "null",
     }));
 
     const headers = Object.keys(newData[0]);

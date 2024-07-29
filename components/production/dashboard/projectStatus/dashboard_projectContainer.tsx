@@ -118,7 +118,7 @@ export const DashboardProjectContainer = ({
       error = unreleasedDashboardProjectError;
       columns = UnReleasedProjectColumn;
       fileName = "DashboardUnreleasedProject";
-      title = "UnReleased Projects";
+      title = "Unreleased Projects";
       exportFields = unReleasedProjectController;
       break;
     default:
@@ -143,7 +143,10 @@ export const DashboardProjectContainer = ({
       ) : (
         <>
           <div className="bg-theme w-full pl-2 py-2 ">
-            <p className="text-lg font-bold text-white ">{"Labour Cards"}</p>
+            <p className="text-lg font-bold text-white ">
+              {"Dashboard - "}
+              {title}
+            </p>
           </div>
           <div className="w-full ">
             <ReportDataTable

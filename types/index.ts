@@ -433,3 +433,13 @@ export interface DashbaordProjectData {
   offline_workorder_description: string[];
   online_workorder_description: string[];
 }
+
+export interface BarChartData {
+  year: number;
+  month: number;
+  date: number;
+  direct_count: number;
+  indirect_count: number;
+  direct_hours: number;
+  indirect_hours: number;
+}
