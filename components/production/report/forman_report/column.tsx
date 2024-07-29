@@ -44,6 +44,7 @@ export const Columns: ColumnDef<FormanReport>[] = [
   {
     accessorKey: "efficiency",
     header: "Efficiency",
+    cell: ({ row }) => {},
   },
   {
     accessorKey: "status",

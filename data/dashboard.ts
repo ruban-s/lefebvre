@@ -1,6 +1,6 @@
 "use server";
 
-import { Axios } from "@/action/axios";
+import { Axios, DashboardAxios } from "@/action/axios";
 import { ResponseData } from "@/types";
 
 interface getDashboardDataProps {
@@ -57,6 +57,31 @@ export const getReleasedProjectBydateAndStatus = async (
         params: {
           shift_date: date,
           status: status,
+        },
+      }
+    );
+    return AxiosResponse!.data;
+  } catch (error) {
+    const errorResponse: ResponseData = {
+      status: false,
+      message: JSON.stringify(error),
+      data: "",
+    };
+    return errorResponse;
+  }
+};
+
+export const getBarChartDataByMonthAndYear = async (
+  month: string,
+  year: string
+) => {
+  try {
+    const AxiosResponse = await DashboardAxios.get(
+      `/dashboard/barchart/jobtype/getAllJobTypeByMonthAndYear`,
+      {
+        params: {
+          month: month,
+          year: year,
         },
       }
     );

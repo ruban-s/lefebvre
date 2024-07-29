@@ -18,3 +18,7 @@ export const ImageAxios = axios.create({
     Authorization: `${token?.value}`,
   },
 });
+
+export const DashboardAxios = axios.create({
+  baseURL: "http://localhost:8080",
+});

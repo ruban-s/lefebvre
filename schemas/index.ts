@@ -263,3 +263,10 @@ export const LabourCardSchema = z
       path: ["prepared_quantity"],
     }
   );
+
+export const DashBoardFormSchema = z.object({
+  month: z.string().optional(),
+  year: z.string().min(1, {
+    message: "Year is required",
+  }),
+});
