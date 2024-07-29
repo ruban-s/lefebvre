@@ -32,7 +32,7 @@ export const IndirectCodeSchema = z.object({
   description: z.string().min(1, { message: "Description is required" }),
 });
 export const ResourceSchema = z.object({
-  resource_id: z.string().min(1, { message: "Resource ID is required" }),
+  resource_id: z.string().min(1, { message: "Resource-ID is required" }),
   status: z.string().min(1, { message: "Status is required" }),
   res_description: z.string().min(1, { message: "Description is required" }),
   res_note: z.string().optional(),

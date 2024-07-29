@@ -27,7 +27,7 @@ const LabourListContainer = () => {
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
   const [tableData, setTableDate] = useState([]);
-
+  
   const setRange = (date: DateRange | undefined) => {
     setDateRange(date);
     const fromDate = date?.from;
@@ -79,7 +79,7 @@ const LabourListContainer = () => {
     }
     setTableDate(filteredData);
   };
-
+  
   useEffect(() => {
     if (fullData) {
       fetchData(fullData);
