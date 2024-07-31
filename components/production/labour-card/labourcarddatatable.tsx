@@ -372,7 +372,7 @@ export function LabourCardDataTable<TData, TValue>({
                   fullexport={fullexport}
                   labourCardFields={labourCardFields}
                 />
-                <ExportButtonComponent
+                {/* <ExportButtonComponent
                   nameChangeFunction={(value: any) => {
                     setExportFileName(value);
                   }}
@@ -399,7 +399,7 @@ export function LabourCardDataTable<TData, TValue>({
                   fullexport={fullexport}
                   data={data}
                   labourCardFields={labourCardFields}
-                />
+                /> */}
               </DropdownMenuContent>
             </DropdownMenu>
 

@@ -51,7 +51,7 @@ import { BarChartData } from "@/types";
 import { getBarChartDataByMonthAndYear } from "@/data/dashboard";
 import Loading from "@/loading";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { currentDate } from "@/commonfunction";
+import { getCurrentDate } from "@/commonfunction";
 
 const chartConfig = {
   direct: {
@@ -212,8 +212,7 @@ const BarChartContainer = () => {
     if (month && year) {
       refetch();
     } else {
-      const date = currentDate();
-      console.log(date);
+      const date = getCurrentDate();
       const [dates, months, years] = date.split("-");
       setMonth(months);
       setYear(years);
@@ -242,6 +241,8 @@ const BarChartContainer = () => {
     );
   }
 
+  const fieldName = month === "empty" ? "monthName" : "date";
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row gap-5 justify-end pb-5">
@@ -268,7 +269,7 @@ const BarChartContainer = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="empty">Select a month</SelectItem>
+                          <SelectItem value="empty">Month...</SelectItem>
                           <SelectItem value="01">January</SelectItem>
                           <SelectItem value="02">February</SelectItem>
                           <SelectItem value="03">March</SelectItem>
@@ -340,7 +341,7 @@ const BarChartContainer = () => {
                   right: 12,
                 }}>
                 <CartesianGrid />
-                <XAxis dataKey="date" />
+                <XAxis dataKey={fieldName} />
                 <YAxis />
                 <Legend />
                 <Tooltip

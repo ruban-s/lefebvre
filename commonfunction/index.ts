@@ -345,7 +345,7 @@ export const calculateWorkAndBreakHour = ({
   };
 };
 
-export const currentDate = () => {
+export const getCurrentDate = () => {
   const date = new Date();
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -358,8 +358,23 @@ export const currentDate = () => {
   return currentDate;
 };
 
+//get the previous date
+export const previousDate = () => {
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+  const day = yesterday.getDate();
+  const month = yesterday.getMonth() + 1;
+  const year = yesterday.getFullYear();
+  const formattedDay = day < 10 ? `0${day}` : `${day}`;
+  const formattedMonth = month < 10 ? `0${month}` : `${month}`;
+
+  const resultDate = `${formattedDay}-${formattedMonth}-${year}`;
+  return resultDate;
+};
+
 export const fetchDefaultForDashboard = async () => {
-  const date = currentDate();
+  const date = getCurrentDate();
   const forman = await fetchFormanList();
   const shift_type = "day";
   const attendance_type = "present";

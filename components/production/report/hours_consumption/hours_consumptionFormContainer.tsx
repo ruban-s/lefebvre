@@ -28,7 +28,6 @@ import { format, parse } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { FaUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
-import { currentDate } from "@/commonfunction";
 
 const HoursConsumptionReportFormContainer = () => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
