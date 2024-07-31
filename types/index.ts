@@ -406,6 +406,7 @@ export interface DashboardState {
   shift_type: string;
   attendance_type: string;
   labor_type: string;
+  prev_date: boolean;
 }
 
 export interface DashbaordProjectData {

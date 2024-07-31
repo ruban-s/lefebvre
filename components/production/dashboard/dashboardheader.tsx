@@ -13,18 +13,15 @@ const DashboardHeader = () => {
   const dashboard = useDashboardStore((state: any) => state.dashboard);
   const setDashboard = useDashboardStore((state: any) => state.setDashboard);
 
-  const [highlightPrev, setHighlightPrev] = useState(false);
-  const [highlightNext, setHighlightNext] = useState(true);
-
   const handleOnclick = (name: any) => {
     if (name === "prev") {
-      setDashboard({ ...dashboard, ["date"]: previousDate() });
-      setHighlightNext(false);
-      setHighlightPrev(true);
+      setDashboard({ ...dashboard, ["date"]: previousDate(), prev_date: true });
     } else {
-      setDashboard({ ...dashboard, ["date"]: getCurrentDate() });
-      setHighlightPrev(false);
-      setHighlightNext(true);
+      setDashboard({
+        ...dashboard,
+        ["date"]: getCurrentDate(),
+        prev_date: false,
+      });
     }
   };
 
@@ -34,21 +31,21 @@ const DashboardHeader = () => {
         <div className="flex flex-row gap-2">
           <Button
             className={` ${
-              highlightPrev
+              dashboard && dashboard.prev_date
                 ? "bg-black text-white hover:bg-black"
                 : "bg-blue-300 text-black hover:bg-blue-300"
             }`}
             onClick={() => handleOnclick("prev")}>
-            Prev
+            Prev Day
           </Button>
           <Button
             className={` ${
-              highlightNext
+              dashboard && !dashboard.prev_date
                 ? "bg-black text-white hover:bg-black"
                 : "bg-blue-300 text-black hover:bg-blue-300"
             }`}
             onClick={() => handleOnclick("next")}>
-            Current
+            Current Day
           </Button>
         </div>
         <div className="bg-white p-2 text-xl tracking-widest shadow-md">

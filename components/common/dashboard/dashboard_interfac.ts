@@ -7,6 +7,7 @@ export interface DashboardCardDataProps {
 
 //cards
 export interface DashboardCardsProps {
+  hasShowEye: boolean;
   heading: string;
   data: DashboardCardDataProps[];
   barColor: string;
