@@ -1,5 +1,4 @@
 "use client";
-import { currentDate } from "@/commonfunction";
 import { ProjectTableContainerProps } from "@/components/common/dashboard/dashboard_interfac";
 import { ReportDataTable } from "@/components/common/report/report-data-table";
 import { getReleasedProjectBydateAndStatus } from "@/data/dashboard";
@@ -17,6 +16,7 @@ import {
 } from "@/config/dashboardConst";
 import { ReleasedProjectColumn } from "./releasedColumn";
 import { UnReleasedProjectColumn } from "./unreleasedColumn";
+import { getCurrentDate } from "@/commonfunction";
 
 export const DashboardProjectContainer = ({
   project_type,
@@ -33,7 +33,9 @@ export const DashboardProjectContainer = ({
     queryKey: ["dashboardAllProject"],
     queryFn: async () => {
       const filterDate =
-        dashboard && dashboard.date !== null ? dashboard.date : currentDate();
+        dashboard && dashboard.date !== null
+          ? dashboard.date
+          : getCurrentDate();
       const data = await getReleasedProjectBydateAndStatus(filterDate, "All");
       return JSON.parse(data.data) as DashbaordProjectData[];
     },
@@ -48,7 +50,9 @@ export const DashboardProjectContainer = ({
     queryKey: ["dashboardReleasedProject"],
     queryFn: async () => {
       const filterDate =
-        dashboard && dashboard.date !== null ? dashboard.date : currentDate();
+        dashboard && dashboard.date !== null
+          ? dashboard.date
+          : getCurrentDate();
       const data = await getReleasedProjectBydateAndStatus(
         filterDate,
         "Released"
@@ -66,7 +70,9 @@ export const DashboardProjectContainer = ({
     queryKey: ["dashboardUnreleasedProject"],
     queryFn: async () => {
       const filterDate =
-        dashboard && dashboard.date !== null ? dashboard.date : currentDate();
+        dashboard && dashboard.date !== null
+          ? dashboard.date
+          : getCurrentDate();
       const data = await getReleasedProjectBydateAndStatus(
         filterDate,
         "Unreleased"

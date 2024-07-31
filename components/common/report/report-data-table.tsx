@@ -354,7 +354,7 @@ export function ReportDataTable<TData, TValue>({
                   data={data}
                   fullexport={fullexport}
                 />
-                <ExportButtonComponent
+                {/* <ExportButtonComponent
                   nameChangeFunction={(value: any) => {
                     setExportFileName(value);
                   }}
@@ -379,7 +379,7 @@ export function ReportDataTable<TData, TValue>({
                   exportDataFields={exportDataFields}
                   fullexport={fullexport}
                   data={data}
-                />
+                /> */}
               </DropdownMenuContent>
             </DropdownMenu>
 

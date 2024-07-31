@@ -378,6 +378,7 @@ const EmployeeFormContainer = () => {
                           <SelectContent>
                             <SelectItem value="Active">Active</SelectItem>
                             <SelectItem value="Inactive">Inactive</SelectItem>
+                            <SelectItem value="Vacation">Vacation</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
