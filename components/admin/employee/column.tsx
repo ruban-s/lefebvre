@@ -172,7 +172,11 @@ export const columns: ColumnDef<EmployeeData>[] = [
     cell: ({ row }) => (
       <Badge
         className={`cursor-pointer rounded-md ${
-          row.original.status === "Active" ? "bg-green-500" : "bg-red-500"
+          row.original.status === "Active"
+            ? "bg-green-500"
+            : row.original.status === "Vacation"
+            ? "bg-blue-700"
+            : "bg-red-500"
         }`}>
         {row.original.status}
       </Badge>

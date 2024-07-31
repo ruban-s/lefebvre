@@ -22,10 +22,10 @@ export const ReleasedProjectColumn: ColumnDef<DashbaordProjectData>[] = [
     header: "Offline",
   },
   {
-    accessorKey: "offline_workorder_description",
-    header: "Offline Work Order",
+    accessorKey: "online_workorder_description",
+    header: "Online Work Order",
     cell: ({ row }) => {
-      const data = row.original.offline_workorder_description;
+      const data = row.original.online_workorder_description;
       return (
         <div>
           {data.length === 0 ? (
@@ -59,10 +59,10 @@ export const ReleasedProjectColumn: ColumnDef<DashbaordProjectData>[] = [
     },
   },
   {
-    accessorKey: "online_workorder_description",
-    header: "Online Work Order",
+    accessorKey: "offline_workorder_description",
+    header: "Offline Work Order",
     cell: ({ row }) => {
-      const data = row.original.online_workorder_description;
+      const data = row.original.offline_workorder_description;
       return (
         <div>
           {data.length === 0 ? (

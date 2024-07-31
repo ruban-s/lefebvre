@@ -8,7 +8,7 @@ import { useHoursConsumptionReportStore } from "@/state";
 import { HoursConsumptionReport } from "@/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Columns } from "./column";
-import { currentDate } from "@/commonfunction";
+import { getCurrentDate } from "@/commonfunction";
 
 const HoursConsumptionListContainer = () => {
   const queryClient = useQueryClient();
@@ -24,8 +24,8 @@ const HoursConsumptionListContainer = () => {
   // Default data for query
   const defaultData = {
     consumption: "1-10",
-    start_date: currentDate(),
-    end_date: currentDate(),
+    start_date: getCurrentDate(),
+    end_date: getCurrentDate(),
   };
 
   // Fetch data using react-query
