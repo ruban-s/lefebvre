@@ -13,6 +13,7 @@ export const DashboardCards = ({
   value,
   total,
   emptyColor,
+  hasShowEye,
 }: DashboardCardsProps) => {
   const progressBarProps = {
     value: value,
@@ -21,23 +22,30 @@ export const DashboardCards = ({
     textColor: barColor,
     emptyColor: emptyColor,
   };
-
-  console.log(data);
-
   //data in each row
   const Row = ({ keyProps, count, queryType }: DashboardCardDataProps) => {
     return (
       <div className="flex flex-row gap-2 items-center justify-between text-sm">
-        <span>{keyProps}</span>
+        <span
+          className={`${keyProps === "OT" ? "text-red-600" : "text-inherit"}`}>
+          {keyProps}
+        </span>
         <div className="flex flex-row gap-2 items-center text-sm">
-          <span>:{count}</span>
-          <Link
-            href={{
-              pathname: `/production/dashboard/project/${queryType}`,
-            }}
-            className={`flex flex-row justify-center items-center`}>
-            <FaEye className="text-gray-500 cursor-pointer" />
-          </Link>
+          <span
+            className={`${
+              keyProps === "OT" ? "text-red-600" : "text-inherit"
+            }`}>
+            :{count}
+          </span>
+          {hasShowEye && (
+            <Link
+              href={{
+                pathname: `/production/dashboard/project/${queryType}`,
+              }}
+              className={`flex flex-row justify-center items-center`}>
+              <FaEye className="text-gray-500 cursor-pointer" />
+            </Link>
+          )}
         </div>
       </div>
     );
