@@ -20,5 +20,5 @@ export const ImageAxios = axios.create({
 });
 
 export const DashboardAxios = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://194.62.96.140",
 });

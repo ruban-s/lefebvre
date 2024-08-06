@@ -289,7 +289,7 @@ export function ReportDataTable<TData, TValue>({
     );
   };
 
-  const filteredDataArr = table.getFilteredRowModel().rows.map((row: any) => {
+  const filteredDataArr = table?.getFilteredRowModel().rows?.map((row: any) => {
     return row.original;
   });
 

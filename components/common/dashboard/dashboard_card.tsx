@@ -5,6 +5,7 @@ import {
 import ProgressBar from "./progressive_bar";
 import { FaEye } from "react-icons/fa";
 import Link from "next/link";
+import { DashboardDialog } from "./dashboard_dialog";
 
 export const DashboardCards = ({
   heading,
@@ -13,6 +14,7 @@ export const DashboardCards = ({
   value,
   total,
   emptyColor,
+  hasShowEye,
 }: DashboardCardsProps) => {
   const progressBarProps = {
     value: value,
@@ -21,23 +23,69 @@ export const DashboardCards = ({
     textColor: barColor,
     emptyColor: emptyColor,
   };
-
-  console.log(data);
-
   //data in each row
   const Row = ({ keyProps, count, queryType }: DashboardCardDataProps) => {
     return (
       <div className="flex flex-row gap-2 items-center justify-between text-sm">
-        <span>{keyProps}</span>
+        <span
+          className={`${keyProps === "OT" ? "text-red-600" : "text-inherit"}`}>
+          {keyProps}
+        </span>
         <div className="flex flex-row gap-2 items-center text-sm">
-          <span>:{count}</span>
-          <Link
-            href={{
-              pathname: `/production/dashboard/project/${queryType}`,
-            }}
-            className={`flex flex-row justify-center items-center`}>
-            <FaEye className="text-gray-500 cursor-pointer" />
-          </Link>
+          <span
+            className={`${
+              keyProps === "OT" ? "text-red-600" : "text-inherit"
+            }`}>
+            :{count}
+          </span>
+          {hasShowEye ? (
+            <Link
+              href={{
+                pathname: `/production/dashboard/project/${queryType}`,
+              }}
+              className={`flex flex-row justify-center items-center`}>
+              <FaEye className="text-gray-500 cursor-pointer" />
+            </Link>
+          ) : (
+            <div>
+              {heading.toLowerCase() === "workers" && (
+                <DashboardDialog
+                  type="workers"
+                  properties={
+                    keyProps.toLowerCase() === "onduty"
+                      ? { attendance: "present" }
+                      : keyProps.toLowerCase() === "workers"
+                      ? { attendance: "all" }
+                      : { attendance: keyProps }
+                  }
+                />
+              )}
+              {heading.toLowerCase() === "shift" && (
+                <DashboardDialog
+                  type="shift"
+                  properties={
+                    keyProps.toLowerCase() === "shift"
+                      ? { work_type: "all" }
+                      : { work_type: keyProps }
+                  }
+                />
+              )}
+              {heading.toLowerCase() === "attendance" && (
+                <DashboardDialog
+                  type="attendance"
+                  properties={
+                    keyProps.toLowerCase() === "total"
+                      ? { attendance: "all" }
+                      : keyProps.toLowerCase() === "ot"
+                      ? { attendance: "overtime" }
+                      : { attendance: keyProps }
+                  }
+                />
+              )}
+            </div>
+
+            // <span>hi</span>
+          )}
         </div>
       </div>
     );

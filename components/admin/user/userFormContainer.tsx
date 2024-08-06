@@ -300,6 +300,7 @@ const UserFormContainer = () => {
                         <FormLabel>Access</FormLabel>
                         <Select
                           value={form.watch("access")}
+                          disabled
                           onValueChange={(value) => {
                             form.setValue("access", value);
                           }}>

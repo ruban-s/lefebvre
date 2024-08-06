@@ -236,6 +236,8 @@ const WorkOrderFormContainer = () => {
 
         if (filterLabourCards.length > 0) {
           setDisableTrue(true);
+        } else {
+          setDisableTrue(false);
         }
 
         setProject(workOrder?.project_id);
@@ -478,7 +480,6 @@ const WorkOrderFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Description"
-                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />

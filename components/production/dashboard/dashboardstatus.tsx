@@ -11,7 +11,6 @@ import {
   getWorkersCountByForman,
   getWorkersCountByShift,
 } from "@/data/real_time_dashboard";
-// import io from "socket.io-client";
 
 const DashboardStatus = () => {
   //query for all projects
@@ -53,9 +52,9 @@ const DashboardStatus = () => {
   } = useQuery({
     queryKey: ["dashboardWorkersCount"],
     queryFn: async () => {
-      console.log("Refetching Workers count");
+      // console.log("Refetching Workers count");
       const data = await getWorkersCount(dashboard.date);
-      console.log(data.data);
+      // console.log(data.data);
       return data.data[0];
     },
     refetchInterval: 5000,
@@ -76,7 +75,7 @@ const DashboardStatus = () => {
         date: dashboard.date,
         shift_type: dashboard.shift_type,
       });
-      console.log(data.data);
+      // console.log(data.data);
       return data.data[0];
     },
     refetchInterval: 5000,
@@ -139,173 +138,177 @@ const DashboardStatus = () => {
     value: releasedPercentage,
     total: `${totalProjects}`,
     emptyColor: "#bae8f4",
+    hasShowEye: true,
   };
 
   // workers config data
-  // const presentPercentage = workersCount
-  //   ? (workersCount.present / workersCount.total) * 100
-  //   : 0;
-  // const workersStatus = {
-  //   heading: "Workers",
-  //   data: [
-  //     {
-  //       keyProps: "Vacation",
-  //       count:
-  //         workersCount && workersCount.vacation ? workersCount.vacation : 0,
-  //       queryType: "allProject",
-  //     },
-  //     {
-  //       keyProps: "Workers",
-  //       count: workersCount && workersCount.total ? workersCount.total : 0,
-  //       queryType: "allProject",
-  //     },
-  //     {
-  //       keyProps: "OnDuty",
-  //       count: workersCount && workersCount.present ? workersCount.present : 0,
-  //       queryType: "releasedProject",
-  //     },
-  //     {
-  //       keyProps: "Vacation",
-  //       count: workersCount && workersCount.absent ? workersCount.absent : 0,
-  //       queryType: "unReleasedProject",
-  //     },
-  //   ],
-  //   barColor: "#084d89",
-  //   value: presentPercentage,
-  //   total: `${workersCount && workersCount.total ? workersCount.total : 0}`,
-  //   emptyColor: "#85b5df",
-  // };
+  const presentPercentage = workersCount
+    ? (workersCount.present / workersCount.total) * 100
+    : 0;
+  const workersStatus = {
+    heading: "Workers",
+    data: [
+      {
+        keyProps: "Vacation",
+        count:
+          workersCount && workersCount.vacation ? workersCount.vacation : 0,
+        queryType: "allProject",
+      },
+      {
+        keyProps: "Workers",
+        count: workersCount && workersCount.total ? workersCount.total : 0,
+        queryType: "allProject",
+      },
+      {
+        keyProps: "OnDuty",
+        count: workersCount && workersCount.present ? workersCount.present : 0,
+        queryType: "releasedProject",
+      },
+      {
+        keyProps: "Absent",
+        count: workersCount && workersCount.absent ? workersCount.absent : 0,
+        queryType: "unReleasedProject",
+      },
+    ],
+    barColor: "#084d89",
+    value: isNaN(presentPercentage) ? 0 : presentPercentage,
+    total: `${workersCount && workersCount.total ? workersCount.total : 0}`,
+    emptyColor: "#85b5df",
+    hasShowEye: false,
+  };
 
   //workersByShift config data
-  // const shiftPercentage = workersShiftCount
-  //   ? (workersShiftCount.direct / workersShiftCount.total) * 100
-  //   : 0;
-  // const workersByShiftStatus = {
-  //   heading: "Shift",
-  //   data: [
-  //     {
-  //       keyProps: "Shift",
-  //       count:
-  //         workersShiftCount && workersShiftCount.total ? workersCount.total : 0,
-  //       queryType: "allProject",
-  //     },
-  //     {
-  //       keyProps: "Direct",
-  //       count:
-  //         workersShiftCount && workersShiftCount.direct
-  //           ? workersShiftCount.direct
-  //           : 0,
-  //       queryType: "releasedProject",
-  //     },
-  //     {
-  //       keyProps: "Indirect",
-  //       count:
-  //         workersShiftCount && workersShiftCount.indirect
-  //           ? workersShiftCount.indirect
-  //           : 0,
-  //       queryType: "unReleasedProject",
-  //     },
-  //   ],
-  //   barColor: "#FFA500",
-  //   value: shiftPercentage,
-  //   total: `${
-  //     workersShiftCount && workersShiftCount.total ? workersCount.total : 0
-  //   }`,
-  //   emptyColor: "#efcb87",
-  // };
+  const shiftPercentage = workersShiftCount
+    ? (workersShiftCount.direct / workersShiftCount.total) * 100
+    : 0;
+  const workersByShiftStatus = {
+    heading: "Shift",
+    data: [
+      {
+        keyProps: "Shift",
+        count:
+          workersShiftCount && workersShiftCount.total ? workersCount.total : 0,
+        queryType: "allProject",
+      },
+      {
+        keyProps: "Direct",
+        count:
+          workersShiftCount && workersShiftCount.direct
+            ? workersShiftCount.direct
+            : 0,
+        queryType: "releasedProject",
+      },
+      {
+        keyProps: "Indirect",
+        count:
+          workersShiftCount && workersShiftCount.indirect
+            ? workersShiftCount.indirect
+            : 0,
+        queryType: "unReleasedProject",
+      },
+    ],
+    barColor: "#FFA500",
+    value: isNaN(shiftPercentage) ? 0 : shiftPercentage,
+    total: `${
+      workersShiftCount && workersShiftCount.total ? workersCount.total : 0
+    }`,
+    emptyColor: "#efcb87",
+    hasShowEye: false,
+  };
 
   //workersByForman config data
-  // const attendancePercentage = workersFormanCount
-  //   ? (workersFormanCount.direct / workersFormanCount.total) * 100
-  //   : 0;
-  // const workersByFormanStatus = {
-  //   heading: "Attendance",
-  //   data: [
-  //     {
-  //       keyProps: "Total",
-  //       count:
-  //         workersFormanCount && workersFormanCount.total
-  //           ? workersFormanCount.total
-  //           : 0,
-  //       queryType: "allProject",
-  //     },
-  //     {
-  //       keyProps: "Present",
-  //       count:
-  //         workersFormanCount && workersFormanCount.present
-  //           ? workersFormanCount.present
-  //           : 0,
-  //       queryType: "releasedProject",
-  //     },
-  //     {
-  //       keyProps: "Absent",
-  //       count:
-  //         workersFormanCount && workersFormanCount.absent
-  //           ? workersFormanCount.absent
-  //           : 0,
-  //       queryType: "unReleasedProject",
-  //     },
-  //     {
-  //       keyProps: "OT",
-  //       count:
-  //         workersFormanCount && workersFormanCount.overtime
-  //           ? workersFormanCount.overtime
-  //           : 0,
-  //       queryType: "unReleasedProject",
-  //     },
-  //   ],
-  //   barColor: "#047821",
-  //   value: attendancePercentage,
-  //   total: `${
-  //     workersFormanCount && workersFormanCount.total
-  //       ? workersFormanCount.total
-  //       : 0
-  //   }`,
-  //   emptyColor: "#6fc886",
-  // };
+  const attendancePercentage = workersFormanCount
+    ? (workersFormanCount.direct / workersFormanCount.total) * 100
+    : 0;
+  const workersByFormanStatus = {
+    heading: "Attendance",
+    data: [
+      {
+        keyProps: "Total",
+        count:
+          workersFormanCount && workersFormanCount.total
+            ? workersFormanCount.total
+            : 0,
+        queryType: "allProject",
+      },
+      {
+        keyProps: "Present",
+        count:
+          workersFormanCount && workersFormanCount.present
+            ? workersFormanCount.present
+            : 0,
+        queryType: "releasedProject",
+      },
+      {
+        keyProps: "Absent",
+        count:
+          workersFormanCount && workersFormanCount.absent
+            ? workersFormanCount.absent
+            : 0,
+        queryType: "unReleasedProject",
+      },
+      {
+        keyProps: "OT",
+        count:
+          workersFormanCount && workersFormanCount.overtime
+            ? workersFormanCount.overtime
+            : 0,
+        queryType: "unReleasedProject",
+      },
+    ],
+    barColor: "#047821",
+    value: isNaN(attendancePercentage) ? 0 : attendancePercentage,
+    total: `${
+      workersFormanCount && workersFormanCount.total
+        ? workersFormanCount.total
+        : 0
+    }`,
+    emptyColor: "#6fc886",
+    hasShowEye: false,
+  };
 
-  // useEffect(() => {
-  //   if (dashboard && dashboard !== null) {
-  //     dashboard.date && allProjectRefetch();
-  //     dashboard.date && workersRefetch();
-  //     dashboard.date && dashboard.shift_type && workersShiftRefetch();
-  //     dashboard.date &&
-  //       dashboard.shift_type &&
-  //       dashboard.forman &&
-  //       workersFormanRefetch();
-  //   }
-  // }, [dashboard]);
+  useEffect(() => {
+    if (dashboard && dashboard !== null) {
+      dashboard.date && allProjectRefetch();
+      dashboard.date && workersRefetch();
+      dashboard.date && dashboard.shift_type && workersShiftRefetch();
+      dashboard.date &&
+        dashboard.shift_type &&
+        dashboard.forman &&
+        workersFormanRefetch();
+    }
+  }, [dashboard]);
 
   return (
     <div className="w-full h-full grid grid-cols-4 gap-5">
       <div className="bg-white h-full rounded-md shadow-md">
-        {/* {workersLoading ? (
+        {workersLoading ? (
           <div className="w-full h-full">
             <Loading />
           </div>
         ) : (
           <DashboardCards {...workersStatus} />
-        )} */}
+        )}
       </div>
       <div className="bg-white col-span-2 h-full rounded-md shadow-md flex flex-row justify-between">
         <div className="bg-white w-[48%] h-full rounded-md shadow-md">
-          {/* {workersShiftLoading ? (
+          {workersShiftLoading ? (
             <div className="w-full h-full">
               <Loading />
             </div>
           ) : (
             <DashboardCards {...workersByShiftStatus} />
-          )} */}
+          )}
         </div>
         <div className="h-full w-[1%] bg-gray-300"></div>
         <div className="bg-white w-[48%] h-full rounded-md shadow-md">
-          {/* {workersFormanLoading ? (
+          {workersFormanLoading ? (
             <div className="w-full h-full">
               <Loading />
             </div>
           ) : (
             <DashboardCards {...workersByFormanStatus} />
-          )} */}
+          )}
         </div>
       </div>
       <div className="bg-white h-full rounded-md shadow-md">

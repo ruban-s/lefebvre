@@ -193,7 +193,11 @@ const WorkOrderResourceFormContainer = () => {
         );
 
         if (filterLabourCards.length > 0) {
+          // console.log(filterLabourCards);
           setDisableTrue(true);
+        } else {
+          console.log(filterLabourCards);
+          setDisableTrue(false);
         }
 
         setProject(workOrder.project_id);

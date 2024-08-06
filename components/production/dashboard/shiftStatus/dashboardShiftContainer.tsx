@@ -2,43 +2,47 @@
 
 import { getCurrentDate } from "@/commonfunction";
 import { ReportDataTable } from "@/components/common/report/report-data-table";
-import { getWorkersByDesignation } from "@/data/real_time_dashboard";
+import { getWorkersByShiftAndDesignation } from "@/data/real_time_dashboard";
 import Loading from "@/loading";
 import { useDashboardStore } from "@/state";
 import { DashboardWorkersData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { columns } from "./workersColumn";
 import { DashboardWorkersController } from "@/config/dashboardConst";
 import { useEffect } from "react";
+import { columns } from "./shiftColumn";
 
-interface DashboardWorkerContainerProps {
-  attendance: string;
+interface DashboardShiftProps {
+  work_type: string;
   designation: string;
 }
 
-const DashboardWorkerContainer = ({
-  attendance,
+const DashboardShiftContainer = ({
+  work_type,
   designation,
-}: DashboardWorkerContainerProps) => {
+}: DashboardShiftProps) => {
+  console.log(work_type, designation);
   const dashboard = useDashboardStore((state: any) => state.dashboard);
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["dashboardWorkers"],
+    queryKey: ["dashboardWorkersByShift"],
     queryFn: async () => {
       const date =
         dashboard && dashboard.date ? dashboard.date : getCurrentDate();
-      const response = await getWorkersByDesignation({
+      const shift_type =
+        dashboard && dashboard.shift_type ? dashboard.shift_type : "day";
+      const response = await getWorkersByShiftAndDesignation({
         date,
-        attendance,
+        shift_type,
+        work_type,
         designation,
       });
-      // console.log(response.data);
+      //   console.log(response.data);
       return response.data as DashboardWorkersData[];
     },
   });
 
   useEffect(() => {
     refetch();
-  }, [attendance, designation]);
+  }, [work_type, designation]);
 
   return (
     <div className="w-[100%] h-auto bg-white ring-1 ring-theme shadow-sm rounded-sm">
@@ -55,7 +59,7 @@ const DashboardWorkerContainer = ({
           <div className="bg-theme w-full pl-2 py-2 ">
             <p className="text-lg font-bold text-white ">
               {"Dashboard - "}
-              {"Workers"}
+              {"WorkersByShift"}
             </p>
           </div>
           <div className="w-full ">
@@ -64,7 +68,7 @@ const DashboardWorkerContainer = ({
               columns={columns}
               searchField={"employee_id"}
               placeholder={"employee_id"}
-              fileName={`DashboardWorkes_${attendance}`}
+              fileName={`DashboardWorkesByShift_${work_type}`}
               fullexport={true}
               exportDataFields={DashboardWorkersController}
             />
@@ -75,4 +79,4 @@ const DashboardWorkerContainer = ({
   );
 };
 
-export default DashboardWorkerContainer;
+export default DashboardShiftContainer;
