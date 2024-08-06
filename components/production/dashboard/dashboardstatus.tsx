@@ -11,7 +11,7 @@ import {
   getWorkersCountByForman,
   getWorkersCountByShift,
 } from "@/data/real_time_dashboard";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 const DashboardStatus = () => {
   //query for all projects
