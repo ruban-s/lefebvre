@@ -444,3 +444,24 @@ export interface BarChartData {
   direct_hours: number;
   indirect_hours: number;
 }
+
+export interface DashboardWorkersData {
+  employee_id: string;
+  name: string;
+  designation_id: string;
+  current_shift_name?: string;
+  shift_type?: string;
+  current_shift_id?: string;
+  shift_date?: string;
+  forman?: string;
+  punch_in_time?: string;
+  punch_out_time?: string;
+  workType?: string;
+  attendance?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  labourcard_id?: string;
+  status?: string;
+  shift_start_time?: string;
+  shift_end_time?: string;
+}

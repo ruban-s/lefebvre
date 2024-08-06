@@ -49,7 +49,7 @@ const DashboardHeader = () => {
           </Button>
         </div>
         <div className="bg-white p-2 text-xl tracking-widest shadow-md">
-          {currentDate}
+          {dashboard ? dashboard.date : getCurrentDate()}
         </div>
         <div className="p-2 bg-white text-2xl border-2 rounded-full border-blue-800 cursor-pointer">
           <Link href={navigateUrl}>

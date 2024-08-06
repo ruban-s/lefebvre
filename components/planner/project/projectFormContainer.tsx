@@ -116,7 +116,10 @@ const ProjectFormContainer = () => {
 
           if (filterLabourCards.length > 0) {
             setDisableTrue(true);
+          } else {
+            setDisableTrue(false);
           }
+
           var startDate = project?.start_date!.toString().split("-");
           var endDate = project?.end_date!.toString().split("-");
           selectedFile(project?.images!);
@@ -340,7 +343,6 @@ const ProjectFormContainer = () => {
                             type="text"
                             {...field}
                             placeholder="Description"
-                            disabled={disableTrue}
                           />
                         </FormControl>
                         <FormMessage />

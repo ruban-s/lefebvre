@@ -2,38 +2,45 @@
 
 import { getCurrentDate } from "@/commonfunction";
 import { ReportDataTable } from "@/components/common/report/report-data-table";
-import { getWorkersByDesignation } from "@/data/real_time_dashboard";
+import { getWorkersByFormanAndDesignation } from "@/data/real_time_dashboard";
 import Loading from "@/loading";
 import { useDashboardStore } from "@/state";
 import { DashboardWorkersData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import { columns } from "./workersColumn";
 import { DashboardWorkersController } from "@/config/dashboardConst";
 import { useEffect } from "react";
+import { columns } from "./attendanceColumn";
 
-interface DashboardWorkerContainerProps {
+interface DashboardAttendanceContainerProps {
   attendance: string;
   designation: string;
 }
 
-const DashboardWorkerContainer = ({
+const DashboardAttendanceContainer = ({
   attendance,
   designation,
-}: DashboardWorkerContainerProps) => {
+}: DashboardAttendanceContainerProps) => {
+  // console.log(attendance, designation);
   const dashboard = useDashboardStore((state: any) => state.dashboard);
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["dashboardWorkers"],
     queryFn: async () => {
       const date =
         dashboard && dashboard.date ? dashboard.date : getCurrentDate();
-      const response = await getWorkersByDesignation({
+      const shift_type =
+        dashboard && dashboard.shift_type ? dashboard.shift_type : "day";
+      const forman = dashboard && dashboard.forman ? dashboard.forman : "1";
+      const response = await getWorkersByFormanAndDesignation({
         date,
         attendance,
         designation,
+        forman,
+        shift_type,
       });
       // console.log(response.data);
       return response.data as DashboardWorkersData[];
     },
+    // enabled: dashboard !== null && dashboard.forman !== null,
   });
 
   useEffect(() => {
@@ -55,7 +62,7 @@ const DashboardWorkerContainer = ({
           <div className="bg-theme w-full pl-2 py-2 ">
             <p className="text-lg font-bold text-white ">
               {"Dashboard - "}
-              {"Workers"}
+              {"WorkersByAttendance"}
             </p>
           </div>
           <div className="w-full ">
@@ -64,7 +71,7 @@ const DashboardWorkerContainer = ({
               columns={columns}
               searchField={"employee_id"}
               placeholder={"employee_id"}
-              fileName={`DashboardWorkes_${attendance}`}
+              fileName={`DashboardWorkes_Attendance_${attendance}`}
               fullexport={true}
               exportDataFields={DashboardWorkersController}
             />
@@ -75,4 +82,4 @@ const DashboardWorkerContainer = ({
   );
 };
 
-export default DashboardWorkerContainer;
+export default DashboardAttendanceContainer;
