@@ -70,34 +70,15 @@ export const CellFunction = ({ row }: any) => {
                     your data and remove from our server."
       values={employee}
       alertactionFunction={() => {
-        deleteItem.mutate(`${employee.id}`);
+        deleteItem.mutate({
+          id: `${employee.id}`,
+          employee_id: `${employee.employee_id}`,
+        });
       }}
     />
   );
 };
 export const columns: ColumnDef<EmployeeData>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
   {
     accessorKey: "employee_id",
     header: "Id",

@@ -54,3 +54,16 @@ export const unReleasedProjectController = [
   "preparedQuantity",
   "requiredQuantity",
 ];
+
+export const DashboardWorkersController = [
+  "employee_id",
+  "name",
+  "designation_id",
+];
+
+export const DashboardShiftController = [
+  "employee_id",
+  "name",
+  "designation_id",
+  "forman_name",
+];

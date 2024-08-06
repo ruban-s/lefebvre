@@ -11,7 +11,6 @@ import {
   getWorkersCountByForman,
   getWorkersCountByShift,
 } from "@/data/real_time_dashboard";
-import io from "socket.io-client";
 
 const DashboardStatus = () => {
   //query for all projects
@@ -53,9 +52,9 @@ const DashboardStatus = () => {
   } = useQuery({
     queryKey: ["dashboardWorkersCount"],
     queryFn: async () => {
-      console.log("Refetching Workers count");
+      // console.log("Refetching Workers count");
       const data = await getWorkersCount(dashboard.date);
-      console.log(data.data);
+      // console.log(data.data);
       return data.data[0];
     },
     refetchInterval: 5000,
@@ -76,7 +75,7 @@ const DashboardStatus = () => {
         date: dashboard.date,
         shift_type: dashboard.shift_type,
       });
-      console.log(data.data);
+      // console.log(data.data);
       return data.data[0];
     },
     refetchInterval: 5000,
@@ -166,7 +165,7 @@ const DashboardStatus = () => {
         queryType: "releasedProject",
       },
       {
-        keyProps: "Vacation",
+        keyProps: "Absent",
         count: workersCount && workersCount.absent ? workersCount.absent : 0,
         queryType: "unReleasedProject",
       },

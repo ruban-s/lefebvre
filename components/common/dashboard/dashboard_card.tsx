@@ -5,6 +5,7 @@ import {
 import ProgressBar from "./progressive_bar";
 import { FaEye } from "react-icons/fa";
 import Link from "next/link";
+import { DashboardDialog } from "./dashboard_dialog";
 
 export const DashboardCards = ({
   heading,
@@ -37,7 +38,7 @@ export const DashboardCards = ({
             }`}>
             :{count}
           </span>
-          {hasShowEye && (
+          {hasShowEye ? (
             <Link
               href={{
                 pathname: `/production/dashboard/project/${queryType}`,
@@ -45,6 +46,45 @@ export const DashboardCards = ({
               className={`flex flex-row justify-center items-center`}>
               <FaEye className="text-gray-500 cursor-pointer" />
             </Link>
+          ) : (
+            <div>
+              {heading.toLowerCase() === "workers" && (
+                <DashboardDialog
+                  type="workers"
+                  properties={
+                    keyProps.toLowerCase() === "onduty"
+                      ? { attendance: "present" }
+                      : keyProps.toLowerCase() === "workers"
+                      ? { attendance: "all" }
+                      : { attendance: keyProps }
+                  }
+                />
+              )}
+              {heading.toLowerCase() === "shift" && (
+                <DashboardDialog
+                  type="shift"
+                  properties={
+                    keyProps.toLowerCase() === "shift"
+                      ? { work_type: "all" }
+                      : { work_type: keyProps }
+                  }
+                />
+              )}
+              {heading.toLowerCase() === "attendance" && (
+                <DashboardDialog
+                  type="attendance"
+                  properties={
+                    keyProps.toLowerCase() === "total"
+                      ? { attendance: "all" }
+                      : keyProps.toLowerCase() === "ot"
+                      ? { attendance: "overtime" }
+                      : { attendance: keyProps }
+                  }
+                />
+              )}
+            </div>
+
+            // <span>hi</span>
           )}
         </div>
       </div>

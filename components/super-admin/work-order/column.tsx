@@ -347,7 +347,7 @@ export const UpdateStatus = ({ row }: any) => {
       if (
         value.status === "Closed" ||
         value.status === "Canceled" ||
-        value.status === "Released"
+        value.status === "Unreleased"
       ) {
         var resourceWorkOrderList = resourceWorkOrder?.filter(
           (info) =>
@@ -498,8 +498,10 @@ export const UpdateStatus = ({ row }: any) => {
                   <SelectValue placeholder={row.original.status} />
                 </SelectTrigger>
                 <SelectContent className="hovrer:none">
-                  <SelectItem value="Released">Released</SelectItem>
-                  <SelectItem value="Closed">Closed</SelectItem>
+                  <SelectItem value="Unreleased">Unreleased</SelectItem>
+                  <SelectItem value="Closed" className="text-red-500">
+                    Closed
+                  </SelectItem>
                   <SelectItem value="Canceled" className="text-orange-500">
                     Canceled
                   </SelectItem>
