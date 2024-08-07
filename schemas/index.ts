@@ -51,7 +51,6 @@ export const EmployeeSchema = z.object({
   current_shift_name: z.string().optional(),
   previous_shift_id: z.string().optional(),
   previous_shift_name: z.string().optional(),
-  shift_type: z.string().optional(),
 });
 export const MeasureSchema = z.object({
   unit: z.string().min(1, { message: "Unit is required" }),

@@ -61,40 +61,9 @@ const EmployeeFormContainer = () => {
       return JSON.parse(data.data) as ShiftData[];
     },
   });
-  // const creatUser = useMutation({
-  //   mutationFn: async (value: any) => {
-  //     const breake = employee
-  //       ? await updateEmployee({ id: employee?.id, ...value })
-  //       : await createEmployee(value);
-  //     removeEmployee();
-  //     return breake;
-  //   },
-  //   onSuccess: (value) => {
-  //     if (value.status) {
-  //       toast.success(`${value.message}`, {
-  //         description: `${value.message}`,
-  //         position: "top-right",
-  //         dismissible: true,
-  //       });
-  //       form.reset();
-  //     } else {
-  //       toast.error(`Something went wrong`, {
-  //         description: "Data not updated contact the admin",
-  //         position: "top-right",
-  //         dismissible: true,
-  //       });
-  //     }
-  //     queryClient.invalidateQueries({ queryKey: ["employee"] });
-  //   },
-  //   onError: (value) => {
-  //     toast.error(`Something went wrong`, {
-  //       position: "top-right",
-  //       dismissible: true,
-  //     });
-  //   },
-  // });
   const creatUser = useMutation({
     mutationFn: async (value: any) => {
+      console.log({ id: employee?.id, ...value });
       const breake = employee
         ? await updateEmployee({ id: employee?.id, ...value })
         : await createEmployee(value);
@@ -102,12 +71,29 @@ const EmployeeFormContainer = () => {
       return breake;
     },
     onSuccess: (value) => {
+      if (value.status) {
+        toast.success(`${value.message}`, {
+          description: `${value.message}`,
+          position: "top-right",
+          dismissible: true,
+        });
+        form.reset();
+      } else {
+        toast.error(`Something went wrong`, {
+          description: "Data not updated contact the admin",
+          position: "top-right",
+          dismissible: true,
+        });
+      }
       queryClient.invalidateQueries({ queryKey: ["employee"] });
-      form.reset();
     },
-    onError: (error) => {},
+    onError: (value) => {
+      toast.error(`Something went wrong`, {
+        position: "top-right",
+        dismissible: true,
+      });
+    },
   });
-
   const form = useForm<z.infer<typeof EmployeeSchema>>({
     resolver: zodResolver(EmployeeSchema),
     defaultValues: {
@@ -162,38 +148,7 @@ const EmployeeFormContainer = () => {
   }, [employee]);
 
   const onSubmit = async (values: z.infer<typeof EmployeeSchema>) => {
-    try {
-      // Fetch shift data
-      const shiftResponse = await getAllShift();
-      const parsedData = JSON.parse(shiftResponse.data);
-      const parsedShiftId = parseInt(values.previous_shift_id!);
-
-      // Get shift types for the given shift ID
-      const shiftTypes = parsedData
-        .filter((data: any) => data.id === parsedShiftId)
-        .map((data: any) => data.shift_type);
-      const shift_type = shiftTypes.length > 0 ? shiftTypes[0] : "";
-
-      // Merge shift_type with values
-      const mergedValues = {
-        ...values,
-        shift_type,
-      };
-
-      // Use toast.promise to handle the mutation
-      toast.promise(
-        creatUser.mutateAsync(mergedValues), // Use mutateAsync to handle promises
-        {
-          loading: "Loading...",
-          success: (data) => `${data.message}`,
-          error: "Error deleting Employee - Contact the admin",
-          position: "top-right",
-          dismissible: true,
-        }
-      );
-    } catch (error) {
-      toast.error("An error occurred while processing your request.");
-    }
+    creatUser.mutate(values);
   };
   useEffect(() => {
     if (image) {
@@ -424,7 +379,6 @@ const EmployeeFormContainer = () => {
                           <SelectContent>
                             <SelectItem value="Active">Active</SelectItem>
                             <SelectItem value="Inactive">Inactive</SelectItem>
-                            <SelectItem value="Vacation">Vacation</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />

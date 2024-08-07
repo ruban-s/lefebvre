@@ -80,6 +80,15 @@ import MultiFileSelect from "@/components/common/multiFileSelect";
 import { getAllLabourCard } from "@/data/labour-card";
 import ResourceMultiFileSelect from "@/components/common/resourceMultiFileSelect";
 import { RefetchWorkOrderResources } from "@/commonfunction";
+import { RxCaretSort } from "react-icons/rx";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 const WorkOrderResourceFormContainer = () => {
   const workOrder = useResourceWorkOrderStore(
@@ -419,45 +428,87 @@ const WorkOrderResourceFormContainer = () => {
                                   </Button>
                                 </div>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="w-auto p-4">
-                                {resource?.map((info, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="w-full p-1 flex justify-center items-center">
-                                      <Button
-                                        variant={"ghost"}
-                                        className="px-1 py-0"
-                                        disabled={disableTrue}
-                                        onClick={() => {
-                                          append({
-                                            actual_hour: "",
-                                            bench_mark_measure: "",
-                                            project_id: `${selectedProject?.project_id}`,
-                                            prepared_quantity: "",
-                                            remark: "",
-                                            resourceId: `${info.resource_id}`,
-                                            sqNumber: "",
-                                            bench_mark_unit: "",
-                                            employee_id: "",
-                                            endDate: `${selectedWorkOrder?.end_date}`,
-                                            estimated_hour: "",
-                                            forman: [],
-                                            attachment: [],
-                                            quantity_unit: "",
-                                            required_quantity: "",
-                                            startDate: `${selectedWorkOrder?.start_date}`,
-                                            work_order_id: `${selectedWorkOrder?.work_order_id}`,
-                                            status: "Unreleased",
-                                            ballance_hour: "",
-                                            ballanced_quantity: "",
-                                          });
-                                        }}>
-                                        {info.resource_id}
-                                      </Button>
-                                    </div>
-                                  );
-                                })}
+                              <DropdownMenuContent className="w-auto h-full max-h-[500px] p-4 overflow-auto border-2 border-gray-300 px-5">
+                                <Command>
+                                  <CommandInput
+                                    placeholder={"Search here..."}
+                                    className="h-9"
+                                  />
+                                  <CommandEmpty className="pt-2">
+                                    No Resource Found.
+                                  </CommandEmpty>
+                                  <CommandList className="pt-2">
+                                    {resource?.map((info, index) => {
+                                      return (
+                                        <CommandItem
+                                          key={index}
+                                          onSelect={() => {
+                                            append({
+                                              actual_hour: "",
+                                              bench_mark_measure: "",
+                                              project_id: `${selectedProject?.project_id}`,
+                                              prepared_quantity: "",
+                                              remark: "",
+                                              resourceId: `${info.resource_id}`,
+                                              sqNumber: "",
+                                              bench_mark_unit: "",
+                                              employee_id: "",
+                                              endDate: `${selectedWorkOrder?.end_date}`,
+                                              estimated_hour: "",
+                                              forman: [],
+                                              attachment: [],
+                                              quantity_unit: "",
+                                              required_quantity: "",
+                                              startDate: `${selectedWorkOrder?.start_date}`,
+                                              work_order_id: `${selectedWorkOrder?.work_order_id}`,
+                                              status: "Unreleased",
+                                              ballance_hour: "",
+                                              ballanced_quantity: "",
+                                            });
+                                          }}>
+                                          {index + 1}. {info.resource_id}
+                                        </CommandItem>
+                                      );
+
+                                      // return (
+                                      //   <div
+                                      //     key={index}
+                                      //     className="w-full p-1 flex justify-center items-center">
+                                      //     <Button
+                                      //       variant={"ghost"}
+                                      //       className="px-1 py-0"
+                                      //       disabled={disableTrue}
+                                      //       onClick={() => {
+                                      // append({
+                                      //   actual_hour: "",
+                                      //   bench_mark_measure: "",
+                                      //   project_id: `${selectedProject?.project_id}`,
+                                      //   prepared_quantity: "",
+                                      //   remark: "",
+                                      //   resourceId: `${info.resource_id}`,
+                                      //   sqNumber: "",
+                                      //   bench_mark_unit: "",
+                                      //   employee_id: "",
+                                      //   endDate: `${selectedWorkOrder?.end_date}`,
+                                      //   estimated_hour: "",
+                                      //   forman: [],
+                                      //   attachment: [],
+                                      //   quantity_unit: "",
+                                      //   required_quantity: "",
+                                      //   startDate: `${selectedWorkOrder?.start_date}`,
+                                      //   work_order_id: `${selectedWorkOrder?.work_order_id}`,
+                                      //   status: "Unreleased",
+                                      //   ballance_hour: "",
+                                      //   ballanced_quantity: "",
+                                      // });
+                                      //       }}>
+                                      //       {info.resource_id}
+                                      //     </Button>
+                                      //   </div>
+                                      // );
+                                    })}
+                                  </CommandList>
+                                </Command>
                               </DropdownMenuContent>
                             </DropdownMenu>
                             {fields.length > 0 && (

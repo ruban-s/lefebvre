@@ -23,13 +23,18 @@ export const getAllEmployee = async () => {
 
 export const createEmployee = async (value: z.infer<typeof EmployeeSchema>) => {
   try {
+    // console.log(value);
     const axiosResponse = await Axios.post("/employee/create", value);
     const data = axiosResponse.data;
+    // console.log(axiosResponse);
+    // console.log(data);
     const microserviceData = JSON.parse(data.data);
     const response = await DashboardAxios.post("/dashboard/employee/create", {
       ...microserviceData,
-      shift_type: value.shift_type,
+      shift_type: "",
     });
+    // console.log(data);
+    // console.log(response);
     return data;
   } catch (error) {
     const errorResponse: ResponseData = {
@@ -48,7 +53,7 @@ export const updateEmployee = async (value: any) => {
     const microserviceData = JSON.parse(data.data);
     const response = await DashboardAxios.put("/dashboard/employee/update", {
       ...microserviceData,
-      shift_type: value.shift_type,
+      shift_type: "",
     });
     return data;
   } catch (error) {
