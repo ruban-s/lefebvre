@@ -4,7 +4,7 @@ import { getDashBoardData } from "@/data/dashboard";
 import { useDashboardStore } from "@/state";
 import { LabourData } from "@/types";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Loading from "@/loading";
 import { ReportDataTable } from "@/components/common/report/report-data-table";
@@ -67,26 +67,39 @@ const DashBoardBody = () => {
 
   //onchange of select dropdown
   const handleSelect = (name: keyof FilterData, id: any) => {
+    // console.log(name, id);
+    // console.log(formanOptions);
     if (filterData[name] !== id) {
     }
     setFilterData({
       ...filterData,
       [name]: id,
     });
-    setDashboard({
-      ...dashboard,
-      [name]: id,
-    });
+    if (name === "forman") {
+      const formanName = formanOptions.filter((val: any) => {
+        return val.id === id;
+      });
+      setDashboard({
+        ...dashboard,
+        [name]: id,
+        forman_name: formanName[0].name.toLowerCase() ?? "",
+      });
+    } else {
+      setDashboard({
+        ...dashboard,
+        [name]: id,
+      });
+    }
+
     //refetch the query
     // refetch();
   };
 
-  //forman Dropdown
-  const FormanDropDown = () => {
+  const FormanDropDown = useMemo(() => {
     return (
       <Select
         value={filterData.forman.toString()}
-        onValueChange={(id: any) => handleSelect("forman", id)}>
+        onValueChange={(e: any) => handleSelect("forman", e)}>
         <SelectTrigger className="border-2 border-gray-300 bg-white p-2 rounded-xl w-[200px]">
           <SelectValue placeholder={"Select Forman"} />
         </SelectTrigger>
@@ -99,10 +112,9 @@ const DashBoardBody = () => {
         </SelectContent>
       </Select>
     );
-  };
+  }, [filterData.forman, handleSelect, formanOptions]);
 
-  //labourType DropDown
-  const LaborTypeDropDown = () => {
+  const LaborTypeDropDown = useMemo(() => {
     return (
       <Select
         value={filterData.labor_type.toString()}
@@ -119,12 +131,14 @@ const DashBoardBody = () => {
         </SelectContent>
       </Select>
     );
-  };
+  }, [filterData.labor_type, handleSelect]);
 
   useEffect(() => {
     // console.log(dashboard);
     if (dashboard !== null) {
+      // console.log(dashboard);
       if (filterData.forman === "" || filterData.labor_type === "") {
+        console.log(dashboard);
         setFilterData({
           ...filterData,
           ["labor_type"]: dashboard.labor_type,
@@ -143,7 +157,11 @@ const DashBoardBody = () => {
             ["labor_type"]: "All",
             ["forman"]: forman[0].id,
           });
-          setDashboard({ ...defaultData, forman: forman[0].id });
+          setDashboard({
+            ...defaultData,
+            forman: forman[0].id,
+            forman_name: forman[0].name.toLowerCase(),
+          });
         } else {
           toast.error(`Something went wrong`, {
             description: "Forman is empty",
@@ -178,12 +196,8 @@ const DashBoardBody = () => {
             </TabsTrigger>
           </TabsList>
           <div className="flex space-x-4 mt-4">
-            <span>
-              <FormanDropDown />
-            </span>
-            <span>
-              <LaborTypeDropDown />
-            </span>
+            <span>{FormanDropDown}</span>
+            <span>{LaborTypeDropDown}</span>
           </div>
         </div>
         <TabsContent value="day">

@@ -7,6 +7,7 @@ export interface DashboardCardDataProps {
 
 //cards
 export interface DashboardCardsProps {
+  title: string;
   hasShowEye: boolean;
   heading: string;
   data: DashboardCardDataProps[];

@@ -92,15 +92,21 @@ export const plannerTabs: TabData[] = [
   },
 ];
 export const productionTabs: TabData[] = [
-  { id: 1, label: "Home", icon: FaHome, link: "/" },
+  // { id: 1, label: "Home", icon: FaHome, link: "/" },
   {
     id: 1,
+    label: "Dashboard",
+    icon: FaHome,
+    link: "/",
+  },
+  {
+    id: 2,
     label: "Project",
     icon: MdSpaceDashboard,
     link: "/production/project",
   },
   {
-    id: 2,
+    id: 7,
     label: "Work Order",
     icon: CgWorkAlt,
     link: "/production/work-order",
@@ -128,12 +134,6 @@ export const productionTabs: TabData[] = [
     label: "Report",
     icon: TbReportAnalytics,
     link: "/production/report",
-  },
-  {
-    id: 2,
-    label: "Dashboard",
-    icon: MdSpaceDashboard,
-    link: "/production/dashboard",
   },
 ];
 export const SuperAdminTabs: TabData[] = [

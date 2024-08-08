@@ -403,6 +403,7 @@ export interface HoursConsumptionReportForm {
 export interface DashboardState {
   date: string;
   forman: any;
+  forman_name: string;
   shift_type: string;
   attendance_type: string;
   labor_type: string;

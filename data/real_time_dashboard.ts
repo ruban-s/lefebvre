@@ -9,7 +9,7 @@ export const getWorkersCount = async (date: string) => {
     const AxiosResponse = await DashboardAxios.get(`/realTime/workers/count`, {
       params: { date },
     });
-    // console.log(AxiosResponse);
+    // console.log(AxiosResponse.data);
     return AxiosResponse!.data;
   } catch (error) {
     const errorResponse: ResponseData = {

@@ -63,6 +63,7 @@ export const DashboardDialog = ({ type, properties }: DashboardDialogProps) => {
           attendance:
             properties.attendance === "workers" ? "all" : properties.attendance,
         });
+        console.log(response);
         // console.log("Workers Response:", response);
         return response.data;
       } else if (type === "shift" && "work_type" in properties) {
