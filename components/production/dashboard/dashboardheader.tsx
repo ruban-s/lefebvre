@@ -52,9 +52,9 @@ const DashboardHeader = () => {
           {dashboard ? dashboard.date : getCurrentDate()}
         </div>
         <div className="p-2 bg-white text-2xl border-2 rounded-full border-blue-800 cursor-pointer">
-          <Link href={navigateUrl}>
-            <IoBarChart className="text-slate-800 text-2xl" />
-          </Link>
+          {/* <Link href={navigateUrl}> */}
+          <IoBarChart className="text-slate-800 text-2xl" />
+          {/* </Link> */}
         </div>
       </div>
     </div>

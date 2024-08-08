@@ -114,8 +114,11 @@ const DashboardStatus = () => {
   const totalProjects = allProject ? allProject.all : 0;
   const releasedProjectsCount = allProject ? allProject.released : 0;
   const unreleasedProjects = allProject ? allProject.unReleased : 0;
-  const releasedPercentage = (releasedProjectsCount / totalProjects) * 100;
+  const releasedPercentage = Math.floor(
+    (releasedProjectsCount / totalProjects) * 100
+  );
   const projectStatus = {
+    title: "Project Status",
     heading: "Project Status",
     data: [
       {
@@ -134,26 +137,21 @@ const DashboardStatus = () => {
         queryType: "unReleasedProject",
       },
     ],
-    barColor: "#0e7490",
+    barColor: "#0e6e89",
     value: releasedPercentage,
-    total: `${totalProjects}`,
-    emptyColor: "#bae8f4",
+    total: `${releasedPercentage}%`,
+    emptyColor: "#02ccff",
     hasShowEye: true,
   };
 
   // workers config data
   const presentPercentage = workersCount
-    ? (workersCount.present / workersCount.total) * 100
+    ? Math.floor((workersCount.present / workersCount.total) * 100)
     : 0;
   const workersStatus = {
-    heading: "Workers",
+    title: "workers",
+    heading: "Total Strength",
     data: [
-      {
-        keyProps: "Vacation",
-        count:
-          workersCount && workersCount.vacation ? workersCount.vacation : 0,
-        queryType: "allProject",
-      },
       {
         keyProps: "Workers",
         count: workersCount && workersCount.total ? workersCount.total : 0,
@@ -169,11 +167,17 @@ const DashboardStatus = () => {
         count: workersCount && workersCount.absent ? workersCount.absent : 0,
         queryType: "unReleasedProject",
       },
+      {
+        keyProps: "Vacation",
+        count:
+          workersCount && workersCount.vacation ? workersCount.vacation : 0,
+        queryType: "allProject",
+      },
     ],
-    barColor: "#084d89",
+    barColor: "#0a2281",
     value: isNaN(presentPercentage) ? 0 : presentPercentage,
-    total: `${workersCount && workersCount.total ? workersCount.total : 0}`,
-    emptyColor: "#85b5df",
+    total: `${presentPercentage}%`,
+    emptyColor: "#3152d7",
     hasShowEye: false,
   };
 
@@ -182,7 +186,11 @@ const DashboardStatus = () => {
     ? (workersShiftCount.direct / workersShiftCount.total) * 100
     : 0;
   const workersByShiftStatus = {
-    heading: "Shift",
+    title: "shift",
+    heading:
+      dashboard && dashboard.shift_type
+        ? `Shift : ${dashboard.shift_type}`
+        : "Shift",
     data: [
       {
         keyProps: "Shift",
@@ -207,12 +215,10 @@ const DashboardStatus = () => {
         queryType: "unReleasedProject",
       },
     ],
-    barColor: "#FFA500",
+    barColor: "#6d4803",
     value: isNaN(shiftPercentage) ? 0 : shiftPercentage,
-    total: `${
-      workersShiftCount && workersShiftCount.total ? workersCount.total : 0
-    }`,
-    emptyColor: "#efcb87",
+    total: isNaN(shiftPercentage) ? `${0}%` : `${shiftPercentage}%`,
+    emptyColor: "#ffb327",
     hasShowEye: false,
   };
 
@@ -221,7 +227,11 @@ const DashboardStatus = () => {
     ? (workersFormanCount.direct / workersFormanCount.total) * 100
     : 0;
   const workersByFormanStatus = {
-    heading: "Attendance",
+    title: "attendance",
+    heading:
+      dashboard && dashboard.forman_name
+        ? `Team : ${dashboard.forman_name}`
+        : "Team : null",
     data: [
       {
         keyProps: "Total",
@@ -256,14 +266,10 @@ const DashboardStatus = () => {
         queryType: "unReleasedProject",
       },
     ],
-    barColor: "#047821",
+    barColor: "#035417",
     value: isNaN(attendancePercentage) ? 0 : attendancePercentage,
-    total: `${
-      workersFormanCount && workersFormanCount.total
-        ? workersFormanCount.total
-        : 0
-    }`,
-    emptyColor: "#6fc886",
+    total: isNaN(attendancePercentage) ? `${0}%` : `${attendancePercentage}%`,
+    emptyColor: "#38fe6d",
     hasShowEye: false,
   };
 

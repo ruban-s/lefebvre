@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [tabs, setTabs] = useState<TabData[]>();
-
+  console.log(children);
   const session = useSession();
   const path = usePathname();
 

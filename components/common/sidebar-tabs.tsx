@@ -24,6 +24,8 @@ const SideBarTabs = (datas: SideBarTabProps) => {
   const { isToggles, tabs, onMouseOver } = datas;
   const path = usePathname();
 
+  // console.log(datas);
+
   return (
     <div
       className="w-full h-auto mt-2"

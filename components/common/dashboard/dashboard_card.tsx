@@ -8,6 +8,7 @@ import Link from "next/link";
 import { DashboardDialog } from "./dashboard_dialog";
 
 export const DashboardCards = ({
+  title,
   heading,
   data,
   barColor,
@@ -48,7 +49,7 @@ export const DashboardCards = ({
             </Link>
           ) : (
             <div>
-              {heading.toLowerCase() === "workers" && (
+              {title.toLowerCase() === "workers" && (
                 <DashboardDialog
                   type="workers"
                   properties={
@@ -60,7 +61,7 @@ export const DashboardCards = ({
                   }
                 />
               )}
-              {heading.toLowerCase() === "shift" && (
+              {title.toLowerCase() === "shift" && (
                 <DashboardDialog
                   type="shift"
                   properties={
@@ -70,7 +71,7 @@ export const DashboardCards = ({
                   }
                 />
               )}
-              {heading.toLowerCase() === "attendance" && (
+              {title.toLowerCase() === "attendance" && (
                 <DashboardDialog
                   type="attendance"
                   properties={
@@ -83,8 +84,6 @@ export const DashboardCards = ({
                 />
               )}
             </div>
-
-            // <span>hi</span>
           )}
         </div>
       </div>
@@ -100,7 +99,10 @@ export const DashboardCards = ({
       </div>
       {/* Project data */}
       <div className="flex flex-col gap-2">
-        <h1 style={{ color: barColor }} className="font-extrabold text-xl">
+        <h1
+          style={{ color: barColor }}
+          className="font-extrabold text-xl capitalize ">
+          {/* {heading.substring(0, 10)} */}
           {heading}
         </h1>
         <div className="space-y-2">
